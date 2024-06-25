@@ -3,8 +3,11 @@ const app = express()
 const port = 3000
 
 app.get('/', (req, res) => {
-  res.send('Teste - clínica MARIA LUIZA')
+  res.send('Teste - clínica Maria Luiza')
 })
+
+const firstRun = require('./firstRun.util.js');
+firstRun.FirstRun();
 
 const hostname = 'localhost';
 app.listen(port, () => {
