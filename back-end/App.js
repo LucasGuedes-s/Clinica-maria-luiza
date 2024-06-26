@@ -6,8 +6,13 @@ app.get('/', (req, res) => {
   res.send('Teste - clínica Maria Luiza')
 })
 
+
 const firstRun = require('./firstRun.util.js');
 firstRun.FirstRun();
+
+//ROTAS
+const UserRouter = require('./routes/user.router.js');
+app.use(UserRouter)
 
 const hostname = 'localhost';
 app.listen(port, () => {
