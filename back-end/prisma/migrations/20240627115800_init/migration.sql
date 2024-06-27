@@ -1,18 +1,16 @@
 -- CreateTable
 CREATE TABLE `Profissionais` (
-    `id_profissional` INTEGER NOT NULL AUTO_INCREMENT,
-    `nome` VARCHAR(191) NOT NULL,
     `email` VARCHAR(191) NOT NULL,
     `senha` VARCHAR(191) NOT NULL,
+    `nome` VARCHAR(191) NOT NULL,
     `telefone` VARCHAR(191) NULL,
     `foto` VARCHAR(2048) NULL,
     `identificador` VARCHAR(191) NULL,
     `permissaoId` INTEGER NOT NULL,
     `funcaoId` INTEGER NULL,
 
-    UNIQUE INDEX `Profissionais_email_key`(`email`),
     UNIQUE INDEX `Profissionais_identificador_key`(`identificador`),
-    PRIMARY KEY (`id_profissional`)
+    PRIMARY KEY (`email`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable

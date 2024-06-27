@@ -8,10 +8,9 @@ datasource db {
 }
 
 model Profissionais {
-  id_profissional  Int          @id @default(autoincrement())
-  nome             String
-  email            String       @unique
+  email            String       @id
   senha            String
+  nome             String
   telefone         String?
   foto             String?      @db.VarChar(2048)
   identificador    String?      @unique

@@ -5,7 +5,7 @@ const port = 3000
 app.get('/', (req, res) => {
   res.send('Teste - clínica Maria Luiza')
 })
-
+app.use(express.json());
 
 const firstRun = require('./firstRun.util.js');
 firstRun.FirstRun();

@@ -1,10 +1,13 @@
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 const bcryptUtil = require("./utils/bcrypt.ultil")
+require('dotenv').config();
 
 async function FirstRun() {
+
   // Verificar se já existem permissões no banco de dados
-  const existingPermissions = await prisma.Permissao.findMany()
+  console.log(process.env.DATABASE_URL);
+  const existingPermissions = await prisma.Permissao.findMany({})
   if (existingPermissions.length > 0) {
     console.log('Permissões já adicionadas')
   }
@@ -49,9 +52,9 @@ async function Profissionais(){
 
   await prisma.Profissionais.create({
     data: {
-      nome: 'Admin',
       email: 'admin@gmail.com',
       senha: senha_users,
+      nome: 'Admin',
       telefone: '84 99428-0599',
       foto: 'gs://clinica-maria-luiza.appspot.com/uploads/funcionarios2.svg',
       identificador: 'ADMIN',
@@ -61,9 +64,9 @@ async function Profissionais(){
 
   await prisma.Profissionais.create({
     data: {
-      nome: 'Profissional',
       email: 'profissional@gmail.com',
       senha: senha_users,
+      nome: 'Profissional',
       telefone: '84 99428-0599',
       foto: 'gs://clinica-maria-luiza.appspot.com/uploads/funcionarios2.svg',
       identificador: 'Nutricionista',
@@ -73,9 +76,9 @@ async function Profissionais(){
 
   await prisma.Profissionais.create({
     data: {
-      nome: 'Recepcionista',
       email: 'recepcionista@gmail.com',
       senha: senha_users,
+      nome: 'Recepcionista',
       telefone: '84 99428-0599',
       foto: 'gs://clinica-maria-luiza.appspot.com/uploads/funcionarios2.svg',
       identificador: 'Recepção',
