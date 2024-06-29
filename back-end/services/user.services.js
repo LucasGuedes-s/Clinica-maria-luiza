@@ -1,10 +1,12 @@
+const jwt = require('jsonwebtoken')
+const config= require('../config/app.config')
+const bcrypt = require('../utils/bcrypt.ultil');
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient()
 
-const bcrypt = require('../utils/bcrypt.ultil');
-const { permission } = require('process');
 
-async function LoginUser(usuario){    
+async function LoginUser(usuario){   
+    
     const user = await prisma.Profissionais.findFirst({
         where:{
             email: usuario.email
@@ -22,7 +24,12 @@ async function LoginUser(usuario){
         permissao: usuario.permissao
     }
     if(senhaValida){
-        console.log("Usuário Logado")
+        const token = jwt.sign(dados_usuario, config.jwtSecret, {
+            expiresIn: 86400 // 24 hours
+        });
+
+        console.log(`Usuário Logado token: ${token}`)
+        return { token: token };
     }
     else{
         throw new Error('Usuário ou senha inválido')
