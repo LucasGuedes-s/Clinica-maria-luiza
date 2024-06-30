@@ -25,7 +25,7 @@ async function LoginUser(usuario){
     }
     if(senhaValida){
         const token = jwt.sign(dados_usuario, config.jwtSecret, {
-            expiresIn: 86400 // 24 hours
+            expiresIn: 86400 // 24 horas
         });
 
         console.log(`Usuário Logado token: ${token}`)

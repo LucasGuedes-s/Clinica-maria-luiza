@@ -14,20 +14,71 @@ model Profissionais {
   telefone         String?
   foto             String?      @db.VarChar(2048)
   identificador    String?      @unique
+  pix              String?
   permissao        Permissao    @relation(fields: [permissaoId], references: [id])
   permissaoId      Int
-  funcao           Funcao?    @relation(fields: [funcaoId], references: [id])
-  funcaoId         Int?
+  especialidade    Especialidade?    @relation(fields: [especialidadeId], references: [id])
+  especialidadeId  Int?
+  consultas        Consultas[]
+  pagamentos       Pagamentos[]
 }
 
+model Pacientes{
+  cpf             String       @id
+  email           String?      @unique
+  nome            String
+  nome_mae        String?
+  data_nascimento DateTime?
+  telefone        String
+  endereco        String?
+  foto            String?      @db.VarChar(2048)
+  agendamentos    Agendamentos[]
+  consultas       Consultas[]
+}
+
+model Agendamentos{
+  id              Int @id @default(autoincrement())
+  data            DateTime
+  agendamento     String?
+  notas           String?
+  status          String?
+  paciente        Pacientes? @relation(fields: [pacienteId], references: [cpf])
+  pacienteId      String?
+  sala_consulta   Salas? @relation(fields: [sala], references: [id])
+  sala            Int?
+}
+model Salas{
+  id              Int @id @default(autoincrement())
+  notas           String?
+  agendamentos    Agendamentos[]
+}
+model Consultas{
+  id              Int @id @default(autoincrement())
+  consulta        String
+  data            DateTime @default(now())
+  descricao       String
+  foto            String? @db.VarChar(2048)
+  paciente        Pacientes? @relation(fields: [pacienteId], references: [cpf])
+  profissional    Profissionais? @relation(fields: [profissionalId], references: [email])
+  pacienteId      String?
+  profissionalId  String?
+}
+model Pagamentos{
+  id              Int @id
+  pagamento       Float?
+  paciente        String?
+  profissional    Profissionais? @relation(fields: [profissionalId], references: [email])     
+  profissionalId  String?
+  Data            DateTime @default(now())
+}
 model Permissao {
   id               Int             @id @default(autoincrement())
   nivel            Int
   acesso           String?
   profissionais    Profissionais[]
 }
-model Funcao {
+model Especialidade {
   id               Int             @id @default(autoincrement())
-  funcao           String?
+  Especialidade    String?
   profissionais    Profissionais[]
 }
