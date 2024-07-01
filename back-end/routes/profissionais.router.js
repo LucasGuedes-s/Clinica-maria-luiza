@@ -1,6 +1,6 @@
 const express = require('express');
-const jwtMiddleware = require('../services/auth.service')
-const userController = require('../controllers/pacientes.controller');
+const jwtMiddleware = require('../middlewares/auth')
+const userController = require('../controllers/profissionais.controller');
 const router = express.Router()
 
 router.get('/profissionais', jwtMiddleware, userController.getPacientes);

@@ -1,4 +1,4 @@
-const login_usuario = require('../services/user.services')
+const login_usuario = require('../services/user.service')
 
 async function LoginUsuario(req, res, next){
     try {
