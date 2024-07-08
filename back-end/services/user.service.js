@@ -5,7 +5,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient()
 
 
-async function LoginUser(usuario){   
+async function LoginUser(usuario, res){   
     
     const user = await prisma.Profissionais.findFirst({
         where:{
@@ -19,9 +19,12 @@ async function LoginUser(usuario){
     const senhaValida = bcrypt.compare(usuario.senha, user.senha);
 
     let dados_usuario = {
-        nome: usuario.nome, 
-        email: usuario.email, 
-        permissao: usuario.permissao
+        nome: user.nome, 
+        email: user.email, 
+        permissao: user.permissaoId,
+        foto: user.foto,
+        telefone: user.telefone
+
     }
     if(senhaValida){
         const token = jwt.sign(dados_usuario, config.jwtSecret, {
@@ -29,8 +32,8 @@ async function LoginUser(usuario){
         });
 
         console.log(`Usuário Logado token: ${token}`)
-        return { token: token };
-    }
+        return {token: token, dados_usuario}
+        }
     else{
         throw new Error('Usuário ou senha inválido')
     }

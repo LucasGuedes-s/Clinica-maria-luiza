@@ -73,7 +73,6 @@ model Pagamentos{
 }
 model Permissao {
   id               Int             @id @default(autoincrement())
-  nivel            Int
   acesso           String?
   profissionais    Profissionais[]
 }
