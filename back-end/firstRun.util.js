@@ -36,21 +36,18 @@ async function Permissoes(){
   //Cria as permissões necessárias
   const permissao1 = await prisma.permissao.create({
     data: {
-      nivel: parseInt(process.env.PERMISSAO_ADMIN),
       acesso: 'Admin',
     },
   })
 
   const permissao2 = await prisma.permissao.create({
     data: {
-      nivel: parseInt(process.env.PERMISSAO_PROFISSIONAL),
       acesso: 'Profissional',
     },
   })
 
   const permissao3 = await prisma.permissao.create({
     data: {
-      nivel: parseInt(process.env.PERMISSAO_RECEPCIONISTA),
       acesso: 'Recepcionista',
     },
   })
