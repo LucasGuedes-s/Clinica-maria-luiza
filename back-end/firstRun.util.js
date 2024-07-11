@@ -54,6 +54,7 @@ async function Permissoes(){
   return {permissao1, permissao2, permissao3};
 }
 async function Pacientes(){
+  
   // Criação dos Pacientes
   await prisma.Pacientes.create({
     data: {

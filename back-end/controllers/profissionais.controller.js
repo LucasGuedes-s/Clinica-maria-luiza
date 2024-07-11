@@ -1,11 +1,14 @@
-async function getPacientes(req, res, next){
+const profissional = require('../services/profissionais.service')
+
+async function getProfissionais(req, res, next){
     try {
-        console.log("Cheguei aqui")
-        res.status(200).json({});
+        const profissionais = await profissional.getProfissionais()
+        console.log(profissionais)
+        res.status(200).json({profissionais});
         next()
     } catch (err) {
-        console.error(`Erro`);
+        console.error(`Erro ao receber usuários`);
     }
     
 }
-module.exports = {getPacientes};
+module.exports = {getProfissionais};
