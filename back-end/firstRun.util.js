@@ -4,7 +4,6 @@ const bcryptUtil = require("./utils/bcrypt.ultil")
 require('dotenv').config();
 
 async function FirstRun() {
-
   // Verificar se já existem permissões no banco de dados
   console.log(process.env.DATABASE_URL);
   const existingPermissions = await prisma.Permissao.findMany({})
@@ -14,7 +13,14 @@ async function FirstRun() {
   else{
     await Permissoes()
   }
-  //Verifica se tem profissionais no banco de dados
+  const Salas = await prisma.Salas.findMany({})
+  if (Salas.length > 0) {
+    console.log('Salas já adicionadas')
+  }
+  else{
+    await CadastrarSalas()
+  }
+
   const users = await prisma.Profissionais.findMany()
   if (users.length > 0) {
     console.log('Algum usuário já cadastrado')
@@ -30,6 +36,17 @@ async function FirstRun() {
   else{
     await Pacientes()
   }
+}
+async function CadastrarSalas(){
+  //Cria as salas necessárias
+  for(let i = 1; i < 8; i++){
+    const sala = await prisma.Salas.create({
+      data: {
+        notas: `Sala ${i}`,
+      },
+    })
+  }
+  console.log('Salas cadastradas')
 }
 
 async function Permissoes(){
@@ -87,7 +104,7 @@ async function Profissionais(){
       nome: 'Admin',
       telefone: '84 99428-0599',
       foto: 'gs://clinica-maria-luiza.appspot.com/uploads/funcionarios2.svg',
-      identificador: 'ADMIN',
+      identificador: 'admin@gmail.com',
       permissaoId: parseInt(process.env.PERMISSAO_ADMIN),
     },
   })
@@ -99,7 +116,7 @@ async function Profissionais(){
       nome: 'Profissional',
       telefone: '84 99428-0599',
       foto: 'gs://clinica-maria-luiza.appspot.com/uploads/funcionarios2.svg',
-      identificador: 'Nutricionista',
+      identificador: 'CRN:1845',
       permissaoId: parseInt(process.env.PERMISSAO_PROFISSIONAL),
     },
   })
@@ -110,7 +127,7 @@ async function Profissionais(){
       nome: 'Recepcionista',
       telefone: '84 99428-0599',
       foto: 'gs://clinica-maria-luiza.appspot.com/uploads/funcionarios2.svg',
-      identificador: 'Recepção',
+      identificador: 'recepcionista@gmail.com',
       permissaoId: parseInt(process.env.PERMISSAO_RECEPCIONISTA),
     },
   })
@@ -118,5 +135,6 @@ async function Profissionais(){
 module.exports = {
   FirstRun,
   Permissoes,
+  CadastrarSalas,
   Profissionais
 }
