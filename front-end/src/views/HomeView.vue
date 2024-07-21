@@ -32,7 +32,6 @@
             </div>
         </div>
     </div>
-
 </template>
 
 <script>
@@ -43,13 +42,10 @@ export default {
 
 }
 </script>
-<style scoped>
-#corpo {
-    margin: 0;
+<style>
+#corpo{
     background-color: #E7FAFF;
-    font-family: 'Montserrat', sans-serif;
 }
-
 .nav-bar {
     background-color: white;
     color: #ffffff;
@@ -97,6 +93,7 @@ export default {
 .nav-links a:hover {
     color: #84E7FF;
 }
+
 
 .button1 {
     padding: 5px 40px;

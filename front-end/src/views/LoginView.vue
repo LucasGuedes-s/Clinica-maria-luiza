@@ -4,7 +4,5 @@
   </div>
 </template>
 <script>
+import { Axios } from 'axios';
 </script>
-
-<style scoped>
-</style>
