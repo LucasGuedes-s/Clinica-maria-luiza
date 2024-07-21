@@ -13,6 +13,7 @@ async function FirstRun() {
   else{
     await Permissoes()
   }
+  //Verifica se já tem salas cadastradas e se não tiver faz o cadastrp
   const Salas = await prisma.Salas.findMany({})
   if (Salas.length > 0) {
     console.log('Salas já adicionadas')
@@ -28,6 +29,7 @@ async function FirstRun() {
   else{
     await Profissionais()
   }
+
   //Verifica se tem pacientes no banco de dados
   const pacientes = await prisma.Pacientes.findMany()
   if (pacientes.length > 0) {
@@ -36,7 +38,16 @@ async function FirstRun() {
   else{
     await Pacientes()
   }
+
+  const agendamentos = await prisma.Agendamentos.findMany({})
+  if (agendamentos.length > 0) {
+    console.log('Agendamento')
+  }
+  else{
+    await Agendamentos()
+  }
 }
+
 async function CadastrarSalas(){
   //Cria as salas necessárias
   for(let i = 1; i < 8; i++){
@@ -132,9 +143,33 @@ async function Profissionais(){
     },
   })
 }
+async function Agendamentos(){
+  // Criação dos agendamentos
+  await prisma.Agendamentos.create({
+    data: {
+      data: new Date(),
+      agendamento: 'Consulta de Lucas',
+      status: 'Andamento',
+      profissionalId: "profissional@gmail.com",
+      pacienteId: "138.845.747-25",
+      sala: 1,
+    },
+  })
+  await prisma.Agendamentos.create({
+    data: {
+      data: new Date(),
+      agendamento: 'Consulta de João Paulo',
+      status: 'Andamento',
+      profissionalId: "profissional@gmail.com",
+      pacienteId: "738.585.784-25",
+      sala: 2,
+    },
+  })
+}
 module.exports = {
   FirstRun,
   Permissoes,
   CadastrarSalas,
-  Profissionais
+  Profissionais,
+  Agendamentos
 }

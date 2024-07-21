@@ -19,6 +19,7 @@ model Profissionais {
   permissaoId      Int
   especialidade    Especialidade?    @relation(fields: [especialidadeId], references: [id])
   especialidadeId  Int?
+  agendamentos     Agendamentos[]
   consultas        Consultas[]
   pagamentos       Pagamentos[]
 }
@@ -35,13 +36,26 @@ model Pacientes{
   agendamentos    Agendamentos[]
   consultas       Consultas[]
 }
+model PacientesABA_dados{
+  paciente        Int @id
+  peso            Float?      
+  altura          Float?
+  comestiveis     String? @db.VarChar(2048)
+  tangiveis       String? @db.VarChar(2048)
+  fisicos         String? @db.VarChar(2048)
+  data_aplicacao  DateTime @default(now())
+  descricao       String?
+}
 
 model Agendamentos{
   id              Int @id @default(autoincrement())
-  data            DateTime 
+  data            DateTime?
+  data_conclusao  DateTime? @default(now())
   agendamento     String?
   notas           String?
   status          String?
+  profissional    Profissionais? @relation(fields: [profissionalId], references: [email])
+  profissionalId  String
   paciente        Pacientes? @relation(fields: [pacienteId], references: [cpf])
   pacienteId      String?
   sala_consulta   Salas? @relation(fields: [sala], references: [id])
@@ -56,8 +70,9 @@ model Consultas{
   id              Int @id @default(autoincrement())
   consulta        String
   data            DateTime @default(now())
-  descricao       String
-  foto            String? @db.VarChar(2048)
+  descricao       String?
+  laudos          String[] @db.VarChar(2048)
+  foto            String[] @db.VarChar(2048)
   paciente        Pacientes? @relation(fields: [pacienteId], references: [cpf])
   profissional    Profissionais? @relation(fields: [profissionalId], references: [email])
   pacienteId      String?
