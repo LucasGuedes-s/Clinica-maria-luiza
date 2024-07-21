@@ -1,35 +1,38 @@
 <template>
-  <nav class="nav-bar">
-    <div class="logo"><img src="../assets/nome.png" alt="Logo"></div>
-    <ul class="nav-links">
-      <li><a href="#quem-somos">Quem somos</a></li>
-      <li><a href="#profissionais">Serviços</a></li>
-      <li><a href="#servicos">Contato</a></li>
-      <RouterLink to="/login"><button class="button1">Login</button></RouterLink>
-    </ul>
-  </nav>
-  <div class="container">
-    <div class="element1">
-      <img src="../assets/girafas.png" alt="Descrição da imagem">
-      <p>Seja bem-vindo(a)!</p>
-    </div>
-    <div class="element2">
-      <div class="element2">
-        <div class="slider-container">
-          <div class="slider">
-            <img src="../assets/Frame1.png" alt="Image 1">
-            <img src="../assets/Frame2.png" alt="Image 2">
-            <img src="../assets/Frame3.png" alt="Image 3">
-            <img src="../assets/Frame4.png" alt="Image 4">
-            <img src="../assets/Frame5.png" alt="Image 5">
-            <img src="../assets/Frame6.png" alt="Image 6">
-          </div>
-          <button class="slider-btn prev-btn">&lt;</button>
-          <button class="slider-btn next-btn">&gt;</button>
+    <div id="corpo">
+        <nav class="nav-bar">
+            <div class="logo"><img src="../assets/nome.png" alt="Logo"></div>
+            <ul class="nav-links">
+                <li><a href="#quem-somos">Quem somos</a></li>
+                <li><a href="#profissionais">Serviços</a></li>
+                <li><a href="#servicos">Contato</a></li>
+                <RouterLink to="/login"><button class="button1">Login</button></RouterLink>
+            </ul>
+        </nav>
+        <div class="container">
+            <div class="element1">
+                <img src="../assets/girafas.png" alt="Descrição da imagem">
+                <p>Seja bem-vindo(a)!</p>
+            </div>
+            <div class="element2">
+                <div class="element2">
+                    <div class="slider-container">
+                        <div class="slider">
+                            <img src="../assets/Frame1.png" alt="Image 1">
+                            <img src="../assets/Frame2.png" alt="Image 2">
+                            <img src="../assets/Frame3.png" alt="Image 3">
+                            <img src="../assets/Frame4.png" alt="Image 4">
+                            <img src="../assets/Frame5.png" alt="Image 5">
+                            <img src="../assets/Frame6.png" alt="Image 6">
+                        </div>
+                        <button class="slider-btn prev-btn">&lt;</button>
+                        <button class="slider-btn next-btn">&gt;</button>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
+
 </template>
 
 <script>
@@ -40,7 +43,12 @@ export default {
 
 }
 </script>
-<style>
+<style scoped>
+#corpo {
+    margin: 0;
+    background-color: #E7FAFF;
+    font-family: 'Montserrat', sans-serif;
+}
 
 .nav-bar {
     background-color: white;
@@ -63,14 +71,17 @@ export default {
     list-style: none;
     display: flex;
     margin-right: 60px;
-    align-items: center; /* Centraliza verticalmente os itens */
+    align-items: center;
+    /* Centraliza verticalmente os itens */
 }
 
 .nav-links li {
     margin: 15px;
     padding: 5px 25px;
-    display: flex; /* Para centralizar horizontalmente */
-    align-items: center; /* Para centralizar horizontalmente */
+    display: flex;
+    /* Para centralizar horizontalmente */
+    align-items: center;
+    /* Para centralizar horizontalmente */
     border-radius: 20px;
     border: 1px solid #84E7FF;
 }
@@ -87,14 +98,16 @@ export default {
     color: #84E7FF;
 }
 
-
-.button1{
+.button1 {
     padding: 5px 40px;
     font-size: 17px;
     margin-left: 20px;
-    background-color: #F5F5F5; /* Cor de fundo */
-    border: none; /* Remover bordas */
-    border-radius: 20px; /* Bordas arredondadas */
+    background-color: #F5F5F5;
+    /* Cor de fundo */
+    border: none;
+    /* Remover bordas */
+    border-radius: 20px;
+    /* Bordas arredondadas */
     font-family: 'Montserrat', sans-serif;
     border: 2px solid #D9D9D9;
 }
@@ -125,9 +138,12 @@ export default {
     margin-top: 20px;
     padding: 10px 85px;
     font-size: 16px;
-    background-color: #FBE9EB; /* Cor de fundo */
-    border: none; /* Remover bordas */
-    border-radius: 5px; /* Bordas arredondadas */
+    background-color: #FBE9EB;
+    /* Cor de fundo */
+    border: none;
+    /* Remover bordas */
+    border-radius: 5px;
+    /* Bordas arredondadas */
     font-family: 'Montserrat', sans-serif;
     border: 2px solid #FAC6CA;
 }
@@ -142,7 +158,7 @@ export default {
     position: relative;
 }
 
-.imggirafa{
+.imggirafa {
     width: 50px;
     height: 50px;
 }
@@ -153,7 +169,8 @@ export default {
 
 .slider {
     display: flex;
-    width: 4800px; /* Total width of all images */
+    width: 4800px;
+    /* Total width of all images */
     transition: transform 0.5s ease;
 }
 
@@ -175,7 +192,8 @@ export default {
     height: 50px;
     cursor: pointer;
     z-index: 10;
-    border-radius: 50%; /* torna o botão circular */
+    border-radius: 50%;
+    /* torna o botão circular */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -189,7 +207,7 @@ export default {
     right: 10px;
 }
 
-section{
+section {
     background-color: red;
 }
 </style>
