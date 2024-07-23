@@ -5,6 +5,14 @@ async function getProfissionais(){
     const profissionais = await prisma.Profissionais.findMany();
     return profissionais;
 }
+async function getProfissional(usuario){  
+    const profissionais = await prisma.Profissionais.findMany({
+        where:{
+            email: usuario.usuario.email
+        }
+    });
+    return profissionais;
+}
 async function getAgendamentos(user){  
     const Agendamentos = await prisma.Agendamentos.findMany({
         where: {
@@ -14,4 +22,4 @@ async function getAgendamentos(user){
     return Agendamentos;
 }
 
-module.exports = {getProfissionais, getAgendamentos};
+module.exports = {getProfissionais, getAgendamentos, getProfissional};

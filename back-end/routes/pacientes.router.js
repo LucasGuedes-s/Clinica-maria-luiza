@@ -7,5 +7,4 @@ const router = express.Router()
 router.get('/pacientes', [jwtMiddleware, permission.get], userController.getPacientes);
 router.post('/cadastrar/pacientes', [jwtMiddleware, permission.post], userController.postPacientes);
 
-
 module.exports = router;

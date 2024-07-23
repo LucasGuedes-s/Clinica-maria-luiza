@@ -11,12 +11,12 @@ async function getPacientes(req, res, next){
 }
 async function postPacientes(req, res, next){
     try {
-        console.log("Cheguei aqui")
-        const pacientes = ''
-        //const pacientes = await Paciente.getPacientes()
+        console.log("Faz o L")
+        const pacientes = await Paciente.cadastrarPaciente(req.body)
         res.status(200).json({pacientes});
         next()
     } catch (err) {
+        console.log(err)
         console.error(`Erro ao receber os pacientes`);
     }
 }
