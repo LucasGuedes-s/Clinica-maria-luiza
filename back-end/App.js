@@ -12,9 +12,10 @@ firstRun.FirstRun();
 
 //ROTAS
 const UserRouter = require('./routes/user.router.js');
-const pacientesRouter = require('./routes/profissionais.router.js');
+const profissionaisRouter = require('./routes/profissionais.router.js');
+const pacientesRouter = require('./routes/pacientes.router.js');
 
-app.use(UserRouter, pacientesRouter)
+app.use(UserRouter, profissionaisRouter, pacientesRouter)
 
 const hostname = 'localhost';
 app.listen(port, () => {
