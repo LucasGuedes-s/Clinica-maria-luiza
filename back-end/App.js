@@ -7,8 +7,8 @@ app.get('/', (req, res) => {
 })
 app.use(express.json());
 
-const firstRun = require('./firstRun.util.js');
-firstRun.FirstRun();
+//const firstRun = require('./firstRun.util.js');
+//firstRun.FirstRun();
 
 //ROTAS
 const UserRouter = require('./routes/user.router.js');
