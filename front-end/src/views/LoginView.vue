@@ -4,14 +4,14 @@
             <img src="../assets/img.girafas.png" alt="" srcset="">
         </div>
         <div class="direita-login">
-            <form class="login-form">
+            <form class="login-form" @submit.prevent="login">
                 <h1>Realizar login</h1>
                 <label for="email">E-mail</label>
-                <input type="text" name="email" placeholder="Digite o seu e-mail">
+                <input type="text" v-model="email" placeholder="Digite o seu e-mail">
                 <label for="senha">Senha</label>
-                <input type="password" name="senha" placeholder="Digite a sua senha">
+                <input type="password" v-model="senha" placeholder="Digite a sua senha">
                 <div class="button-container">
-                    <button type="submit" class="btn-entrar">Entrar</button>
+                    <button type="submit" class="btn-entrar" click="login"> Entrar</button>
                     <button type="submit" class="btn-paciente">Entrar como paciente</button>
                 </div>
             </form>
@@ -123,6 +123,31 @@ h1 {
 </style>
 
 <script>
-import { Axios } from 'axios';
-export default {name:'LoginView'}
+import Axios from 'axios';
+export default {
+    name:'LoginView', 
+    data(){
+        return{
+            email:'',
+            senha:''
+        }
+    },
+methods:{
+    async login(){
+        console.log("cheguei aqui")
+        console.log(this.email, this.senha)
+        await Axios.post("http://localhost:3000/user/login", {
+            user:{
+                email:this.email,
+                senha:this.senha
+            }
+        }).then(response =>{
+            console.log(response.status)
+        }).catch(Error =>{
+            console.log (Error)
+        })
+    }
+}
+    }
+
 </script>
