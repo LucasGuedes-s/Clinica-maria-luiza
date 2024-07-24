@@ -137,7 +137,7 @@ methods:{
         console.log("cheguei aqui")
         console.log(this.email, this.senha)
         await Axios.post("http://localhost:3000/user/login", {
-            user:{
+            usuario:{
                 email:this.email,
                 senha:this.senha
             }
