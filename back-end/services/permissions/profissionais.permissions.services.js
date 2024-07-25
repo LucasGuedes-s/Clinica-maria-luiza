@@ -18,4 +18,12 @@ async function post(req, res, next) {
         next(err);
     }
 }
-module.exports = {get, post};
+async function postProfissional(req, res, next) {
+    try {
+        await verificarPermissoes(req.user, permissions.PERMISSAO_ADMIN);
+        next(); 
+    } catch (err) {
+        next(err);
+    }
+}
+module.exports = {get, post, postProfissional};

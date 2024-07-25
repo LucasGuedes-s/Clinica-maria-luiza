@@ -30,4 +30,15 @@ async function getAgendamentos(req, res, next){
     }
     
 }
-module.exports = {getProfissionais, getAgendamentos, getProfissional};
+async function postProfissional(req, res, next){
+    try {
+        const profissional = req.body
+        console.log("Cheguei aqui")
+        res.status(200).json({profissional});
+        next()
+    } catch (err) {
+        console.error(`Erro ao receber usuário`);
+    }
+    
+}
+module.exports = {getProfissionais, getAgendamentos, getProfissional, postProfissional};
