@@ -6,7 +6,9 @@
 
 */
 -- AlterTable
-ALTER TABLE "Agendamentos" ADD COLUMN     "profissionalId" TEXT NOT NULL;
+ALTER TABLE "Agendamentos" ADD COLUMN     "data_conclusao" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+ADD COLUMN     "profissionalId" TEXT NOT NULL,
+ALTER COLUMN "data" DROP NOT NULL;
 
 -- AlterTable
 ALTER TABLE "Consultas" ADD COLUMN     "laudos" VARCHAR(2048)[],
