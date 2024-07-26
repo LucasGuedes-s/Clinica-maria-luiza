@@ -123,6 +123,7 @@ h1 {
 
 <script>
 import Axios from 'axios';
+import Swal from 'sweetalert2'
 import { useAuthStore } from '@/store.js'
 
 export default {
@@ -152,11 +153,16 @@ methods:{
             }
         }).then(response =>{
             console.log(response.status)
+            console.log(response.data)
             console.log(response.headers.authorization); //Mostra o token que está chegando
-
             this.store.token = response.headers.authorization.split(' ')[1]; //Adiciona o token ao Store
         }).catch(Error =>{
-            console.log (Error)
+            console.error(Error);
+            Swal.fire({
+                icon: 'erro',
+                title: 'Usuário ou senhas incorretos',
+                timer: 4000,
+            })
         })
     }
 }
