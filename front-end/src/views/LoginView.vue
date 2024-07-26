@@ -18,7 +18,6 @@
         </div>
     </div>
 </template>
-
 <style scoped>
 body {
     margin: 0;
@@ -124,12 +123,22 @@ h1 {
 
 <script>
 import Axios from 'axios';
+import { useAuthStore } from '@/store.js'
+
 export default {
-    name:'LoginView', 
+    name:'LoginView',
+    //O gancho setup() serve como ponto de entrada para usar a API de Composição em componentes. 
+    setup(){
+        const store = useAuthStore() //Importação da função do Store.js
+        return{
+            store
+        }
+    },
     data(){
         return{
             email:'',
-            senha:''
+            senha:'',
+            token: []
         }
     },
 methods:{
@@ -143,6 +152,9 @@ methods:{
             }
         }).then(response =>{
             console.log(response.status)
+            console.log(response.headers.authorization); //Mostra o token que está chegando
+
+            this.store.token = response.headers.authorization.split(' ')[1]; //Adiciona o token ao Store
         }).catch(Error =>{
             console.log (Error)
         })

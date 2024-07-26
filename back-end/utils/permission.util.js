@@ -2,13 +2,6 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient()
 
 async function verificarPermissions(usuario, permission_id) {
-    /*const user = await prisma.Profissionais.findFirst({
-        where:{
-            email: usuario.email
-        }
-    });*/
-    console.log(permission_id)
-    console.log(usuario)
     for(let i in permission_id){
         console.log("Aqui")
         if (usuario.permissao === permission_id[i]) {
