@@ -125,6 +125,7 @@ h1 {
 import Axios from 'axios';
 import Swal from 'sweetalert2'
 import { useAuthStore } from '@/store.js'
+import router from '@/router';
 
 export default {
     name:'LoginView',
@@ -144,8 +145,6 @@ export default {
     },
 methods:{
     async login(){
-        console.log("cheguei aqui")
-        console.log(this.email, this.senha)
         await Axios.post("http://localhost:3000/user/login", {
             usuario:{
                 email:this.email,
@@ -156,6 +155,8 @@ methods:{
             console.log(response.data)
             console.log(response.headers.authorization); //Mostra o token que está chegando
             this.store.token = response.headers.authorization.split(' ')[1]; //Adiciona o token ao Store
+            this.store.usuario = response.data
+            router.push('/dashboard')
         }).catch(Error =>{
             console.error(Error);
             Swal.fire({

@@ -1,40 +1,59 @@
 <template>
     <div id="corpo">
+        <header>
         <nav class="nav-bar">
             <div class="logo"><img src="../assets/nome.png" alt="Logo"></div>
             <ul class="nav-links">
                 <li><a href="#quem-somos">Quem somos</a></li>
-                <li><a href="#profissionais">Serviços</a></li>
-                <li><a href="#servicos">Contato</a></li>
+                <li><a href="#servicos">Serviços</a></li>
+                <li><a href="#contato">Contato</a></li>
                 <RouterLink to="/login"><button class="button1">Login</button></RouterLink>
             </ul>
         </nav>
-        <div class="container">
-            <div class="element1">
-                <img src="../assets/girafas.png" alt="Descrição da imagem">
-                <p>Seja bem-vindo(a)!</p>
-            </div>
-            <div class="element2">
-                <div class="element2">
-                    <div class="slider-container">
-                        <div class="slider">
-                            <img src="../assets/Frame1.png" alt="Image 1">
-                            <img src="../assets/Frame2.png" alt="Image 2">
-                            <img src="../assets/Frame3.png" alt="Image 3">
-                            <img src="../assets/Frame4.png" alt="Image 4">
-                            <img src="../assets/Frame5.png" alt="Image 5">
-                            <img src="../assets/Frame6.png" alt="Image 6">
-                        </div>
-                        <button class="slider-btn prev-btn">&lt;</button>
-                        <button class="slider-btn next-btn">&gt;</button>
-                    </div>
+    </header>
+
+    <div class="container">
+        <div class="element1">
+            <img src="../assets/girafas.png" alt="Descrição da imagem">
+            <p>Seja bem-vindo(a)!</p>
+        </div>
+        <div class="element2">
+            <div class="slider-container">
+                <div class="slider">
+                    <img src="../assets/Frame1.png" alt="Image 1">
+                    <img src="../assets/Frame2.png" alt="Image 2">
+                    <img src="../assets/Frame3.png" alt="Image 3">
+                    <img src="../assets/Frame4.png" alt="Image 4">
+                    <img src="../assets/Frame5.png" alt="Image 5">
+                    <img src="../assets/Frame6.png" alt="Image 6">
                 </div>
+                <button class="slider-btn prev-btn">&lt;</button>
+                <button class="slider-btn next-btn">&gt;</button>
             </div>
         </div>
+    </div>
+
+    <section id="quem-somos">
+        <h1>Quem somos?</h1>
+        <p>Nossa Clínica de Desenvolvimento Infantil oferece atendimento especializado com foco na Intervenção em ABA,
+            promovendo melhorias no comportamento e na aprendizagem. Contamos com uma equipe multidisciplinar dedicada a
+            garantir o desenvolvimento integral e o bem-estar das crianças e suas famílias. Acreditamos que cada criança
+            é única e nosso compromisso é proporcionar um ambiente acolhedor, seguro e estimulante.</p>
+    </section>
+
+    <section id="servicos">
+        <h1>Nossos serviços</h1>
+    </section>
+
+    <section id="contato">
+        <h1>Contato</h1>
+    </section>
     </div>
 </template>
 
 <script>
+import { RouterLink } from 'vue-router';
+
 export default {
 
 }
@@ -65,16 +84,13 @@ export default {
     display: flex;
     margin-right: 60px;
     align-items: center;
-    /* Centraliza verticalmente os itens */
 }
 
 .nav-links li {
     margin: 15px;
     padding: 5px 25px;
-    display: flex;
-    /* Para centralizar horizontalmente */
-    align-items: center;
-    /* Para centralizar horizontalmente */
+    display: flex; 
+    align-items: center; 
     border-radius: 20px;
     border: 1px solid #84E7FF;
 }
@@ -82,7 +98,7 @@ export default {
 .nav-links a {
     text-decoration: none;
     color: #7E7E7E;
-    font-size: 18px;
+    font-size: 17px;
     display: flex;
     align-items: center;
 }
@@ -91,21 +107,21 @@ export default {
     color: #84E7FF;
 }
 
-
 .button1 {
     padding: 5px 40px;
     font-size: 17px;
     margin-left: 20px;
-    background-color: #F5F5F5;
-    /* Cor de fundo */
+    background-color: #F5F5F5; 
     border: none;
-    /* Remover bordas */
-    border-radius: 20px;
-    /* Bordas arredondadas */
+    border-radius: 20px; 
     font-family: 'Montserrat', sans-serif;
-    border: 2px solid #D9D9D9;
+    border: 1px solid #D9D9D9;
+    color: #7E7E7E;
 }
 
+.button1:hover{
+    background-color: #E7FAFF;
+}
 
 .container {
     display: flex;
@@ -132,16 +148,12 @@ export default {
     margin-top: 20px;
     padding: 10px 85px;
     font-size: 16px;
-    background-color: #FBE9EB;
-    /* Cor de fundo */
-    border: none;
-    /* Remover bordas */
-    border-radius: 5px;
-    /* Bordas arredondadas */
+    background-color: #FBE9EB; 
+    border: none; 
+    border-radius: 5px; 
     font-family: 'Montserrat', sans-serif;
     border: 2px solid #FAC6CA;
 }
-
 
 .element2 {
     width: 800px;
@@ -163,8 +175,7 @@ export default {
 
 .slider {
     display: flex;
-    width: 4800px;
-    /* Total width of all images */
+    width: 4800px; 
     transition: transform 0.5s ease;
 }
 
@@ -186,8 +197,7 @@ export default {
     height: 50px;
     cursor: pointer;
     z-index: 10;
-    border-radius: 50%;
-    /* torna o botão circular */
+    border-radius: 50%; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -202,6 +212,19 @@ export default {
 }
 
 section {
-    background-color: red;
+    max-width: 1200px;
+    margin: 55px auto; 
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 25px;
+    box-shadow: 0 4px 10px -1px rgba(0, 0, 0, 0.10);
+    text-align: center;
+    color: #FAC6CA; 
+}
+
+section p{
+    color: #7E7E7E;
+    line-height: 1.9; 
+    font-size: 16px;
 }
 </style>
