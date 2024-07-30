@@ -33,13 +33,11 @@
             <h1>Bem-vindo(a)!</h1>
         </div>
         <div class="container2">
-            <img src="">
+            <img :src="imageUrl" alt="Foto do Usuário" @error="onImageError" />
             <div class="info">
-                <p>Nome:</p>
-                <p>ID:</p>
-                <p>Função:</p>
-                <p>E-mail:</p>
-                <p>Pix:</p>
+                <p>Nome: {{ nome }}</p>
+                <p>e-mail: {{ email }}</p>
+                <p>Telefone: {{ telefone }}</p>
             </div>
             <div class="senha-div">
                 <button class="alterar-senha-btn">Alterar Senha</button>
@@ -227,7 +225,6 @@ h2 {
 </style>
 <script>
 import { useAuthStore } from '@/store';
-import axios from 'axios';
 
 export default {
     name:'dashboard',
@@ -239,17 +236,28 @@ export default {
     },
     data(){
         return{
-            user: null
+            user: null,
+            nome: null,
+            email: null,
+            telefone: null,
+            imageUrl: null
         }
     },
     methods:{
         async dados(){
-            const usuario = 1
-            await axios.get(`http://localhost:3000/profissional/${usuario}`, 
-                {headers:{'Authorization':`${this.store.token}`}}
-            )
+            try{
+                this.user = this.store.usuario.usuario
+                this.nome = this.user.nome
+                this.email = this.user.email
+                this.telefone = this.user.telefone
+                this.imageUrl = this.user.foto
+            }
+            catch{
+                console.log('Erro')
+            }
         }
     },
+
     mounted(){
         this.dados();
     }

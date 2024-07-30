@@ -90,7 +90,7 @@ async function Pacientes(){
       email: 'Lucasguedes2908@gmail.com',
       nome: 'Lucas Guedes',
       telefone: '84 99428-0599',
-      foto: 'gs://clinica-maria-luiza.appspot.com/uploads/34852164-cf03-4d5b-adb7-7aa1940aea62_WhatsApp Image 2024-05-09 at 07.49.14.jpeg',
+      foto: 'https://firebasestorage.googleapis.com/v0/b/clinica-maria-luiza.appspot.com/o/uploads%2Fe87a3bb3-dd13-4582-a719-e7c3c0c38764_Design%20sem%20nome%20(3).png?alt=media&token=37428848-38b9-4172-b57b-81da30bf6e2ahttps://firebasestorage.googleapis.com/v0/b/clinica-maria-luiza.appspot.com/o/uploads%2F005dea4f-069a-4e1b-94f5-5a800b1a60be_334572.WdsS_E6FZYwB.jpeg?alt=media&token=fada7821-9f2c-4b0a-8022-5a7840c303cb',
     },
   });
 
@@ -100,7 +100,7 @@ async function Pacientes(){
       email: 'JoãoPaulo@gmail.com',
       nome: 'João Paulo',
       telefone: '84 8133-2996',
-      foto: 'gs://clinica-maria-luiza.appspot.com/uploads/zdnv504i.png',
+      foto: 'https://firebasestorage.googleapis.com/v0/b/clinica-maria-luiza.appspot.com/o/uploads%2Fe87a3bb3-dd13-4582-a719-e7c3c0c38764_Design%20sem%20nome%20(3).png?alt=media&token=37428848-38b9-4172-b57b-81da30bf6e2a',
     },
   })
 }
@@ -114,7 +114,7 @@ async function Profissionais(){
       senha: senha_users,
       nome: 'Admin',
       telefone: '84 99428-0599',
-      foto: 'gs://clinica-maria-luiza.appspot.com/uploads/funcionarios2.svg',
+      foto: 'https://firebasestorage.googleapis.com/v0/b/clinica-maria-luiza.appspot.com/o/uploads%2Ffuncionarios2.svg?alt=media&token=cc7511c0-9e76-4cd6-9e33-891bbb3cfd1c',
       identificador: 'admin@gmail.com',
       permissaoId: parseInt(process.env.PERMISSAO_ADMIN),
     },
@@ -126,7 +126,7 @@ async function Profissionais(){
       senha: senha_users,
       nome: 'Profissional',
       telefone: '84 99428-0599',
-      foto: 'gs://clinica-maria-luiza.appspot.com/uploads/funcionarios2.svg',
+      foto: 'https://firebasestorage.googleapis.com/v0/b/clinica-maria-luiza.appspot.com/o/uploads%2Ffuncionarios2.svg?alt=media&token=cc7511c0-9e76-4cd6-9e33-891bbb3cfd1c',
       identificador: 'CRN:1845',
       permissaoId: parseInt(process.env.PERMISSAO_PROFISSIONAL),
     },
@@ -137,7 +137,7 @@ async function Profissionais(){
       senha: senha_users,
       nome: 'Recepcionista',
       telefone: '84 99428-0599',
-      foto: 'gs://clinica-maria-luiza.appspot.com/uploads/funcionarios2.svg',
+      foto: 'https://firebasestorage.googleapis.com/v0/b/clinica-maria-luiza.appspot.com/o/uploads%2Ffuncionarios2.svg?alt=media&token=cc7511c0-9e76-4cd6-9e33-891bbb3cfd1c',
       identificador: 'recepcionista@gmail.com',
       permissaoId: parseInt(process.env.PERMISSAO_RECEPCIONISTA),
     },
