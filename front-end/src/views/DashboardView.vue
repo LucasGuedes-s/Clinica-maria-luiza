@@ -257,7 +257,6 @@ export default {
     methods: {
         async dados() {
             try {
-                console.log(this.store.usuario.usuario)
                 this.user = this.store.usuario.usuario
                 this.nome = this.user.nome
                 this.email = this.user.email

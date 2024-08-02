@@ -32,9 +32,8 @@ async function getAgendamentos(req, res, next){
 }
 async function postProfissional(req, res, next){
     try {
-        const profissional = req.body
-        console.log("Cheguei aqui")
-        res.status(200).json({profissional});
+        const cadastro = await Profissional.postProfissional(req.body)
+        res.status(200).json({cadastro});
         next()
     } catch (err) {
         console.error(`Erro ao receber usuário`);

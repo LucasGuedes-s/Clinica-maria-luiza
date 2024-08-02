@@ -1,5 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient()
+const bcryptUtil = require("../utils/bcrypt.ultil")
+require('dotenv').config();
 
 async function getProfissionais(){   
     const profissionais = await prisma.Profissionais.findMany();
@@ -21,5 +23,23 @@ async function getAgendamentos(user){
     });
     return Agendamentos;
 }
+async function postProfissional(user){  
+    console.log(user)
+    let senha_user = bcryptUtil.hash(user.usuario.senha);
 
-module.exports = {getProfissionais, getAgendamentos, getProfissional};
+    await prisma.Profissionais.create({
+        data: {
+            email: user.usuario.email,
+            senha: senha_user,
+            nome: user.usuario.nome,
+            telefone: user.usuario.telefone,
+            foto: user.usuario.foto,
+            identificador: user.usuario.identificador,
+            permissaoId: user.usuario.permissaoId,
+          },
+    });
+    return;
+}
+
+
+module.exports = {getProfissionais, getAgendamentos, postProfissional, getProfissional};
