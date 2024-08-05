@@ -30,21 +30,25 @@ model Pacientes{
   nome            String
   nome_mae        String?
   data_nascimento DateTime?
-  telefone        String
+  telefone        String?
   endereco        String?
   foto            String?      @db.VarChar(2048)
   agendamentos    Agendamentos[]
   consultas       Consultas[]
+  paciente_dados  Pacientes_dados[]
+  ConsultaAba     ConsultaAba[]
 }
-model PacientesABA_dados{
-  paciente        Int @id
+model Pacientes_dados{
+  pacientes       Int @id @default(autoincrement())
+  paciente        Pacientes? @relation(fields: [pacienteId], references: [cpf])
+  pacienteId      String?
   peso            Float?      
   altura          Float?
   comestiveis     String? @db.VarChar(2048)
   tangiveis       String? @db.VarChar(2048)
   fisicos         String? @db.VarChar(2048)
   data_aplicacao  DateTime @default(now())
-  descricao       String?
+  alergicos       String?
 }
 
 model Agendamentos{
@@ -78,6 +82,22 @@ model Consultas{
   pacienteId      String?
   profissionalId  String?
 }
+model ConsultaAba{
+  pacientes       Int @id @default(autoincrement())
+  paciente        Pacientes? @relation(fields: [pacienteId], references: [cpf])
+  pacienteId      String?
+  nome_aplicador  String?
+  data_aplicacao  DateTime @default(now())      
+  descricao_atividade String? @db.VarChar(2048)
+  Aplicacao1      String?
+  Aplicacao2      String?
+  Aplicacao3      String?
+  Aplicacao4      String?
+  Aplicacao5      String?
+  teste           String?
+  observacoes     String? @db.VarChar(2048)
+}
+
 model Pagamentos{
   id              Int @id
   pagamento       Float?

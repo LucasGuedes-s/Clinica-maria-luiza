@@ -5,6 +5,14 @@ async function getPacientes(){
     const pacientes = await prisma.Pacientes.findMany();
     return pacientes;
 }
+async function getPaciente(id){  
+    const pacientes = await prisma.Pacientes.findMany({
+        where:{
+            cpf: id.cpf
+        }
+    });
+    return pacientes;
+}
 async function cadastrarPaciente(req){  
     const pacientes = await prisma.Pacientes.create({
         data: {
