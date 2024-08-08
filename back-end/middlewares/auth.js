@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 
 function validarJWT(req, res, next){
     //console.log(req.headers.authorization)
+    
     //Verifica se o token veio certo, ou está nulo
     if (!req.headers.authorization) {
         res.status(422).send({

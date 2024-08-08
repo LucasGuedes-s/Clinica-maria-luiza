@@ -19,6 +19,8 @@ model Profissionais {
   permissaoId      Int
   especialidade    Especialidade?    @relation(fields: [especialidadeId], references: [id])
   especialidadeId  Int?
+  paciente         Pacientes? @relation(fields: [pacienteId], references: [cpf])
+  pacienteId       String? //Adicionado
   agendamentos     Agendamentos[]
   consultas        Consultas[]
   pagamentos       Pagamentos[]
@@ -37,6 +39,7 @@ model Pacientes{
   consultas       Consultas[]
   paciente_dados  Pacientes_dados[]
   ConsultaAba     ConsultaAba[]
+  profissionais   Profissionais[] //Adicionado
 }
 model Pacientes_dados{
   pacientes       Int @id @default(autoincrement())
@@ -47,14 +50,15 @@ model Pacientes_dados{
   comestiveis     String? @db.VarChar(2048)
   tangiveis       String? @db.VarChar(2048)
   fisicos         String? @db.VarChar(2048)
-  data_aplicacao  DateTime @default(now())
+  data            DateTime @default(now())
+  data_neuro      DateTime? @db.Date
   alergicos       String?
 }
 
 model Agendamentos{
   id              Int @id @default(autoincrement())
   data            DateTime?
-  data_conclusao  DateTime? @default(now())
+  data_conclusao  DateTime? @db.Date
   agendamento     String?
   notas           String?
   status          String?
