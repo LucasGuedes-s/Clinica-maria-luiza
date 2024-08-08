@@ -6,40 +6,14 @@
             <input type="text" id="search-input" placeholder="Nome do profissional...">
             <button>Cadastrar</button>
         </div>
-        <div class="container-profissional">
-            <img src="kessya.jpg">
+        <div class="container-profissional" v-for="usuario in profissional" :key="usuario.email">
+            <img :src="usuario.foto">
             <div class="info">
-                <p>Nome:</p>
-                <p>Especialide:</p>
-                <p>E-mail:</p>
-                <p>Telefone:</p>
-                <p>Pix:</p>
-            </div>
-            <div class="detalhar-div">
-                <button class="detalhar-btn">Detalhar</button>
-            </div>
-        </div>
-        <div class="container-profissional">
-            <img src="kessya.jpg">
-            <div class="info">
-                <p>Nome:</p>
-                <p>Especialide:</p>
-                <p>E-mail:</p>
-                <p>Telefone:</p>
-                <p>Pix:</p>
-            </div>
-            <div class="detalhar-div">
-                <button class="detalhar-btn">Detalhar</button>
-            </div>
-        </div>
-        <div class="container-profissional">
-            <img src="kessya.jpg">
-            <div class="info">
-                <p>Nome:</p>
-                <p>Especialide:</p>
-                <p>E-mail:</p>
-                <p>Telefone:</p>
-                <p>Pix:</p>
+                <p>Nome: {{ usuario.nome }}</p>
+                <p>Especialide: {{ usuario.especialidade }}</p>
+                <p>E-mail: {{ usuario.email }}</p>
+                <p>Telefone: {{ usuario.telefone }}</p>
+                <p>Pix: {{ usuario.pix }}</p>
             </div>
             <div class="detalhar-div">
                 <button class="detalhar-btn">Detalhar</button>
@@ -182,8 +156,12 @@ input {
 <script>
 import Sidebar from '@/components/Sidebar.vue'
 import { useAuthStore } from '@/store';
+import Axios from 'axios';
 export default {
     name: 'profissionais',
+    components:{
+        Sidebar
+    },
     setup() {
         const store = useAuthStore()
         return {
@@ -192,17 +170,34 @@ export default {
     },
     methods: {
         async profissionais() {
-            await Axios.get("http://localhost:3000/user//profissionais", {
+            const token = this.store.token
+            console.log(token)
+            Axios.get("http://localhost:3000/profissionais", {
                 headers: {
                     'Authorization': `${token}`
                 }
             }).then(response => {
-                console.log(response.status)
-                console.log(response.data)
+                this.profissional = response.data.profissionais
+                console.log(response.data.profissionais)
             }).catch(Error => {
                 console.error(Error)
             })
         }
+    },
+    mounted (){
+        this.profissionais()
+    },
+    data(){
+        return{
+            profissional: null
+        }
+    },
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            if (!vm.store.isAuthenticated) {
+                vm.$router.push('/login')
+            }
+        })
     }
 }
 

@@ -173,6 +173,9 @@ import Sidebar from '@/components/Sidebar.vue';
 
 export default {
     name: 'dashboard',
+    components:{
+        Sidebar
+    },
     setup() {
         const store = useAuthStore()
         return {
