@@ -11,7 +11,7 @@
                 <label for="senha">Senha</label>
                 <input type="password" v-model="senha" placeholder="Digite a sua senha">
                 <div class="button-container">
-                    <button type="submit" class="btn-entrar" click="login"> Entrar</button>
+                    <button type="submit" class="btn-entrar" click="login">Entrar como profissional</button>
                     <button type="submit" class="btn-paciente">Entrar como paciente</button>
                 </div>
             </form>
