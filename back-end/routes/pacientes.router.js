@@ -5,6 +5,9 @@ const permission = require('../services/permissions/profissionais.permissions.se
 const router = express.Router()
 
 router.get('/pacientes', [jwtMiddleware, permission.get], userController.getPacientes);
+
+router.get('/consulta/paciente', [jwtMiddleware, permission.get], userController.getConsultas);
 router.post('/cadastrar/pacientes', [jwtMiddleware, permission.post], userController.postPacientes);
+router.post('/consulta/registrar', [jwtMiddleware, permission.postProfissionais], userController.postConsulta);
 
 module.exports = router;

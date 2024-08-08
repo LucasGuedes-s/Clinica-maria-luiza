@@ -20,16 +20,7 @@ async function getProfissional(req, res, next){
         console.error(`Erro ao receber esse profissional`);
     }
 }
-async function getAgendamentos(req, res, next){
-    try {
-        const agenda = await Profissional.getAgendamentos(req.body)
-        res.status(200).json({agenda});
-        next()
-    } catch (err) {
-        console.error(`Erro ao receber agenda do usuário`);
-    }
-    
-}
+
 async function postProfissional(req, res, next){
     try {
         const cadastro = await Profissional.postProfissional(req.body)
@@ -37,7 +28,6 @@ async function postProfissional(req, res, next){
         next()
     } catch (err) {
         console.error(`Erro ao receber usuário`);
-    }
-    
+    }  
 }
-module.exports = {getProfissionais, getAgendamentos, getProfissional, postProfissional};
+module.exports = {getProfissionais, getProfissional, postProfissional};

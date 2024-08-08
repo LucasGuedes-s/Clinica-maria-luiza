@@ -26,8 +26,9 @@ app.use(cors({
 const UserRouter = require('./routes/user.router.js');
 const profissionaisRouter = require('./routes/profissionais.router.js');
 const pacientesRouter = require('./routes/pacientes.router.js');
+const agendaRouter = require('./routes/agenda.router.js');
 
-app.use(UserRouter, profissionaisRouter, pacientesRouter)
+app.use(UserRouter, profissionaisRouter, pacientesRouter, agendaRouter)
 
 const hostname = 'localhost';
 app.listen(port, () => {
