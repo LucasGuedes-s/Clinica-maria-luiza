@@ -6,8 +6,8 @@
             <input type="text" id="search-input" placeholder="Nome do paciente...">
             <button>Cadastrar</button>
         </div>
-        <div class="container-profissional">
-            <img src="kessya.jpg">
+        <div class="container-paciente">
+            <img src="">
             <div class="info">
                 <p>Nome:</p>
                 <p>Telefone:</p>
@@ -67,7 +67,7 @@ input {
     font-size: 14px;
 }
 
-.container-profissional {
+.container-paciente {
     background-color: white;
     padding: 20px;
     margin-bottom: 20px;
@@ -78,7 +78,7 @@ input {
     position: relative;
 }
 
-.container-profissional img {
+.container-paciente img {
     width: 165px;
     height: 170px;
     margin-right: 20px;
@@ -114,7 +114,7 @@ input {
 }
 
 .histconsultas-btn {
-    background-color: #E7FAFF; /* Define a cor de fundo para o botão "Hist. consultas" */
+    background-color: #E7FAFF; 
 }
 
 </style>
