@@ -1,6 +1,6 @@
 <template>
      <div class="container">
-        <img src="girafas.png" alt="Imagem de girafas">
+        <img src="../assets/girafas.png" alt="Imagem de girafas">
         <h1>Acesso não autorizado!</h1>
         <h2>Você não tem permissão para acessar a página solicitada.</h2>
         <div class="button-container">

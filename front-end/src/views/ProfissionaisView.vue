@@ -174,7 +174,7 @@ export default {
             console.log(token)
             Axios.get("http://localhost:3000/profissionais", {
                 headers: {
-                    'Authorization': `${token}`
+                    'Authorization': `Bearer ${token}`
                 }
             }).then(response => {
                 this.profissional = response.data.profissionais
@@ -194,8 +194,16 @@ export default {
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
+            const authStore = useAuthStore();
+            const userPermissions = authStore.getUser.usuario.permissao; // Obtém as permissões do usuário
+            
+            const requiredPermission = 1;
+            
             if (!vm.store.isAuthenticated) {
                 vm.$router.push('/login')
+            }
+            else if (userPermissions != requiredPermission) {
+                vm.$router.push('/unauthorized'); // Redireciona para uma página de acesso negado
             }
         })
     }

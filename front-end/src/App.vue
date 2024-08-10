@@ -10,6 +10,10 @@
   color: #2c3e50;
   margin: 0;
 }
+img:focus {
+  outline: none;
+}
+
 body{
   margin: 0;
   background-color: white;
