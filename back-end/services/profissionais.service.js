@@ -5,6 +5,7 @@ require('dotenv').config();
 
 async function getProfissionais(){   
     const profissionais = await prisma.Profissionais.findMany();
+
     return profissionais;
 }
 async function getProfissional(usuario){  
@@ -14,14 +15,6 @@ async function getProfissional(usuario){
         }
     });
     return profissionais;
-}
-async function getAgendamentos(user){  
-    const Agendamentos = await prisma.Agendamentos.findMany({
-        where: {
-            profissionalId: user.usuario.email
-        }
-    });
-    return Agendamentos;
 }
 async function postProfissional(user){  
     console.log(user)
@@ -41,5 +34,4 @@ async function postProfissional(user){
     return;
 }
 
-
-module.exports = {getProfissionais, getAgendamentos, postProfissional, getProfissional};
+module.exports = {getProfissionais, postProfissional, getProfissional};

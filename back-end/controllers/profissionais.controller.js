@@ -3,7 +3,6 @@ const Profissional = require('../services/profissionais.service')
 async function getProfissionais(req, res, next){
     try {
         const profissionais = await Profissional.getProfissionais()
-        console.log(profissionais)
         res.status(200).json({profissionais});
         next()
     } catch (err) {

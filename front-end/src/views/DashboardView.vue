@@ -2,7 +2,7 @@
     <div>
         <Sidebar />
     </div>
-        <div class="main-content">
+    <div class="main-content">
         <div class="container1">
             <h1>Bem-vindo(a)!</h1>
         </div>
@@ -49,6 +49,7 @@ body {
     background-color: #E7FAFF;
     font-family: 'Montserrat', sans-serif;
 }
+
 .main-content {
     margin-left: 260px;
     padding: 20px;
@@ -173,7 +174,7 @@ import Sidebar from '@/components/Sidebar.vue';
 
 export default {
     name: 'dashboard',
-    components:{
+    components: {
         Sidebar
     },
     setup() {

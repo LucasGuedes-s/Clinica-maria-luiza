@@ -1,9 +1,8 @@
-const Profissional = require('../services/profissionais.service')
+const Agendamentos = require('../services/agendas.service')
 
 async function postAgendamentos(req, res, next){
     try {
-        const consulta = 'Aqui'
-        //const consulta = await Paciente.agendarConsulta(req.body)
+        const consulta = await Agendamentos.agendarConsulta(req.body)
         res.status(200).json({consulta});
         next()
     } catch (err) {
@@ -13,7 +12,7 @@ async function postAgendamentos(req, res, next){
 }
 async function getAgendamentos(req, res, next){
     try {
-        const agenda = await Profissional.getAgendamentos(req.body)
+        const agenda = await Agendamentos.getAgendamentos(req.body)
         res.status(200).json({agenda});
         next()
     } catch (err) {

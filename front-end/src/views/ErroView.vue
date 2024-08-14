@@ -4,14 +4,14 @@
         <h1>Acesso não autorizado!</h1>
         <h2>Você não tem permissão para acessar a página solicitada.</h2>
         <div class="button-container">
-            <button class="btn">Voltar</button>
-            <button class="btn">Login</button>
+            <button class="btn" @click="voltar">Voltar</button>
+            <button class="btn" @click="login">Login</button>
         </div>
     </div>
 </template>
 
-<style>
-    body {
+<style scoped>
+body {
     margin: 0;
     height: 100vh;
     display: flex;
@@ -79,5 +79,18 @@ h2 {
 .btn:hover {
     background-color: #F5F5F5;
 }
-
 </style>
+<script>
+import router from '@/router';
+
+export default {
+    methods: {
+        voltar() {
+            router.push('/dashboard')
+        },
+        login() {
+            router.push('/login')
+        }
+    }
+}
+</script>

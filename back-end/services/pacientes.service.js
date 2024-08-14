@@ -49,9 +49,9 @@ async function registrarConsulta(req){
             paciente: {
                 connect: { cpf: req.consulta.pacienteId }
               },
-              profissional: {
-                connect: { email: req.consulta.profissionalId}
-              },
+            profissional: {
+              connect: { email: req.consulta.profissionalId}
+            },
             laudos: req.consulta.laudos,
             foto: req.consulta.foto
         }
