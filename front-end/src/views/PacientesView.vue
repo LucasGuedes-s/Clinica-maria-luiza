@@ -6,11 +6,11 @@
             <input type="text" id="search-input" placeholder="Nome do paciente...">
             <RouterLink to="/cadastrarpaciente"><button>Cadastrar</button></RouterLink>
         </div>
-        <div class="container-paciente">
-            <img src="">
+        <div class="container-paciente" v-for="usuario in paciente" :key="usuario.cpf">
+            <img :src="usuario.foto">
             <div class="info">
-                <p>Nome:</p>
-                <p>Telefone:</p>
+                <p>Nome: {{ usuario.nome }}</p>
+                <p>Telefone: {{ usuario.telefone }}</p>
             </div>
             <div class="botoes-div">
                 <button class="detalhar-btn">Detalhar</button>
@@ -120,11 +120,64 @@ input {
 </style>
 
 <script>
-import Sidebar from '@/components/Sidebar.vue';
+import Sidebar from '@/components/Sidebar.vue'
+import { useAuthStore } from '@/store';
+import Axios from 'axios';
 export default {
-    name: 'profissionais',
+    name: 'pacientes',
     components:{
         Sidebar
+    },
+    setup() {
+        const store = useAuthStore()
+        return {
+            store
+        }
+    },
+    methods: {
+        async pacientes() {
+            const token = this.store.token
+            console.log(token)
+            Axios.get("http://localhost:3000/pacientes", {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then(response => {
+                this.paciente = response.data.pacientes
+                console.log(response.data.pacientes)
+            }).catch(Error => {
+                console.error(Error)
+            })
+        }
+    },
+    mounted (){
+        this.pacientes()
+    },
+    data(){
+        return{
+            paciente: null
+        }
+    },
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            try{
+                const authStore = useAuthStore();
+                const userPermissions = authStore.getUser.usuario.permissao; // Obtém as permissões do usuário
+                
+                const requiredPermission = 1;
+                
+                if (!vm.store.isAuthenticated) {
+                    vm.$router.push('/login')
+                }
+                else if (userPermissions != requiredPermission) {
+                    vm.$router.push('/unauthorized'); // Redireciona para uma página de acesso negado
+                }
+            }
+            catch{
+                console.log("Erro")
+            }
+
+        })
     }
 }
 </script>

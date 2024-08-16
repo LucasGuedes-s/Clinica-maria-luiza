@@ -1,5 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient()
+const bcryptUtil = require("../utils/bcrypt.ultil")
+require('dotenv').config();
 
 async function getPacientes(){  
     const pacientes = await prisma.Pacientes.findMany();
@@ -58,5 +60,22 @@ async function registrarConsulta(req){
     });
 
     return consulta;
+}
+async function postPaciente(user){  
+  console.log(user)
+  let senha_user = bcryptUtil.hash(user.usuario.senha);
+
+  await prisma.Pacientes.create({
+      data: {
+          email: user.usuario.email,
+          senha: senha_user,
+          nome: user.usuario.nome,
+          telefone: user.usuario.telefone,
+          foto: user.usuario.foto,
+          identificador: user.usuario.identificador,
+          permissaoId: user.usuario.permissaoId,
+        },
+  });
+  return;
 }
 module.exports = {getPacientes, getConsultas, cadastrarPaciente, registrarConsulta};
