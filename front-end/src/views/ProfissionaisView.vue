@@ -4,7 +4,7 @@
         <h1>Profissionais</h1>
         <div class="search-cadastrar">
             <input type="text" id="search-input" placeholder="Nome do profissional...">
-            <button>Cadastrar</button>
+            <RouterLink to="/cadastrarprofissional"><button>Cadastrar</button></RouterLink>
         </div>
         <div class="container-profissional" v-for="usuario in profissional" :key="usuario.email">
             <img :src="usuario.foto">

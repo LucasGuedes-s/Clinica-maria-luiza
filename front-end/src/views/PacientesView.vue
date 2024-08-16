@@ -4,7 +4,7 @@
         <h1>Pacientes</h1>
         <div class="search-cadastrar">
             <input type="text" id="search-input" placeholder="Nome do paciente...">
-            <button>Cadastrar</button>
+            <RouterLink to="/cadastrarpaciente"><button>Cadastrar</button></RouterLink>
         </div>
         <div class="container-paciente">
             <img src="">

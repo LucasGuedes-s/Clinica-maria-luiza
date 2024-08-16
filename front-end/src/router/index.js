@@ -41,6 +41,22 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/PacientesView.vue')
   },
   {
+    path: '/cadastrarprofissional',
+    name: 'cadastrarprofissional',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/CadastrarProfView.vue')
+  },
+  {
+    path: '/cadastrarpaciente',
+    name: 'cadastrarpaciente',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/CadastrarPacView.vue')
+  },
+  {
     path: '/unauthorized',
     name: 'naoAutorizado',
     // route level code-splitting
