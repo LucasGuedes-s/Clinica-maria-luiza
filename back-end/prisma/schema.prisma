@@ -30,11 +30,12 @@ model Pacientes{
   cpf             String       @id
   email           String?      @unique
   nome            String
-  nome_mae        String?
+  nome_responsavel String?
   data_nascimento DateTime?
   telefone        String?
   endereco        String?
   foto            String?      @db.VarChar(2048)
+  tipo_paciente   String?
   agendamentos    Agendamentos[]
   consultas       Consultas[]
   paciente_dados  Pacientes_dados[]

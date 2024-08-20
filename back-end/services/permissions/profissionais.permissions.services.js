@@ -17,6 +17,14 @@ async function post(req, res, next) {
         next(err);
     }
 }
+async function getPacientes(req, res, next) {
+    try {
+        await verificarPermissoes(req.user, permissions.TODOS);
+        next(); 
+    } catch (err) {
+        next(err);
+    }
+}
 async function postProfissionais(req, res, next) {
     try {
         await verificarPermissoes(req.user, permissions.PERMISSAO_PROFISSIONAL);
@@ -33,4 +41,4 @@ async function postProfissional(req, res, next) {
         next(err);
     }
 }
-module.exports = {get, post, postProfissionais, postProfissional};
+module.exports = {get, post, postProfissionais, getPacientes, postProfissional};

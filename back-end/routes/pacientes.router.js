@@ -4,7 +4,9 @@ const userController = require('../controllers/pacientes.controller.js');
 const permission = require('../services/permissions/profissionais.permissions.services')
 const router = express.Router()
 
-router.get('/pacientes', [jwtMiddleware, permission.get], userController.getPacientes);
+//router.get('/pacientes/historico/:id', userController.getConsultas);
+
+router.get('/pacientes', [jwtMiddleware, permission.getPacientes], userController.getPacientes);
 
 router.get('/consulta/paciente', [jwtMiddleware, permission.get], userController.getConsultas);
 router.post('/cadastrar/pacientes', [jwtMiddleware, permission.post], userController.postPacientes);

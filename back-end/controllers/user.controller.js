@@ -21,4 +21,5 @@ async function LoginUsuario(req, res, next){
         next(err);
     }
 }
+
 module.exports = {LoginUsuario};

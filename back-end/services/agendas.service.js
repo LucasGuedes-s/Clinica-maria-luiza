@@ -3,18 +3,23 @@ const prisma = new PrismaClient()
 
 async function agendarConsulta(req){  
     console.log(req)
+      // Primeiro, encontre o paciente pelo CPF
+    const paciente = await prisma.Pacientes.findUnique({
+        where: { cpf: req.agenda.paciente }
+    });
+
+    // Encontre o profissional pelo email
+    const profissional = await prisma.Profissionais.findUnique({
+        where: { email: req.agenda.profissional }
+    });
     const agenda = await prisma.Agendamentos.create({
         data: {
 			data: new Date(),
 			agendamento: req.agenda.agendar,
 			notas: req.agenda.notas,
             status: "Andamento",
-            pacienteId: {
-                connect: { cpf: req.agenda.paciente}
-            },
-            profissionalId: {
-                connect: { email: req.agenda.profissional}
-            },
+            pacienteId: paciente.id,
+            profissionalId: profissional.id,
 			sala: 2
           },
     });
