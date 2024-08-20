@@ -161,16 +161,9 @@ export default {
     beforeRouteEnter(to, from, next) {
         next(vm => {
             try{
-                const authStore = useAuthStore();
-                const userPermissions = authStore.getUser.usuario.permissao; // Obtém as permissões do usuário
-                
-                const requiredPermission = 1;
                 
                 if (!vm.store.isAuthenticated) {
                     vm.$router.push('/login')
-                }
-                else if (userPermissions != requiredPermission) {
-                    vm.$router.push('/unauthorized'); // Redireciona para uma página de acesso negado
                 }
             }
             catch{

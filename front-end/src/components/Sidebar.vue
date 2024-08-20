@@ -77,3 +77,21 @@
     color: #84E7FF;
 }
 </style>
+
+<script>
+import { useAuthStore } from '@/store'; 
+
+export default {
+    setup() {
+        const store = useAuthStore();
+        return {
+            store
+        }
+    },
+    methods: {
+        async pacientes() {
+            store.logout();
+        }
+    },
+};
+</script>
