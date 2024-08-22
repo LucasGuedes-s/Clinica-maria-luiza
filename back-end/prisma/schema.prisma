@@ -19,8 +19,8 @@ model Profissionais {
   permissaoId      Int
   especialidade    Especialidade?    @relation(fields: [especialidadeId], references: [id])
   especialidadeId  Int?
-  paciente         Pacientes? @relation(fields: [pacienteId], references: [cpf])
-  pacienteId       String? //Adicionado
+  //paciente         Pacientes? @relation(fields: [pacienteId], references: [cpf])
+  //pacienteId       String? //Adicionado
   agendamentos     Agendamentos[]
   consultas        Consultas[]
   pagamentos       Pagamentos[]
@@ -40,7 +40,7 @@ model Pacientes{
   consultas       Consultas[]
   paciente_dados  Pacientes_dados[]
   ConsultaAba     ConsultaAba[]
-  profissionais   Profissionais[] //Adicionado
+  //profissionais   Profissionais[] //Adicionado
 }
 model Pacientes_dados{
   pacientes       Int @id @default(autoincrement())

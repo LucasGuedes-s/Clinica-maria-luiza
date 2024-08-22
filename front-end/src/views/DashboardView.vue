@@ -14,7 +14,7 @@
                 <p>Telefone: {{ telefone }}</p>
             </div>
             <div class="senha-div">
-                <button class="alterar-senha-btn">Alterar Senha</button>
+                <button class="alterar-senha-btn" click="teste">Alterar Senha</button>
             </div>
         </div>
         <h2>Agendamentos Solicitados:</h2>
@@ -171,6 +171,8 @@ h2 {
 <script>
 import { useAuthStore } from '@/store';
 import Sidebar from '@/components/Sidebar.vue';
+import Axios from 'axios';
+import Swal from 'sweetalert2'
 
 export default {
     name: 'dashboard',
@@ -205,8 +207,7 @@ export default {
                 console.log('Erro ao obter usuários')
             }
         }
-    },
-
+        },
     mounted() {
         this.dados();
     },

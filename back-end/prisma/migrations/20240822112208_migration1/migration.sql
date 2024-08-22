@@ -18,22 +18,41 @@ CREATE TABLE "Pacientes" (
     "cpf" TEXT NOT NULL,
     "email" TEXT,
     "nome" TEXT NOT NULL,
-    "nome_mae" TEXT,
+    "nome_responsavel" TEXT,
     "data_nascimento" TIMESTAMP(3),
-    "telefone" TEXT NOT NULL,
+    "telefone" TEXT,
     "endereco" TEXT,
     "foto" VARCHAR(2048),
+    "tipo_paciente" TEXT,
 
     CONSTRAINT "Pacientes_pkey" PRIMARY KEY ("cpf")
 );
 
 -- CreateTable
+CREATE TABLE "Pacientes_dados" (
+    "pacientes" SERIAL NOT NULL,
+    "pacienteId" TEXT,
+    "peso" DOUBLE PRECISION,
+    "altura" DOUBLE PRECISION,
+    "comestiveis" VARCHAR(2048),
+    "tangiveis" VARCHAR(2048),
+    "fisicos" VARCHAR(2048),
+    "data" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "data_neuro" DATE,
+    "alergicos" TEXT,
+
+    CONSTRAINT "Pacientes_dados_pkey" PRIMARY KEY ("pacientes")
+);
+
+-- CreateTable
 CREATE TABLE "Agendamentos" (
     "id" SERIAL NOT NULL,
-    "data" TIMESTAMP(3) NOT NULL,
+    "data" TIMESTAMP(3),
+    "data_conclusao" DATE,
     "agendamento" TEXT,
     "notas" TEXT,
     "status" TEXT,
+    "profissionalId" TEXT NOT NULL,
     "pacienteId" TEXT,
     "sala" INTEGER,
 
@@ -53,12 +72,31 @@ CREATE TABLE "Consultas" (
     "id" SERIAL NOT NULL,
     "consulta" TEXT NOT NULL,
     "data" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "descricao" TEXT NOT NULL,
-    "foto" VARCHAR(2048),
+    "descricao" TEXT,
+    "laudos" VARCHAR(2048)[],
+    "foto" VARCHAR(2048)[],
     "pacienteId" TEXT,
     "profissionalId" TEXT,
 
     CONSTRAINT "Consultas_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ConsultaAba" (
+    "pacientes" SERIAL NOT NULL,
+    "pacienteId" TEXT,
+    "nome_aplicador" TEXT,
+    "data_aplicacao" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "descricao_atividade" VARCHAR(2048),
+    "Aplicacao1" TEXT,
+    "Aplicacao2" TEXT,
+    "Aplicacao3" TEXT,
+    "Aplicacao4" TEXT,
+    "Aplicacao5" TEXT,
+    "teste" TEXT,
+    "observacoes" VARCHAR(2048),
+
+    CONSTRAINT "ConsultaAba_pkey" PRIMARY KEY ("pacientes")
 );
 
 -- CreateTable
@@ -101,6 +139,12 @@ ALTER TABLE "Profissionais" ADD CONSTRAINT "Profissionais_permissaoId_fkey" FORE
 ALTER TABLE "Profissionais" ADD CONSTRAINT "Profissionais_especialidadeId_fkey" FOREIGN KEY ("especialidadeId") REFERENCES "Especialidade"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Pacientes_dados" ADD CONSTRAINT "Pacientes_dados_pacienteId_fkey" FOREIGN KEY ("pacienteId") REFERENCES "Pacientes"("cpf") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Agendamentos" ADD CONSTRAINT "Agendamentos_profissionalId_fkey" FOREIGN KEY ("profissionalId") REFERENCES "Profissionais"("email") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Agendamentos" ADD CONSTRAINT "Agendamentos_pacienteId_fkey" FOREIGN KEY ("pacienteId") REFERENCES "Pacientes"("cpf") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -111,6 +155,9 @@ ALTER TABLE "Consultas" ADD CONSTRAINT "Consultas_pacienteId_fkey" FOREIGN KEY (
 
 -- AddForeignKey
 ALTER TABLE "Consultas" ADD CONSTRAINT "Consultas_profissionalId_fkey" FOREIGN KEY ("profissionalId") REFERENCES "Profissionais"("email") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ConsultaAba" ADD CONSTRAINT "ConsultaAba_pacienteId_fkey" FOREIGN KEY ("pacienteId") REFERENCES "Pacientes"("cpf") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Pagamentos" ADD CONSTRAINT "Pagamentos_profissionalId_fkey" FOREIGN KEY ("profissionalId") REFERENCES "Profissionais"("email") ON DELETE SET NULL ON UPDATE CASCADE;

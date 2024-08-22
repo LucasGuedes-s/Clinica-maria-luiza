@@ -13,7 +13,7 @@
                 <p>Telefone: {{ usuario.telefone }}</p>
             </div>
             <div class="botoes-div">
-                <button class="detalhar-btn">Detalhar</button>
+                <button class="detalhar-btn" @click="teste(usuario.nome)">Evolução</button>
                 <button class="histconsultas-btn">Hist. consultas</button>
                 <button class="registrar-btn">Registrar consultas</button>
             </div>
@@ -28,9 +28,11 @@ body {
     background-color: #E7FAFF;
     font-family: 'Montserrat', sans-serif;
 }
+
 h1 {
     color: #84E7FF;
 }
+
 .main-content {
     margin-left: 260px;
     padding: 20px;
@@ -48,8 +50,10 @@ input {
     padding: 10px 20px;
     font-size: 16px;
     border: none;
-    border-radius: 8px; /* Adiciona bordas arredondadas */
-    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1); /* Sombra mais sutil na parte inferior */
+    border-radius: 8px;
+    /* Adiciona bordas arredondadas */
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+    /* Sombra mais sutil na parte inferior */
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
 }
@@ -62,7 +66,8 @@ input {
     cursor: pointer;
     border-radius: 8px;
     margin-left: 10px;
-    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1); /* Sombra mais sutil na parte inferior */
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+    /* Sombra mais sutil na parte inferior */
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
 }
@@ -101,7 +106,9 @@ input {
     gap: 20px;
 }
 
-.detalhar-btn,.histconsultas-btn,.registrar-btn {
+.detalhar-btn,
+.histconsultas-btn,
+.registrar-btn {
     padding: 10px 20px;
     background-color: white;
     border: 1px solid #84E7FF;
@@ -114,9 +121,8 @@ input {
 }
 
 .histconsultas-btn {
-    background-color: #E7FAFF; 
+    background-color: #E7FAFF;
 }
-
 </style>
 
 <script>
@@ -125,7 +131,7 @@ import { useAuthStore } from '@/store';
 import Axios from 'axios';
 export default {
     name: 'pacientes',
-    components:{
+    components: {
         Sidebar
     },
     setup() {
@@ -148,25 +154,43 @@ export default {
             }).catch(Error => {
                 console.error(Error)
             })
+        },
+        async teste(nome) {
+            Axios({
+                url: 'http://localhost:3000/historico/consultas', // Altere a URL conforme necessário
+                method: 'GET',
+                responseType: 'blob' // Importante para tratar a resposta como um blob
+            })
+                .then(response => {
+                    // Crie um URL para o blob
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', `consultas de ${nome} .pdf`); // Nome do arquivo
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+                })
+                .catch(error => console.error('Erro ao baixar o PDF:', error));
         }
     },
-    mounted (){
+    mounted() {
         this.pacientes()
     },
-    data(){
-        return{
+    data() {
+        return {
             paciente: null
         }
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            try{
-                
+            try {
+
                 if (!vm.store.isAuthenticated) {
                     vm.$router.push('/login')
                 }
             }
-            catch{
+            catch {
                 console.log("Erro")
             }
 

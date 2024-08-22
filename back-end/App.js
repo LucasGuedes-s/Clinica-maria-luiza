@@ -27,8 +27,10 @@ const UserRouter = require('./routes/user.router.js');
 const profissionaisRouter = require('./routes/profissionais.router.js');
 const pacientesRouter = require('./routes/pacientes.router.js');
 const agendaRouter = require('./routes/agenda.router.js');
+const pdfsRouter = require('./routes/pdfs.router.js');
 
-app.use(UserRouter, profissionaisRouter, pacientesRouter, agendaRouter)
+
+app.use(UserRouter, profissionaisRouter, pacientesRouter, agendaRouter, pdfsRouter)
 
 const hostname = 'localhost';
 app.listen(port, () => {

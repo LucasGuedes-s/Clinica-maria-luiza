@@ -21,17 +21,20 @@ async function FirstRun() {
   else{
     await CadastrarSalas()
   }
+  console.log("users")
 
-  const users = await prisma.Profissionais.findMany()
+  const users = await prisma.Profissionais.findMany({})
+  console.log(users)
   if (users.length > 0) {
     console.log('Algum usuário já cadastrado')
   }
   else{
+    console.log("users")
     await Profissionais()
   }
 
   //Verifica se tem pacientes no banco de dados
-  const pacientes = await prisma.Pacientes.findMany()
+  const pacientes = await prisma.Pacientes.findMany({})
   if (pacientes.length > 0) {
     console.log('Algum paciente já cadastrado')
   }
@@ -90,7 +93,7 @@ async function Pacientes(){
       email: 'Lucasguedes2908@gmail.com',
       nome: 'Lucas Guedes',
       telefone: '84 99428-0599',
-      foto: 'https://firebasestorage.googleapis.com/v0/b/clinica-maria-luiza.appspot.com/o/uploads%2Fe87a3bb3-dd13-4582-a719-e7c3c0c38764_Design%20sem%20nome%20(3).png?alt=media&token=37428848-38b9-4172-b57b-81da30bf6e2ahttps://firebasestorage.googleapis.com/v0/b/clinica-maria-luiza.appspot.com/o/uploads%2F005dea4f-069a-4e1b-94f5-5a800b1a60be_334572.WdsS_E6FZYwB.jpeg?alt=media&token=fada7821-9f2c-4b0a-8022-5a7840c303cb',
+      foto: 'https://firebasestorage.googleapis.com/v0/b/clinica-maria-luiza.appspot.com/o/uploads%2F34852164-cf03-4d5b-adb7-7aa1940aea62_WhatsApp%20Image%202024-05-09%20at%2007.49.14.jpeg?alt=media&token=2a12f0a9-da1f-4ff8-a3d4-1a260716968f',
     },
   });
 
@@ -100,7 +103,7 @@ async function Pacientes(){
       email: 'JoãoPaulo@gmail.com',
       nome: 'João Paulo',
       telefone: '84 8133-2996',
-      foto: 'https://firebasestorage.googleapis.com/v0/b/clinica-maria-luiza.appspot.com/o/uploads%2Fe87a3bb3-dd13-4582-a719-e7c3c0c38764_Design%20sem%20nome%20(3).png?alt=media&token=37428848-38b9-4172-b57b-81da30bf6e2a',
+      foto: 'https://firebasestorage.googleapis.com/v0/b/clinica-maria-luiza.appspot.com/o/uploads%2Fzdnv504i.png?alt=media&token=d8594420-daa6-4a98-a966-db7db8e81d6c',
     },
   })
 }
