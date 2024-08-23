@@ -80,4 +80,4 @@ async function postPaciente(user){
   });
   return;
 }
-module.exports = {getPacientes, getConsultas, cadastrarPaciente, registrarConsulta};
+module.exports = {getPacientes, getConsultas, postPaciente, cadastrarPaciente, registrarConsulta};
