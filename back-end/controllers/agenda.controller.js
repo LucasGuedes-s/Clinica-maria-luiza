@@ -12,7 +12,7 @@ async function postAgendamentos(req, res, next){
 }
 async function getAgendamentos(req, res, next){
     try {
-        const agenda = await Agendamentos.getAgendamentos(req.body)
+        const agenda = await Agendamentos.getAgendamentos(req.params.id)
         res.status(200).json({agenda});
         next()
     } catch (err) {
