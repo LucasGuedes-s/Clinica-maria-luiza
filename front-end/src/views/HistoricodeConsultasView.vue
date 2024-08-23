@@ -6,11 +6,11 @@
             <div class="infos_historico">
                 <div class="info_item">
                     <label for="resposta-data">Data:</label>
-                    <input type="date" id="resposta-data" value="" readonly>
+                    <input type="date" id="resposta-data" value="">
                 </div>
                 <div class="info_item">
                     <label for="especialista-nome">Especialista:</label>
-                    <input type="text" id="especialista-nome" value="" readonly>
+                    <input type="text" id="especialista-nome" value="">
                 </div>
                 <div class="info_item descricao">
                     <label for="historico_descricao">Descrição:</label>
