@@ -3,10 +3,10 @@
     <div class="main-content">
         <h1>Pacientes</h1>
         <div class="search-cadastrar">
-            <input type="text" id="search-input" placeholder="Nome do paciente...">
+            <input type="text" id="search-input" placeholder="Nome do paciente..." v-model="pesquisa" >
             <RouterLink to="/cadastrarpaciente"><button>Cadastrar</button></RouterLink>
         </div>
-        <div class="container-paciente" v-for="usuario in paciente" :key="usuario.cpf">
+        <div class="container-paciente" v-for="usuario in filteredPacientes" :key="usuario.cpf">
             <img :src="usuario.foto">
             <div class="info">
                 <p>Nome: {{ usuario.nome }}</p>
@@ -143,7 +143,6 @@ export default {
     methods: {
         async pacientes() {
             const token = this.store.token
-            console.log(token)
             Axios.get("http://localhost:3000/pacientes", {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -179,7 +178,16 @@ export default {
     },
     data() {
         return {
-            paciente: null
+            pesquisa: '',
+            paciente: []
+        }
+    },
+    computed: {
+        filteredPacientes() {
+        
+            return this.paciente.filter(paciente => 
+            paciente.nome.toLowerCase().includes(this.pesquisa.toLowerCase())
+        );
         }
     },
     beforeRouteEnter(to, from, next) {
