@@ -18,6 +18,7 @@ async function getConsultas(user){
           cpf: user
         }
       });
+      console.log(paciente)
       // Verifica se o paciente foi encontrado
       if (paciente) {
         // Buscar consultas associadas ao paciente encontrado
@@ -26,6 +27,8 @@ async function getConsultas(user){
             pacienteId: user // Usando o identificador único do paciente
           }
         });
+        console.log(consultas)
+
         return consultas;
     }
 }

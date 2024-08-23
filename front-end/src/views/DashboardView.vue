@@ -18,25 +18,14 @@
             </div>
         </div>
         <h2>Agendamentos Solicitados:</h2>
-        <div class="container3">
+        <div class="container3" v-for="agenda in agendamentos" :key="agenda.id">
             <div class="resposta-info">
                 <label for="paciente-nome">Nome do Paciente:</label>
-                <input type="text" id="paciente-nome" value="Nome do Paciente" readonly>
+                <input type="text" id="paciente-nome" :value="agenda.paciente.nome" readonly>
                 <label for="resposta-data">Data:</label>
-                <input type="data" id="resposta-data" value="2024-07-28" readonly>
+                <input type="data" id="resposta-data" :value="agenda.dataFormatada" readonly>
                 <label for="resposta-hora">Hora:</label>
-                <input type="hora" id="resposta-hora" value="10:00" readonly>
-                <button class="btn-concluido">Marcar como Concluído</button>
-            </div>
-        </div>
-        <div class="container3">
-            <div class="resposta-info">
-                <label for="paciente-nome">Nome do Paciente:</label>
-                <input type="text" id="paciente-nome" value="Nome do Paciente" readonly>
-                <label for="resposta-data">Data:</label>
-                <input type="data" id="resposta-data" value="2024-07-28" readonly>
-                <label for="resposta-hora">Hora:</label>
-                <input type="hora" id="resposta-hora" value="10:00" readonly>
+                <input type="hora" id="resposta-hora" :value="agenda.horaFormatada" readonly>
                 <button class="btn-concluido">Marcar como Concluído</button>
             </div>
         </div>
@@ -187,6 +176,7 @@ export default {
     },
     data() {
         return {
+            agendamentos: [],
             user: null,
             nome: null,
             email: null,
@@ -206,10 +196,21 @@ export default {
             catch {
                 console.log('Erro ao obter usuários')
             }
+        },
+        async getAgendamentos(){
+            const token = this.store.token
+            Axios.get(`http://localhost:3000/profissionais/agendamentos/${this.email}`,{
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then(response =>{
+                this.agendamentos = response.data.agenda
+            })
         }
         },
     mounted() {
         this.dados();
+        this.getAgendamentos()
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {

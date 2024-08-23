@@ -2,13 +2,13 @@ const { jsPDF } = require("jspdf");
 const autoTable = require('jspdf-autotable');
 const fs = require('fs');
 const path = require('path');
-
 const paciente = require('../pacientes.service')
 
 async function createReportPdf(usuario) {
 
     const doc = new jsPDF();
     const consultas = await paciente.getConsultas(usuario)
+    console.log(consultas)
     const imgPath = path.resolve(__dirname, '../../src/assets/img.girafas.png');
     const imgData = fs.readFileSync(imgPath).toString('base64');
 
