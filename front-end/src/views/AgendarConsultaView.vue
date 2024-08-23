@@ -1,0 +1,152 @@
+<template>
+    <Sidebar />
+    <div class="main-content">
+        <div class="container_agendarconsulta">
+            <h1>Agendar Consulta</h1>
+            <form>
+                <div class="form-group">
+                    <label for="nome">Nome do Paciente:</label>
+                    <input type="text" id="nome_paciente" name="nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="nome">Nome do Responsável:</label>
+                    <input type="text" id="nome_responsavel" name="nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="telefone">Telefone:</label>
+                    <input type="tel" id="telefone_paciente" name="telefone" placeholder="(XX) XXXXX-XXXX" required>
+                </div>
+                <div class="form-group">
+                    <label for="datadaconsulta">Data:</label>
+                    <input type="date" id="data_consulta" name="datadaconsulta" required>
+                </div>
+            
+                <div class="form-group">
+                    <label for="horario">Horário:</label>
+                    <input type="time" id="horario_consulta" name="horario" required>
+                </div>
+                <div class="form-group">
+                    <label for="especialidade">Especialidade:</label>
+                    <select id="especialidade" name="especialidade" required>
+                        <option value="especialidade1">Especialidade 1</option>
+                        <option value="especialidade2">Especialidade 2</option>
+                        <option value="especialidade3">Especialidade 3</option>
+                    </select>
+                </div>
+                <div class="form-group observacao">
+                    <label for="observacao_agendarconsulta">Observação:</label>
+                    <textarea id="observacao_agendarconsulta" rows="4"></textarea>
+                </div>
+            
+                <button type="submit" class="agendarconsulta_btn">Agendar</button>
+            </form>            
+        </div>
+    </div>
+</template>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #E7FAFF;
+}
+.main-content {
+    margin-left: 260px;
+    padding: 20px;
+    justify-content: center;
+}
+
+.container_agendarconsulta {
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.container_agendarconsulta h1 {
+    color: #84E7FF;
+    margin-bottom: 20px;
+}
+
+.form-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #84E7FF;
+    width: 600px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 35px; 
+    align-items: start;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 10px; 
+}
+
+.form-group input, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-group textarea {
+    padding: 10px;
+    border: 1px solid #D9D9D9;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 16px;
+    color: #7E7E7E;
+}
+
+.observacao {
+    grid-column: 1 / -1;
+}
+
+.agendarconsulta_btn {
+    grid-column: 1 / -1;
+    padding: 10px;
+    background-color: #E7FAFF;
+    border: 1px solid #84E7FF;
+    border-radius: 4px;
+    color: #7E7E7E;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 15px; 
+    margin-bottom: 15px;
+}
+
+.agendarconsulta_btn:hover {
+    background-color: #E7FAFF;
+}
+
+#data_consulta, #especialidade, #horario{
+    font-family: 'Montserrat', sans-serif;
+}
+</style>
+
+<script>
+import Sidebar from '@/components/Sidebar.vue'
+import { useAuthStore } from '@/store';
+import Axios from 'axios';
+export default {
+    name: 'registrarconsulta',
+    components: {
+        Sidebar
+    },
+}
+</script>
