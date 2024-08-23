@@ -23,8 +23,7 @@ async function getAgendamentos(req, res, next){
 
 async function updateAgendamentos(req, res, next){
     try {
-        const consulta = 'Aqui'
-        //const consulta = await Paciente.agendarConsulta(req.body)
+        const consulta = await Agendamentos.updateAgendamentos(req.params.id)
         res.status(200).json({consulta});
         next()
     } catch (err) {

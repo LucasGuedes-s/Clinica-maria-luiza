@@ -3,13 +3,9 @@ const prisma = new PrismaClient()
 const formatar = require('../utils/formatdata.ultil')
 
 async function agendarConsulta(req){  
-    console.log(req)
-      // Primeiro, encontre o paciente pelo CPF
     const paciente = await prisma.Pacientes.findUnique({
         where: { cpf: req.agenda.paciente }
     });
-
-    // Encontre o profissional pelo email
     const profissional = await prisma.Profissionais.findUnique({
         where: { email: req.agenda.profissional }
     });
@@ -29,7 +25,10 @@ async function agendarConsulta(req){
 async function getAgendamentos(user){  
 
     const agenda = await prisma.Agendamentos.findMany({
-        where: { profissionalId: user },
+        where: { 
+            profissionalId: user,
+            status: 'Andamento'
+        },
         include: {
             paciente: {
               select: {
@@ -38,7 +37,6 @@ async function getAgendamentos(user){
             },
           },
     });
-    console.log(agenda)
     const Agendamentos = agenda.map(agendamento => {
         const { data, hora } = formatar.formatarDataHoraSeparados(agendamento.data);
         return {
@@ -49,4 +47,19 @@ async function getAgendamentos(user){
     });
     return Agendamentos;
 }
-module.exports = {agendarConsulta, getAgendamentos};
+async function updateAgendamentos(id){
+    const dataAtual = new Date()
+    const data = dataAtual.toISOString();
+    const id_agendamento = parseInt(id);
+    const agenda = await prisma.Agendamentos.update({
+        where:{
+            id: id_agendamento
+        },
+        data: {
+            status: 'Concluida',
+            data_conclusao: data,
+        }
+    });   
+    return agenda;
+}
+module.exports = {agendarConsulta, getAgendamentos, updateAgendamentos};
