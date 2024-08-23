@@ -9,14 +9,15 @@ async function agendarConsulta(req){
     const profissional = await prisma.Profissionais.findUnique({
         where: { email: req.agenda.profissional }
     });
+
     const agenda = await prisma.Agendamentos.create({
         data: {
 			data: new Date(),
 			agendamento: req.agenda.agendar,
 			notas: req.agenda.notas,
             status: "Andamento",
-            pacienteId: paciente.id,
-            profissionalId: profissional.id,
+            pacienteId: paciente.cpf,
+            profissionalId: profissional.email,
 			sala: 2
           },
     });

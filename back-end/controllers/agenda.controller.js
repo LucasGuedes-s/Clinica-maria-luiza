@@ -6,6 +6,7 @@ async function postAgendamentos(req, res, next){
         res.status(200).json({consulta});
         next()
     } catch (err) {
+        res.status(500)
         console.log(err)
         console.error(`Erro ao registrar agendamento para profissional`);
     }
