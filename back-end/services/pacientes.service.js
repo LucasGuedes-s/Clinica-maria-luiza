@@ -4,12 +4,12 @@ const bcryptUtil = require("../utils/bcrypt.ultil")
 require('dotenv').config();
 
 async function getPacientes(){  
-    /*const pacientes = await prisma.Pacientes.findMany({
+    const pacientes = await prisma.Pacientes.findMany({
       include: {
         paciente_dados: true // Inclui os dados da tabela Pacientes_dados
       }
-    }); */
-    const pacientes = await prisma.Pacientes.findMany();
+    });
+    //const pacientes = await prisma.Pacientes.findMany();
     return pacientes;
 }
 async function getConsultas(user){

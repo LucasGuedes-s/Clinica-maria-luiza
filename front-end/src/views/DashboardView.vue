@@ -205,6 +205,8 @@ export default {
                 }
             }).then(response =>{
                 this.agendamentos = response.data.agenda
+            }).catch(error =>{
+                console.log(error)
             })
         }
         },
