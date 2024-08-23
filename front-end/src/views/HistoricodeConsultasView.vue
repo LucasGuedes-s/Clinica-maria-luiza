@@ -1,0 +1,116 @@
+<template>
+    <Sidebar />
+    <div class="main-content">
+        <h1>Histórico de Consultas</h1>
+        <div class="container_historico">
+            <div class="infos_historico">
+                <div class="info_item">
+                    <label for="resposta-data">Data:</label>
+                    <input type="date" id="resposta-data" value="" readonly>
+                </div>
+                <div class="info_item">
+                    <label for="especialista-nome">Especialista:</label>
+                    <input type="text" id="especialista-nome" value="" readonly>
+                </div>
+                <div class="info_item descricao">
+                    <label for="historico_descricao">Descrição:</label>
+                    <textarea id="historico_descricao" rows="4"></textarea>
+                </div>
+                <div class="botoes">
+                    <button class="btn_detalhar_hist">Detalhar</button>
+                    <button class="btn_arquivopdf_hist">Arquivo em PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #E7FAFF;
+}
+.main-content {
+    margin-left: 260px;
+    padding: 20px;
+}
+
+h1 {
+    color: #84E7FF;
+}
+
+.container_historico {
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #84E7FF;
+    border-radius: 8px;
+    width: calc(100% - 40px);
+}
+
+.infos_historico {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.info_item {
+    display: flex;
+    flex-direction: column;
+}
+
+.descricao {
+    grid-column: 1 / -1;
+}
+
+.botoes {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-between; /* Alinha os botões com espaçamento entre eles */
+    gap: 10px;
+}
+
+.info_item label {
+    margin-bottom: 5px;
+    color: #7E7E7E;
+}
+
+.info_item input,
+.info_item textarea {
+    padding: 10px;
+    border: 1px solid #D9D9D9;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 16px;
+    color: #7E7E7E;
+}
+
+.info_item textarea {
+    resize: vertical;
+}
+
+.btn_detalhar_hist, .btn_arquivopdf_hist {
+    flex: 1; /* Faz com que os botões tenham a mesma largura */
+    padding: 10px 20px;
+    border-radius: 4px;
+    background-color: #F5F5F5;
+    color: #7E7E7E;
+    border: 1px solid #D9D9D9;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+}
+</style>
+
+<script>
+import Sidebar from '@/components/Sidebar.vue'
+import { useAuthStore } from '@/store';
+import Axios from 'axios';
+export default {
+    name: 'historicodeconsulta',
+    components: {
+        Sidebar
+    },
+}
+</script>
