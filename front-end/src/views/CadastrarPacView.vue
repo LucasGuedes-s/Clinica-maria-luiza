@@ -1,7 +1,7 @@
 <template>
     <Sidebar />
     <div class="main-content">
-        <div class="container1">
+        <div class="container_cadastrarpac">
             <h1>Cadastrar Paciente</h1>
             <form>
                 <div class="form-group">
@@ -56,7 +56,7 @@ body {
     justify-content: center;
 }
 
-.container1 {
+.container_cadastrarpac {
     background-color: white;
     padding: 20px;
     margin-bottom: 20px;
@@ -64,7 +64,7 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.container1 h1 {
+h1 {
     color: #D9D9D9;
     margin-bottom: 20px;
 }

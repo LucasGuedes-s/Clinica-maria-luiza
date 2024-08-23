@@ -15,7 +15,7 @@
             <div class="botoes-div">
                 <button class="detalhar-btn">Evolução</button>
                 <button class="histconsultas-btn" @click="teste(usuario.nome, usuario.cpf)">Hist. consultas</button>
-                <button class="registrar-btn">Registrar consultas</button>
+                <RouterLink to="/registrarconsulta"><button class="registrar-btn">Registrar consultas</button></RouterLink>
             </div>
         </div>
     </div>
