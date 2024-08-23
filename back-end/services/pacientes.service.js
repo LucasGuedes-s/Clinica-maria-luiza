@@ -52,10 +52,11 @@ async function registrarConsulta(req){
     const consulta = await prisma.Consultas.create({
         data: {
             consulta: req.consulta.consulta,
+            data: new Date(),
             descricao: req.consulta.descricao,
             paciente: {
                 connect: { cpf: req.consulta.pacienteId }
-              },
+            },
             profissional: {
               connect: { email: req.consulta.profissionalId}
             },
