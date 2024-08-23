@@ -1,26 +1,50 @@
 const { jsPDF } = require("jspdf");
 const autoTable = require('jspdf-autotable');
+const fs = require('fs');
+const path = require('path');
 
-async function createReportPdf(nome) {
-    console.log(nome)
+const paciente = require('../pacientes.service')
+
+async function createReportPdf(usuario) {
+
     const doc = new jsPDF();
+    const consultas = await paciente.getConsultas(usuario)
+    const imgPath = path.resolve(__dirname, '../../src/assets/img.girafas.png');
+    const imgData = fs.readFileSync(imgPath).toString('base64');
 
-    /*const imgData = 'https://firebasestorage.googleapis.com/v0/b/clinica-maria-luiza.appspot.com/o/uploads%2Fgirafas.png?alt=media&token=576a35f6-3bb8-4156-b554-4ee7605c55bc'; // Substitua pelo seu base64
-    const imgWidth = 50;
     const imgHeight = 50;
+    const imgWidth = 50;
+
     const pageWidth = doc.internal.pageSize.getWidth();
     const x = (pageWidth - imgWidth) / 2;
-    doc.addImage(imgData, 'PNG', x, 10, imgWidth, imgHeight);*/
+    doc.addImage(imgData, 'PNG', x, 10, imgWidth, imgHeight);
 
-    // Adicionando a tabela
-    const tableColumn = ["Nome", "Idade", "Cargo"];
-    const tableRows = [
-        ["Lucas", "55", "Programador"],
-        ["Jefferson", "26", "Engenheiro"],
-        ["João Paulo", "24", "Web Designer"]
-    ];
+    const patientInfo = `
+        Nome: João da Silva
+        Idade: 30 anos
+        Data da Consulta: 22/08/2024
+    `;
 
-    // Definindo a posição inicial da tabela
+    doc.setFontSize(12);
+    doc.text(patientInfo, 10, 70);
+
+    // Cabeçalhos da tabela
+    const tableColumn = ["Consulta", "Data", "Descrição", "Profissional", "Laudos", "Foto"];
+
+    // Inicializando as linhas da tabela
+    const tableRows = [];
+
+    consultas.forEach(consulta => {
+        const row = [
+            consulta.consulta,
+            new Date(consulta.data).toLocaleDateString(),  // Formata a data
+            consulta.descricao,
+            consulta.profissionalId,
+        ];
+        tableRows.push(row);
+    });
+
+    // Adicionando a tabela ao PDF
     let startY = 70;
 
     // Adicionando as colunas da tabela
@@ -28,7 +52,10 @@ async function createReportPdf(nome) {
         head: [tableColumn],
         body: tableRows,
         startY: startY,
-        theme: 'grid'
+        theme: 'grid',
+        headStyles: {
+            fillColor: [132, 231, 255], // Cor de fundo do cabeçalho (em RGB)
+        },
     });
 
     const pdfBuffer = doc.output('arraybuffer');

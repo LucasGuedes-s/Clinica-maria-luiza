@@ -4,6 +4,6 @@ const pdfController = require('../controllers/pdfs.controller.js');
 const permission = require('../services/permissions/profissionais.permissions.services')
 const router = express.Router()
 
-router.get('/historico/consultas', pdfController.getpdfConsultas);
+router.get('/historico/consultas/:id', pdfController.getpdfConsultas);
 
 module.exports = router;

@@ -24,12 +24,10 @@ async function FirstRun() {
   console.log("users")
 
   const users = await prisma.Profissionais.findMany({})
-  console.log(users)
   if (users.length > 0) {
     console.log('Algum usuário já cadastrado')
   }
   else{
-    console.log("users")
     await Profissionais()
   }
 

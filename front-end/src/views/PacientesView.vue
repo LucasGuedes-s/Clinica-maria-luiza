@@ -13,8 +13,8 @@
                 <p>Telefone: {{ usuario.telefone }}</p>
             </div>
             <div class="botoes-div">
-                <button class="detalhar-btn" @click="teste(usuario.nome)">Evolução</button>
-                <button class="histconsultas-btn">Hist. consultas</button>
+                <button class="detalhar-btn">Evolução</button>
+                <button class="histconsultas-btn" @click="teste(usuario.nome, usuario.cpf)">Hist. consultas</button>
                 <button class="registrar-btn">Registrar consultas</button>
             </div>
         </div>
@@ -155,11 +155,11 @@ export default {
                 console.error(Error)
             })
         },
-        async teste(nome) {
+        async teste(nome, cpf) {
             Axios({
-                url: 'http://localhost:3000/historico/consultas', // Altere a URL conforme necessário
+                url: `http://localhost:3000/historico/consultas/${cpf}`,  // Altere a URL conforme necessário
                 method: 'GET',
-                responseType: 'blob' // Importante para tratar a resposta como um blob
+                responseType: 'blob',  // Importante para tratar a resposta como um blob
             })
                 .then(response => {
                     // Crie um URL para o blob

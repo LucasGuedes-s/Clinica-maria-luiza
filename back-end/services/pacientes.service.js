@@ -13,12 +13,9 @@ async function getPacientes(){
     return pacientes;
 }
 async function getConsultas(user){
-    console.log(user)
-    console.log(user.id.cpf)
-
     const paciente = await prisma.Pacientes.findUnique({
         where: {
-          cpf: user.id.cpf
+          cpf: user
         }
       });
       // Verifica se o paciente foi encontrado
@@ -26,7 +23,7 @@ async function getConsultas(user){
         // Buscar consultas associadas ao paciente encontrado
         const consultas = await prisma.Consultas.findMany({
           where: {
-            pacienteId: user.id.cpf // Usando o identificador único do paciente
+            pacienteId: user // Usando o identificador único do paciente
           }
         });
         return consultas;
