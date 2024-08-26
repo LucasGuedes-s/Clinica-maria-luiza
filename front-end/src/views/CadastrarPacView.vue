@@ -3,43 +3,43 @@
     <div class="main-content">
         <div class="container_cadastrarpac">
             <h1>Cadastrar Paciente</h1>
-            <form>
+            <form @submit.prevent="cadastrarpaciente">
                 <div class="form-group">
                     <label for="nome">Nome:</label>
-                    <input type="text" id="nome" name="nome" required>
+                    <input type="text" id="nome" name="nome" v-model="nome" required>
                 </div>
                 <div class="form-group">
                     <label for="dataNascimento">Data de Nascimento:</label>
-                    <input type="date" id="dataNascimento" name="dataNascimento" required>
+                    <input type="date" id="dataNascimento" name="dataNascimento" v-model="data_nascimento" required>
                 </div>
-            
+
                 <div class="form-group">
                     <label for="cpf">CPF:</label>
-                    <input type="text" id="cpf" name="cpf" required>
+                    <input type="text" id="cpf" name="cpf" v-model="cpf" required>
                 </div>
                 <div class="form-group">
                     <label for="responsavel">Nome do Responsável:</label>
-                    <input type="text" id="responsavel" name="responsavel" required>
+                    <input type="text" id="responsavel" name="responsavel" v-model="nome_mae" required>
                 </div>
                 <div class="form-group">
                     <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
+                    <input type="email" id="email" name="email" v-model="email" required>
                 </div>
                 <div class="form-group">
                     <label for="telefone">Telefone:</label>
-                    <input type="tel" id="telefone" name="telefone" required>
+                    <input type="tel" id="telefone" name="telefone" v-model="telefone" required>
                 </div>
                 <div class="form-group">
                     <label for="endereco">Endereço:</label>
-                    <input type="text" id="endereco" name="endereco" required>
+                    <input type="text" id="endereco" name="endereco" v-model="endereco" required>
                 </div>
                 <div class="form-group selecionar">
                     <label for="imagem">Adicionar Imagem:</label>
                     <input type="file" id="imagem" name="imagem" accept="image/*">
                 </div>
-            
-                <button type="submit" class="cadastrar-btn">Cadastrar</button>
-            </form>            
+
+                <button type="submit" class="cadastrar-btn" click="cadastrarpaciente">Cadastrar</button>
+            </form>
         </div>
     </div>
 </template>
@@ -50,6 +50,7 @@ body {
     font-family: 'Montserrat', sans-serif;
     background-color: #E7FAFF;
 }
+
 .main-content {
     margin-left: 260px;
     padding: 20px;
@@ -81,7 +82,7 @@ h1 {
 form {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 35px; 
+    gap: 35px;
     align-items: start;
 }
 
@@ -91,10 +92,11 @@ form {
 }
 
 .form-group label {
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
 }
 
-.form-group input, select {
+.form-group input,
+select {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
@@ -113,7 +115,7 @@ form {
     font-size: 16px;
     cursor: pointer;
     width: 100%;
-    margin-top: 15px; 
+    margin-top: 15px;
     margin-bottom: 15px;
 }
 
@@ -124,10 +126,60 @@ form {
 
 <script>
 import Sidebar from '@/components/Sidebar.vue'
+import { useAuthStore } from '@/store.js'
+import { Axios } from 'axios';
 export default {
     name: 'cadastrar_profissional',
-    components:{
+    components: {
         Sidebar
+    },
+    setup(){
+        const store = useAuthStore() //Importação da função do Store.js
+        return{
+            store
+        }
+    },
+data(){
+    return {
+        cpf: '',
+        email: '',
+        nome: '',
+        nome_mae: '',
+        data_nascimento: '',
+        telefone: '',
+        endereco: '',
+        foto: 'https://firebasestorage.googleapis.com/v0/b/clinica-maria-luiza.appspot.com/o/uploads%2Ffuncionarios2.svg?alt=media&token=cc7511c0-9e76-4cd6-9e33-891bbb3cfd1c',
     }
+},
+methods: {
+    async cadastrarpaciente(){
+        const token = this.store.token
+        console.log("Aqui")
+        await Axios.post("http://localhost:3000/cadastrar/pacientes", {
+            paciente: {
+                cpf: this.cpf,
+                nome: this.nome,
+                nome_mae: this.nome_mae,
+                data_nascimento: this.data_nascimento,
+                email: this.email,
+                telefone: this.telefone,
+                endereco: this.endereco,
+                //foto: this.foto
+            },
+            headers: {
+                'Authorization': `Bearer ${token}`
+                }
+        }).then(response => {
+            console.log(response.status)
+        }).catch(Error => {
+            console.error(Error);
+            Swal.fire({
+                icon: 'erro',
+                title: 'Não foi possível realizar o cadastro',
+                timer: 4000,
+            })
+        })
+    }
+}
 }
 </script>

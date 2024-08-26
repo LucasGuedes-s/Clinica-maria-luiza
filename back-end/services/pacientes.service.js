@@ -55,6 +55,7 @@ async function getConsulta(consulta){
   return consultas;
 }
 async function cadastrarPaciente(req){  
+  console.log(req)
     const pacientes = await prisma.Pacientes.create({
         data: {
             cpf: req.paciente.cpf,
