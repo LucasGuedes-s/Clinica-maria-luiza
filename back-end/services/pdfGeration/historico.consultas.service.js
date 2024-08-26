@@ -4,6 +4,8 @@ const fs = require('fs');
 const path = require('path');
 const paciente = require('../pacientes.service')
 const formatar = require('../../utils/formatdata.ultil')
+
+
 function addFooter(doc) {
     const pageCount = doc.internal.getNumberOfPages();
     const data_hora = formatar.formatarDataHoraSeparados(new Date())
