@@ -1,9 +1,9 @@
-const login_usuario = require('../services/user.service')
+const usuario = require('../services/user.service')
 
 async function LoginUsuario(req, res, next){
     try {
         console.log(req.body)
-        const login = await login_usuario.LoginUser(req.body.usuario);
+        const login = await usuario.LoginUser(req.body.usuario);
         res.setHeader('Authorization', `Bearer ${login.token}`);
         res.status(200).json({ 
             usuario: {
@@ -21,5 +21,14 @@ async function LoginUsuario(req, res, next){
         next(err);
     }
 }
+async function updateSenha(req, res, next){
+    try {
+        const nova_senha = await usuario.updateSenha(req.body)
+        res.status(200).json({nova_senha});
+        next()
+    } catch (err) {
+        console.error(`Erro ao atualizar a nova senha`);
+    }
+}
 
-module.exports = {LoginUsuario};
+module.exports = {LoginUsuario, updateSenha};
