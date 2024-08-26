@@ -38,6 +38,16 @@ async function postPacientes(req, res, next){
         console.error(`Erro ao receber os pacientes`);
     }
 }
+async function postDados(req, res, next){
+    try {
+        const dados = await Paciente.cadastrarDados(req.body)
+        res.status(200).json({dados});
+        next()
+    } catch (err) {
+        console.log(err)
+        console.error(`Erro ao receber os dados do paciente`);
+    }
+}
 async function postConsulta(req, res, next){
     try {
         const consulta = await Paciente.registrarConsulta(req.body)
@@ -48,4 +58,4 @@ async function postConsulta(req, res, next){
         console.error(`Erro ao registrar a consulta`);
     }
 }
-module.exports = {getPacientes, getPaciente, getConsultas, postPacientes, postConsulta};
+module.exports = {getPacientes, getPaciente, getConsultas, postPacientes, postDados, postConsulta};

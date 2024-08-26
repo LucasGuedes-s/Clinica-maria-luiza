@@ -3,10 +3,10 @@
     <div class="main-content">
         <h1>Profissionais</h1>
         <div class="search-cadastrar">
-            <input type="text" id="search-input" placeholder="Nome do profissional...">
+            <input type="text" id="search-input" placeholder="Nome do profissional..." v-model="pesquisa">
             <RouterLink to="/cadastrarprofissional"><button>Cadastrar</button></RouterLink>
         </div>
-        <div class="container-profissional" v-for="usuario in profissional" :key="usuario.email">
+        <div class="container-profissional" v-for="usuario in filteredProfissional" :key="usuario.email">
             <img :src="usuario.foto">
             <div class="info">
                 <p>Nome: {{ usuario.nome }}</p>
@@ -168,6 +168,12 @@ export default {
             store
         }
     },
+    data(){
+        return{
+            pesquisa: '',
+            profissional: []
+        }
+    },
     methods: {
         async profissionais() {
             const token = this.store.token
@@ -185,13 +191,15 @@ export default {
             })
         }
     },
+    computed: {
+        filteredProfissional() {
+            return this.profissional.filter(profissional => 
+            profissional.nome.toLowerCase().includes(this.pesquisa.toLowerCase())
+        );
+        }
+    },
     mounted (){
         this.profissionais()
-    },
-    data(){
-        return{
-            profissional: null
-        }
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {

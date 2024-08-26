@@ -102,10 +102,8 @@ h1 {
     cursor: pointer;
 }
 </style>
-
 <script>
-import Sidebar from '@/components/Sidebar.vue'
-import { useAuthStore } from '@/store';
+import Sidebar from '@/components/Sidebar.vue';
 import Axios from 'axios';
 export default {
     name: 'historicodeconsulta',

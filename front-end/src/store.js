@@ -15,6 +15,7 @@ export const useAuthStore = defineStore('auth', {
     setAuthData(user, token) {
       this.usuario = user;
       this.token = token;
+      
       // Salvar no localStorage e nos cookies
       localStorage.setItem('token', token);
       localStorage.setItem('usuario', JSON.stringify(user));

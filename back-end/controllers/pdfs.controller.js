@@ -5,10 +5,16 @@ async function getpdfConsultas(req, res){
 
     const pdfBuffer = await pdf.createReportPdf(req.params.id)
     // Envie o PDF como resposta
-    
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'attachment; filename=arquivo.pdf');
     res.send(Buffer.from(pdfBuffer));
 };
+async function getpdfConsulta(req, res){
 
-module.exports = { getpdfConsultas }
+    const pdfBuffer = await pdf.createReportPdf(req.body)
+    // Envie o PDF como resposta
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=arquivo.pdf');
+    res.send(Buffer.from(pdfBuffer));
+};
+module.exports = { getpdfConsultas, getpdfConsulta }

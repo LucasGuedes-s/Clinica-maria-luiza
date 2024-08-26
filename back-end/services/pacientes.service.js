@@ -13,12 +13,22 @@ async function getPacientes(){
     return pacientes;
 }
 async function getConsultas(user){
+
+    const consultas = await prisma.Pacientes.findUnique({
+      where: {
+        cpf: user // Usando o identificador único do paciente
+      },
+      include: {
+        consultas: true // Inclui todas as consultas relacionadas ao paciente
+      }
+    });
+
+/*
     const paciente = await prisma.Pacientes.findUnique({
         where: {
           cpf: user
         }
       });
-      console.log(paciente)
       // Verifica se o paciente foi encontrado
       if (paciente) {
         // Buscar consultas associadas ao paciente encontrado
@@ -26,11 +36,23 @@ async function getConsultas(user){
           where: {
             pacienteId: user // Usando o identificador único do paciente
           }
-        });
-        console.log(consultas)
+        });*/
 
         return consultas;
+}
+async function getConsulta(consulta){
+
+  const consultas = await prisma.Pacientes.findUnique({
+    where: {
+      id: consulta.cpf // Usando o identificador único do paciente
+    },
+    include:{
+      consultas:{
+        where:{ consulta: consulta.id }
+      }
     }
+  });
+  return consultas;
 }
 async function cadastrarPaciente(req){  
     const pacientes = await prisma.Pacientes.create({
@@ -39,7 +61,7 @@ async function cadastrarPaciente(req){
             email: req.paciente.email,
             nome: req.paciente.nome,
             nome_mae: req.paciente.nome_mae,
-            data_nascimento: req.paciente.data_nascimento,
+            data_nascimento: new Date(req.paciente.data_nascimento),
             telefone: req.paciente.telefone,
             endereco: req.paciente.endereco,
             foto: req.paciente.foto,
@@ -55,7 +77,7 @@ async function registrarConsulta(req){
             data: new Date(),
             descricao: req.consulta.descricao,
             paciente: {
-                connect: { cpf: req.consulta.pacienteId }
+              connect: { cpf: req.consulta.pacienteId }
             },
             profissional: {
               connect: { email: req.consulta.profissionalId}
@@ -67,21 +89,21 @@ async function registrarConsulta(req){
 
     return consulta;
 }
-async function postPaciente(user){  
-  console.log(user)
-  let senha_user = bcryptUtil.hash(user.usuario.senha);
+async function cadastrarDados(dados){  
+  console.log(dados)
 
-  await prisma.Pacientes.create({
+  const cad_dados = await prisma.Pacientes_dados.create({
       data: {
-          email: user.usuario.email,
-          senha: senha_user,
-          nome: user.usuario.nome,
-          telefone: user.usuario.telefone,
-          foto: user.usuario.foto,
-          identificador: user.usuario.identificador,
-          permissaoId: user.usuario.permissaoId,
+          pacienteId: dados.dados.pacienteId,
+          peso: parseFloat(dados.dados.peso),
+          altura: parseFloat(dados.dados.altura),
+          comestiveis: dados.dados.comestiveis,
+          tangiveis: dados.dados.tangiveis,
+          fisicos: dados.dados.fisicos,
+          data_neuro: new Date(dados.dados.data_neuro),
+          alergicos: dados.dados.alergicos,
         },
   });
-  return;
+  return cad_dados;
 }
-module.exports = {getPacientes, getConsultas, postPaciente, cadastrarPaciente, registrarConsulta};
+module.exports = {getPacientes, getConsultas, getConsulta, cadastrarDados, cadastrarPaciente, registrarConsulta};

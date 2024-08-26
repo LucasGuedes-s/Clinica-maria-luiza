@@ -11,6 +11,7 @@
             <div class="info">
                 <p>Nome: {{ usuario.nome }}</p>
                 <p>Telefone: {{ usuario.telefone }}</p>
+                <p v-if="usuario.paciente_dados && usuario.paciente_dados.length > 0">Alergico a: {{ usuario.paciente_dados[0].alergicos }}</p>
             </div>
             <div class="botoes-div">
                 <button class="detalhar-btn">Evolução</button>
@@ -140,6 +141,7 @@ export default {
             store
         }
     },
+    
     methods: {
         async pacientes() {
             const token = this.store.token
@@ -159,8 +161,7 @@ export default {
                 url: `http://localhost:3000/historico/consultas/${cpf}`,  // Altere a URL conforme necessário
                 method: 'GET',
                 responseType: 'blob',  // Importante para tratar a resposta como um blob
-            })
-                .then(response => {
+            }).then(response => {
                     // Crie um URL para o blob
                     const url = window.URL.createObjectURL(new Blob([response.data]));
                     const link = document.createElement('a');

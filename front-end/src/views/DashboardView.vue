@@ -26,7 +26,7 @@
                 <input type="data" id="resposta-data" :value="agenda.dataFormatada" readonly>
                 <label for="resposta-hora">Hora:</label>
                 <input type="hora" id="resposta-hora" :value="agenda.horaFormatada" readonly>
-                <button class="btn-concluido">Marcar como Concluído</button>
+                <button class="btn-concluido" @click="updateAgendamento(agenda.id)">Marcar como Concluído</button>
             </div>
         </div>
     </div>
@@ -197,6 +197,7 @@ export default {
                 console.log('Erro ao obter usuários')
             }
         },
+        
         async getAgendamentos(){
             const token = this.store.token
             Axios.get(`http://localhost:3000/profissionais/agendamentos/${this.email}`,{
@@ -205,6 +206,26 @@ export default {
                 }
             }).then(response =>{
                 this.agendamentos = response.data.agenda
+            }).catch(error =>{
+                console.log(error)
+            })
+        },
+        async updateAgendamento(id){
+            const token = this.store.token
+            Axios.get(`http://localhost:3000/profissional/agendamento/${id}`,{
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then(response =>{
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Tarefa concluída com sucesso!',
+                    text: 'O status da tarefa foi atualizado com sucesso',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                })
+                this.getAgendamentos()
             }).catch(error =>{
                 console.log(error)
             })
