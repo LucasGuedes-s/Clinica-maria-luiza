@@ -1,9 +1,9 @@
 <template>
      <div class="container_loginpaciente">
-        <div class="esquerda-login">
+        <div class="esquerda_login">
             <img src="../assets/img.girafas.png" alt="" srcset="">
         </div>
-        <div class="direita-login">
+        <div class="direita_login">
             <form class="login_paciente">
                 <h1>Histórico de consulta</h1>
                 <label for="email">E-mail ou CPF:</label>
@@ -39,7 +39,7 @@ h1 {
     color: #D9D9D9;
 }
 
-.esquerda-login {
+.esquerda_login {
     width: 40vw;
     height: 100vh;
     display: flex;
@@ -47,7 +47,7 @@ h1 {
     align-items: center;
 }
 
-.direita-login {
+.direita_login {
     width: 60vw;
     height: 100vh;
     display: flex;
