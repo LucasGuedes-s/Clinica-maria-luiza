@@ -61,7 +61,7 @@ async function cadastrarPaciente(req){
             cpf: req.paciente.cpf,
             email: req.paciente.email,
             nome: req.paciente.nome,
-            nome_mae: req.paciente.nome_mae,
+            //nome_mae: req.paciente.nome_mae,
             data_nascimento: new Date(req.paciente.data_nascimento),
             telefone: req.paciente.telefone,
             endereco: req.paciente.endereco,

@@ -127,7 +127,10 @@ select {
 <script>
 import Sidebar from '@/components/Sidebar.vue'
 import { useAuthStore } from '@/store.js'
-import { Axios } from 'axios';
+import Axios from 'axios';
+import Swal from 'sweetalert2';
+import router from '@/router';
+
 export default {
     name: 'cadastrar_profissional',
     components: {
@@ -164,15 +167,19 @@ methods: {
                 email: this.email,
                 telefone: this.telefone,
                 endereco: this.endereco,
-                //foto: this.foto
+                foto: this.foto
             },
             headers: {
                 'Authorization': `Bearer ${token}`
                 }
-        }).then(response => {
-            console.log(response.status)
-        }).catch(Error => {
-            console.error(Error);
+        }).then(
+            Swal.fire({
+                icon: 'success',
+                title: 'Cadastrado com sucesso',
+                timer: 4000,
+            }),
+            router.push("/pacientes")
+        ).catch( error => {
             Swal.fire({
                 icon: 'erro',
                 title: 'Não foi possível realizar o cadastro',
