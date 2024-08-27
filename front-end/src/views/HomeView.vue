@@ -1,66 +1,58 @@
 <template>
     <div id="corpo">
         <header>
-        <nav class="nav-bar">
-            <div class="logo"><img src="../assets/nome.png" alt="Logo"></div>
-            <ul class="nav-links">
-                <li><a href="#quem-somos">Quem somos</a></li>
-                <li><a href="#servicos">Serviços</a></li>
-                <li><a href="#contato">Contato</a></li>
-                <RouterLink to="/login"><button class="button1">Login</button></RouterLink>
-            </ul>
-        </nav>
-    </header>
+            <nav class="nav-bar">
+                <div class="logo"><img src="../assets/nome.png" alt="Logo"></div>
+                <ul class="nav-links">
+                    <li><a href="#quem-somos">Quem somos</a></li>
+                    <li><a href="#servicos">Serviços</a></li>
+                    <li><a href="#contato">Contato</a></li>
+                    <RouterLink to="/login"><button class="button1">Login</button></RouterLink>
+                </ul>
+            </nav>
+        </header>
 
-    <div class="container">
-        <div class="element1">
-            <img src="../assets/girafas.png" alt="Descrição da imagem">
-            <p>Seja bem-vindo(a)!</p>
-        </div>
-        <div class="element2">
-            <div class="slider-container">
-                <div class="slider">
-                    <img src="../assets/Frame1.png" alt="Image 1">
-                    <img src="../assets/Frame2.png" alt="Image 2">
-                    <img src="../assets/Frame3.png" alt="Image 3">
-                    <img src="../assets/Frame4.png" alt="Image 4">
-                    <img src="../assets/Frame5.png" alt="Image 5">
-                    <img src="../assets/Frame6.png" alt="Image 6">
-                </div>
-                <button class="slider-btn prev-btn">&lt;</button>
-                <button class="slider-btn next-btn">&gt;</button>
+        <div class="container">
+            <div class="element1">
+                <img src="../assets/girafas.png" alt="Descrição da imagem">
+                <p>Seja bem-vindo(a)!</p>
             </div>
-        </div>
+            <div class="element2">
+    <div class="slider-container" ref="sliderContainer">
+      <div class="slider" :style="{ transform: `translateX(-${slideIndex * slideWidth}px)` }">
+        <img v-for="(image, index) in images" :key="index" :src="image.src" :alt="image.alt">
+      </div>
+      <button class="slider-btn prev-btn" @click="prevSlide">&lt;</button>
+      <button class="slider-btn next-btn" @click="nextSlide">&gt;</button>
     </div>
+  </div>
+        </div>
 
-    <section id="quem-somos">
-        <h1>Quem somos?</h1>
-        <p>Nossa Clínica de Desenvolvimento Infantil oferece atendimento especializado com foco na Intervenção em ABA,
-            promovendo melhorias no comportamento e na aprendizagem. Contamos com uma equipe multidisciplinar dedicada a
-            garantir o desenvolvimento integral e o bem-estar das crianças e suas famílias. Acreditamos que cada criança
-            é única e nosso compromisso é proporcionar um ambiente acolhedor, seguro e estimulante.</p>
-    </section>
+        <section id="quem-somos">
+            <h1>Quem somos?</h1>
+            <p>Nossa Clínica de Desenvolvimento Infantil oferece atendimento especializado com foco na Intervenção em
+                ABA,
+                promovendo melhorias no comportamento e na aprendizagem. Contamos com uma equipe multidisciplinar
+                dedicada a
+                garantir o desenvolvimento integral e o bem-estar das crianças e suas famílias. Acreditamos que cada
+                criança
+                é única e nosso compromisso é proporcionar um ambiente acolhedor, seguro e estimulante.</p>
+        </section>
 
-    <section id="servicos">
-        <h1>Nossos serviços</h1>
-    </section>
+        <section id="servicos">
+            <h1>Nossos serviços</h1>
+        </section>
 
-    <section id="contato">
-        <h1>Contato</h1>
-    </section>
+        <section id="contato">
+            <h1>Contato</h1>
+        </section>
     </div>
 </template>
-
-<script>
-import { RouterLink } from 'vue-router';
-export default {
-
-}
-</script>
-<style>
-#corpo{
+<style scoped>
+#corpo {
     background-color: #E7FAFF;
 }
+
 .nav-bar {
     background-color: white;
     color: #ffffff;
@@ -88,8 +80,8 @@ export default {
 .nav-links li {
     margin: 15px;
     padding: 5px 25px;
-    display: flex; 
-    align-items: center; 
+    display: flex;
+    align-items: center;
     border-radius: 20px;
     border: 1px solid #84E7FF;
 }
@@ -110,15 +102,15 @@ export default {
     padding: 5px 40px;
     font-size: 17px;
     margin-left: 20px;
-    background-color: #F5F5F5; 
+    background-color: #F5F5F5;
     border: none;
-    border-radius: 20px; 
+    border-radius: 20px;
     font-family: 'Montserrat', sans-serif;
     border: 1px solid #D9D9D9;
     color: #7E7E7E;
 }
 
-.button1:hover{
+.button1:hover {
     background-color: #E7FAFF;
 }
 
@@ -147,9 +139,9 @@ export default {
     margin-top: 20px;
     padding: 10px 85px;
     font-size: 16px;
-    background-color: #FBE9EB; 
-    border: none; 
-    border-radius: 5px; 
+    background-color: #FBE9EB;
+    border: none;
+    border-radius: 5px;
     font-family: 'Montserrat', sans-serif;
     border: 2px solid #FAC6CA;
 }
@@ -174,7 +166,7 @@ export default {
 
 .slider {
     display: flex;
-    width: 4800px; 
+    width: 4800px;
     transition: transform 0.5s ease;
 }
 
@@ -196,7 +188,7 @@ export default {
     height: 50px;
     cursor: pointer;
     z-index: 10;
-    border-radius: 50%; 
+    border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -212,18 +204,64 @@ export default {
 
 section {
     max-width: 1200px;
-    margin: 55px auto; 
+    margin: 55px auto;
     padding: 20px;
     background-color: #ffffff;
     border-radius: 25px;
     box-shadow: 0 4px 10px -1px rgba(0, 0, 0, 0.10);
     text-align: center;
-    color: #FAC6CA; 
+    color: #FAC6CA;
 }
 
-section p{
+section p {
     color: #7E7E7E;
-    line-height: 1.9; 
+    line-height: 1.9;
     font-size: 16px;
 }
+
 </style>
+<script>
+import { RouterLink } from 'vue-router';
+export default {
+  data() {
+    return {
+      slideIndex: 0,
+      slideWidth: 0,
+      images: [
+        { src: require('../assets/Frame1.png'), alt: 'Image 1' },
+        { src: require('../assets/Frame2.png'), alt: 'Image 2' },
+        { src: require('../assets/Frame3.png'), alt: 'Image 3' },
+        { src: require('../assets/Frame4.png'), alt: 'Image 4' },
+        { src: require('../assets/Frame5.png'), alt: 'Image 5' },
+        { src: require('../assets/Frame6.png'), alt: 'Image 6' },
+      ],
+    };
+  },
+  mounted() {
+    this.updateSlideWidth();
+    window.addEventListener('resize', this.updateSlideWidth);
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.updateSlideWidth);
+  },
+  methods: {
+    updateSlideWidth() {
+      if (this.$refs.sliderContainer) {
+        this.slideWidth = this.$refs.sliderContainer.clientWidth;
+      }
+    },
+    prevSlide() {
+      this.slideIndex--;
+      if (this.slideIndex < 0) {
+        this.slideIndex = this.images.length - 1;
+      }
+    },
+    nextSlide() {
+      this.slideIndex++;
+      if (this.slideIndex >= this.images.length) {
+        this.slideIndex = 0;
+      }
+    },
+  },
+};
+</script>

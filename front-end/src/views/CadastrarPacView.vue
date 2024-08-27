@@ -136,57 +136,77 @@ export default {
     components: {
         Sidebar
     },
-    setup(){
+    setup() {
         const store = useAuthStore() //Importação da função do Store.js
-        return{
+        return {
             store
         }
     },
-data(){
-    return {
-        cpf: '',
-        email: '',
-        nome: '',
-        nome_mae: '',
-        data_nascimento: '',
-        telefone: '',
-        endereco: '',
-        foto: 'https://firebasestorage.googleapis.com/v0/b/clinica-maria-luiza.appspot.com/o/uploads%2Ffuncionarios2.svg?alt=media&token=cc7511c0-9e76-4cd6-9e33-891bbb3cfd1c',
-    }
-},
-methods: {
-    async cadastrarpaciente(){
-        const token = this.store.token
-        console.log("Aqui")
-        await Axios.post("http://localhost:3000/cadastrar/pacientes", {
-            paciente: {
-                cpf: this.cpf,
-                nome: this.nome,
-                nome_mae: this.nome_mae,
-                data_nascimento: this.data_nascimento,
-                email: this.email,
-                telefone: this.telefone,
-                endereco: this.endereco,
-                foto: this.foto
-            },
-            headers: {
-                'Authorization': `Bearer ${token}`
+    data() {
+        return {
+            cpf: '',
+            email: '',
+            nome: '',
+            nome_mae: '',
+            data_nascimento: '',
+            telefone: '',
+            endereco: '',
+            foto: 'https://firebasestorage.googleapis.com/v0/b/clinica-maria-luiza.appspot.com/o/uploads%2Ffuncionarios2.svg?alt=media&token=cc7511c0-9e76-4cd6-9e33-891bbb3cfd1c',
+        }
+    },
+    methods: {
+        async cadastrarpaciente() {
+            const token = this.store.token
+            console.log(token)
+            console.log("Aqui")
+            await Axios.post(`http://localhost:3000/cadastrar/pacientes`, {
+                paciente: {
+                    cpf: this.cpf,
+                    nome: this.nome,
+                    nome_mae: this.nome_mae,
+                    data_nascimento: this.data_nascimento,
+                    email: this.email,
+                    telefone: this.telefone,
+                    endereco: this.endereco,
+                    foto: this.foto
                 }
-        }).then(
-            Swal.fire({
-                icon: 'success',
-                title: 'Cadastrado com sucesso',
-                timer: 4000,
-            }),
-            router.push("/pacientes")
-        ).catch( error => {
-            Swal.fire({
-                icon: 'erro',
-                title: 'Não foi possível realizar o cadastro',
-                timer: 4000,
-            })
+            },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }).then(
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Cadastrado com sucesso',
+                        timer: 6000,
+                    }),
+
+                    router.push("/pacientes")
+                ).catch(error => {
+                    console.error('Erro:', error.response.data);
+                    Swal.fire({
+                        icon: 'erro',
+                        title: 'Não foi possível realizar o cadastro',
+                        text: error.response.data.message,
+                        timer: 4000,
+                    })
+                })
+        }
+    },
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            try {
+
+                if (!vm.store.isAuthenticated) {
+                    vm.$router.push('/login')
+                }
+            }
+            catch {
+                console.log("Erro")
+            }
+
         })
     }
-}
 }
 </script>

@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken')
 const config= require('../config/app.config')
 const bcrypt = require('../utils/bcrypt.ultil');
 const { PrismaClient } = require('@prisma/client');
-const { Console } = require('console');
 const prisma = new PrismaClient()
 
 async function LoginUser(usuario, res){ 
@@ -38,4 +37,39 @@ async function LoginUser(usuario, res){
         throw new Error('Usuário ou senha inválido')
     }
 }
-module.exports = {LoginUser};
+async function updateSenha(users, res){ 
+    console.log("Cheguei aqu")
+    const user = await prisma.Profissionais.findFirst({
+        where:{
+            email: users.usuario.email
+        }
+    });
+
+    if(user == null){
+        throw new Error('Senha inválida')
+    }
+    console.log(user)
+    const senhaValida = bcrypt.compare(users.usuario.senha, user.senha);
+    const nova_senha = bcrypt.hash(users.usuario.nova_senha)
+
+    if(senhaValida){
+        console.log(nova_senha)
+
+        const user = await prisma.Profissionais.update({
+            where:{
+                email: users.usuario.email
+            },
+            data: {
+                senha: nova_senha
+            }
+        });
+
+        return 'Alterada com sucesso';
+    }
+    else{
+        console.log(Error)
+        throw new Error('Não foi possível alterar a senha do usuário')
+    }
+
+}
+module.exports = {LoginUser, updateSenha};

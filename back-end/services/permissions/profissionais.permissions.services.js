@@ -19,8 +19,11 @@ async function getAgendamentos(req, res, next) {
 }
 async function post(req, res, next) {
     try {
+        console.log(req)
+        console.log(req.user)
+        console.log("User")
         await verificarPermissoes(req.user, permissions.TODOS);
-        next(); 
+        next();
     } catch (err) {
         next(err);
     }
