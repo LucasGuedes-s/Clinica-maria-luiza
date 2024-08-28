@@ -6,7 +6,6 @@ async function postPagamentos(pagamento) {
   console.log(pagamento)
   const pagamentos = await prisma.Pagamentos.create({
     data: {
-      id: pagamento.pagar.id,
       pagamento: parseFloat(pagamento.pagar.valor),
       paciente: pagamento.pagar.paciente,
       profissionalId: pagamento.pagar.profissionalId,
