@@ -130,10 +130,63 @@ form {
 
 <script>
 import Sidebar from '@/components/Sidebar.vue'
+import { useAuthStore } from '@/store.js'
+import Axios from 'axios';
+import Swal from 'sweetalert2';
+import router from '@/router';
+
 export default {
     name: 'cadastrar_profissional',
     components:{
         Sidebar
+    },
+    setup(){
+        const store = useAuthStore() //Importação da função do Store.js
+        return{
+            store
+        }
+    },
+data(){
+    return {
+        nome: '',
+        data_nascimento: '',
+        email: '',
+        telefone: '',
+        pix: '',
+        foto: '',
     }
+},
+methods: {
+    async cadastrarprofissional(){
+        const token = this.store.token
+        console.log("Aqui")
+        await Axios.post("http://localhost:3000/cadastrar/profissional", {
+            profissional: {
+                nome: this.nome,
+                data_nascimento: this.data_nascimento,
+                email: this.email,
+                telefone: this.telefone,
+                pix: this.pix,
+                foto: this.foto
+            },
+            headers: {
+                'Authorization': `Bearer ${token}`
+                }
+        }).then(
+            Swal.fire({
+                icon: 'success',
+                title: 'Cadastrado com sucesso',
+                timer: 4000,
+            }),
+            router.push("/profissionais")
+        ).catch( error => {
+            Swal.fire({
+                icon: 'erro',
+                title: 'Não foi possível realizar o cadastro',
+                timer: 4000,
+            })
+        })
+    }
+}
 }
 </script>
