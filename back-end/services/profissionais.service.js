@@ -33,5 +33,20 @@ async function postProfissional(user){
     });
     return;
 }
+async function cadastrarProfissional(req){  
+    console.log(req)
+      const profissionais = await prisma.Profissionais.create({
+          data: {
+              nome: req.profissional.nome,
+              data_nascimento: new Date(req.profissional.data_nascimento),
+              email: req.profissional.email,
+              telefone: req.profissional.telefone,
+              pix: req.profissional.pix,
+              foto: req.profissional.foto,
+          }
+      });
+  
+      return profissionais;
+}
 
-module.exports = {getProfissionais, postProfissional, getProfissional};
+module.exports = {getProfissionais, postProfissional, getProfissional, cadastrarProfissional};

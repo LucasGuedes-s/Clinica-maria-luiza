@@ -6,20 +6,20 @@
             <form>
                 <div class="form-group">
                     <label for="nome">Nome:</label>
-                    <input type="text" id="nome_funcionario" name="nome" required>
+                    <input type="text" id="nome_funcionario" name="nome" v-model="nome" required>
                 </div>
                 <div class="form-group">
                     <label for="data-nascimento">Data de Nascimento:</label>
-                    <input type="date" id="data_nasc_prof" name="data-nascimento" required>
+                    <input type="date" id="data_nasc_prof" name="data-nascimento" v-model="data_nascimento" required>
                 </div>
             
                 <div class="form-group">
                     <label for="email">Email:</label>
-                    <input type="email" id="email_prof" name="email" required>
+                    <input type="email" id="email_prof" name="email" v-model="email"required>
                 </div>
                 <div class="form-group">
                     <label for="telefone">Telefone:</label>
-                    <input type="tel" id="telefone_prof" name="telefone" required>
+                    <input type="tel" id="telefone_prof" name="telefone" v-model="telefone" required>
                 </div>
             
                 <div class="form-group">
@@ -32,14 +32,13 @@
                 </div>
                 <div class="form-group">
                     <label for="pix">PIX:</label>
-                    <input type="text" id="pix" name="pix" required>
+                    <input type="text" id="pix" name="pix" v-model="pix" required>
                 </div>
             
                 <div class="form-group selecionar">
                     <label for="imagem">Adicionar Imagem:</label>
                     <input type="file" id="imagem_prof" name="imagem" accept="image/*">
                 </div>
-            
                 <button type="submit" class="cadastrar-btn">Cadastrar</button>
             </form>            
         </div>
@@ -130,10 +129,63 @@ form {
 
 <script>
 import Sidebar from '@/components/Sidebar.vue'
+import { useAuthStore } from '@/store.js'
+import Axios from 'axios';
+import Swal from 'sweetalert2';
+import router from '@/router';
+
 export default {
     name: 'cadastrar_profissional',
     components:{
         Sidebar
+    },
+    setup(){
+        const store = useAuthStore() //Importação da função do Store.js
+        return{
+            store
+        }
+    },
+data(){
+    return {
+        nome: '',
+        data_nascimento: '',
+        email: '',
+        telefone: '',
+        pix: '',
+        foto: '',
     }
+},
+methods: {
+    async cadastrarprofissional(){
+        const token = this.store.token
+        console.log("Aqui")
+        await Axios.post("http://localhost:3000/cadastrar/profissional", {
+            profissional: {
+                nome: this.nome,
+                data_nascimento: this.data_nascimento,
+                email: this.email,
+                telefone: this.telefone,
+                pix: this.pix,
+                foto: this.foto
+            },
+            headers: {
+                'Authorization': `Bearer ${token}`
+                }
+        }).then(
+            Swal.fire({
+                icon: 'success',
+                title: 'Cadastrado com sucesso',
+                timer: 4000,
+            }),
+            router.push("/profissionais")
+        ).catch( error => {
+            Swal.fire({
+                icon: 'erro',
+                title: 'Não foi possível realizar o cadastro',
+                timer: 4000,
+            })
+        })
+    }
+}
 }
 </script>

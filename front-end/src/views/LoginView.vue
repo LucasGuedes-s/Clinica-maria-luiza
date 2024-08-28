@@ -1,5 +1,5 @@
 <template>
-   <div class="container">
+   <div class="container_login">
         <div class="esquerda-login">
             <img src="../assets/img.girafas.png" alt="" srcset="">
         </div>
@@ -29,7 +29,7 @@ body {
     background-color: white;
 }
 
-.container {
+.container_login {
     width: 100vw;
     height: 100vh;
     margin: 0;
