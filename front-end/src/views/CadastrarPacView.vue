@@ -35,7 +35,7 @@
                 </div>
                 <div class="form-group selecionar">
                     <label for="imagem">Adicionar Imagem:</label>
-                    <input type="file" id="imagem" name="imagem" accept="image/*">
+                    <input type="file" id="imagem" name="imagem" @change="handleFileUpload">
                 </div>
 
                 <button type="submit" class="cadastrar-btn" click="cadastrarpaciente">Cadastrar</button>
@@ -130,7 +130,10 @@ import { useAuthStore } from '@/store.js'
 import Axios from 'axios';
 import Swal from 'sweetalert2';
 import router from '@/router';
-
+//Importações de subir imagem
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from '../firebase.js'
+import { v4 as uuidv4 } from 'uuid';
 export default {
     name: 'cadastrar_profissional',
     components: {
@@ -151,14 +154,24 @@ export default {
             data_nascimento: '',
             telefone: '',
             endereco: '',
-            foto: 'https://firebasestorage.googleapis.com/v0/b/clinica-maria-luiza.appspot.com/o/uploads%2Ffuncionarios2.svg?alt=media&token=cc7511c0-9e76-4cd6-9e33-891bbb3cfd1c',
+            imagem: null,
         }
     },
     methods: {
+        async handleFileUpload(event) {
+            this.imagem = event.target.files[0];
+        },
         async cadastrarpaciente() {
             const token = this.store.token
-            console.log(token)
-            console.log("Aqui")
+            // Gera um identificador único para a imagem
+            const uniqueImageName = uuidv4() + '_' + this.imagem.name;
+            // Cria uma referência para o armazenamento
+            const storageRef = ref(storage, 'pacientes/' + uniqueImageName);
+            // Faz o upload da imagem
+            const snapshot = await uploadBytes(storageRef, this.imagem);
+            // Obtém a URL pública da imagem
+            const foto = await getDownloadURL(snapshot.ref);
+  
             await Axios.post(`http://localhost:3000/cadastrar/pacientes`, {
                 paciente: {
                     cpf: this.cpf,
@@ -168,7 +181,7 @@ export default {
                     email: this.email,
                     telefone: this.telefone,
                     endereco: this.endereco,
-                    foto: this.foto
+                    foto: foto
                 }
             },
                 {
@@ -179,9 +192,8 @@ export default {
                     Swal.fire({
                         icon: 'success',
                         title: 'Cadastrado com sucesso',
-                        timer: 6000,
+                        timer: 7000,
                     }),
-
                     router.push("/pacientes")
                 ).catch(error => {
                     console.error('Erro:', error.response.data);
