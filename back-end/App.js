@@ -5,12 +5,10 @@ const cors = require('cors');
 
 app.use(express.json());
 app.use(cors({
-  origin: 'https://clinica-maria-luiza-pzxbvq6wa-clinica-maria-luizas-projects.vercel.app',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Permite os métodos que você precisa
+  origin: '*', // Ajuste para a origem do frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Authorization', 'Content-Type'],
-  exposedHeaders: ['Authorization', 'Content-Type'],
-  credentials: true, // Se você precisar lidar com cookies ou sessões
-  optionsSuccessStatus: 200 // Para garantir compatibilidade com navegadores mais antigos
+  credentials: true, // Se você estiver lidando com cookies
 }));
 
 const firstRun = require('./firstRun.util.js');
