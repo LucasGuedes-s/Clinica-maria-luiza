@@ -172,7 +172,7 @@ export default {
             // Obtém a URL pública da imagem
             const foto = await getDownloadURL(snapshot.ref);
   
-            await Axios.post(`http://localhost:3000/cadastrar/pacientes`, {
+            await Axios.post(`https://clinica-maria-luiza.onrender.com/cadastrar/pacientes`, {
                 paciente: {
                     cpf: this.cpf,
                     nome: this.nome,
@@ -196,7 +196,7 @@ export default {
                     }),
                     router.push("/pacientes")
                 ).catch(error => {
-                    console.error('Erro:', error.response.data);
+                    console.error('Erro:', error);
                     Swal.fire({
                         icon: 'erro',
                         title: 'Não foi possível realizar o cadastro',

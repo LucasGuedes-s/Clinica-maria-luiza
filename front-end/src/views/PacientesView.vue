@@ -145,7 +145,7 @@ export default {
     methods: {
         async pacientes() {
             const token = this.store.token
-            Axios.get("http://localhost:3000/pacientes", {
+            Axios.get("https://clinica-maria-luiza.onrender.com/pacientes", {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
