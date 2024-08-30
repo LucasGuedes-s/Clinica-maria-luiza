@@ -21,11 +21,22 @@ const origin = [
   'https://clinica-maria-luiza-pzxbvq6wa-clinica-maria-luizas-projects.vercel.app'
 ];
 
+const allowedOrigins = [
+  'http://localhost:8080',
+  'https://clinica-maria-luiza-pzxbvq6wa-clinica-maria-luizas-projects.vercel.app'
+];
+
 app.use(cors({
-  origin: origin,
-  methods: 'PUT',
-  optionsSuccessStatus: 200 // Algumas versões mais recentes do CORS exigem isso
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Error no cors'));
+    }
+  },
+  credentials: true, // Caso esteja utilizando cookies ou autenticação baseada em sessões.
 }));
+
 //ROTAS
 const UserRouter = require('./routes/user.router.js');
 const profissionaisRouter = require('./routes/profissionais.router.js');
