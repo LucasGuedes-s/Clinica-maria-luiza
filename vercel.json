@@ -1,0 +1,23 @@
+module.exports = {
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "https://clinica-maria-luiza-pzxbvq6wa-clinica-maria-luizas-projects.vercel.app"
+          },
+          {
+            key: "Access-Control-Allow-Methods",
+            value: "GET, POST, PUT, DELETE, OPTIONS"
+          },
+          {
+            key: "Access-Control-Allow-Headers",
+            value: "Content-Type, Authorization"
+          }
+        ]
+      }
+    ];
+  }
+};
