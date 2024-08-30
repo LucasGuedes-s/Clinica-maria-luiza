@@ -3,26 +3,25 @@ const app = express()
 const port = 3000
 const cors = require('cors');
 
-app.get('/', (req, res) => {
-  res.send('Teste - clínica Maria Luiza')
-})
 app.use(express.json());
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Headers", "Authorization, content-type");
-  res.header("Access-Control-Expose-Headers", "Authorization, content-type");
-  res.header("Access-Control-Allow-Origin", "*");
-  next();
-});
+app.use(cors({
+  origin: 'https://clinica-maria-luiza-pzxbvq6wa-clinica-maria-luizas-projects.vercel.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Permite os métodos que você precisa
+  allowedHeaders: ['Authorization', 'Content-Type'],
+  exposedHeaders: ['Authorization', 'Content-Type'],
+  credentials: true, // Se você precisar lidar com cookies ou sessões
+  optionsSuccessStatus: 200 // Para garantir compatibilidade com navegadores mais antigos
+}));
 
 const firstRun = require('./firstRun.util.js');
 firstRun.FirstRun();
 
-app.use(cors({
-  origin: 'https://clinica-maria-luiza-pzxbvq6wa-clinica-maria-luizas-projects.vercel.app',
-  methods: 'PUT',
-  optionsSuccessStatus: 200 // Algumas versões mais recentes do CORS exigem isso
-}));
 //ROTAS
+
+app.get('/', (req, res) => {
+  res.send('Teste - clínica Maria Luiza')
+})
+
 const UserRouter = require('./routes/user.router.js');
 const profissionaisRouter = require('./routes/profissionais.router.js');
 const pacientesRouter = require('./routes/pacientes.router.js');

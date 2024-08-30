@@ -158,7 +158,7 @@ export default {
         },
         async teste(nome, cpf) {
             Axios({
-                url: `http://localhost:3000/historico/consultas/${cpf}`,  // Altere a URL conforme necessário
+                url: `https://clinica-maria-luiza.onrender.com/historico/consultas/${cpf}`,  // Altere a URL conforme necessário
                 method: 'GET',
                 responseType: 'blob',  // Importante para tratar a resposta como um blob
             }).then(response => {
