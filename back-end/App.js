@@ -11,6 +11,11 @@ app.use(cors({
   credentials: true, // Se você estiver lidando com cookies
 }));
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Headers", "Authorization, content-type");
+  res.header("Access-Control-Expose-Headers", "Authorization, content-type");
+  next();
+});
 const firstRun = require('./firstRun.util.js');
 firstRun.FirstRun();
 
