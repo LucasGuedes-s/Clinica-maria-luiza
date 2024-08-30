@@ -18,7 +18,7 @@ const firstRun = require('./firstRun.util.js');
 firstRun.FirstRun();
 
 app.use(cors({
-  origin: ['http://localhost:8080', 'https://clinica-maria-luiza-pzxbvq6wa-clinica-maria-luizas-projects.vercel.app'],
+  origin: 'https://clinica-maria-luiza-pzxbvq6wa-clinica-maria-luizas-projects.vercel.app',
   methods: 'PUT',
   optionsSuccessStatus: 200 // Algumas versões mais recentes do CORS exigem isso
 }));
