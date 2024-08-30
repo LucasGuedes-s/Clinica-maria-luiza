@@ -160,7 +160,7 @@ methods:{
         }).catch(Error =>{
             console.error(Error);
             Swal.fire({
-                icon: 'erro',
+                icon: 'error',
                 title: 'Usuário ou senhas incorretos',
                 timer: 4000,
             })
