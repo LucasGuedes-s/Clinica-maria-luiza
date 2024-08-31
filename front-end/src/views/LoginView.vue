@@ -151,11 +151,9 @@ methods:{
                 senha:this.senha
             }
         }).then(response =>{
-            console.log(response.status)
-            console.log(response.data)
-            console.log(response.headers.authorization); //Mostra o token que está chegando
-            this.store.token = response.headers.authorization.split(' ')[1]; //Adiciona o token ao Store
-            this.store.usuario = response.data
+            const token = response.headers.authorization.split(' ')[1];
+            const user = response.data;
+            this.store.login(user, token);
             router.push('/dashboard')
         }).catch(Error =>{
             console.error(Error);

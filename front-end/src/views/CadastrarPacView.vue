@@ -163,6 +163,7 @@ export default {
         },
         async cadastrarpaciente() {
             const token = this.store.token
+            
             // Gera um identificador único para a imagem
             const uniqueImageName = uuidv4() + '_' + this.imagem.name;
             // Cria uma referência para o armazenamento

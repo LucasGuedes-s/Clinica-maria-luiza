@@ -178,7 +178,7 @@ export default {
         async profissionais() {
             const token = this.store.token
             console.log(token)
-            Axios.get("http://localhost:3000/profissionais", {
+            Axios.get("https://clinica-maria-luiza.onrender.com/profissionais", {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -186,7 +186,7 @@ export default {
                 this.profissional = response.data.profissionais
                 console.log(response.data.profissionais)
             }).catch(Error => {
-            
+
                 console.error(Error)
             })
         }
