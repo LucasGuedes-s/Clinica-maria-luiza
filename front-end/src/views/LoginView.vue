@@ -26,7 +26,7 @@ body {
     height: 100vh;
     justify-content: center;
     align-items: center;
-    background-color: white;
+    background-color: white !important;
 }
 
 .container_login {
