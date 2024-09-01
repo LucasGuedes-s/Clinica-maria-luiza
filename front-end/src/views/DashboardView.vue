@@ -3,22 +3,22 @@
         <Sidebar />
     </div>
     <div class="main-content">
-        <div class="container1">
+        <div class="titulo_dashboard">
             <h1>Bem-vindo(a)!</h1>
         </div>
-        <div class="container2">
+        <div class="container_dashboard">
             <img :src="imageUrl" alt="Foto do Usuário" @error="onImageError" />
             <div class="info">
                 <p>Nome: {{ nome }}</p>
                 <p>E-mail: {{ email }}</p>
                 <p>Telefone: {{ telefone }}</p>
             </div>
-            <div class="senha-div">
-                <button class="alterar-senha-btn" click="teste">Alterar Senha</button>
+            <div class="senha_div">
+                <button class="alterar_senha_btn" click="teste">Alterar Senha</button>
             </div>
         </div>
         <h2>Agendamentos Solicitados:</h2>
-        <div class="container3" v-for="agenda in agendamentos" :key="agenda.id">
+        <div class="container_agendamentos" v-for="agenda in agendamentos" :key="agenda.id">
             <div class="resposta-info">
                 <label for="paciente-nome">Nome do Paciente:</label>
                 <input type="text" id="paciente-nome" :value="agenda.paciente.nome" readonly>
@@ -45,7 +45,7 @@ body {
     padding: 20px;
 }
 
-.container1 {
+.titulo_dashboard {
     background-color: white;
     margin-bottom: 20px;
     text-align: center;
@@ -53,11 +53,11 @@ body {
     border: 1px solid #84E7FF;
 }
 
-.container1 h1 {
+.titulo_dashboard h1 {
     color: #D9D9D9;
 }
 
-.container2 {
+.container_dashboard {
     background-color: white;
     padding: 20px;
     margin-bottom: 20px;
@@ -68,7 +68,7 @@ body {
     position: relative;
 }
 
-.container2 img {
+.container_dashboard img {
     width: 165px;
     height: 170px;
     margin-right: 20px;
@@ -81,13 +81,13 @@ body {
     flex-grow: 1;
 }
 
-.senha-div {
+.senha_div {
     position: absolute;
     bottom: 20px;
     right: 20px;
 }
 
-.alterar-senha-btn {
+.alterar_senha_btn {
     padding: 10px 20px;
     background-color: #E7FAFF;
     border: 1px solid #84E7FF;
@@ -98,7 +98,7 @@ body {
     font-size: 14px;
 }
 
-.alterar-senha-btn:hover {
+.alterar_senha_btn:hover {
     background-color: #F5F5F5;
 }
 
@@ -110,7 +110,7 @@ h2 {
     color: #84E7FF;
 }
 
-.container3 {
+.container_agendamentos {
     background-color: white;
     padding: 20px;
     margin-bottom: 20px;

@@ -1,22 +1,22 @@
 <template>
     <Sidebar />
-    <div class="main-content">
+    <div class="main_content">
         <h1>Pacientes</h1>
-        <div class="search-cadastrar">
+        <div class="search_cadastrar">
             <input type="text" id="search-input" placeholder="Nome do paciente..." v-model="pesquisa" >
             <RouterLink to="/cadastrarpaciente"><button>Cadastrar</button></RouterLink>
         </div>
-        <div class="container-paciente" v-for="usuario in filteredPacientes" :key="usuario.cpf">
+        <div class="container_paciente" v-for="usuario in filteredPacientes" :key="usuario.cpf">
             <img :src="usuario.foto">
             <div class="info">
                 <p>Nome: {{ usuario.nome }}</p>
                 <p>Telefone: {{ usuario.telefone }}</p>
                 <p v-if="usuario.paciente_dados && usuario.paciente_dados.length > 0">Alergico a: {{ usuario.paciente_dados[0].alergicos }}</p>
             </div>
-            <div class="botoes-div">
-                <button class="detalhar-btn">Evolução</button>
-                <button class="histconsultas-btn" @click="teste(usuario.nome, usuario.cpf)">Hist. consultas</button>
-                <RouterLink to="/registrarconsulta"><button class="registrar-btn">Registrar consultas</button></RouterLink>
+            <div class="botoes_div">
+                <button class="detalhar_btn">Evolução</button>
+                <button class="histconsultas_btn" @click="teste(usuario.nome, usuario.cpf)">Hist. consultas</button>
+                <RouterLink to="/registrarconsulta"><button class="registrar_btn">Registrar consultas</button></RouterLink>
             </div>
         </div>
     </div>
@@ -34,12 +34,12 @@ h1 {
     color: #84E7FF;
 }
 
-.main-content {
+.main_content {
     margin-left: 260px;
     padding: 20px;
 }
 
-.search-cadastrar {
+.search_cadastrar {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
@@ -60,7 +60,7 @@ input {
 }
 
 
-.search-cadastrar button {
+.search_cadastrar button {
     padding: 10px 50px;
     border: none;
     background-color: white;
@@ -73,7 +73,7 @@ input {
     font-size: 14px;
 }
 
-.container-paciente {
+.container_paciente {
     background-color: white;
     padding: 20px;
     margin-bottom: 20px;
@@ -84,7 +84,7 @@ input {
     position: relative;
 }
 
-.container-paciente img {
+.container_paciente img {
     width: 165px;
     height: 170px;
     margin-right: 20px;
@@ -99,7 +99,7 @@ input {
     margin-left: 10px;
 }
 
-.botoes-div {
+.botoes_div {
     position: absolute;
     bottom: 20px;
     right: 20px;
@@ -107,9 +107,9 @@ input {
     gap: 20px;
 }
 
-.detalhar-btn,
-.histconsultas-btn,
-.registrar-btn {
+.detalhar_btn,
+.histconsultas_btn,
+.registrar_btn {
     padding: 10px 20px;
     background-color: white;
     border: 1px solid #84E7FF;
@@ -121,7 +121,7 @@ input {
     margin-right: 10px;
 }
 
-.histconsultas-btn {
+.histconsultas_btn {
     background-color: #E7FAFF;
 }
 </style>
