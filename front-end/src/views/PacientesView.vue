@@ -30,13 +30,13 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
-h1 {
-    color: #84E7FF;
+.main_content {
+    margin-left: 250px; /* Alinha o conteúdo principal ao lado do sidebar */
+    padding: 20px;
 }
 
-.main_content {
-    margin-left: 260px;
-    padding: 20px;
+h1 {
+    color: #84E7FF;
 }
 
 .search_cadastrar {
@@ -45,30 +45,25 @@ h1 {
     margin-bottom: 20px;
 }
 
-
 input {
     width: 90%;
     padding: 10px 20px;
     font-size: 16px;
     border: none;
     border-radius: 8px;
-    /* Adiciona bordas arredondadas */
     box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
-    /* Sombra mais sutil na parte inferior */
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
 }
 
-
 .search_cadastrar button {
-    padding: 10px 50px;
+    padding: 10px 20px;
     border: none;
     background-color: white;
     cursor: pointer;
     border-radius: 8px;
     margin-left: 10px;
     box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
-    /* Sombra mais sutil na parte inferior */
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
 }
@@ -118,7 +113,6 @@ input {
     cursor: pointer;
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
-    margin-right: 10px;
 }
 
 .histconsultas_btn {
