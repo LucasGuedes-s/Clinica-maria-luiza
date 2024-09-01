@@ -26,6 +26,7 @@ async function postProfissional(req, res, next){
         res.status(200).json({cadastro});
         next()
     } catch (err) {
+        console.log(err)
         console.error(`Erro ao receber usuário`);
     }  
 }

@@ -21,11 +21,11 @@ async function getPaciente(req, res, next){
 }
 async function getConsultas(req, res, next){
     try {
-        const consultas = await Paciente.getConsultas(req.params.id)
+        const consultas = await Paciente.getConsultas(req.params.cpf)
         res.status(200).json({consultas});
         next()
     } catch (err) {
-        console.error(`Erro ao receber as consultas do paciente ${req.params.id}`);
+        console.error(`Erro ao receber as consultas do paciente ${req.params.cpf}`);
     }
 }
 async function postPacientes(req, res, next){

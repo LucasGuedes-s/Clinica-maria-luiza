@@ -4,7 +4,7 @@ const userController = require('../controllers/pacientes.controller.js');
 const permission = require('../services/permissions/profissionais.permissions.services')
 const router = express.Router()
 
-router.get('/consulta/paciente', [jwtMiddleware, permission.get], userController.getConsultas);
+router.get('/consulta/paciente/:cpf', [jwtMiddleware, permission.getDados], userController.getConsultas);
 router.post('/consulta/registrar', [jwtMiddleware, permission.postProfissionais], userController.postConsulta);
 
 module.exports = router;

@@ -13,16 +13,16 @@ function addFooter(doc) {
         const pageCount = doc.internal.getNumberOfPages();
 
         for (let i = 1; i <= pageCount; i++) {
-          doc.setPage(i); // Vai para a página específica
-          doc.setFontSize(10);
-      
-          // Adiciona o texto do rodapé centralizado na parte inferior da página
-          doc.text(
-            `Página ${i} de ${pageCount}, documento retirado no dia ${data_hora.data} às ${data_hora.hora}h`,
-            doc.internal.pageSize.getWidth() / 2,
-            doc.internal.pageSize.getHeight() - 10,
-            { align: 'center' }
-          );
+            doc.setPage(i); // Vai para a página específica
+            doc.setFontSize(10);
+            doc.setTextColor(126, 126, 126);
+            // Adiciona o texto do rodapé centralizado na parte inferior da página
+            doc.text(
+                `Página ${i} de ${pageCount}, documento retirado no dia ${data_hora.data} às ${data_hora.hora}h`,
+                doc.internal.pageSize.getWidth() / 2,
+                doc.internal.pageSize.getHeight() - 10,
+                { align: 'center' }
+            );
         }
     }
 }
@@ -30,6 +30,8 @@ async function createReportPdf(usuario) {
 
     const doc = new jsPDF();
     const consultas = await paciente.getConsultas(usuario)
+    console.log(consultas)
+
     const imgPath = path.resolve(__dirname, '../../src/assets/img.girafas.png');
     const imgData = fs.readFileSync(imgPath).toString('base64');
     const imgHeight = 40;
@@ -40,31 +42,37 @@ async function createReportPdf(usuario) {
     doc.addImage(imgData, 'PNG', x, 10, imgWidth, imgHeight);
 
     const firstImageY = 10 + imgHeight + 10;
+
     // Definir as dimensões da segunda imagem
-    const secondImageWidth = 50;
-    const secondImageHeight = 50;
+    const secondImageWidth = 40;
+    const secondImageHeight = 40;
 
     // Posicionar a segunda imagem e o texto abaixo da primeira imagem
-    const secondImageX = 10; // Posição X da segunda imagem
+    const secondImageX = 15; // Posição X da segunda imagem
     const secondImageY = firstImageY + 5; // Posição Y abaixo da primeira imagem
 
     const textX = secondImageX + secondImageWidth + 10; // Texto ao lado direito da segunda imagem
-    const textY = secondImageY + 10; 
+    const textY = secondImageY + 5;
 
     const data_hora = formatar.formatarDataHoraSeparados(new Date(consultas.data_nascimento))
+    //Foi atendido na Clínica Maria Luíza. A seguir, são detalhados os dados de todas as consultas realizada sob esse paciente na clínica.   
 
     const patientInfo = `
     Nome: ${consultas.nome};
+CPF: ${consultas.cpf};
+E-mail: ${consultas.email}
+Residente em: ${consultas.endereco}
 Nascido em ${data_hora.data};
-
-Foi atendido na Clínica Maria Luíza. A seguir, são detalhados os dados de todas as consultas realizada sob esse paciente na clínica.   
     `;
     doc.setFontSize(14);
     doc.setTextColor(126, 126, 126); // Define a cor do texto como preta
-    doc.text(patientInfo.trim(), textX, textY, { maxWidth: 130, lineHeight: 1.5 });
-    
+    const lineHeightFactor = 1.5;
+
+    doc.text(patientInfo.trim(), textX, textY, { maxWidth: 130, lineHeightFactor: lineHeightFactor });
+
     const inicio = new Date().getTime();
     const image = await getImageAsBase64(consultas.foto);
+
     doc.addImage(image, 'JPEG', secondImageX, secondImageY, secondImageWidth, secondImageHeight);
     var fim = new Date().getTime();
 
@@ -73,8 +81,11 @@ Foi atendido na Clínica Maria Luíza. A seguir, são detalhados os dados de tod
 
     // Inicializando as linhas da tabela
     const tableRows = [];
-
+    const laudos = []
     consultas.consultas.forEach(consulta => {
+        if (consulta.laudos.length > 0) {  // Verifica se o array de laudos não está vazio
+            laudos.push(...consulta.laudos);  // Adiciona os laudos ao array principal, desestruturando o array interno
+        }
         const row = [
             consulta.consulta,
             new Date(consulta.data).toLocaleDateString(),  // Formata a data
@@ -85,7 +96,7 @@ Foi atendido na Clínica Maria Luíza. A seguir, são detalhados os dados de tod
     });
 
     const lineHeight = 10; // Altura da linha
-    const tableStartY = textY + (lineHeight * patientInfo.split('\n').length) + 1; // Ajuste conforme necessário
+    const tableStartY = textY + (lineHeight * patientInfo.split('\n').length); // Ajuste conforme necessário
 
     // Adicionando as colunas da tabela
     doc.autoTable({
@@ -98,10 +109,36 @@ Foi atendido na Clínica Maria Luíza. A seguir, são detalhados os dados de tod
         },
     });
     addFooter(doc);
+    doc.addPage();
 
+    // Adicionar o título para a nova página
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0); // Preto
+    doc.text('Laudos do Paciente', 10, 20);
+
+    for (let i = 0; i < laudos.length; i++) {
+        const laudoUrl = laudos[i];
+        try {
+            if (i > 0) {
+                doc.addPage();
+                addFooter(doc);     // Adiciona uma nova página para cada laudo, exceto o primeiro
+            }
+            const laudoBase64 = await getImageAsBase64(laudoUrl);
+            const laudoWidth = pageWidth - 20; // Ajuste de acordo com o tamanho da página
+            const laudoHeight = (laudoWidth * 0.75); // Mantém a proporção da imagem
+            const laudoX = 10;
+            const laudoY = 20;
+
+            // Adicionar o laudo na nova página
+            doc.addImage(laudoBase64, 'JPEG', laudoX, laudoY, laudoWidth, laudoHeight);
+
+        } catch (error) {
+            console.error('Erro ao adicionar imagem do laudo:', error);
+        }
+    }
     var tempo = fim - inicio;
-
     console.log('Tempo de execução: ' + tempo);
+
     const pdfBuffer = doc.output('arraybuffer');
 
     return pdfBuffer;
@@ -128,7 +165,7 @@ async function pdfConsulta(id) {
     const secondImageY = firstImageY; // Posição Y abaixo da primeira imagem
 
     const textX = secondImageX + secondImageWidth + 10; // Texto ao lado direito da segunda imagem
-    const textY = secondImageY + 10; 
+    const textY = secondImageY + 10;
 
     const data_hora = formatar.formatarDataHoraSeparados(new Date(consultas.data_nascimento))
 
@@ -152,7 +189,7 @@ Nascido em ${data_hora.data};
 
 Foi atendido na data de -- pela profissional --
     `;
-    doc.text(consulta.trim(),texto)
+    doc.text(consulta.trim(), texto)
     addFooter(doc);
     const pdfBuffer = doc.output('arraybuffer');
 

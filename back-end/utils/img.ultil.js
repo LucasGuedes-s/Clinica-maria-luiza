@@ -3,12 +3,9 @@ const axios = require('axios');
 async function getImageAsBase64(url) {
   try {
     // Aguardando a resposta da requisição
-    console.log("Cheguei aqui")
-
     const response = await axios.get(url, { responseType: 'arraybuffer' });
     // Convertendo o buffer para base64
     const buffer = Buffer.from(response.data, 'binary');
-    console.log("Cheguei aqui")
     return buffer.toString('base64');
   } catch (error) {
     console.error('Erro ao converter imagem para base64:', error);
