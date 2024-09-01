@@ -10,5 +10,4 @@ router.get('/pacientes', [jwtMiddleware, permission.getPacientes], userControlle
 router.post('/cadastrar/pacientes', /*[jwtMiddleware, permission.post],*/ userController.postPacientes);
 router.post('/dados/pacientes', [jwtMiddleware, permission.post], userController.postDados);
 
-
 module.exports = router;

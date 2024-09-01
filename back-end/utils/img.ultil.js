@@ -1,21 +1,19 @@
-// utils.js (ou outro nome de arquivo)
-function getImageAsBase64(url) {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.crossOrigin = 'Anonymous';
-      img.src = url;
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-        const dataURL = canvas.toDataURL('image/jpeg');
-        resolve(dataURL);
-      };
-      img.onerror = (error) => {
-        reject(error);
-      };
-    });
+const axios = require('axios');
+
+async function getImageAsBase64(url) {
+  try {
+    // Aguardando a resposta da requisição
+    console.log("Cheguei aqui")
+
+    const response = await axios.get(url, { responseType: 'arraybuffer' });
+    // Convertendo o buffer para base64
+    const buffer = Buffer.from(response.data, 'binary');
+    console.log("Cheguei aqui")
+    return buffer.toString('base64');
+  } catch (error) {
+    console.error('Erro ao converter imagem para base64:', error);
+    throw error;
   }
-module.exports = { getImageAsBase64 }
+}
+
+module.exports = { getImageAsBase64 };

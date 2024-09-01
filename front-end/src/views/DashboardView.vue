@@ -37,6 +37,7 @@ body {
     margin: 0;
     background-color: #E7FAFF;
     font-family: 'Montserrat', sans-serif;
+    display: block;
 }
 
 .main-content {

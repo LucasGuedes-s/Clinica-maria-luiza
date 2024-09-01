@@ -41,15 +41,9 @@ async function getConsultas(user){
         return consultas;
 }
 async function getConsulta(consulta){
-
-  const consultas = await prisma.Pacientes.findUnique({
+  const consultas = await prisma.Consultas.findUnique({
     where: {
-      id: consulta.cpf // Usando o identificador único do paciente
-    },
-    include:{
-      consultas:{
-        where:{ consulta: consulta.id }
-      }
+      id: consulta // Usando o identificador único do paciente
     }
   });
   return consultas;
@@ -61,7 +55,7 @@ async function cadastrarPaciente(req){
             cpf: req.paciente.cpf,
             email: req.paciente.email,
             nome: req.paciente.nome,
-            //nome_mae: req.paciente.nome_mae,
+            nome_mae: req.paciente.nome_mae,
             data_nascimento: new Date(req.paciente.data_nascimento),
             telefone: req.paciente.telefone,
             endereco: req.paciente.endereco,

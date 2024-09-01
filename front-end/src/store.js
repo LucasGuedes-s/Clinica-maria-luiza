@@ -19,6 +19,7 @@ export const useAuthStore = defineStore('auth', {
       // Salvar no localStorage e nos cookies
       localStorage.setItem('token', token);
       localStorage.setItem('usuario', JSON.stringify(user));
+
       Cookies.set('token', token, { expires: 1 }); // Expira em 1 dias
       Cookies.set('usuario', JSON.stringify(user), { expires: 7 });
     },
@@ -40,8 +41,7 @@ export const useAuthStore = defineStore('auth', {
     loadFromLocalStorage() {
       // Carregar dados do localStorage
       let token = localStorage.getItem('token');
-      let user = JSON.parse(localStorage.getItem('usuario'));
-
+      let user = JSON.parse(localStorage.getItem('usuario'));      
       // Se não encontrar no localStorage, tenta nos cookies
       if (!token || !user) {
         token = Cookies.get('token');
