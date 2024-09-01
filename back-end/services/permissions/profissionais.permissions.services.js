@@ -9,6 +9,14 @@ async function get(req, res, next) {
         next(err);
     }
 }
+async function getDados(req, res, next) {
+    try {
+        await verificarPermissoes(req.user, permissions.TODOS);
+        next(); 
+    } catch (err) {
+        next(err);
+    }
+}
 async function getAgendamentos(req, res, next) {
     try {
         await verificarPermissoes(req.user, permissions.TODOS);
@@ -19,9 +27,6 @@ async function getAgendamentos(req, res, next) {
 }
 async function post(req, res, next) {
     try {
-        console.log(req)
-        console.log(req.user)
-        console.log("User")
         await verificarPermissoes(req.user, permissions.TODOS);
         next();
     } catch (err) {
@@ -52,4 +57,4 @@ async function postProfissional(req, res, next) {
         next(err);
     }
 }
-module.exports = {get, post, postProfissionais, getAgendamentos, getPacientes, postProfissional};
+module.exports = {get, getDados, post, postProfissionais, getAgendamentos, getPacientes, postProfissional};

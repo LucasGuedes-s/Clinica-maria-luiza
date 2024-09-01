@@ -1,6 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient()
-const bcryptUtil = require("../utils/bcrypt.ultil")
+const bcryptUtil = require("../utils/bcrypt.ultil");
 require('dotenv').config();
 
 async function getProfissionais(){   
@@ -18,22 +18,24 @@ async function getProfissional(usuario){
 }
 async function postProfissional(user){  
     console.log(user)
-    let senha_user = bcryptUtil.hash(user.usuario.senha);
+    let senha_user = bcryptUtil.hash(process.env.SENHA, process.env.SALTOS);
 
-    await prisma.Profissionais.create({
+    const cad = await prisma.Profissionais.create({
         data: {
             email: user.usuario.email,
             senha: senha_user,
             nome: user.usuario.nome,
             telefone: user.usuario.telefone,
             foto: user.usuario.foto,
-            identificador: user.usuario.identificador,
-            permissaoId: user.usuario.permissaoId,
-          },
+            identificador: user.usuario.email, //"user.usuario.identificador"
+            permissaoId: 2,
+        },
     });
-    return;
+    console.log("aqui")
+    console.log(cad)
+    return cad;
 }
-async function cadastrarProfissional(req){  
+/*async function cadastrarProfissional(req){  
     console.log(req)
       const profissionais = await prisma.Profissionais.create({
           data: {
@@ -45,8 +47,8 @@ async function cadastrarProfissional(req){
               foto: req.profissional.foto,
           }
       });
-  
+      console.log(profissionais)
       return profissionais;
-}
+}*/
 
-module.exports = {getProfissionais, postProfissional, getProfissional, cadastrarProfissional};
+module.exports = {getProfissionais, postProfissional, getProfissional};

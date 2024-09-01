@@ -17,8 +17,7 @@ model Profissionais {
   pix              String?
   permissao        Permissao    @relation(fields: [permissaoId], references: [id])
   permissaoId      Int
-  especialidade    Especialidade?    @relation(fields: [especialidadeId], references: [id])
-  especialidadeId  Int?
+  especialidade    String
   //paciente         Pacientes? @relation(fields: [pacienteId], references: [cpf])
   //pacienteId       String? //Adicionado
   agendamentos     Agendamentos[]
@@ -40,7 +39,7 @@ model Pacientes{
   consultas       Consultas[]
   paciente_dados  Pacientes_dados[]
   ConsultaAba     ConsultaAba[]
-  //profissionais   Profissionais[] //Adicionado
+  avaliacaoAba    AvaliacaoAba[] //Adicionado
 }
 model Pacientes_dados{
   pacientes       Int @id @default(autoincrement())
@@ -65,7 +64,7 @@ model Agendamentos{
   status          String?
   profissional    Profissionais? @relation(fields: [profissionalId], references: [email])
   profissionalId  String
-  paciente        Pacientes? @relation(fields: [pacienteId], references: [cpf])
+  paciente        Pacientes? @relation(fields: [pacienteId], references: [email])
   pacienteId      String?
   sala_consulta   Salas? @relation(fields: [sala], references: [id])
   sala            Int?
@@ -100,9 +99,24 @@ model ConsultaAba{
   Aplicacao4      String?
   Aplicacao5      String?
   teste           String?
+  foto            String? @db.VarChar(2048)
   observacoes     String? @db.VarChar(2048)
 }
-
+model AvaliacaoAba{
+  pacientes       Int @id @default(autoincrement())
+  paciente        Pacientes? @relation(fields: [pacienteId], references: [cpf])
+  pacienteId      String?
+  nome_aplicador  String?
+  data_aplicacao  DateTime @default(now())      
+  descricao_atividade String? @db.VarChar(2048)
+  Aplicacao1      String?
+  Aplicacao2      String?
+  Aplicacao3      String?
+  Aplicacao4      String?
+  Aplicacao5      String?
+  teste           String?
+  observacoes     String? @db.VarChar(2048)
+}
 model Pagamentos{
   id              Int @id @default(autoincrement())
   pagamento       Float?
@@ -114,10 +128,5 @@ model Pagamentos{
 model Permissao {
   id               Int             @id @default(autoincrement())
   acesso           String?
-  profissionais    Profissionais[]
-}
-model Especialidade {
-  id               Int             @id @default(autoincrement())
-  Especialidade    String?
   profissionais    Profissionais[]
 }

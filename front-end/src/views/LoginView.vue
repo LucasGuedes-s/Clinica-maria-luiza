@@ -12,7 +12,7 @@
                 <input type="password" v-model="senha" placeholder="Digite a sua senha">
                 <div class="button-container">
                     <button type="submit" class="btn-entrar" click="login">Entrar como profissional</button>
-                    <button type="submit" class="btn-paciente">Entrar como paciente</button>
+                    <router-link to="/loginpaciente"><button type="submit" class="btn-paciente">Entrar como paciente</button></router-link>
                 </div>
             </form>
         </div>

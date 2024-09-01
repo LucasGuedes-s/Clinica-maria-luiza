@@ -163,7 +163,7 @@ export default {
         },
         async cadastrarpaciente() {
             const token = this.store.token
-            
+
             // Gera um identificador único para a imagem
             const uniqueImageName = uuidv4() + '_' + this.imagem.name;
             // Cria uma referência para o armazenamento
@@ -172,7 +172,7 @@ export default {
             const snapshot = await uploadBytes(storageRef, this.imagem);
             // Obtém a URL pública da imagem
             const foto = await getDownloadURL(snapshot.ref);
-  
+
             await Axios.post(`https://clinica-maria-luiza.onrender.com/cadastrar/pacientes`, {
                 paciente: {
                     cpf: this.cpf,
@@ -193,8 +193,12 @@ export default {
                     Swal.fire({
                         icon: 'success',
                         title: 'Cadastrado com sucesso',
-                        timer: 7000,
-                    }),
+                        timer: 8000,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    }
+                    ),
                     router.push("/pacientes")
                 ).catch(error => {
                     console.error('Erro:', error);
