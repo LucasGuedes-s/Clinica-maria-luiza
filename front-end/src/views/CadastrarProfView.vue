@@ -3,7 +3,7 @@
     <div class="main-content">
         <div class="container_cadastrarprof">
             <h1>Cadastrar Profissional</h1>
-            <form>
+            <form @submit.prevent="cadastrarprofissional">
                 <div class="form-group">
                     <label for="nome">Nome:</label>
                     <input type="text" id="nome_funcionario" name="nome" v-model="nome" required>
@@ -39,7 +39,7 @@
                     <label for="imagem">Adicionar Imagem:</label>
                     <input type="file" id="imagem_prof" name="imagem" accept="image/*">
                 </div>
-                <button type="submit" class="cadastrar-btn">Cadastrar</button>
+                <button type="submit" class="cadastrar-btn" click="cadastrarprofissional">Cadastrar</button>
             </form>            
         </div>
     </div>
@@ -158,7 +158,7 @@ data(){
 methods: {
     async cadastrarprofissional(){
         const token = this.store.token
-        await Axios.post("https://clinica-maria-luiza.onrender.com/cadastrar/profissional", {
+        await Axios.post(`http://localhost:3000/cadastrar/profissional`, {
             usuario: {
                 nome: this.nome,
                 data_nascimento: this.data_nascimento,
@@ -167,21 +167,23 @@ methods: {
                 pix: this.pix,
                 foto: this.foto
             },
+        },
+        {
             headers: {
                 'Authorization': `Bearer ${token}`
-                }
+            }
         }).then(
             Swal.fire({
                 icon: 'success',
                 title: 'Cadastrado com sucesso',
-                timer: 4000,
+                timer: 8000,
             }),
             router.push("/profissionais")
-        ).catch( error => {
+        ).catch(error => {
             Swal.fire({
                 icon: 'erro',
                 title: 'Não foi possível realizar o cadastro',
-                timer: 4000,
+                timer: 6000,
             })
         })
     }

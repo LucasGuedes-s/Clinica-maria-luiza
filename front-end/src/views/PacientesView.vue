@@ -14,8 +14,8 @@
                 <p v-if="usuario.paciente_dados && usuario.paciente_dados.length > 0">Alergico a: {{ usuario.paciente_dados[0].alergicos }}</p>
             </div>
             <div class="botoes_div">
-                <button class="detalhar_btn">Evolução</button>
-                <button class="histconsultas_btn" @click="teste(usuario.nome, usuario.cpf)">Hist. consultas</button>
+                <button class="detalhar_btn" @click="teste(usuario.nome, usuario.cpf)">Evolução</button>
+                <button class="histconsultas_btn" @click="historico(usuario.cpf)">Hist. consultas</button>
                 <RouterLink to="/registrarconsulta"><button class="registrar_btn">Registrar consultas</button></RouterLink>
             </div>
         </div>
@@ -124,6 +124,8 @@ input {
 import Sidebar from '@/components/Sidebar.vue'
 import { useAuthStore } from '@/store';
 import Axios from 'axios';
+import Swal from 'sweetalert2';
+
 export default {
     name: 'pacientes',
     components: {
@@ -135,7 +137,12 @@ export default {
             store
         }
     },
-    
+    data() {
+        return {
+            pesquisa: '',
+            paciente: []
+        }
+    },
     methods: {
         async pacientes() {
             const token = this.store.token
@@ -145,14 +152,26 @@ export default {
                 }
             }).then(response => {
                 this.paciente = response.data.pacientes
-                console.log(response.data.pacientes)
             }).catch(Error => {
                 console.error(Error)
             })
         },
+        async historico(cpf){
+            sessionStorage.setItem('cpf', cpf);
+            this.$router.push({ name: 'historicodeconsulta' });
+        },
         async teste(nome, cpf) {
+            Swal.fire({
+                title: 'Aguarde...',
+                text: 'Estamos gerando o PDF.',
+                timer: 4000,
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
             Axios({
-                url: `https://clinica-maria-luiza.onrender.com/historico/consultas/${cpf}`,  // Altere a URL conforme necessário
+                url: `http://localhost:3000/historico/consultas/${cpf}`,  // Altere a URL conforme necessário
                 method: 'GET',
                 responseType: 'blob',  // Importante para tratar a resposta como um blob
             }).then(response => {
@@ -171,15 +190,8 @@ export default {
     mounted() {
         this.pacientes()
     },
-    data() {
-        return {
-            pesquisa: '',
-            paciente: []
-        }
-    },
     computed: {
         filteredPacientes() {
-        
             return this.paciente.filter(paciente => 
             paciente.nome.toLowerCase().includes(this.pesquisa.toLowerCase())
         );
@@ -188,7 +200,6 @@ export default {
     beforeRouteEnter(to, from, next) {
         next(vm => {
             try {
-
                 if (!vm.store.isAuthenticated) {
                     vm.$router.push('/login')
                 }

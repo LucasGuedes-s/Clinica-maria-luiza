@@ -2,19 +2,21 @@
     <Sidebar />
     <div class="main-content">
         <h1>Histórico de Consultas</h1>
-        <div class="container_historico">
+        <div class="container_historico" v-for="consulta in consultas" :key="consulta.id">
+            <h1 v-if="consultas.length == 0">Nenhuma consulta registrada</h1>
+
             <div class="infos_historico">
                 <div class="info_item">
-                    <label for="resposta-data">Data:</label>
+                    <label for="resposta-data">Data: {{ consulta.data }}</label>
                     <input type="date" id="resposta-data" value="">
                 </div>
                 <div class="info_item">
                     <label for="especialista-nome">Especialista:</label>
-                    <input type="text" id="especialista-nome" value="">
+                    <input type="text" id="especialista-nome" :value="consulta.consulta" readonly>
                 </div>
                 <div class="info_item descricao">
                     <label for="historico_descricao">Descrição:</label>
-                    <textarea id="historico_descricao" rows="4"></textarea>
+                    <textarea id="historico_descricao" rows="4" :value="consulta.descricao" readonly></textarea>
                 </div>
                 <div class="botoes">
                     <button class="btn_detalhar_hist">Detalhar</button>
@@ -31,6 +33,7 @@ body {
     font-family: 'Montserrat', sans-serif;
     background-color: #E7FAFF;
 }
+
 .main-content {
     margin-left: 260px;
     padding: 20px;
@@ -67,7 +70,8 @@ h1 {
 .botoes {
     grid-column: 1 / -1;
     display: flex;
-    justify-content: space-between; /* Alinha os botões com espaçamento entre eles */
+    justify-content: space-between;
+    /* Alinha os botões com espaçamento entre eles */
     gap: 10px;
 }
 
@@ -90,8 +94,10 @@ h1 {
     resize: vertical;
 }
 
-.btn_detalhar_hist, .btn_arquivopdf_hist {
-    flex: 1; /* Faz com que os botões tenham a mesma largura */
+.btn_detalhar_hist,
+.btn_arquivopdf_hist {
+    flex: 1;
+    /* Faz com que os botões tenham a mesma largura */
     padding: 10px 20px;
     border-radius: 4px;
     background-color: #F5F5F5;
@@ -105,10 +111,46 @@ h1 {
 <script>
 import Sidebar from '@/components/Sidebar.vue';
 import Axios from 'axios';
+import { useAuthStore } from '@/store.js'
+
 export default {
     name: 'historicodeconsulta',
+
+    setup() {
+        const store = useAuthStore()
+        return {
+            store
+        }
+    },
     components: {
         Sidebar
     },
+    data() {
+        return {
+            consultas: null,
+            cpf: sessionStorage.getItem('cpf') || ''
+        };
+    },
+    mounted() {
+        // Opcional: Limpar o CPF do sessionStorage após uso
+        sessionStorage.removeItem('cpf');
+        this.getConsultas()
+    },
+    methods: {
+        async getConsultas() {
+            const token = this.store.token
+            const cpf = this.cpf
+
+            Axios.get(`http://localhost:3000/consulta/paciente/${cpf}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then(response => {
+                this.consultas = response.data.consultas.consultas
+            }).catch(error => {
+                console.error(error)
+            })
+        }
+    }
 }
 </script>
