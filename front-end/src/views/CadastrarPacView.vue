@@ -173,7 +173,7 @@ export default {
             // Obtém a URL pública da imagem
             const foto = await getDownloadURL(snapshot.ref);
 
-            await Axios.post(`http://localhost:3000/cadastrar/pacientes`, {
+            await Axios.post(`https://clinica-maria-luiza.onrender.com/cadastrar/pacientes`, {
                 paciente: {
                     cpf: this.cpf,
                     nome: this.nome,

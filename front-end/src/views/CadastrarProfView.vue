@@ -158,7 +158,7 @@ data(){
 methods: {
     async cadastrarprofissional(){
         const token = this.store.token
-        await Axios.post(`http://localhost:3000/cadastrar/profissional`, {
+        await Axios.post(`https://clinica-maria-luiza.onrender.com/cadastrar/profissional`, {
             usuario: {
                 nome: this.nome,
                 data_nascimento: this.data_nascimento,

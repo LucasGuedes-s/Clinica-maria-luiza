@@ -157,7 +157,7 @@ export default {
     },
 methods:{
     async agendarconsulta(){
-        await Axios.post("http://localhost:3000/cadastrar/agendamento", {
+        await Axios.post(`https://clinica-maria-luiza.onrender.com/cadastrar/agendamento`, {
             agenda:{
                 agendar,
                 notas,
