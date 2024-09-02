@@ -17,7 +17,7 @@ model Profissionais {
   pix              String?
   permissao        Permissao    @relation(fields: [permissaoId], references: [id])
   permissaoId      Int
-  especialidade    String
+  especialidade    String?
   //paciente         Pacientes? @relation(fields: [pacienteId], references: [cpf])
   //pacienteId       String? //Adicionado
   agendamentos     Agendamentos[]
@@ -99,7 +99,6 @@ model ConsultaAba{
   hora_inicio     DateTime?
   hora_fim        DateTime?
   descricao_atividade String? @db.VarChar(2048)
-  
   Aplicacao1      String?
   Aplicacao2      String?
   Aplicacao3      String?
@@ -113,16 +112,7 @@ model AvaliacaoAba{
   pacientes       Int @id @default(autoincrement())
   paciente        Pacientes? @relation(fields: [pacienteId], references: [cpf])
   pacienteId      String?
-  nome_aplicador  String?
-  data_aplicacao  DateTime @default(now())      
-  descricao_atividade String? @db.VarChar(2048)
-  Aplicacao1      String?
-  Aplicacao2      String?
-  Aplicacao3      String?
-  Aplicacao4      String?
-  Aplicacao5      String?
-  teste           String?
-  observacoes     String? @db.VarChar(2048)
+  foto            String? @db.VarChar(2048)
 }
 model Pagamentos{
   id              Int @id @default(autoincrement())
