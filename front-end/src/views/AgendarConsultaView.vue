@@ -5,8 +5,15 @@
             <h1>Agendar Consulta</h1>
             <form>
                 <div class="form-group">
-                    <label for="nome">Nome do Paciente:</label>
-                    <input type="text" id="nome_paciente" name="nome" required>
+                    <label for="nome_paciente">Nome do Paciente:</label>
+                    <input type="text" id="nome_paciente" v-model="buscar" @input="searchpacientes"
+                        @focus="sugestoes = true" @blur="hideSuggestions" autocomplete="off" required />
+                    <ul v-if="sugestoes && filtrarPacientes.length">
+                        <li v-for="paciente in filtrarPacientes" :key="paciente.id"
+                            @mousedown.prevent="selecionarPaciente(paciente)">
+                            {{ paciente.nome }}
+                        </li>
+                    </ul>
                 </div>
                 <div class="form-group">
                     <label for="nome">Nome do Responsável:</label>
@@ -20,7 +27,7 @@
                     <label for="datadaconsulta">Data:</label>
                     <input type="date" id="data_consulta" name="datadaconsulta" required>
                 </div>
-            
+
                 <div class="form-group">
                     <label for="horario">Horário:</label>
                     <input type="time" id="horario_consulta" name="horario" required>
@@ -37,9 +44,9 @@
                     <label for="observacao_agendarconsulta">Observação:</label>
                     <textarea id="observacao_agendarconsulta" rows="4"></textarea>
                 </div>
-            
+
                 <button type="submit" class="agendarconsulta_btn">Agendar</button>
-            </form>            
+            </form>
         </div>
     </div>
 </template>
@@ -50,6 +57,7 @@ body {
     font-family: 'Montserrat', sans-serif;
     background-color: #E7FAFF;
 }
+
 .main-content {
     margin-left: 260px;
     padding: 20px;
@@ -81,7 +89,7 @@ body {
 form {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 35px; 
+    gap: 35px;
     align-items: start;
 }
 
@@ -91,10 +99,11 @@ form {
 }
 
 .form-group label {
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
 }
 
-.form-group input, select {
+.form-group input,
+select {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
@@ -126,17 +135,43 @@ form {
     font-size: 16px;
     cursor: pointer;
     width: 100%;
-    margin-top: 15px; 
+    margin-top: 15px;
     margin-bottom: 15px;
 }
 
 .agendarconsulta_btn:hover {
     background-color: #E7FAFF;
 }
+ul {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  max-height: 150px;
+  overflow-y: auto;
+  margin-top: 65px;
+  padding-left: 0;
+  list-style-type: none;
+  background-color: #fff;
+  position: absolute;
+  width: 50%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
 
-#data_consulta, #especialidade, #horario{
+li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+li:hover {
+  background-color: #f0f0f0;
+}
+
+#data_consulta,
+#especialidade,
+#horario {
     font-family: 'Montserrat', sans-serif;
 }
+
 </style>
 
 <script>
@@ -148,39 +183,76 @@ export default {
     components: {
         Sidebar
     },
-    data(){
-        return{
-            agendar:'',
-            notas:'',
-            cpf:'',
+    setup() {
+        const store = useAuthStore() //Importação da função do Store.js
+        return {
+            store
         }
     },
-methods:{
-    async agendarconsulta(){
-        await Axios.post(`https://clinica-maria-luiza.onrender.com/cadastrar/agendamento`, {
-            agenda:{
-                agendar,
-                notas,
-                cpf,
-                email
-            }
-        }).then(response =>{
-            console.log(response.status)
-            console.log(response.data)
-            console.log(response.headers.authorization); //Mostra o token que está chegando
-            this.store.token = response.headers.authorization.split(' ')[1]; //Adiciona o token ao Store
-            this.store.usuario = response.data
-            router.push('/dashboard')
-        }).catch(Error =>{
-            console.error(Error);
-            Swal.fire({
-                icon: 'erro',
-                title: 'Usuário ou senhas incorretos',
-                timer: 4000,
+    data() {
+        return {
+            agendar: '',
+            notas: '',
+            cpf: '',
+            buscar: '',
+            filtrarPacientes: [],
+            pacientes: [], // Este array deve ser preenchido com os dados dos pacientes
+            sugestoes: false
+        }
+    },
+    methods: {
+        searchpacientes() {
+            this.filtrarPacientes = this.pacientes.filter(paciente =>
+                paciente.nome.toLowerCase().includes(this.buscar.toLowerCase())
+            );
+        },
+        selecionarPaciente(paciente) {
+            this.buscar = paciente.nome;
+            this.sugestoes = false;
+        },
+        hideSuggestions() {
+            setTimeout(() => {
+                this.sugestoes = false;
+            }, 200);
+        },
+
+        async agendarconsulta() {
+            await Axios.post(`https://clinica-maria-luiza.onrender.com/cadastrar/agendamento`, {
+                agenda: {
+                    agendar,
+                    notas,
+                    cpf,
+                    email
+                }
+            }).then(response => {
+                console.log(response.status)
+                console.log(response.data)
+                console.log(response.headers.authorization); //Mostra o token que está chegando
+                this.store.token = response.headers.authorization.split(' ')[1]; //Adiciona o token ao Store
+                this.store.usuario = response.data
+                router.push('/dashboard')
+            }).catch(Error => {
+                console.error(Error);
+                Swal.fire({
+                    icon: 'erro',
+                    title: 'Usuário ou senhas incorretos',
+                    timer: 4000,
+                })
             })
+        }
+    },
+    mounted() {
+        const token = this.store.token
+        Axios.get("https://clinica-maria-luiza.onrender.com/pacientes", {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }).then(response => {
+            this.pacientes = response.data.pacientes
+        }).catch(Error => {
+            console.error(Error)
         })
     }
 }
-    }
 
 </script>

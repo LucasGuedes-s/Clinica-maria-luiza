@@ -24,10 +24,10 @@
             
                 <div class="form-group">
                     <label for="especialidade">Especialidade:</label>
-                    <select id="especialidade" name="especialidade" required>
-                        <option value="especialidade1">Especialidade 1</option>
-                        <option value="especialidade2">Especialidade 2</option>
-                        <option value="especialidade3">Especialidade 3</option>
+                    <select id="especialidade" name="especialidade" v-model="especialidade" required>
+                        <option v-for="especialidade in especialidades" :key="especialidade" :value="especialidade">
+                            {{ especialidade }}
+                        </option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -133,7 +133,7 @@ import { useAuthStore } from '@/store.js'
 import Axios from 'axios';
 import Swal from 'sweetalert2';
 import router from '@/router';
-
+//import profissionais from '@/assets/config/profissionais.json'
 export default {
     name: 'cadastrar_profissional',
     components:{
@@ -153,6 +153,8 @@ data(){
         telefone: '',
         pix: '',
         foto: '',
+        especialidades: [],
+        especialidade: ''
     }
 },
 methods: {
@@ -165,7 +167,9 @@ methods: {
                 email: this.email,
                 telefone: this.telefone,
                 pix: this.pix,
-                foto: this.foto
+                foto: this.foto,
+                especialidade: this.especialidade
+
             },
         },
         {
@@ -187,6 +191,18 @@ methods: {
             })
         })
     }
+},
+
+mounted() {
+  try {
+    const data = require('@/config/profissionais.json');
+    console.log(data)
+    this.especialidades = data.profissionais;
+    console.log(this.especialidade)
+  } catch (error) {
+    console.error('Erro ao carregar as especialidades:', error);
+  }
 }
+
 }
 </script>

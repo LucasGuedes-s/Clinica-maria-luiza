@@ -14,7 +14,7 @@
                 <p>Telefone: {{ telefone }}</p>
             </div>
             <div class="senha_div">
-                <button class="alterar_senha_btn" click="teste">Alterar Senha</button>
+                <router-link to="/alterarsenha"><button class="alterar_senha_btn" click="teste">Alterar Senha</button></router-link>
             </div>
         </div>
         <h2>Agendamentos Solicitados:</h2>
