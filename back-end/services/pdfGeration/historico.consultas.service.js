@@ -3,6 +3,7 @@ const autoTable = require('jspdf-autotable');
 const fs = require('fs');
 const path = require('path');
 const paciente = require('../pacientes.service')
+const profissionais = require('../profissionais.service')
 const formatar = require('../../utils/formatdata.ultil')
 const { getImageAsBase64 } = require('../../utils/img.ultil');
 
@@ -195,4 +196,44 @@ Foi atendido na data de -- pela profissional --
 
     return pdfBuffer;
 }
-module.exports = { createReportPdf, pdfConsulta, addFooter }
+async function pdfConsultas(id) {
+    const doc = new jsPDF();
+    const consultas = await profissionais.getConsultas(id)
+    const imgPath = path.resolve(__dirname, '../../src/assets/img.girafas.png');
+    const imgData = fs.readFileSync(imgPath).toString('base64');
+    const imgHeight = 40;
+    const imgWidth = 40;
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const x = (pageWidth - imgWidth) / 2;
+    doc.addImage(imgData, 'PNG', x, 10, imgWidth, imgHeight);
+
+    //const data_hora = formatar.formatarDataHoraSeparados(new Date(consultas.data_nascimento))
+    /*
+    const patientInfo = `
+    Nome: ${consultas.nome};
+Nascido em ${data_hora.data};
+
+Foi atendido na data de -- pela profissional --
+    `;
+    doc.setFontSize(14);
+    doc.setTextColor(126, 126, 126); // Define a cor do texto como preta
+    doc.text(patientInfo.trim(), textX, textY, { maxWidth: 130, lineHeight: 1.5 });
+
+    const image = await getImageAsBase64(consultas.foto);
+    doc.addImage(image, 'JPEG', secondImageX, secondImageY, secondImageWidth, secondImageHeight);
+
+    const texto = textY + (lineHeight * patientInfo.split('\n').length) + 1; // Ajuste conforme necessário
+    const consulta = `
+    Nome: ${consultas.nome};
+Nascido em ${data_hora.data};
+
+Foi atendido na data de -- pela profissional --
+    `;
+    doc.text(consulta.trim(), texto) */
+    addFooter(doc);
+    const pdfBuffer = doc.output('arraybuffer');
+
+    return pdfBuffer;
+}
+module.exports = { createReportPdf, pdfConsulta, pdfConsultas, addFooter }

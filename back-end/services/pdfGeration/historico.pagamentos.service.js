@@ -1,5 +1,6 @@
 const { jsPDF } = require("jspdf");
 const autoTable = require('jspdf-autotable');
+
 const fs = require('fs');
 const path = require('path');
 const pagamentos = require('../pagamentos.service')
@@ -94,19 +95,9 @@ async function pdfPagamentos(mes_ano) {
     doc.setTextColor(126, 126, 126); // Define a cor do texto
     doc.text(informacoes, 14, finalY + 10);
 
-    // Adiciona espaço para assinatura no canto inferior da página
-    const signatureY = pageHeight - 50; // Ajuste a distância do rodapé
-    const signatureLineWidth = 60;
-
-    // Adiciona a linha para assinatura
-    doc.setLineWidth(0.5);
-    doc.setLineWidth(0.5);
-    doc.line(pageWidth - signatureLineWidth - 14, signatureY, pageWidth - 14, signatureY); // Linha de assinatura
-    doc.text(`Assinatura`, pageWidth - signatureLineWidth - 14, signatureY + 10); // Texto "Assinatura" abaixo da linha
     addFooter(doc);
 
     const pdfBuffer = doc.output('arraybuffer');
-
     return pdfBuffer;
 }
 module.exports = { pdfPagamentos }

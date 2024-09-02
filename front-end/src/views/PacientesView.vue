@@ -15,6 +15,7 @@
             </div>
             <div class="botoes_div">
                 <button class="detalhar_btn" @click="teste(usuario.nome, usuario.cpf)">Evolução</button>
+                <button class="detalhar_btn" @click="teste(usuario.nome, usuario.cpf)">Registro Aba</button>
                 <button class="histconsultas_btn" @click="historico(usuario.cpf)">Hist. consultas</button>
                 <RouterLink to="/registrarconsulta"><button class="registrar_btn">Registrar consultas</button></RouterLink>
             </div>

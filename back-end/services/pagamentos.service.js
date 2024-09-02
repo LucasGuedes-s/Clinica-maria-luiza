@@ -3,7 +3,6 @@ const { error } = require('console');
 const prisma = new PrismaClient()
 
 async function postPagamentos(pagamento) {
-  console.log(pagamento)
   const pagamentos = await prisma.Pagamentos.create({
     data: {
       pagamento: parseFloat(pagamento.pagar.valor),
@@ -12,6 +11,7 @@ async function postPagamentos(pagamento) {
       Data: new Date()
     },
   });
+
   return pagamentos;
 }
 async function getPagamentos(req, res) {

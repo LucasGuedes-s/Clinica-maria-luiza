@@ -16,7 +16,7 @@
                 <p>Pix: {{ usuario.pix }}</p>
             </div>
             <div class="detalhar-div">
-                <button class="detalhar-btn">Detalhar</button>
+                <button class="detalhar-btn">Consultas</button>
             </div>
         </div>
     </div>

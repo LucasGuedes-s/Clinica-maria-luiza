@@ -22,6 +22,7 @@ model Profissionais {
   //pacienteId       String? //Adicionado
   agendamentos     Agendamentos[]
   consultas        Consultas[]
+  consultasAba     ConsultaAba[]
   pagamentos       Pagamentos[]
 }
 
@@ -78,6 +79,8 @@ model Consultas{
   id              Int @id @default(autoincrement())
   consulta        String
   data            DateTime @default(now())
+  hora_inicio     DateTime?
+  hora_fim        DateTime?
   descricao       String?
   laudos          String[] @db.VarChar(2048)
   foto            String[] @db.VarChar(2048)
@@ -90,9 +93,13 @@ model ConsultaAba{
   pacientes       Int @id @default(autoincrement())
   paciente        Pacientes? @relation(fields: [pacienteId], references: [cpf])
   pacienteId      String?
-  nome_aplicador  String?
-  data_aplicacao  DateTime @default(now())      
+  profissional    Profissionais? @relation(fields: [profissionalId], references: [email])
+  profissionalId  String?
+  data            DateTime?
+  hora_inicio     DateTime?
+  hora_fim        DateTime?
   descricao_atividade String? @db.VarChar(2048)
+  
   Aplicacao1      String?
   Aplicacao2      String?
   Aplicacao3      String?

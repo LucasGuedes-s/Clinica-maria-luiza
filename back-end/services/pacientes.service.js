@@ -65,6 +65,7 @@ async function cadastrarPaciente(req) {
 
   return pacientes;
 }
+
 async function registrarConsulta(req) {
   const paciente = await prisma.Pacientes.findUnique({
     where: { cpf: req.consulta.pacienteId }
@@ -90,9 +91,41 @@ async function registrarConsulta(req) {
 
   return consulta;
 }
-async function cadastrarDados(dados) {
-  console.log(dados)
+async function registrarConsultaAba(req) {
+  const paciente = await prisma.Pacientes.findUnique({
+    where: { cpf: req.consulta.pacienteId }
+  });
+  if (!paciente) {
+    throw new Error('Paciente não encontrado');
+  }
 
+  const consulta = await prisma.ConsultaAba.create({
+    data: {
+      consulta: req.consulta.consulta,
+      data: new Date(),
+      hora_inicio: req.consulta.hora_inicio,
+      hora_fim: req.consulta.hora_fim,
+      descricao_atividade: req.consulta.descricao,
+      pacienteId: {
+        connect: { cpf: req.consulta.pacienteId }
+      },
+      nome_aplicador: {
+        connect: { email: req.consulta.profissionalId }
+      },
+      Aplicacao1:  req.consulta.aplicacao1,
+      Aplicacao2:  req.consulta.aplicacao2,
+      Aplicacao3:  req.consulta.aplicacao3,
+      Aplicacao4:  req.consulta.aplicacao4,
+      Aplicacao5:  req.consulta.aplicacao5,
+      teste:       req.consulta.teste,
+      observacoes: req.consulta.observacoes,      
+      foto:        req.consulta.foto
+    }
+  });
+
+  return consulta;
+}
+async function cadastrarDados(dados) {
   const cad_dados = await prisma.Pacientes_dados.create({
     data: {
       pacienteId: dados.dados.pacienteId,
@@ -107,4 +140,4 @@ async function cadastrarDados(dados) {
   });
   return cad_dados;
 }
-module.exports = { getPacientes, getConsultas, getConsulta, cadastrarDados, cadastrarPaciente, registrarConsulta };
+module.exports = { getPacientes, getConsultas, getConsulta, cadastrarDados, cadastrarPaciente, registrarConsulta, registrarConsultaAba};

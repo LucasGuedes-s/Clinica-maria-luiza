@@ -16,8 +16,19 @@ async function getProfissional(usuario){
     });
     return profissionais;
 }
+async function getConsultas(usuario){  
+    const consultas = await prisma.Consultas.findMany({
+        where:{
+            email: usuario.usuario.email,
+            data: {
+                gte: new Date(new Date().setDate(new Date().getDate() - 30)) // Filtra para consultas nos últimos 30 dias
+            }
+        },
+
+    });
+    return consultas;
+}
 async function postProfissional(user){  
-    console.log(user)
     let senha_user = bcryptUtil.hash(process.env.SENHA, process.env.SALTOS);
 
     const cad = await prisma.Profissionais.create({
@@ -31,8 +42,6 @@ async function postProfissional(user){
             permissaoId: 2,
         },
     });
-    console.log("aqui")
-    console.log(cad)
     return cad;
 }
 /*async function cadastrarProfissional(req){  
@@ -51,4 +60,4 @@ async function postProfissional(user){
       return profissionais;
 }*/
 
-module.exports = {getProfissionais, postProfissional, getProfissional};
+module.exports = {getProfissionais, getConsultas, postProfissional, getProfissional};
