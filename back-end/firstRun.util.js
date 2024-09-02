@@ -1,6 +1,6 @@
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
-const bcryptUtil = require("./utils/bcrypt.ultil")
+const bcryptUtil = require("./utils/bcrypt.ultil");
 require('dotenv').config();
 
 async function FirstRun() {
@@ -21,7 +21,6 @@ async function FirstRun() {
   else{
     await CadastrarSalas()
   }
-  console.log("users")
 
   const users = await prisma.Profissionais.findMany({})
   if (users.length > 0) {
@@ -114,6 +113,7 @@ async function Profissionais(){
       email: 'admin@gmail.com',
       senha: senha_users,
       nome: 'Admin',
+      especialidade: "Adm",
       telefone: '84 99428-0599',
       foto: 'https://firebasestorage.googleapis.com/v0/b/clinica-maria-luiza.appspot.com/o/uploads%2Ffuncionarios2.svg?alt=media&token=cc7511c0-9e76-4cd6-9e33-891bbb3cfd1c',
       identificador: 'admin@gmail.com',
@@ -129,12 +129,14 @@ async function Profissionais(){
       telefone: '84 99428-0599',
       foto: 'https://firebasestorage.googleapis.com/v0/b/clinica-maria-luiza.appspot.com/o/uploads%2Ffuncionarios2.svg?alt=media&token=cc7511c0-9e76-4cd6-9e33-891bbb3cfd1c',
       identificador: 'CRN:1845',
+      especialidade: "Nutricionista",
       permissaoId: parseInt(process.env.PERMISSAO_PROFISSIONAL),
     },
   })
   await prisma.Profissionais.create({
     data: {
       email: 'recepcionista@gmail.com',
+      especialidade: "Recepcionista",
       senha: senha_users,
       nome: 'Recepcionista',
       telefone: '84 99428-0599',
@@ -146,26 +148,34 @@ async function Profissionais(){
 }
 async function Agendamentos(){
   // Criação dos agendamentos
-  await prisma.Agendamentos.create({
-    data: {
-      data: new Date(),
-      agendamento: 'Consulta de Lucas',
-      status: 'Andamento',
-      profissionalId: "profissional@gmail.com",
-      pacienteId: "138.845.747-25",
-      sala: 1,
-    },
-  })
-  await prisma.Agendamentos.create({
-    data: {
-      data: new Date(),
-      agendamento: 'Consulta de João Paulo',
-      status: 'Andamento',
-      profissionalId: "profissional@gmail.com",
-      pacienteId: "738.585.784-25",
-      sala: 2,
-    },
-  })
+  try{
+
+    const agendamento = await prisma.Agendamentos.create({
+      data: {
+        data: new Date(),
+        agendamento: 'Consulta de Lucas',
+        status: 'Andamento',
+        profissionalId: "profissional@gmail.com",
+        pacienteId: "138.845.747-25",
+        sala: 1,
+      },
+    })
+    console.log(agendamento)
+
+    await prisma.Agendamentos.create({
+      data: {
+        data: new Date(),
+        agendamento: 'Consulta de João Paulo',
+        status: 'Andamento',
+        profissionalId: "profissional@gmail.com",
+        pacienteId: "738.585.784-25",
+        sala: 2,
+      },
+    })
+  }
+  catch{
+    console.log("error ao adicionar agendamento")
+  }
 }
 module.exports = {
   FirstRun,

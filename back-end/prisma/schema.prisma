@@ -17,7 +17,7 @@ model Profissionais {
   pix              String?
   permissao        Permissao    @relation(fields: [permissaoId], references: [id])
   permissaoId      Int
-  especialidade    String?
+  especialidade    String
   //paciente         Pacientes? @relation(fields: [pacienteId], references: [cpf])
   //pacienteId       String? //Adicionado
   agendamentos     Agendamentos[]

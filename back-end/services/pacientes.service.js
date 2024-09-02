@@ -92,26 +92,27 @@ async function registrarConsulta(req) {
   return consulta;
 }
 async function registrarConsultaAba(req) {
+  console.log(req)
+  console.log(req.consulta.pacienteId)
   const paciente = await prisma.Pacientes.findUnique({
     where: { cpf: req.consulta.pacienteId }
   });
+  console.log(paciente)
+
   if (!paciente) {
     throw new Error('Paciente não encontrado');
   }
-
-  const consulta = await prisma.ConsultaAba.create({
+  /*const consulta = await prisma.ConsultaAba.create({
     data: {
-      consulta: req.consulta.consulta,
-      data: new Date(),
-      hora_inicio: req.consulta.hora_inicio,
-      hora_fim: req.consulta.hora_fim,
-      descricao_atividade: req.consulta.descricao,
-      pacienteId: {
+      paciente: {
         connect: { cpf: req.consulta.pacienteId }
       },
-      nome_aplicador: {
+      profissionalId: {
         connect: { email: req.consulta.profissionalId }
       },
+      hora_inicio: new Date(req.consulta.inicio),
+      hora_fim: new Date(req.consulta.fim),
+      descricao_atividade: req.consulta.descricao,
       Aplicacao1:  req.consulta.aplicacao1,
       Aplicacao2:  req.consulta.aplicacao2,
       Aplicacao3:  req.consulta.aplicacao3,
@@ -121,8 +122,29 @@ async function registrarConsultaAba(req) {
       observacoes: req.consulta.observacoes,      
       foto:        req.consulta.foto
     }
+  }); */
+  const consulta = await prisma.consultaAba.create({
+    data: {
+      paciente: {
+        connect: { cpf: "123.456.678-90" } // Conectando com o paciente
+      },
+      profissional: {
+        connect: { email: "profissional@gmail.com" } // Conectando com o profissional
+      },
+      hora_inicio: new Date("2024-09-02T08:00:00.000Z"),
+      hora_fim: new Date("2024-09-02T09:00:00.000Z"),
+      descricao_atividade: "Consulta aba", // Exemplo de valor
+      Aplicacao1: "a+", // Exemplo de valor
+      Aplicacao2: "a-", // Exemplo de valor
+      Aplicacao3: "a+", // Exemplo de valor
+      Aplicacao4: "a+", // Exemplo de valor
+      Aplicacao5: "a-", // Exemplo de valor
+      teste: "a+", // Exemplo de valor
+      observacoes: "Paciente apresentou evolução nos últimos dias", // Observações
+      foto: "https://example.com/fotos/consulta1.jpg" // URL da foto
+    }
   });
-
+  
   return consulta;
 }
 async function cadastrarDados(dados) {
