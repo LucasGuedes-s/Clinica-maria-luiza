@@ -10,8 +10,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="data-nascimento">Data de Nascimento:</label>
-                    <input type="date" id="data_nasc_prof" name="data-nascimento" v-model="data_nascimento" required>
+                    <label for="pix">PIX:</label>
+                    <input type="text" id="pix" name="pix" v-model="pix">
                 </div>
             
                 <div class="form-group">
@@ -32,8 +32,13 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="pix">PIX:</label>
-                    <input type="text" id="pix" name="pix" v-model="pix">
+                    <label for="especialidade">Permsissões no sistema:</label>
+
+                    <select id="permisssao" name="permissao" v-model="permissaoId" required>
+                        <option>Administrador</option>
+                        <option>Recepcionista</option>
+                        <option>Profissional</option>
+                    </select>
                 </div>
             
                 <div class="form-group selecionar">
@@ -159,7 +164,9 @@ data(){
         pix: '',
         imagem: null,
         especialidades: [],
-        especialidade: ''
+        especialidade: '',
+        permissao: null,
+        permissaoId: null
     }
 },
 methods: {
@@ -171,13 +178,22 @@ methods: {
         // Gera um identificador único para a imagem
         const uniqueImageName = uuidv4() + '_' + this.imagem.name;
         // Cria uma referência para o armazenamento
-        const storageRef = ref(storage, 'pacientes/' + uniqueImageName);
+        const storageRef = ref(storage, 'profissionais/' + uniqueImageName);
         // Faz o upload da imagem
         const snapshot = await uploadBytes(storageRef, this.imagem);
         // Obtém a URL pública da imagem
         const foto = await getDownloadURL(snapshot.ref);
-        
-        await Axios.post(`https://clinica-maria-luiza.onrender.com/cadastrar/profissional`, {
+        console.log(this.especialidade)
+        if(this.permissaoId == 'Administrador'){
+            this.permissao = 1
+        }
+        else if(this.permissaoId == 'Profissional'){
+            this.permissao = 2
+        }
+        else if(this.permissaoId == 'Recepcionista'){
+            this.permissao = 3
+        }
+        await Axios.post(`http://localhost:3000/cadastrar/profissional`, {
             usuario: {
                 nome: this.nome,
                 data_nascimento: this.data_nascimento,
@@ -185,8 +201,8 @@ methods: {
                 telefone: this.telefone,
                 pix: this.pix,
                 foto: foto,
+                permissaoId: this.permissao,
                 especialidade: this.especialidade
-
             },
         },
         {
@@ -222,7 +238,27 @@ mounted() {
   } catch (error) {
     console.error('Erro ao carregar as especialidades:', error);
   }
-}
+},
+beforeRouteEnter(to, from, next) {
+        next(vm => {
+            try{
+                const authStore = useAuthStore();
+                const userPermissions = authStore.getUser.usuario.permissao; // Obtém as permissões do usuário
+                const requiredPermission = 1;
+                
+                if (!vm.store.isAuthenticated) {
+                    vm.$router.push('/login')
+                }
+                else if (userPermissions != requiredPermission) {
+                    vm.$router.push('/unauthorized'); // Redireciona para uma página de acesso negado
+                }
+            }
+            catch{
+                console.log("Erro")
+            }
+
+        })
+    }
 
 }
 </script>

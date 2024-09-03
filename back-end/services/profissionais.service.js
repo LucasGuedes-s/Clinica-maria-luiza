@@ -30,7 +30,7 @@ async function getConsultas(usuario){
 }
 async function postProfissional(user){  
     let senha_user = bcryptUtil.hash(process.env.SENHA, process.env.SALTOS);
-
+    console.log(user)
     const cad = await prisma.Profissionais.create({
         data: {
             email: user.usuario.email,
