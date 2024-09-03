@@ -102,4 +102,27 @@ h1 {
 .btn-consultar:hover {
     background-color: #E7FAFF;
 }
+@media (max-width: 768px) {
+    .esquerda_login img {
+    width: 80%;
+    height: auto;
+  }
+  .container_loginpaciente {
+    flex-direction: column;
+  }
+
+  .esquerda_login,
+  .direita_login {
+    width: 90%;
+    height: auto;
+  }
+
+  .direita_login {
+    padding: 20px;
+  }
+
+  .login_paciente {
+    width: 100%;
+  }
+}
 </style>

@@ -59,7 +59,7 @@ body {
 }
 
 .main-content {
-    margin-left: 260px;
+    margin-left: 250px;
     padding: 20px;
     justify-content: center;
 }
@@ -170,6 +170,20 @@ li:hover {
 #especialidade,
 #horario {
     font-family: 'Montserrat', sans-serif;
+}
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+        padding: 15px;
+    }
+
+    .container_agendarconsulta {
+        padding: 15px;
+    }
+
+    form {
+        grid-template-columns: 1fr;
+    }
 }
 
 </style>

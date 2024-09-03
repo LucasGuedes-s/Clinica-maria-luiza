@@ -34,7 +34,7 @@ body {
 }
 
 .main-content {
-    margin-left: 260px;
+    margin-left: 250px;
     padding: 20px;
     justify-content: center;
 }
@@ -54,7 +54,7 @@ h1 {
 form {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 35px;
+    gap: 20px;
     align-items: start;
 }
 
@@ -96,6 +96,22 @@ form {
     margin-top: 15px;
     margin-bottom: 15px;
     font-family: 'Montserrat', sans-serif;
+}
+
+@media (max-width: 768px) {
+    form {
+        grid-template-columns: 1fr; /* Apenas uma coluna em telas menores */
+    }
+    .registrarconsulta_btn {
+        width: 100%;
+    }
+    .main-content {
+        margin-left: 0; /* Remover margem para telas menores */
+        padding: 10px;
+    }
+    .container_registrarconsulta {
+        padding: 15px; /* Reduz o padding para telas menores */
+    }
 }
 </style>
 
