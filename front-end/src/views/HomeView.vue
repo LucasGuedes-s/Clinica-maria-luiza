@@ -51,6 +51,8 @@
 <style scoped>
 #corpo {
     background-color: #E7FAFF;
+    margin: 0;
+    padding: 0;
 }
 
 .nav-bar {

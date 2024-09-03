@@ -1,18 +1,18 @@
 <template>
    <div class="container_login">
-        <div class="esquerda-login">
+        <div class="esquerda_login">
             <img src="../assets/img.girafas.png" alt="" srcset="">
         </div>
-        <div class="direita-login">
-            <form class="login-form" @submit.prevent="login">
+        <div class="direita_login">
+            <form class="login_form" @submit.prevent="login">
                 <h1>Realizar login</h1>
                 <label for="email">E-mail</label>
                 <input type="text" v-model="email" placeholder="Digite o seu e-mail">
                 <label for="senha">Senha</label>
                 <input type="password" v-model="senha" placeholder="Digite a sua senha">
-                <div class="button-container">
-                    <button type="submit" class="btn-entrar" click="login">Entrar como profissional</button>
-                    <router-link to="/loginpaciente"><button type="submit" class="btn-paciente">Entrar como paciente</button></router-link>
+                <div class="button_container">
+                    <button type="submit" class="btn_profissional" click="login">Entrar como profissional</button>
+                    <router-link to="/loginpaciente"><button type="submit" class="btn_paciente">Entrar como paciente</button></router-link>
                 </div>
             </form>
         </div>
@@ -42,7 +42,7 @@ h1 {
     color: #D9D9D9;
 }
 
-.esquerda-login {
+.esquerda_login {
     width: 40vw;
     height: 100vh;
     display: flex;
@@ -50,7 +50,7 @@ h1 {
     align-items: center;
 }
 
-.direita-login {
+.direita_login {
     width: 60vw;
     height: 100vh;
     display: flex;
@@ -58,22 +58,22 @@ h1 {
     align-items: center;
 }
 
-.login-form {
+.login_form {
     width: 80%;
 }
 
-.login-form h2 {
+.login_form h2 {
     text-align: center;
     margin-bottom: 20px;
 }
 
-.login-form label {
+.login_form label {
     display: block;
     margin-bottom: 8px;
     color: #D9D9D9;
 }
 
-.login-form input {
+.login_form input {
     width: 100%;
     padding: 10px;
     margin-bottom: 50px;
@@ -82,17 +82,17 @@ h1 {
     box-sizing: border-box;
 }
 
-.login-form input::placeholder {
+.login_form input::placeholder {
     color: #D9D9D9; 
     font-family: 'Montserrat', sans-serif;
 }
 
-.button-container {
+.button_container {
     display: flex;
     justify-content: space-between;
 }
 
-.login-form button {
+.login_form button {
     width: 48%;
     padding: 10px;
     border-radius: 4px;
@@ -101,21 +101,21 @@ h1 {
     box-sizing: border-box;
 }
 
-.btn-entrar {
+.btn_profissional {
     background-color: #E7FAFF;
     border: 1px solid #86E7FF; /* Define a borda do botão */
 }
 
-.btn-entrar:hover {
+.btn_profissional:hover {
     background-color: #86E7FF;
 }
 
-.btn-paciente {
+.btn_paciente {
     background-color: #FBE9EB;
     border: 1px solid #FAC6CA;
 }
 
-.btn-paciente:hover {
+.btn_paciente:hover {
     background-color: #FAC6CA;
 }
 
