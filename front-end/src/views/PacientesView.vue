@@ -12,6 +12,8 @@
                 <p>Nome: {{ usuario.nome }}</p>
                 <p>Telefone: {{ usuario.telefone }}</p>
                 <p v-if="usuario.paciente_dados && usuario.paciente_dados.length > 0">Alergico a: {{ usuario.paciente_dados[0].alergicos }}</p>
+                <p v-if="usuario.paciente_dados && usuario.paciente_dados.length > 0">Consulta neuro: {{ usuario.paciente_dados[0].data_neuro }}</p>
+
             </div>
             <div class="botoes_div">
                 <button class="detalhar_btn" @click="teste(usuario.nome, usuario.cpf)">Evolução</button>

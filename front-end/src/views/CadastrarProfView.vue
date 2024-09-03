@@ -8,6 +8,7 @@
                     <label for="nome">Nome:</label>
                     <input type="text" id="nome_funcionario" name="nome" v-model="nome" required>
                 </div>
+
                 <div class="form-group">
                     <label for="data-nascimento">Data de Nascimento:</label>
                     <input type="date" id="data_nasc_prof" name="data-nascimento" v-model="data_nascimento" required>
@@ -32,12 +33,12 @@
                 </div>
                 <div class="form-group">
                     <label for="pix">PIX:</label>
-                    <input type="text" id="pix" name="pix" v-model="pix" required>
+                    <input type="text" id="pix" name="pix" v-model="pix">
                 </div>
             
                 <div class="form-group selecionar">
                     <label for="imagem">Adicionar Imagem:</label>
-                    <input type="file" id="imagem_prof" name="imagem" accept="image/*">
+                    <input type="file" id="imagem_prof" name="imagem" @change="handleFileUpload">
                 </div>
                 <button type="submit" class="cadastrar-btn" click="cadastrarprofissional">Cadastrar</button>
             </form>            
@@ -133,7 +134,11 @@ import { useAuthStore } from '@/store.js'
 import Axios from 'axios';
 import Swal from 'sweetalert2';
 import router from '@/router';
-//import profissionais from '@/assets/config/profissionais.json'
+//Importações de subir imagem
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from '../firebase.js'
+import { v4 as uuidv4 } from 'uuid';
+
 export default {
     name: 'cadastrar_profissional',
     components:{
@@ -152,14 +157,26 @@ data(){
         email: '',
         telefone: '',
         pix: '',
-        foto: '',
+        imagem: null,
         especialidades: [],
         especialidade: ''
     }
 },
 methods: {
+    async handleFileUpload(event) {
+        this.imagem = event.target.files[0];
+    },
     async cadastrarprofissional(){
         const token = this.store.token
+        // Gera um identificador único para a imagem
+        const uniqueImageName = uuidv4() + '_' + this.imagem.name;
+        // Cria uma referência para o armazenamento
+        const storageRef = ref(storage, 'pacientes/' + uniqueImageName);
+        // Faz o upload da imagem
+        const snapshot = await uploadBytes(storageRef, this.imagem);
+        // Obtém a URL pública da imagem
+        const foto = await getDownloadURL(snapshot.ref);
+        
         await Axios.post(`https://clinica-maria-luiza.onrender.com/cadastrar/profissional`, {
             usuario: {
                 nome: this.nome,
@@ -167,7 +184,7 @@ methods: {
                 email: this.email,
                 telefone: this.telefone,
                 pix: this.pix,
-                foto: this.foto,
+                foto: foto,
                 especialidade: this.especialidade
 
             },
@@ -181,6 +198,9 @@ methods: {
                 icon: 'success',
                 title: 'Cadastrado com sucesso',
                 timer: 8000,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
             }),
             router.push("/profissionais")
         ).catch(error => {

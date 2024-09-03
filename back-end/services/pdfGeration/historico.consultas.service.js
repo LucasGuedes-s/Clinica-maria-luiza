@@ -5,8 +5,54 @@ const path = require('path');
 const paciente = require('../pacientes.service')
 const profissionais = require('../profissionais.service')
 const formatar = require('../../utils/formatdata.ultil')
+const ChartJSNodeCanvas = require('chartjs-node-canvas');
 const { getImageAsBase64 } = require('../../utils/img.ultil');
 
+async function generateChart(aplicacoes) {
+    // Mapeia os valores das aplicações para um formato numérico ou categórico
+    const labels = ['Aplicação 1', 'Aplicação 2', 'Aplicação 3', 'Aplicação 4', 'Aplicação 5', 'Teste'];
+    const desempenhoData = labels.map(label => {
+      switch (aplicacoes[label]) {
+        case 'AT+':
+          return 5;
+        case 'AT-':
+          return 3;
+        case 'AP+':
+          return 4;
+        case 'SA+':
+          return 2;
+        default:
+          return 1;
+      }
+    });
+  
+    const configuration = {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Desempenho',
+          data: desempenhoData, // Dados dinâmicos baseados nas aplicações
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    };
+  
+    // Renderiza o gráfico para um buffer de imagem
+    const imageBuffer = await chartJSNodeCanvas.renderToBuffer(configuration);
+  
+    return imageBuffer;
+  }
+  
 function addFooter(doc) {
     const pageCount = doc.internal.getNumberOfPages();
     const data_hora = formatar.formatarDataHoraSeparados(new Date())
@@ -236,4 +282,36 @@ Foi atendido na data de -- pela profissional --
 
     return pdfBuffer;
 }
-module.exports = { createReportPdf, pdfConsulta, pdfConsultas, addFooter }
+async function pdfConsultasAba(req) {
+    const doc = new jsPDF();
+    const consultas = await paciente.getConsultasAba(req);
+    
+    // Verifica se há consultas
+    if (consultas.length > 0) {
+        for (const consulta of consultas) {
+            const aplicacoes = {
+                'Aplicação 1': consulta.Aplicacao1,
+                'Aplicação 2': consulta.Aplicacao2,
+                'Aplicação 3': consulta.Aplicacao3,
+                'Aplicação 4': consulta.Aplicacao4,
+                'Aplicação 5': consulta.Aplicacao5,
+                'Teste': consulta.teste
+            };
+            
+            const chartImage = await generateChart(aplicacoes);
+            const chartImageBase64 = chartImage.toString('base64');
+            
+            doc.addPage(); // Adiciona uma nova página para cada consulta
+            doc.text(`Relatório de Desempenho - Consulta: ${consulta.data}`, 10, 10);
+            doc.addImage(chartImageBase64, 'PNG', 10, 20, 180, 100);
+        }
+    }
+
+    addFooter(doc);
+    
+    // Salva o PDF
+    const pdfBuffer = doc.output('arraybuffer');
+    return pdfBuffer;
+}
+
+module.exports = { generateChart, createReportPdf, pdfConsulta, pdfConsultas, pdfConsultasAba, addFooter }

@@ -39,7 +39,8 @@ async function postProfissional(user){
             telefone: user.usuario.telefone,
             foto: user.usuario.foto,
             identificador: user.usuario.email, //"user.usuario.identificador"
-            permissaoId: 2,
+            permissaoId: user.usuario.permissaoId,
+            especialidade: user.usuario.especialidade
         },
     });
     return cad;
