@@ -157,6 +157,55 @@ h2 {
 .btn-concluido:hover {
     background-color: #E7FAFF;
 }
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+    }
+
+    .sidebar{
+        display: none;
+    }
+
+    .container_dashboard {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .container_dashboard img {
+        width: 100%;
+        height: auto;
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+
+    .senha_div {
+        position: static;
+        margin-top: 20px;
+        right: auto;
+        bottom: auto;
+    }
+
+    .alterar_senha_btn {
+        width: 100%;
+    }
+
+    .container_agendamentos {
+        width: 100%;
+    }
+
+    .resposta-info {
+        flex-direction: column;
+    }
+
+    .resposta-info label,
+    .resposta-info input {
+        width: 100%;
+    }
+
+    .btn-concluido {
+        width: 100%;
+    }
+}
 </style>
 <script>
 import { useAuthStore } from '@/store';

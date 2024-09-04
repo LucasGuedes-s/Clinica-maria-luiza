@@ -122,14 +122,10 @@ input {
 }
 
 @media (max-width: 768px) {
-    .sidebar{
-        display: none;
-    }
     .main_content {
         margin-left: 0;
         padding: 10px;
     }
-
     .search_cadastrar {
         flex-direction: row; /* Alinha lado a lado */
         align-items: center;
