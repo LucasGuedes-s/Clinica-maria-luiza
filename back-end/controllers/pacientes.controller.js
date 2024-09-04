@@ -1,5 +1,5 @@
 const Paciente = require('../services/pacientes.service')
-
+const consulta = require('../services/pacientes.service')
 async function getPacientes(req, res, next){
     try {
         const pacientes = await Paciente.getPacientes()
@@ -26,6 +26,15 @@ async function getConsultas(req, res, next){
         next()
     } catch (err) {
         console.error(`Erro ao receber as consultas do paciente ${req.params.cpf}`);
+    }
+}
+async function getConsultasAba(req, res, next){
+    try {
+        const consultas = await consulta.getConsultasAba(req.params.cpf)
+        res.status(200).json({consultas});
+        next()
+    } catch (err) {
+        console.error(`Erro ao receber as consultas`);
     }
 }
 async function postPacientes(req, res, next){
@@ -69,4 +78,4 @@ async function postConsultaAba(req, res, next){
         console.error(`Erro ao registrar a consulta aba`);
     }
 }
-module.exports = {getPacientes, getPaciente, getConsultas, postPacientes, postDados, postConsulta, postConsultaAba};
+module.exports = {getPacientes, getPaciente, getConsultas, getConsultasAba, postPacientes, postDados, postConsulta, postConsultaAba};

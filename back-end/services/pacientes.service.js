@@ -23,21 +23,17 @@ async function getConsultas(user) {
     }
   });
 
-  /*
-      const paciente = await prisma.Pacientes.findUnique({
-          where: {
-            cpf: user
-          }
-        });
-        // Verifica se o paciente foi encontrado
-        if (paciente) {
-          // Buscar consultas associadas ao paciente encontrado
-          const consultas = await prisma.Consultas.findMany({
-            where: {
-              pacienteId: user // Usando o identificador único do paciente
-            }
-          });*/
+  return consultas;
+}
+async function getConsultasAba(req) {
+  console.log(req)
+  const consultas = await prisma.ConsultaAba.findMany({
+    where: {
+      pacienteId: req, // Usando o identificador único do paciente
+  }
+  });
 
+  console.error(consultas)
   return consultas;
 }
 async function getConsulta(consulta) {
@@ -49,7 +45,6 @@ async function getConsulta(consulta) {
   return consultas;
 }
 async function cadastrarPaciente(req) {
-  console.log(req.paciente)
   const pacientes = await prisma.Pacientes.create({
     data: {
       cpf: req.paciente.cpf,
@@ -65,7 +60,6 @@ async function cadastrarPaciente(req) {
 
   return pacientes;
 }
-
 async function registrarConsulta(req) {
   const paciente = await prisma.Pacientes.findUnique({
     where: { cpf: req.consulta.pacienteId }
@@ -92,22 +86,20 @@ async function registrarConsulta(req) {
   return consulta;
 }
 async function registrarConsultaAba(req) {
-  console.log(req)
-  console.log(req.consulta.pacienteId)
+
   const paciente = await prisma.Pacientes.findUnique({
     where: { cpf: req.consulta.pacienteId }
   });
-  console.log(paciente)
 
   if (!paciente) {
     throw new Error('Paciente não encontrado');
   }
-  /*const consulta = await prisma.ConsultaAba.create({
+  const consulta = await prisma.ConsultaAba.create({
     data: {
       paciente: {
         connect: { cpf: req.consulta.pacienteId }
       },
-      profissionalId: {
+      profissional: {
         connect: { email: req.consulta.profissionalId }
       },
       hora_inicio: new Date(req.consulta.inicio),
@@ -121,27 +113,6 @@ async function registrarConsultaAba(req) {
       teste:       req.consulta.teste,
       observacoes: req.consulta.observacoes,      
       foto:        req.consulta.foto
-    }
-  }); */
-  const consulta = await prisma.consultaAba.create({
-    data: {
-      paciente: {
-        connect: { cpf: "123.456.678-90" } // Conectando com o paciente
-      },
-      profissional: {
-        connect: { email: "profissional@gmail.com" } // Conectando com o profissional
-      },
-      hora_inicio: new Date("2024-09-02T08:00:00.000Z"),
-      hora_fim: new Date("2024-09-02T09:00:00.000Z"),
-      descricao_atividade: "Consulta aba", // Exemplo de valor
-      Aplicacao1: "a+", // Exemplo de valor
-      Aplicacao2: "a-", // Exemplo de valor
-      Aplicacao3: "a+", // Exemplo de valor
-      Aplicacao4: "a+", // Exemplo de valor
-      Aplicacao5: "a-", // Exemplo de valor
-      teste: "a+", // Exemplo de valor
-      observacoes: "Paciente apresentou evolução nos últimos dias", // Observações
-      foto: "https://example.com/fotos/consulta1.jpg" // URL da foto
     }
   });
   
@@ -162,4 +133,4 @@ async function cadastrarDados(dados) {
   });
   return cad_dados;
 }
-module.exports = { getPacientes, getConsultas, getConsulta, cadastrarDados, cadastrarPaciente, registrarConsulta, registrarConsultaAba};
+module.exports = { getPacientes, getConsultas, getConsulta, getConsultasAba, cadastrarDados, cadastrarPaciente, registrarConsulta, registrarConsultaAba};
