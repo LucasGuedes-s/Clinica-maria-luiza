@@ -25,41 +25,8 @@
 <style>
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
     background-color: #E7FAFF;
     font-family: 'Montserrat', sans-serif;
-}
-
-.sidebar {
-    height: 100%;
-    width: 250px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: white;
-    padding-top: 20px;
-    text-align: center;
-    box-shadow: 0 4px 10px -1px rgba(0, 0, 0, 0.10);
-}
-
-.sidebar img {
-    width: 150px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-.sidebar a {
-    padding: 20px 15px;
-    text-decoration: none;
-    font-size: 16px;
-    text-align: left;
-    color: #7E7E7E;
-    display: block;
-    margin-left: 30px;
-}
-
-.sidebar a:hover {
-    color: #84E7FF;
 }
 
 h1 {
@@ -67,7 +34,7 @@ h1 {
 }
 
 .main-content {
-    margin-left: 260px;
+    margin-left: 250px;
     padding: 20px;
 }
 
@@ -84,9 +51,7 @@ input {
     font-size: 16px;
     border: none;
     border-radius: 8px;
-    /* Adiciona bordas arredondadas */
     box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
-    /* Sombra mais sutil na parte inferior */
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
 }
@@ -100,7 +65,6 @@ input {
     border-radius: 8px;
     margin-left: 10px;
     box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
-    /* Sombra mais sutil na parte inferior */
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
 }
@@ -152,8 +116,42 @@ input {
     background-color: #E7FAFF;
 }
 @media (max-width: 768px) {
-}
+    .main-content {
+        margin-left: 0;
+        padding: 10px;
+    }
 
+    .search-cadastrar {
+        flex-direction: row; /* Alinha lado a lado */
+        align-items: center;
+    }
+
+    input {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .search-cadastrar button {
+        padding: 8px 16px;
+        font-size: 14px;
+        width: 100px; /* Largura fixa do botão */
+    }
+
+    .container-profissional {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .container-profissional img {
+        width: 100%;
+        height: auto;
+    }
+
+    .detalhar-div {
+        position: static;
+        margin-top: 10px;
+    }
+}
 </style>
 <script>
 import Sidebar from '@/components/Sidebar.vue'

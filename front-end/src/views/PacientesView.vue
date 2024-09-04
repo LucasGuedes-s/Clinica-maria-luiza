@@ -14,25 +14,24 @@
                 <p v-if="usuario.paciente_dados && usuario.paciente_dados.length > 0">Alergico a: {{ usuario.paciente_dados[0].alergicos }}</p>
             </div>
             <div class="botoes_div">
-                <button class="detalhar_btn" @click="teste(usuario.nome, usuario.cpf)">Evolução</button>
-                <button class="detalhar_btn" @click="teste(usuario.nome, usuario.cpf)">Registro Aba</button>
-                <button class="histconsultas_btn" @click="historico(usuario.cpf)">Hist. consultas</button>
+                <button class="evolucao_btn" @click="teste(usuario.nome, usuario.cpf)">Evolução</button>
+                <button class="registroaba_btn" @click="teste(usuario.nome, usuario.cpf)">Registro Aba</button>
                 <RouterLink to="/registrarconsulta"><button class="registrar_btn">Registrar consultas</button></RouterLink>
+                <button class="histconsultas_btn" @click="historico(usuario.cpf)">Hist. consultas</button>
             </div>
         </div>
     </div>
 </template>
 
-<style scoped>
+<style>
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
     background-color: #E7FAFF;
     font-family: 'Montserrat', sans-serif;
 }
 
 .main_content {
-    margin-left: 250px; /* Alinha o conteúdo principal ao lado do sidebar */
+    margin-left: 250px;
     padding: 20px;
 }
 
@@ -44,6 +43,7 @@ h1 {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+    gap: 10px;
 }
 
 input {
@@ -58,12 +58,11 @@ input {
 }
 
 .search_cadastrar button {
-    padding: 10px 20px;
+    padding: 10px 50px;
     border: none;
     background-color: white;
     cursor: pointer;
     border-radius: 8px;
-    margin-left: 10px;
     box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
@@ -76,14 +75,15 @@ input {
     border: 1px solid #84E7FF;
     border-radius: 8px;
     display: flex;
-    align-items: center;
+    flex-direction: row; /* Organiza itens em linha */
+    align-items: flex-start; /* Alinha itens ao topo */
     position: relative;
+    gap: 20px; /* Espaçamento entre a imagem e a info */
 }
 
 .container_paciente img {
     width: 165px;
     height: 170px;
-    margin-right: 20px;
     border-radius: 5px;
     object-fit: cover;
     border: 1px solid #84E7FF;
@@ -92,18 +92,18 @@ input {
 .info {
     flex-grow: 1;
     color: #7E7E7E;
-    margin-left: 10px;
 }
 
 .botoes_div {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
     display: flex;
-    gap: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: auto; /* Move os botões para a parte inferior */
+    justify-content: flex-end; /* Alinha os botões à direita */
 }
 
-.detalhar_btn,
+.evolucao_btn,
+.registroaba_btn,
 .histconsultas_btn,
 .registrar_btn {
     padding: 10px 20px;
@@ -114,10 +114,56 @@ input {
     cursor: pointer;
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
+    min-width: 120px;
 }
 
 .histconsultas_btn {
     background-color: #E7FAFF;
+}
+
+@media (max-width: 768px) {
+    .sidebar{
+        display: none;
+    }
+    .main_content {
+        margin-left: 0;
+        padding: 10px;
+    }
+
+    .search_cadastrar {
+        flex-direction: row; /* Alinha lado a lado */
+        align-items: center;
+    }
+
+    input {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .search_cadastrar button {
+        padding: 8px 16px;
+        font-size: 14px;
+        width: 100px; /* Largura fixa do botão */
+    }
+
+
+    .container_paciente {
+        flex-direction: column; /* Empilha os itens da container em telas menores */
+        align-items: center;
+    }
+
+    .container_paciente img {
+        width: 100%;
+        height: auto;
+    }
+
+    .info {
+        text-align: center; /* Centraliza o texto da info em telas menores */
+    }
+
+    .botoes_div {
+        justify-content: center;
+    }
 }
 </style>
 

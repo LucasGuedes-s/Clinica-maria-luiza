@@ -122,6 +122,15 @@ select {
 .cadastrar-btn:hover {
     background-color: #E7FAFF;
 }
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+        padding: 15px;
+    }
+    form {
+        grid-template-columns: 1fr;
+    }
+}
 </style>
 
 <script>
