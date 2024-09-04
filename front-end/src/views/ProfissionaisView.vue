@@ -151,8 +151,10 @@ input {
 .detalhar-btn:hover {
     background-color: #E7FAFF;
 }
-</style>
+@media (max-width: 768px) {
+}
 
+</style>
 <script>
 import Sidebar from '@/components/Sidebar.vue'
 import { useAuthStore } from '@/store';
