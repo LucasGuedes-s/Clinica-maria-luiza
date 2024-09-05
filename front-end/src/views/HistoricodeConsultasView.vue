@@ -132,7 +132,7 @@ export default {
         };
     },
     mounted() {
-        // Opcional: Limpar o CPF do sessionStorage após uso
+        //Limpar o CPF do sessionStorage após uso
         sessionStorage.removeItem('cpf');
         this.getConsultas()
     },
