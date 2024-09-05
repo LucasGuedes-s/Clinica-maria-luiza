@@ -69,7 +69,6 @@ async function postConsulta(req, res, next){
 }
 async function postConsultaAba(req, res, next){
     try {
-        console.log("Aqui")
         const consulta = await Paciente.registrarConsultaAba(req.body)
         res.status(200).json({consulta});
         next()

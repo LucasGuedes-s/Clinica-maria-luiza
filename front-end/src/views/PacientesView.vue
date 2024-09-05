@@ -14,7 +14,7 @@
                 <p v-if="usuario.paciente_dados && usuario.paciente_dados.length > 0">Alergico a: {{ usuario.paciente_dados[0].alergicos }}</p>
             </div>
             <div class="botoes_div">
-                <button class="evolucao_btn" @click="teste(usuario.nome, usuario.cpf)">Evolução</button>
+                <button class="evolucao_btn" v-if="usuario.paciente_dados" @click="teste(usuario.nome, usuario.cpf)">Evolução</button>
                 <button class="registroaba_btn" @click="teste(usuario.nome, usuario.cpf)">Registro Aba</button>
                 <RouterLink to="/registrarconsulta"><button class="registrar_btn">Registrar consultas</button></RouterLink>
                 <button class="histconsultas_btn" @click="historico(usuario.cpf)">Hist. consultas</button>

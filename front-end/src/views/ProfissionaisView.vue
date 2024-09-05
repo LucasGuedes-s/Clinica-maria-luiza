@@ -177,7 +177,6 @@ export default {
     methods: {
         async profissionais() {
             const token = this.store.token
-
             Axios.get("https://clinica-maria-luiza.onrender.com/profissionais", {
                 headers: {
                     'Authorization': `Bearer ${token}`

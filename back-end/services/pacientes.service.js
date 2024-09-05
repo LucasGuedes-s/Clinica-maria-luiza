@@ -26,14 +26,11 @@ async function getConsultas(user) {
   return consultas;
 }
 async function getConsultasAba(req) {
-  console.log(req)
   const consultas = await prisma.ConsultaAba.findMany({
     where: {
       pacienteId: req, // Usando o identificador único do paciente
   }
   });
-
-  console.error(consultas)
   return consultas;
 }
 async function getConsulta(consulta) {
@@ -102,6 +99,7 @@ async function registrarConsultaAba(req) {
       profissional: {
         connect: { email: req.consulta.profissionalId }
       },
+      data: new Date(req.consulta.data),
       hora_inicio: new Date(req.consulta.inicio),
       hora_fim: new Date(req.consulta.fim),
       descricao_atividade: req.consulta.descricao,

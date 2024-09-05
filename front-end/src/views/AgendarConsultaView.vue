@@ -16,16 +16,8 @@
                     </ul>
                 </div>
                 <div class="form-group">
-                    <label for="nome">Nome do Responsável:</label>
-                    <input type="text" id="nome_responsavel" name="nome" required>
-                </div>
-                <div class="form-group">
-                    <label for="telefone">Telefone:</label>
-                    <input type="tel" id="telefone_paciente" name="telefone" placeholder="(XX) XXXXX-XXXX" required>
-                </div>
-                <div class="form-group">
                     <label for="datadaconsulta">Data:</label>
-                    <input type="date" id="data_consulta" name="datadaconsulta" required>
+                    <input type="date" id="data_consulta" name="datadaconsulta" v-model="data">
                 </div>
 
                 <div class="form-group">
@@ -207,7 +199,7 @@ export default {
         return {
             agendar: '',
             notas: '',
-            cpf: '',
+            data: '',
             buscar: '',
             filtrarPacientes: [],
             pacientes: [], // Este array deve ser preenchido com os dados dos pacientes
@@ -229,14 +221,15 @@ export default {
                 this.sugestoes = false;
             }, 200);
         },
-
         async agendarconsulta() {
-            await Axios.post(`https://clinica-maria-luiza.onrender.com/cadastrar/agendamento`, {
+            const profissional = store
+            await Axios.post(`http://localhost:3000/cadastrar/agendamento`, {
                 agenda: {
-                    agendar,
-                    notas,
-                    cpf,
-                    email
+                    data: this.data,
+                    agendar: this.agenda,
+                    notas: this.notas,
+                    profissional: profissional,
+                    paciente: this.buscar.cpf
                 }
             }).then(response => {
                 console.log(response.status)
