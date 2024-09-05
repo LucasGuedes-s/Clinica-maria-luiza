@@ -122,6 +122,9 @@ input {
 }
 
 @media (max-width: 768px) {
+    .sidebar{
+        display: none
+    }
     .main_content {
         margin-left: 0;
         padding: 10px;
@@ -144,13 +147,16 @@ input {
 
 
     .container_paciente {
-        flex-direction: column; /* Empilha os itens da container em telas menores */
+        flex-direction: column;
         align-items: center;
+        justify-content: center;
     }
 
     .container_paciente img {
         width: 100%;
         height: auto;
+        margin: 0 auto 10px; 
+        display: block; 
     }
 
     .info {

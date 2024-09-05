@@ -116,6 +116,9 @@ input {
     background-color: #E7FAFF;
 }
 @media (max-width: 768px) {
+    .sidebar{
+        display: none
+    }
     .main-content {
         margin-left: 0;
         padding: 10px;
@@ -140,11 +143,14 @@ input {
     .container-profissional {
         flex-direction: column;
         align-items: center;
+        justify-content: center;
     }
 
     .container-profissional img {
         width: 100%;
         height: auto;
+        margin: 0 auto 10px; 
+        display: block; 
     }
 
     .detalhar-div {
