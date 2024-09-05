@@ -16,8 +16,8 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Expose-Headers", "Authorization, content-type");
   next();
 });
-const firstRun = require('./firstRun.util.js');
-firstRun.FirstRun();
+//const firstRun = require('./firstRun.util.js');
+//firstRun.FirstRun();
 
 //ROTAS
 
