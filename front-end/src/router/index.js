@@ -112,6 +112,14 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/AlterSenhaView.vue')
   },
+  {
+    path: '/evolucao',
+    name: 'evolucao',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/EvolucaoAbaView.vue')
+  },
 ]
 
 const router = createRouter({
