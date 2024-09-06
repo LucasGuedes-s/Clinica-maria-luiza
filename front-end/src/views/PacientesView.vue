@@ -145,7 +145,6 @@ input {
         width: 100px; /* Largura fixa do botão */
     }
 
-
     .container_paciente {
         flex-direction: column;
         align-items: center;
