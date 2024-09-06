@@ -65,7 +65,7 @@ model Agendamentos{
   status          String?
   profissional    Profissionais? @relation(fields: [profissionalId], references: [email])
   profissionalId  String
-  paciente        Pacientes? @relation(fields: [pacienteId], references: [email])
+  paciente        Pacientes? @relation(fields: [pacienteId], references: [cpf])
   pacienteId      String?
   sala_consulta   Salas? @relation(fields: [sala], references: [id])
   sala            Int?

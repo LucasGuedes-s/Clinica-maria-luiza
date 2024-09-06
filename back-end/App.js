@@ -16,8 +16,9 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Expose-Headers", "Authorization, content-type");
   next();
 });
-//const firstRun = require('./firstRun.util.js');
-//firstRun.FirstRun();
+
+const firstRun = require('./firstRun.util.js');
+firstRun.FirstRun();
 
 //ROTAS
 
@@ -32,7 +33,6 @@ const agendaRouter = require('./routes/agenda.router.js');
 const consultasRouter = require('./routes/consultas.router.js');
 const pagamentosRouter = require('./routes/pagamentos.router.js');
 const pdfsRouter = require('./routes/pdfs.router.js');
-
 
 app.use(UserRouter, profissionaisRouter, pacientesRouter, agendaRouter, consultasRouter, pagamentosRouter, pdfsRouter)
 

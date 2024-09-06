@@ -99,7 +99,7 @@ async function registrarConsultaAba(req) {
       profissional: {
         connect: { email: req.consulta.profissionalId }
       },
-      data: new Date(req.consulta.data),
+      data: new Date(),
       hora_inicio: new Date(req.consulta.inicio),
       hora_fim: new Date(req.consulta.fim),
       descricao_atividade: req.consulta.descricao,

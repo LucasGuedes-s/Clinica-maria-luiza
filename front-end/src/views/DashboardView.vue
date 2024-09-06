@@ -161,13 +161,14 @@ h2 {
     .main-content {
         margin-left: 0;
     }
-
+    .info{
+        margin-left: 10px;
+    }
     .sidebar{
         display: none;
     }
 
     .container_dashboard {
-        flex-direction: column;
         align-items: center;
     }
 
@@ -175,14 +176,11 @@ h2 {
         width: 100%;
         height: auto;
         margin-right: 0;
-        margin-bottom: 20px;
+        margin-bottom: 0;
     }
 
     .senha_div {
-        position: static;
-        margin-top: 20px;
-        right: auto;
-        bottom: auto;
+        display: none;
     }
 
     .alterar_senha_btn {

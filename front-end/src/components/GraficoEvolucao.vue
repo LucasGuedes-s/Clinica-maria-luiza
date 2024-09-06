@@ -24,7 +24,6 @@ export default {
     setup(props) {
         const consultas = ref([]);
         const chart = ref(null);
-
         const agendarconsulta = async () => {
             const cpf = props.dado;
             try {

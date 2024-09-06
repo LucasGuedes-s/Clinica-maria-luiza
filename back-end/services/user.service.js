@@ -5,7 +5,6 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient()
 
 async function LoginUser(usuario, res){ 
-    console.log("Aqui")
     const user = await prisma.Profissionais.findFirst({
         where:{
             email: usuario.email
@@ -38,7 +37,6 @@ async function LoginUser(usuario, res){
     }
 }
 async function updateSenha(users, res){ 
-    console.log("Cheguei aqu")
     const user = await prisma.Profissionais.findFirst({
         where:{
             email: users.usuario.email

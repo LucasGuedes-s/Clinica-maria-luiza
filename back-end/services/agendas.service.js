@@ -6,6 +6,7 @@ async function agendarConsulta(req){
     const paciente = await prisma.Pacientes.findUnique({
         where: { cpf: req.agenda.paciente }
     });
+    console.log(paciente)
     const profissional = await prisma.Profissionais.findUnique({
         where: { email: req.agenda.profissional }
     });

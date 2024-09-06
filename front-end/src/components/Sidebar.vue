@@ -76,6 +76,15 @@
 .sidebar a:hover {
     color: #84E7FF;
 }
+@media screen and (max-width: 600px) {
+  .sidebar{
+    width: 100px;
+    padding: 5px;
+  }
+  .sidebar svg{
+    display: none
+  }
+}
 </style>
 
 <script>
