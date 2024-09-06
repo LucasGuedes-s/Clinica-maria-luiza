@@ -123,6 +123,9 @@ select {
     background-color: #E7FAFF;
 }
 @media (max-width: 768px) {
+    .sidebar{
+        display: none;
+    }
     .main-content {
         margin-left: 0;
         padding: 15px;

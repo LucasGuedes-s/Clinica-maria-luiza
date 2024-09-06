@@ -12,7 +12,7 @@
                 <input type="password" v-model="senha" placeholder="Digite a sua senha">
                 <div class="button_container">
                     <button type="submit" class="btn_profissional" click="login">Entrar como profissional</button>
-                    <router-link to="/loginpaciente"><button type="submit" class="btn_paciente">Entrar como paciente</button></router-link>
+                    <router-link to="/loginpaciente" class="btn_paciente">Entrar como paciente</router-link>
                 </div>
             </form>
         </div>
@@ -83,7 +83,7 @@ h1 {
 }
 
 .login_form input::placeholder {
-    color: #D9D9D9; 
+    color: #D9D9D9;
     font-family: 'Montserrat', sans-serif;
 }
 
@@ -92,18 +92,25 @@ h1 {
     justify-content: space-between;
 }
 
-.login_form button {
+button,
+.btn_paciente {
     width: 48%;
     padding: 10px;
     border-radius: 4px;
     cursor: pointer;
     font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
     box-sizing: border-box;
+    border: none;
+    text-align: center;
+    display: inline-block;
+    text-decoration: none; /* Ensure no underline */
+    color: inherit; /* Inherit text color */
 }
 
 .btn_profissional {
     background-color: #E7FAFF;
-    border: 1px solid #86E7FF; /* Define a borda do botão */
+    border: 1px solid #86E7FF;
 }
 
 .btn_profissional:hover {
@@ -119,6 +126,44 @@ h1 {
     background-color: #FAC6CA;
 }
 
+@media (max-width: 768px) {
+    .container_login {
+        flex-direction: column;
+    }
+    
+    .esquerda_login img {
+        width: 80%; /* Make the image smaller on medium screens */
+        height: auto;
+    }
+    
+    .esquerda_login,
+    .direita_login {
+        width: 100%;
+        height: auto; /* Allow height to adjust based on content */
+    }
+    
+    .login_form {
+        width: 90%;
+        margin: 0 auto; /* Center form horizontally */
+    }
+    
+    .login_form input {
+        padding: 8px; /* Adjust padding for smaller screens */
+        font-size: 14px; /* Reduce font size for inputs */
+    }
+    
+    .button_container {
+        flex-direction: column; /* Ensure buttons stack vertically on small screens */
+    }
+    
+    .button_container button,
+    .button_container .btn_paciente {
+        width: 100%;
+        font-size: 14px; /* Adjust font size for buttons */
+        padding: 8px; /* Adjust padding for buttons */
+        margin-bottom: 15px; /* Increase space between buttons */
+    }
+}
 </style>
 
 <script>
