@@ -122,6 +122,7 @@ form {
 import Sidebar from '@/components/Sidebar.vue'
 import { useAuthStore } from '@/store';
 import Axios from 'axios';
+
 export default {
     name: 'registrarconsulta',
     components: {

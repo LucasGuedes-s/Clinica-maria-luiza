@@ -112,7 +112,7 @@ model AvaliacaoAba{
   pacientes       Int @id @default(autoincrement())
   paciente        Pacientes? @relation(fields: [pacienteId], references: [cpf])
   pacienteId      String?
-  foto            String? @db.VarChar(2048)
+  foto            String[] @db.VarChar(2048)
 }
 model Pagamentos{
   id              Int @id @default(autoincrement())

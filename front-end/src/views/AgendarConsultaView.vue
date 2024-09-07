@@ -3,7 +3,7 @@
     <div class="main-content">
         <div class="container_agendarconsulta">
             <h1>Agendar Consulta</h1>
-            <form>
+            <form @submit.prevent="agendarconsulta">
                 <div class="form-group">
                     <label for="nome_paciente">Nome do Paciente:</label>
                     <input type="text" id="nome_paciente" v-model="buscar" @input="searchpacientes"
@@ -37,7 +37,7 @@
                     <textarea id="observacao_agendarconsulta" rows="4"></textarea>
                 </div>
 
-                <button type="submit" class="agendarconsulta_btn">Agendar</button>
+                <button type="submit" class="agendarconsulta_btn" click="agendarconsulta">Agendar</button>
             </form>
         </div>
     </div>
@@ -202,6 +202,7 @@ export default {
             data: '',
             buscar: '',
             filtrarPacientes: [],
+            selecionado: '',
             pacientes: [], // Este array deve ser preenchido com os dados dos pacientes
             sugestoes: false
         }
@@ -214,6 +215,7 @@ export default {
         },
         selecionarPaciente(paciente) {
             this.buscar = paciente.nome;
+            this.selecionado = paciente.cpf;
             this.sugestoes = false;
         },
         hideSuggestions() {
@@ -222,7 +224,8 @@ export default {
             }, 200);
         },
         async agendarconsulta() {
-            const profissional = store
+            console.log(this.selecionado)
+            //const profissional = store.usuario.usuario.email
             await Axios.post(`http://localhost:3000/cadastrar/agendamento`, {
                 agenda: {
                     data: this.data,

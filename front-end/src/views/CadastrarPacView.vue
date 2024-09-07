@@ -37,7 +37,14 @@
                     <label for="imagem">Adicionar Imagem:</label>
                     <input type="file" id="imagem" name="imagem" @change="handleFileUpload">
                 </div>
-
+                <div class="form-group">
+                    <label for="tipo_paciente">Tipo paciente:</label>
+                    <select id="tioo" name="tipo" v-model="tipo_paciente" required>
+                        <option>Paciente externo</option>
+                        <option>Paciente ABA</option>
+                        <option>Outro</option>
+                    </select>
+                </div>
                 <button type="submit" class="cadastrar-btn" click="cadastrarpaciente">Cadastrar</button>
             </form>
         </div>
@@ -122,14 +129,17 @@ select {
 .cadastrar-btn:hover {
     background-color: #E7FAFF;
 }
+
 @media (max-width: 768px) {
-    .sidebar{
+    .sidebar {
         display: none;
     }
+
     .main-content {
         margin-left: 0;
         padding: 15px;
     }
+
     form {
         grid-template-columns: 1fr;
     }
@@ -167,6 +177,7 @@ export default {
             telefone: '',
             endereco: '',
             imagem: null,
+            tipo_paciente: ''
         }
     },
     methods: {
@@ -184,49 +195,69 @@ export default {
             const snapshot = await uploadBytes(storageRef, this.imagem);
             // Obtém a URL pública da imagem
             const foto = await getDownloadURL(snapshot.ref);
+            // Supondo que você tenha uma propriedade 'tipoPaciente' que determina o tipo
+            const tipoPaciente = this.tipoPaciente; // Exemplo: "convencional" ou "especial"
 
-            await Axios.post(`https://clinica-maria-luiza.onrender.com/cadastrar/pacientes`, {
-                paciente: {
-                    cpf: this.cpf,
-                    nome: this.nome,
-                    nome_mae: this.nome_mae,
-                    data_nascimento: this.data_nascimento,
-                    email: this.email,
-                    telefone: this.telefone,
-                    endereco: this.endereco,
-                    foto: foto
-                }
-            },
-                {
+            try {
+                // Envia os dados do paciente para o backend
+                const response = await Axios.post(`https://clinica-maria-luiza.onrender.com/cadastrar/pacientes`, {
+                    paciente: {
+                        cpf: this.cpf,
+                        nome: this.nome,
+                        nome_mae: this.nome_mae,
+                        data_nascimento: this.data_nascimento,
+                        email: this.email,
+                        telefone: this.telefone,
+                        endereco: this.endereco,
+                        foto: this.foto, 
+                        tipo_paciente: this.tipo_paciente
+                    }
+                }, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
-                }).then(
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Cadastrado com sucesso',
-                        timer: 8000,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
+                });
+
+                // Exibe mensagem de sucesso
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Cadastrado com sucesso',
+                    timer: 8000,
+                    didOpen: () => {
+                        Swal.showLoading();
                     }
-                    ),
-                    router.push("/pacientes")
-                ).catch(error => {
-                    console.error('Erro:', error);
+                });
+
+                // Redireciona ou abre aba diferente com base no tipo de paciente
+                if (this.tipo_paciente === 'Paciente externo') {
+                    this.$router.push('/pacientes');
+                } else if (this.tipo_paciente === 'Paciente ABA') {
+                    this.$router.push('/pacieneteAba');
+                } else {
                     Swal.fire({
-                        icon: 'erro',
-                        title: 'Não foi possível realizar o cadastro',
-                        text: error.response.data.message,
+                        icon: 'error',
+                        title: 'Tipo de paciente não especificado',
                         timer: 4000,
-                    })
-                })
+                    });
+                    console.error('Tipo de paciente desconhecido');
+                }
+
+            } catch (error) {
+                // Tratamento de erro
+                console.error('Erro:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Não foi possível realizar o cadastro',
+                    text: error.response.data.message,
+                    timer: 4000,
+                });
+            }
         }
     },
+
     beforeRouteEnter(to, from, next) {
         next(vm => {
             try {
-
                 if (!vm.store.isAuthenticated) {
                     vm.$router.push('/login')
                 }

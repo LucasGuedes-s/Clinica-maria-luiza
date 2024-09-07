@@ -200,4 +200,10 @@ body {
 #myChart{
     background-color: white;
 }
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+        padding: 15px;
+    }
+}
 </style>

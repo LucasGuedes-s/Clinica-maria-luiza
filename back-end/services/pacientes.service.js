@@ -51,6 +51,7 @@ async function cadastrarPaciente(req) {
       data_nascimento: new Date(req.paciente.data_nascimento),
       telefone: req.paciente.telefone,
       endereco: req.paciente.endereco,
+      tipo_paciente: req.paciente.tipo_paciente,
       foto: req.paciente.foto,
     }
   });
