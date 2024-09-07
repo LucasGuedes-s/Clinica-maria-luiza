@@ -2,7 +2,7 @@
     <div>
         <Sidebar />
     </div>
-    <div class="main-content">
+    <div class="main_content_dashboard">
         <div class="titulo_dashboard">
             <h1>Bem-vindo(a)!</h1>
         </div>
@@ -18,7 +18,7 @@
             </div>
         </div>
         <h2>Agendamentos Solicitados:</h2>
-        <div class="container_agendamentos" v-for="agenda in agendamentos" :key="agenda.id">
+        <div class="container_agendamentos_dashboard" v-for="agenda in agendamentos" :key="agenda.id">
             <div class="resposta-info">
                 <label for="paciente-nome">Nome do Paciente:</label>
                 <input type="text" id="paciente-nome" :value="agenda.paciente.nome" readonly>
@@ -40,7 +40,7 @@ body {
     display: block;
 }
 
-.main-content {
+.main_content_dashboard {
     margin-left: 250px;
     padding: 20px;
 }
@@ -110,7 +110,7 @@ h2 {
     color: #84E7FF;
 }
 
-.container_agendamentos {
+.container_agendamentos_dashboard {
     background-color: white;
     padding: 20px;
     margin-bottom: 20px;
