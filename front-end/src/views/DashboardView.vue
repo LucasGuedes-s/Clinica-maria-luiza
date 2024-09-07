@@ -163,6 +163,7 @@ h2 {
     }
     .info{
         margin-left: 10px;
+        text-align: left;
     }
     .sidebar{
         display: none;
@@ -173,7 +174,7 @@ h2 {
     }
 
     .container_dashboard img {
-        width: 100%;
+        width: 150px;
         height: auto;
         margin-right: 0;
         margin-bottom: 0;
