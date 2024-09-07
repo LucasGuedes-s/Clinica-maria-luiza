@@ -190,6 +190,10 @@ h2 {
     .container_agendamentos {
         width: 100%;
     }
+    .main_content_dashboard {
+        margin-left: 0px;
+        padding: 20px;
+    }
 
     .resposta-info {
         flex-direction: column;
