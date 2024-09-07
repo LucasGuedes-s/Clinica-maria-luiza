@@ -20,8 +20,10 @@
         <h2>Agendamentos Solicitados:</h2>
         <div class="container_agendamentos_dashboard" v-for="agenda in agendamentos" :key="agenda.id">
             <div class="resposta-info">
+                <label for="paciente-nome">Agendamento:</label>
+                <input type="text" id="paciente-nome" :value="agenda.agendamento" readonly>
                 <label for="paciente-nome">Nome do Paciente:</label>
-                <input type="text" id="paciente-nome" :value="agenda.paciente.nome" readonly>
+                <input type="text" id="paciente-nome" :value="agenda.paciente" readonly>
                 <label for="resposta-data">Data:</label>
                 <input type="data" id="resposta-data" :value="agenda.dataFormatada" readonly>
                 <label for="resposta-hora">Hora:</label>
@@ -259,6 +261,7 @@ export default {
                 }
             }).then(response =>{
                 this.agendamentos = response.data.agenda
+                console.log(this.agendamentos)
             }).catch(error =>{
                 console.log(error)
             })
