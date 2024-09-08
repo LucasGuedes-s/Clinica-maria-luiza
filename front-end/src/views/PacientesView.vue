@@ -165,7 +165,7 @@ input {
     .container_paciente img {
         width: 150px;
         height: 150px;
-        margin: 0 auto 10px; 
+        margin-bottom: 10px; 
         display: block; 
     }
 
