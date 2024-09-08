@@ -8,7 +8,7 @@
         </div>
         <div class="container_dashboard">
             <img :src="imageUrl" alt="Foto do Usuário" @error="onImageError" />
-            <div class="info">
+            <div class="informacao">
                 <p>Nome: {{ nome }}</p>
                 <p>E-mail: {{ email }}</p>
                 <p>Telefone: {{ telefone }}</p>
@@ -19,7 +19,7 @@
         </div>
         <h2>Agendamentos Solicitados:</h2>
         <div class="container_agendamentos_dashboard" v-for="agenda in agendamentos" :key="agenda.id">
-            <div class="resposta-info">
+            <div class="resposta-informacao">
                 <label for="paciente-nome">Agendamento:</label>
                 <input type="text" id="paciente-nome" :value="agenda.agendamento" readonly>
                 <label for="paciente-nome">Nome do Paciente:</label>
@@ -79,7 +79,7 @@ body {
     border: 1px solid #84E7FF;
 }
 
-.info {
+.informacao {
     flex-grow: 1;
 }
 
@@ -104,7 +104,7 @@ body {
     background-color: #F5F5F5;
 }
 
-.info {
+.informacao {
     color: #7E7E7E;
 }
 
@@ -122,17 +122,17 @@ h2 {
     /* Ajuste para se adaptar ao layout */
 }
 
-.resposta-info {
+.resposta-informacao {
     display: flex;
     flex-direction: column;
 }
 
-.resposta-info label {
+.resposta-informacao label {
     margin-top: 10px;
     color: #7E7E7E;
 }
 
-.resposta-info input {
+.resposta-informacao input {
     margin-top: 5px;
     padding: 10px;
     border: 1px solid #D9D9D9;
@@ -163,7 +163,7 @@ h2 {
     .main-content {
         margin-left: 0;
     }
-    .info{
+    .informacao{
         margin-left: 10px;
         text-align: left;
     }
@@ -195,12 +195,12 @@ h2 {
         padding: 20px;
     }
 
-    .resposta-info {
+    .resposta-informacao {
         flex-direction: column;
     }
 
-    .resposta-info label,
-    .resposta-info input {
+    .resposta-informacao label,
+    .resposta-informacao input {
         width: 100%;
     }
 

@@ -7,11 +7,14 @@
             <RouterLink to="/cadastrarpaciente"><button>Cadastrar</button></RouterLink>
         </div>
         <div class="container_paciente" v-for="usuario in filteredPacientes" :key="usuario.cpf">
-            <img :src="usuario.foto">
             <div class="info">
-                <p>Nome: {{ usuario.nome }}</p>
-                <p>Telefone: {{ usuario.telefone }}</p>
-                <p v-if="usuario.paciente_dados && usuario.paciente_dados.length > 0">Alergico a: {{ usuario.paciente_dados[0].alergicos }}</p>
+                <img :src="usuario.foto">
+                <div class="textos"> 
+                    <p>Nome: {{ usuario.nome }}</p>
+                    <p>Telefone: {{ usuario.telefone }}</p>
+                    <p v-if="usuario.paciente_dados && usuario.paciente_dados.length > 0">Alergico a: {{ usuario.paciente_dados[0].alergicos }}</p>
+            </div>
+
             </div>
             <div class="botoes_div">
                 <button class="evolucao_btn" v-if="usuario.paciente_dados.length > 0" @click="evolucao(usuario.cpf)">Evolução</button>
@@ -74,7 +77,6 @@ input {
     margin-bottom: 20px;
     border: 1px solid #84E7FF;
     border-radius: 8px;
-    display: flex;
     flex-direction: row; /* Organiza itens em linha */
     align-items: flex-start; /* Alinha itens ao topo */
     position: relative;
@@ -91,9 +93,12 @@ input {
 
 .info {
     flex-grow: 1;
+    display: inline-flex;
     color: #7E7E7E;
 }
-
+.textos{
+        margin: 10px;
+    }
 .botoes_div {
     display: flex;
     flex-wrap: wrap;
@@ -122,7 +127,13 @@ input {
 }
 
 @media (max-width: 768px) {
-
+    .evolucao_btn,
+    .registroaba_btn,
+    .histconsultas_btn,
+    .registrar_btn {
+        padding: 8px 8px;
+        min-width: auto;
+    }
     .main_content {
         margin-left: 0;
         padding: 10px;
@@ -130,6 +141,9 @@ input {
     .search_cadastrar {
         flex-direction: row; /* Alinha lado a lado */
         align-items: center;
+    }
+    .textos{
+        margin: 10px;
     }
 
     input {
@@ -142,7 +156,6 @@ input {
         font-size: 14px;
         width: 100px; /* Largura fixa do botão */
     }
-
     .container_paciente {
         flex-direction: column;
         align-items: center;
@@ -150,18 +163,20 @@ input {
     }
 
     .container_paciente img {
-        width: 100%;
-        height: auto;
+        width: 150px;
+        height: 150px;
         margin: 0 auto 10px; 
         display: block; 
     }
 
     .info {
-        text-align: center; /* Centraliza o texto da info em telas menores */
+        display: flex;
+        text-align: left;
     }
 
     .botoes_div {
-        justify-content: center;
+        flex-wrap: inherit;
+        justify-content: inherit;
     }
 }
 </style>

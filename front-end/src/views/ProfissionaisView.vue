@@ -8,7 +8,7 @@
         </div>
         <div class="container-profissional" v-for="usuario in filteredProfissional" :key="usuario.email">
             <img :src="usuario.foto">
-            <div class="info">
+            <div class="info_prof">
                 <p>Nome: {{ usuario.nome }}</p>
                 <p>Especialide: {{ usuario.especialidade }}</p>
                 <p>E-mail: {{ usuario.email }}</p>
@@ -89,7 +89,7 @@ input {
     border: 1px solid #84E7FF;
 }
 
-.info {
+.info_prof {
     flex-grow: 1;
     color: #7E7E7E;
     margin-left: 10px;
