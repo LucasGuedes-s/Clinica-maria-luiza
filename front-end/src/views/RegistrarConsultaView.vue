@@ -99,9 +99,7 @@ form {
 }
 
 @media (max-width: 768px) {
-    .sidebar{
-        display: none
-    }
+
     form {
         grid-template-columns: 1fr; /* Apenas uma coluna em telas menores */
     }

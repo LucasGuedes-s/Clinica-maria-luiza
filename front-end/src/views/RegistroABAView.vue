@@ -178,10 +178,6 @@ form {
 }
 
 @media (max-width: 768px) {
-    .sidebar {
-        display: none;
-    }
-
     .main_content {
         margin-left: 0;
         padding: 10px;

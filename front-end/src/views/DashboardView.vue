@@ -167,9 +167,6 @@ h2 {
         margin-left: 10px;
         text-align: left;
     }
-    .sidebar{
-        display: none;
-    }
 
     .container_dashboard {
         align-items: center;

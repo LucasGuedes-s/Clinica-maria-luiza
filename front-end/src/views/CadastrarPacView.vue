@@ -131,10 +131,6 @@ select {
 }
 
 @media (max-width: 768px) {
-    .sidebar {
-        display: none;
-    }
-
     .main-content {
         margin-left: 0;
         padding: 15px;
@@ -210,7 +206,7 @@ export default {
                         telefone: this.telefone,
                         endereco: this.endereco,
                         foto: this.foto, 
-                        tipo_paciente: this.tipo_paciente
+                        tipo_paciente: this.tipo_paciente 
                     }
                 }, {
                     headers: {
