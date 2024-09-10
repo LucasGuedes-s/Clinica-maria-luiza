@@ -65,6 +65,7 @@ async function registrarConsulta(req) {
   if (!paciente) {
     throw new Error('Paciente não encontrado');
   }
+  console.log(req)
   const consulta = await prisma.Consultas.create({
     data: {
       consulta: req.consulta.consulta,

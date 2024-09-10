@@ -32,7 +32,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="especialidade">Permsissões no sistema:</label>
+                    <label for="especialidade">Permissões no sistema:</label>
 
                     <select id="permisssao" name="permissao" v-model="permissaoId" required>
                         <option>Administrador</option>

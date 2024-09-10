@@ -19,7 +19,7 @@
             <div class="botoes_div">
                 <button class="evolucao_btn" v-if="usuario.paciente_dados.length > 0" @click="evolucao(usuario.cpf)">Evolução</button>
                 <button class="registroaba_btn" v-if="usuario.paciente_dados.length > 0" @click="teste(usuario.nome, usuario.cpf)">Registro Aba</button>
-                <RouterLink to="/registrarconsulta"><button class="registrar_btn">Registrar consultas</button></RouterLink>
+                <RouterLink to="/registrarconsulta"><button class="registrar_btn" @click="consulta(usuario.cpf, usuario.nome)">Registrar consultas</button></RouterLink>
                 <button class="histconsultas_btn" @click="historico(usuario.cpf)">Hist. consultas</button>
             </div>
         </div>
@@ -223,13 +223,20 @@ export default {
         },
         async evolucao(cpf){
             sessionStorage.setItem('cpf', cpf);
+            
             this.$router.push({ name: 'evolucao' });
+        },
+        async consulta(cpf, nome){
+            sessionStorage.setItem('cpf', cpf);
+            sessionStorage.setItem('nome', nome);
+
+            this.$router.push({ name: 'registrarconsulta' });
         },
         async teste(nome, cpf) {
             Swal.fire({
                 title: 'Aguarde...',
                 text: 'Estamos gerando o PDF.',
-                timer: 4000,
+                timer: 6000,
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();

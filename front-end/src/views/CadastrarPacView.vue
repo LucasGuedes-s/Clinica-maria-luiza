@@ -186,7 +186,7 @@ export default {
             // Gera um identificador único para a imagem
             const uniqueImageName = uuidv4() + '_' + this.imagem.name;
             // Cria uma referência para o armazenamento
-            const storageRef = ref(storage, 'profissionais/' + uniqueImageName);
+            const storageRef = ref(storage, 'pacientes/' + uniqueImageName);
             // Faz o upload da imagem
             const snapshot = await uploadBytes(storageRef, this.imagem);
             // Obtém a URL pública da imagem
@@ -205,7 +205,7 @@ export default {
                         email: this.email,
                         telefone: this.telefone,
                         endereco: this.endereco,
-                        foto: this.foto, 
+                        foto: foto, 
                         tipo_paciente: this.tipo_paciente 
                     }
                 }, {
