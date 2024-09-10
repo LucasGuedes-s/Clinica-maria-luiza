@@ -32,7 +32,7 @@
 body {
     margin: 0;
     font-family: 'Montserrat', sans-serif;
-    background-color: red;
+    background-color: #E7FAFF;
 }
 
 .main-content {
