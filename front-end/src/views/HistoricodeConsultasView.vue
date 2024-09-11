@@ -7,8 +7,8 @@
 
             <div class="infos_historico">
                 <div class="info_item">
-                    <label for="resposta-data">Data: {{ consulta.data }}</label>
-                    <input type="date" id="resposta-data" value="">
+                    <label for="resposta-data">Data:</label>
+                    <input type="text" id="resposta-data" :value="formatDate(consulta.data)">
                 </div>
                 <div class="info_item">
                     <label for="especialista-nome">Especialista:</label>
@@ -112,6 +112,7 @@ h1 {
 import Sidebar from '@/components/Sidebar.vue';
 import Axios from 'axios';
 import { useAuthStore } from '@/store.js'
+import { formatDate } from '../utils/formatarData';
 
 export default {
     name: 'historicodeconsulta',
@@ -127,6 +128,7 @@ export default {
     },
     data() {
         return {
+            formatDate,
             consultas: null,
             cpf: sessionStorage.getItem('cpf') || ''
         };

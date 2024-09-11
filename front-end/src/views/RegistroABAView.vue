@@ -5,7 +5,7 @@
             <div class="header_container">
                 <h1>Registro aba</h1>
                 <div class="paciente_nome">
-                    <p>Nome do Paciente:</p>
+                    <p>Nome do Paciente: {{ nome }}</p>
                 </div>
             </div>
             <form>
@@ -217,6 +217,14 @@ export default {
     name: 'registroaba',
     components: {
         Sidebar
-    }
+    },
+    setup() {
+        const store = useAuthStore()
+        return {
+            store,
+            cpf: sessionStorage.getItem('cpf') || '',
+            nome: sessionStorage.getItem('nome') || '',
+        }
+    },
 }
 </script>

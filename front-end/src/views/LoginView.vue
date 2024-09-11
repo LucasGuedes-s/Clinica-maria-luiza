@@ -20,13 +20,13 @@
 </template>
 <style scoped>
 body {
+    background-color: rgb(252, 252, 252);
     margin: 0;
     font-family: 'Montserrat', sans-serif;
     display: flex;
     height: 100vh;
     justify-content: center;
     align-items: center;
-    background-color: white;
 }
 form {
     display: block;

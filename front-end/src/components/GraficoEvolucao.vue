@@ -1,11 +1,9 @@
 <template>
-    <div class="main-content">
-        <div class="titulo">
-            <h1>Evolução do paciente</h1>
-        </div>
-        <div>
-            <canvas id="myChart"></canvas>
-        </div>
+    <div class="titulo">
+        <h1>Evolução do paciente</h1>
+    </div>
+    <div>
+        <canvas id="myChart"></canvas>
     </div>
 </template>
 
@@ -199,11 +197,5 @@ body {
 }
 #myChart{
     background-color: white;
-}
-@media (max-width: 768px) {
-    .main-content {
-        margin-left: 0;
-        padding: 15px;
-    }
 }
 </style>
