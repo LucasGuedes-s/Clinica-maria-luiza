@@ -5,6 +5,15 @@ const fs = require('fs');
 const path = require('path');
 const pagamentos = require('../pagamentos.service')
 const formatar = require('../../utils/formatdata.ultil')
+function getMonthName(monthNumber) {
+    const monthNames = [
+      "janeiro", "fevereiro", "março", "abril", "maio", "junho", 
+      "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"
+    ];
+  
+    // Ajusta o mês para ser indexado de 0 (Janeiro) a 11 (Dezembro)
+    return monthNames[monthNumber - 1];
+  }
 
 function addFooter(doc) {
     const pageCount = doc.internal.getNumberOfPages();
@@ -49,13 +58,14 @@ async function pdfPagamentos(mes_ano) {
     const lineHeight = 10; // Altura da linha
     const maxWidth = 190; // Largura máxima do texto
 
-    const patientInfo = ` Relatório de pagamentos do mês`;
+    const mes = getMonthName(mes_ano.mes);
+    const patientInfo = ` Relatório de pagamentos do mês de ${mes}`;
     doc.setFontSize(12);
     doc.setTextColor(126, 126, 126); // Define a cor do texto como preta
     doc.text(patientInfo.split('\n'), eixox, eixoy, { maxWidth: maxWidth, lineHeight: lineHeight });
 
     // Cabeçalhos da tabela
-    const tableColumn = ["Valor", "Paciente", "Profissioal", "Data"];
+    const tableColumn = ["Valor", "Tipo pagamento", "Paciente", "Profissioal", "Data"];
 
     // Inicializando as linhas da tabela
     const tableRows = [];
@@ -67,6 +77,7 @@ async function pdfPagamentos(mes_ano) {
 
             const row = [
                 pagamentos.pagamento.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+                pagamentos.tipo_pagamento,
                 pagamentos.paciente,
                 pagamentos.profissionalId,
                 new Date(pagamentos.Data).toLocaleDateString(),  // Formata a data

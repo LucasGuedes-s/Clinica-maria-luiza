@@ -26,9 +26,11 @@ body {
     height: 100vh;
     justify-content: center;
     align-items: center;
-    background-color: white !important;
+    background-color: white;
 }
-
+form {
+    display: block;
+}
 .container_login {
     width: 100vw;
     height: 100vh;
@@ -132,36 +134,36 @@ button,
     }
     
     .esquerda_login img {
-        width: 80%; /* Make the image smaller on medium screens */
+        width: 80%;
         height: auto;
     }
     
     .esquerda_login,
     .direita_login {
         width: 100%;
-        height: auto; /* Allow height to adjust based on content */
+        height: auto; 
     }
     
     .login_form {
         width: 90%;
-        margin: 0 auto; /* Center form horizontally */
+        margin: 0 auto;
     }
     
     .login_form input {
-        padding: 8px; /* Adjust padding for smaller screens */
-        font-size: 14px; /* Reduce font size for inputs */
+        padding: 8px; 
+        font-size: 14px; 
     }
     
     .button_container {
-        flex-direction: column; /* Ensure buttons stack vertically on small screens */
+        flex-direction: column; 
     }
     
     .button_container button,
     .button_container .btn_paciente {
         width: 100%;
-        font-size: 14px; /* Adjust font size for buttons */
-        padding: 8px; /* Adjust padding for buttons */
-        margin-bottom: 15px; /* Increase space between buttons */
+        font-size: 14px;
+        padding: 8px; 
+        margin-bottom: 15px;
     }
 }
 </style>

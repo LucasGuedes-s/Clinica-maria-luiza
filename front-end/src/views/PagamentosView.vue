@@ -12,7 +12,6 @@
                         <th>Nome do Paciente:</th>
                         <th>Valor:</th>
                         <th>Data:</th>
-
                     </tr>
                 </thead>
                 <tbody>

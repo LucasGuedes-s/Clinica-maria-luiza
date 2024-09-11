@@ -7,6 +7,7 @@ async function postPagamentos(pagamento) {
     data: {
       pagamento: parseFloat(pagamento.pagar.valor),
       paciente: pagamento.pagar.paciente,
+      tipo_pagamento: pagamento.pagar.tipo_pagamento,
       profissionalId: pagamento.pagar.profissionalId,
       Data: new Date()
     },
@@ -54,7 +55,6 @@ async function getPagamentoMes(mes_ano) {
   try {
     // Extrair o mês e ano do corpo da requisição ou dos parâmetros de query
     const { mes, ano } = mes_ano;
-    console.log(mes, ano)
     // Verificar se o mês e o ano foram fornecidos
     if (!mes || !ano) {
       return error('Mês e ano são obrigatórios');

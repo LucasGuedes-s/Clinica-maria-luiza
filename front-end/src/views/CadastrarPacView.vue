@@ -33,10 +33,6 @@
                     <label for="endereco">Endereço:</label>
                     <input type="text" id="endereco" name="endereco" v-model="endereco" required>
                 </div>
-                <div class="form-group selecionar">
-                    <label for="imagem">Adicionar Imagem:</label>
-                    <input type="file" id="imagem" name="imagem" @change="handleFileUpload">
-                </div>
                 <div class="form-group">
                     <label for="tipo_paciente">Tipo paciente:</label>
                     <select id="tioo" name="tipo" v-model="tipo_paciente" required>
@@ -44,6 +40,10 @@
                         <option>Paciente ABA</option>
                         <option>Outro</option>
                     </select>
+                </div>
+                <div class="form-group selecionar">
+                    <label for="imagem">Adicionar Imagem:</label>
+                    <input type="file" id="imagem" name="imagem" @change="handleFileUpload">
                 </div>
                 <button type="submit" class="cadastrar-btn" click="cadastrarpaciente">Cadastrar</button>
             </form>
