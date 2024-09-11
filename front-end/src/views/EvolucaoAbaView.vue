@@ -2,11 +2,11 @@
     <div>
         <Sidebar />
     </div>
-    <div class="main-content">
+    <div class="main-content_evolucao">
         <div>
             <GraficoEvolucao :dado="cpf" />
         </div>
-        <div class="titulo_evolucao">
+        <!--<div class="titulo_evolucao">
             <h1>Evolução</h1>
         </div>
         <table>
@@ -16,8 +16,6 @@
                     <th>Aplicação 01</th>
                     <th>Aplicação 02</th>
                     <th>Aplicação 03</th>
-                    <th>Aplicação 04</th>
-                    <th>Aplicação 05</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,11 +24,9 @@
                     <td>{{ consult.Aplicacao1 }}</td>
                     <td>{{ consult.Aplicacao2 }}</td>
                     <td>{{ consult.Aplicacao3 }}</td>
-                    <td>{{ consult.Aplicacao4 }}</td>
-                    <td>{{ consult.Aplicacao5 }}</td>
                 </tr>
             </tbody>
-        </table>
+        </table>-->
     </div>
 </template>
 
@@ -93,5 +89,15 @@ export default {
 
 .titulo_evolucao h1 {
     color: #D9D9D9;
+}
+.main-content_evolucao{
+    margin-left: 250px;
+    padding: 10px;
+}
+@media (max-width: 768px) {
+    .main-content_evolucao {
+        margin-left: 0;
+        padding: 10px;
+    }
 }
 </style>

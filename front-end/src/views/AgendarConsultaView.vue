@@ -5,7 +5,7 @@
             <h1>Agendar Consulta</h1>
             <form @submit.prevent="agendarconsulta">
                 <div class="form-group">
-                    <label for="nome_paciente">Nome do Paciente:</label>
+                    <label for="nome_paciente">Agendamento:</label>
                     <input type="text" id="nome_paciente" v-model="buscar" @input="searchpacientes"
                         @focus="sugestoes = true" @blur="hideSuggestions" autocomplete="off" required />
                     <ul v-if="sugestoes && filtrarPacientes.length">
