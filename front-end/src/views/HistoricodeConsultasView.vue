@@ -27,7 +27,7 @@
     </div>
 </template>
 
-<style>
+<style scoped>
 body {
     margin: 0;
     font-family: 'Montserrat', sans-serif;
@@ -108,9 +108,8 @@ h1 {
     cursor: pointer;
 }
 @media (max-width: 768px) {
-    .main_content {
+    .main-content {
         margin-left: 0;
-        padding: 10px;
     }
 }
 </style>

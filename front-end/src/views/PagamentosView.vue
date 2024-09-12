@@ -81,7 +81,7 @@ h2 {
 }
 @media (max-width: 768px) {
     .main-content {
-        margin-left: 0; /* Remove o espaço da sidebar em telas pequenas */
+        margin-left: 0;
     }
 
     .tabela, th, td {
