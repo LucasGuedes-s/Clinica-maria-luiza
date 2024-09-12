@@ -131,6 +131,11 @@ form {
 .selecionar {
     grid-column: 1 / -1;
 }
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+    }
+}
 </style>
 
 <script>
