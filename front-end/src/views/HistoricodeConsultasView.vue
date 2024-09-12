@@ -107,6 +107,12 @@ h1 {
     font-size: 14px;
     cursor: pointer;
 }
+@media (max-width: 768px) {
+    .main_content {
+        margin-left: 0;
+        padding: 10px;
+    }
+}
 </style>
 <script>
 import Sidebar from '@/components/Sidebar.vue';
