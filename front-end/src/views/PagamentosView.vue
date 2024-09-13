@@ -2,7 +2,7 @@
     <div>
         <Sidebar />
     </div>
-    <div class="main-content">
+    <div class="main-content_pagamentos">
         <h1>Pagamentos</h1>
         <div class="container_pagamentos">
             <h2>Agosto</h2>
@@ -34,7 +34,7 @@ body {
     background-color: #E7FAFF;
 }
 
-.main-content {
+.main-content_pagamentos {
     margin-left: 250px;
     padding: 20px;
 }
@@ -80,7 +80,7 @@ h2 {
     font-size: 16px;
 }
 @media (max-width: 768px) {
-    .main-content {
+    .main-content_pagamentos {
         margin-left: 0;
     }
 

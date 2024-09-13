@@ -1,6 +1,6 @@
 <template>
     <Sidebar />
-    <div class="main-content">
+    <div class="main_content_registrar">
         <div class="container_registrarconsulta">
             <h1>Registrar Consulta</h1>
             <form @submit.prevent="registrarConsulta">
@@ -37,7 +37,7 @@ body {
     background-color: #E7FAFF;
 }
 
-.main-content {
+.main_content_registrar {
     margin-left: 250px;
     padding: 20px;
     justify-content: center;
@@ -123,9 +123,8 @@ form {
         width: 100%;
     }
 
-    .main-content {
+    .main_content_registrar {
         margin-left: 0;
-        /* Remover margem para telas menores */
         padding: 10px;
     }
 
@@ -222,17 +221,18 @@ export default {
                     }
                 }
             ).then(response => {
+                console.log(response.status)
                 Swal.fire({
-                    icon: 'sucesso',
-                    title: `Consulta de ${this.nome} cadastrado com sucesso`,
+                    icon: 'success',
+                    title: `Consulta de ${this.nome} cadastrada com sucesso`,
                     timer: 4000,
                 })
                 router.push("/pacientes")
             }).catch(Error => {
-                console.error(Error);
+                console.log(Error);
                 Swal.fire({
                     icon: 'error',
-                    title: 'Usuário ou senhas incorretos',
+                    title: 'Não foi possível registrar sua consulta',
                     timer: 4000,
                 })
             })
