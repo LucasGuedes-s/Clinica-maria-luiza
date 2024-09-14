@@ -4,8 +4,12 @@
         <div class="container_agendarconsulta">
             <h1>Agendar Consulta</h1>
             <form @submit.prevent="agendarconsulta">
+                <div class="form-group observacao">
+                    <label for="observacao_agendarconsulta">Agendamento:</label>
+                    <textarea id="observacao_agendarconsulta" rows="1" v-model="agendamento"></textarea>
+                </div>
                 <div class="form-group">
-                    <label for="nome_paciente">Agendamento:</label>
+                    <label for="nome_paciente">Paciente:</label>
                     <input type="text" id="nome_paciente" v-model="buscar" @input="searchpacientes"
                         @focus="sugestoes = true" @blur="hideSuggestions" autocomplete="off" required />
                     <ul v-if="sugestoes && filtrarPacientes.length">
@@ -17,7 +21,7 @@
                 </div>
                 <div class="form-group">
                     <label for="datadaconsulta">Data:</label>
-                    <input type="date" id="data_consulta" name="datadaconsulta" v-model="data">
+                    <input type="datetime-local" id="data_consulta" name="datadaconsulta" v-model="data">
                 </div>
 
                 <div class="form-group">
@@ -26,10 +30,11 @@
                 </div>
                 <div class="form-group">
                     <label for="especialidade">Especialidade:</label>
-                    <select id="especialidade" name="especialidade" required>
-                        <option value="especialidade1">Especialidade 1</option>
-                        <option value="especialidade2">Especialidade 2</option>
-                        <option value="especialidade3">Especialidade 3</option>
+                    <select id="especialidade" name="especialidade" v-model="profissional" required>
+                        <option v-for="profissional in profissionais" :key="profissional.email" :value="profissional.email">
+                            {{ profissional.especialidade }} - {{ profissional.nome }} 
+                        </option>
+                        
                     </select>
                 </div>
                 <div class="form-group observacao">
@@ -184,6 +189,9 @@ li:hover {
 import Sidebar from '@/components/Sidebar.vue'
 import { useAuthStore } from '@/store';
 import Axios from 'axios';
+import Swal from 'sweetalert2'
+import router from '@/router';
+
 export default {
     name: 'registrarconsulta',
     components: {
@@ -201,8 +209,11 @@ export default {
             notas: '',
             data: '',
             buscar: '',
+            agendamento: '',
             filtrarPacientes: [],
             selecionado: '',
+            profissional: '',
+            profissionais: [], // Este array deve ser preenchido com os dados dos profissionais
             pacientes: [], // Este array deve ser preenchido com os dados dos pacientes
             sugestoes: false
         }
@@ -218,40 +229,54 @@ export default {
             this.selecionado = paciente.cpf;
             this.sugestoes = false;
         },
+        selecionarPaciente(paciente) {
+            this.buscar = paciente.nome;
+            this.selecionado = paciente.cpf;
+            this.sugestoes = false;
+        },
         hideSuggestions() {
             setTimeout(() => {
                 this.sugestoes = false;
             }, 200);
         },
         async agendarconsulta() {
-            console.log(this.selecionado)
-            //const profissional = store.usuario.usuario.email
+            const token = this.store.token
+            console.log(this.profissional)
             await Axios.post(`http://localhost:3000/cadastrar/agendamento`, {
                 agenda: {
+                    agendamento: this.agendamento,
                     data: this.data,
                     agendar: this.agenda,
                     notas: this.notas,
-                    profissional: profissional,
-                    paciente: this.buscar.cpf
+                    profissional: this.profissional,
+                    paciente: this.selecionado
                 }
-            }).then(response => {
+            },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }   
+            ).then(response => {
                 console.log(response.status)
-                console.log(response.data)
-                console.log(response.headers.authorization); //Mostra o token que está chegando
-                this.store.token = response.headers.authorization.split(' ')[1]; //Adiciona o token ao Store
-                this.store.usuario = response.data
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Agendamento realizado com sucesso!',
+                    timer: 4000,
+                })
                 router.push('/dashboard')
             }).catch(Error => {
                 console.error(Error);
                 Swal.fire({
                     icon: 'erro',
-                    title: 'Usuário ou senhas incorretos',
+                    title: 'Erro ao registrar agendamento',
                     timer: 4000,
                 })
             })
         }
     },
     mounted() {
+        ///profissionais/agendar
         const token = this.store.token
         Axios.get("https://clinica-maria-luiza.onrender.com/pacientes", {
             headers: {
@@ -259,6 +284,16 @@ export default {
             }
         }).then(response => {
             this.pacientes = response.data.pacientes
+        }).catch(Error => {
+            console.error(Error)
+        })
+        Axios.get("http://localhost:3000/profissionais/agendar", {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }).then(response => {
+            this.profissionais = response.data.profissionais
+            console.log(this.profissionais)
         }).catch(Error => {
             console.error(Error)
         })

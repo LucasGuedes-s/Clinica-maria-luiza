@@ -6,6 +6,7 @@ const router = express.Router()
 
 router.post('/cadastrar/profissional', [jwtMiddleware, permission.postProfissional], userController.postProfissional);
 
+router.get('/profissionais/agendar', [jwtMiddleware, permission.post], userController.getProfissionais);
 router.get('/profissionais', [jwtMiddleware, permission.get], userController.getProfissionais);
 router.get('/profissional/:id',[jwtMiddleware, permission.get], userController.getProfissional);
 

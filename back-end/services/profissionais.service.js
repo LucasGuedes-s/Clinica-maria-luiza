@@ -4,7 +4,17 @@ const bcryptUtil = require("../utils/bcrypt.ultil");
 require('dotenv').config();
 
 async function getProfissionais(){   
-    const profissionais = await prisma.Profissionais.findMany();
+    const profissionais = await prisma.Profissionais.findMany({
+        select: {
+            nome: true,
+            email: true,
+            especialidade: true,
+            foto: true,
+            identificador: true,
+            pix: true,
+            telefone: true
+        }
+    });
 
     return profissionais;
 }

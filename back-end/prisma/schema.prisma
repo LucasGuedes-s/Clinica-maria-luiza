@@ -119,6 +119,7 @@ model Pagamentos{
   pagamento       Float?
   paciente        String?
   tipo_pagamento  String?
+  movimentacao    String?
   profissional    Profissionais? @relation(fields: [profissionalId], references: [email])     
   profissionalId  String?
   Data            DateTime @default(now())
