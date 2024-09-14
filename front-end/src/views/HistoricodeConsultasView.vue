@@ -19,7 +19,7 @@
                     <textarea id="historico_descricao" rows="4" :value="consulta.descricao" readonly></textarea>
                 </div>
                 <div class="botoes">
-                    <button class="btn_detalhar_hist">Laudo</button>
+                    <button class="btn_detalhar_hist" @click="laudo(consulta.laudos)">Laudo</button>
                     <button class="btn_arquivopdf_hist" @click="arquivoPdf(consulta.id)">Arquivo em PDF</button>
                 </div>
             </div>
@@ -141,10 +141,27 @@ export default {
     },
     mounted() {
         //Limpar o CPF do sessionStorage após uso
-        sessionStorage.removeItem('cpf');
+        //sessionStorage.removeItem('cpf');
         this.getConsultas()
     },
     methods: {
+        async laudo(link){
+            try{
+                if(link.length === 0){
+                    Swal.fire("Nenhum laudo anexado nesta consulta");
+                }
+                else if(link){
+                    for(let i =0; i < link.length; i++){
+                        window.open(link[i], '_blank');
+                    }
+                }
+
+            }
+            catch{
+
+            }
+
+        },
         async arquivoPdf(id){
             Swal.fire({
                 title: 'Aguarde...',
