@@ -156,7 +156,7 @@ export default {
                 }
             });
             await Axios({
-                url: `http://localhost:3000/pdf/consulta/${id}`,  // Altere a URL conforme necessário
+                url: `https://clinica-maria-luiza.onrender.com/pdf/consulta/${id}`,  // Altere a URL conforme necessário
                 method: 'GET',
                 responseType: 'blob',  // Importante para tratar a resposta como um blob
             }).then(response => {
