@@ -1,6 +1,6 @@
 <template>
     <Sidebar />
-    <div class="main-content">
+    <div class="main-content-paciente">
         <div class="container_cadastrarpac">
             <h1>Cadastrar Paciente</h1>
             <form @submit.prevent="cadastrarpaciente">
@@ -58,7 +58,7 @@ body {
     background-color: #E7FAFF;
 }
 
-.main-content {
+.main-content-paciente {
     margin-left: 260px;
     padding: 20px;
     justify-content: center;
@@ -131,10 +131,9 @@ select {
 }
 
 @media (max-width: 768px) {
-    .main-content {
+    .main-content-paciente {
         margin-left: 0;
     }
-
     form {
         grid-template-columns: 1fr;
     }
@@ -151,8 +150,9 @@ import router from '@/router';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from '../firebase.js'
 import { v4 as uuidv4 } from 'uuid';
+
 export default {
-    name: 'cadastrar_profissional',
+    name: 'cadastrar_paciente',
     components: {
         Sidebar
     },
@@ -172,6 +172,7 @@ export default {
             telefone: '',
             endereco: '',
             imagem: null,
+            foto: null,
             tipo_paciente: ''
         }
     },
@@ -181,21 +182,22 @@ export default {
         },
         async cadastrarpaciente() {
             const token = this.store.token
-
-            // Gera um identificador único para a imagem
-            const uniqueImageName = uuidv4() + '_' + this.imagem.name;
-            // Cria uma referência para o armazenamento
-            const storageRef = ref(storage, 'pacientes/' + uniqueImageName);
-            // Faz o upload da imagem
-            const snapshot = await uploadBytes(storageRef, this.imagem);
-            // Obtém a URL pública da imagem
-            const foto = await getDownloadURL(snapshot.ref);
-            // Supondo que você tenha uma propriedade 'tipoPaciente' que determina o tipo
-            const tipoPaciente = this.tipoPaciente; // Exemplo: "convencional" ou "especial"
-
+            try{
+                // Gera um identificador único para a imagem
+                const uniqueImageName = uuidv4() + '_' + this.imagem.name;
+                // Cria uma referência para o armazenamento
+                const storageRef = ref(storage, 'pacientes/' + uniqueImageName);
+                // Faz o upload da imagem
+                const snapshot = await uploadBytes(storageRef, this.imagem);
+                // Obtém a URL pública da imagem
+                this.foto = await getDownloadURL(snapshot.ref);
+            }
+            catch{
+                this.foto = 'https://firebasestorage.googleapis.com/v0/b/clinica-maria-luiza.appspot.com/o/uploads%2Ffuncionarios2.svg?alt=media&token=cc7511c0-9e76-4cd6-9e33-891bbb3cfd1c'
+            }
             try {
                 // Envia os dados do paciente para o backend
-                const response = await Axios.post(`https://clinica-maria-luiza.onrender.com/cadastrar/pacientes`, {
+                await Axios.post(`https://clinica-maria-luiza.onrender.com/cadastrar/pacientes`, {
                     paciente: {
                         cpf: this.cpf,
                         nome: this.nome,
@@ -204,39 +206,36 @@ export default {
                         email: this.email,
                         telefone: this.telefone,
                         endereco: this.endereco,
-                        foto: foto, 
+                        foto: this.foto, 
                         tipo_paciente: this.tipo_paciente 
                     }
                 }, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
-                });
-
-                // Exibe mensagem de sucesso
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Cadastrado com sucesso',
-                    timer: 8000,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-
-                // Redireciona ou abre aba diferente com base no tipo de paciente
-                if (this.tipo_paciente === 'Paciente externo') {
-                    this.$router.push('/pacientes');
-                } else if (this.tipo_paciente === 'Paciente ABA') {
-                    this.$router.push('/pacieneteAba');
-                } else {
+                }).then(response =>{
+                    console.log(response.status)
                     Swal.fire({
-                        icon: 'error',
-                        title: 'Tipo de paciente não especificado',
-                        timer: 4000,
+                        icon: 'success',
+                        title: 'Cadastrado com sucesso',
+                        timer: 8000,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
                     });
-                    console.error('Tipo de paciente desconhecido');
-                }
-
+                    if (this.tipo_paciente === 'Paciente externo') {
+                        this.$router.push('/pacientes');
+                    } else if (this.tipo_paciente === 'Paciente ABA') {
+                        this.$router.push('/pacieneteAba');
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Tipo de paciente não especificado',
+                            timer: 4000,
+                        });
+                        console.error('Tipo de paciente desconhecido');
+                    }
+                })
             } catch (error) {
                 // Tratamento de erro
                 console.error('Erro:', error);

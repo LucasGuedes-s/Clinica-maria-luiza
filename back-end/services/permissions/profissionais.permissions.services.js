@@ -57,4 +57,12 @@ async function postProfissional(req, res, next) {
         next(err);
     }
 }
-module.exports = {get, getDados, post, postProfissionais, getAgendamentos, getPacientes, postProfissional};
+async function postConsulta(req, res, next) {
+    try {
+        await verificarPermissoes(req.user, permissions.PROF_ADM);
+        next(); 
+    } catch (err) {
+        next(err);
+    }
+}
+module.exports = {get, getDados, post, postProfissionais, getAgendamentos, getPacientes, postProfissional, postConsulta};

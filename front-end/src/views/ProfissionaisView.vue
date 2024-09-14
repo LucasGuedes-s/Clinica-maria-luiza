@@ -187,6 +187,7 @@ export default {
                 }
             }).then(response => {
                 this.profissional = response.data.profissionais
+                console.log(this.profissional)
             }).catch(Error => {
                 console.error(Error)
             })
