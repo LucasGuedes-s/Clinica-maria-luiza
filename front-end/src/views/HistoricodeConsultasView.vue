@@ -19,8 +19,8 @@
                     <textarea id="historico_descricao" rows="4" :value="consulta.descricao" readonly></textarea>
                 </div>
                 <div class="botoes">
-                    <button class="btn_detalhar_hist">Detalhar</button>
-                    <button class="btn_arquivopdf_hist">Arquivo em PDF</button>
+                    <button class="btn_detalhar_hist">Laudo</button>
+                    <button class="btn_arquivopdf_hist" @click="arquivoPdf(consulta.id)">Arquivo em PDF</button>
                 </div>
             </div>
         </div>
@@ -118,6 +118,7 @@ import Sidebar from '@/components/Sidebar.vue';
 import Axios from 'axios';
 import { useAuthStore } from '@/store.js'
 import { formatDate } from '../utils/formatarData';
+import Swal from 'sweetalert2';
 
 export default {
     name: 'historicodeconsulta',
@@ -144,6 +145,37 @@ export default {
         this.getConsultas()
     },
     methods: {
+        async arquivoPdf(id){
+            Swal.fire({
+                title: 'Aguarde...',
+                text: 'Estamos gerando o PDF.',
+                timer: 3000,
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            await Axios({
+                url: `http://localhost:3000/pdf/consulta/${id}`,  // Altere a URL conforme necessário
+                method: 'GET',
+                responseType: 'blob',  // Importante para tratar a resposta como um blob
+            }).then(response => {
+                // Crie um URL para o blob
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `consulta.pdf`); // Nome do arquivo
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+            }).catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro ao gerar PDF',
+                timer: 4000,
+            })
+            console.error('Erro ao baixar o PDF:', error)});
+        },
         async getConsultas() {
             const token = this.store.token
             const cpf = this.cpf
@@ -153,7 +185,7 @@ export default {
                     'Authorization': `Bearer ${token}`
                 }
             }).then(response => {
-                this.consultas = response.data.consultas.consultas
+                this.consultas = response.data.consultas.consultas.slice().reverse()
             }).catch(error => {
                 console.error(error)
             })

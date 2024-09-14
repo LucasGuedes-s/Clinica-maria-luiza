@@ -34,9 +34,17 @@ async function getConsultasAba(req) {
   return consultas;
 }
 async function getConsulta(consulta) {
+  const consult = parseInt(consulta)
   const consultas = await prisma.Consultas.findUnique({
     where: {
-      id: consulta // Usando o identificador único do paciente
+      id: consult // Usando o identificador único do paciente
+    },
+    include: {
+      profissional: { // Nome do campo que define a relação no seu schema
+        select: {
+          nome: true // Seleciona apenas o campo 'nome' do profissional
+        }
+      }
     }
   });
   return consultas;

@@ -10,7 +10,7 @@ async function getpdfConsultas(req, res){
     res.send(Buffer.from(pdfBuffer));
 };
 async function getpdfConsulta(req, res){
-    const pdfBuffer = await pdf.createReportPdf(req.body)
+    const pdfBuffer = await pdf.pdfConsulta(req.params.id)
     // Envie o PDF como resposta
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'attachment; filename=arquivo.pdf');

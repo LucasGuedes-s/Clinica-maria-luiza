@@ -147,55 +147,86 @@ Nascido em ${data_hora.data};
 }
 async function pdfConsulta(id) {
   const doc = new jsPDF();
-  const consult = await paciente.getConsulta(id)
+  const consulta = await paciente.getConsulta(id);
+  console.log(consulta)
+  // Carregando a imagem
   const imgPath = path.resolve(__dirname, '../../src/assets/img.girafas.png');
   const imgData = fs.readFileSync(imgPath).toString('base64');
   const imgHeight = 40;
   const imgWidth = 40;
 
+  // Dimensões da página
   const pageWidth = doc.internal.pageSize.getWidth();
-  const x = (pageWidth - imgWidth) / 2;
-  doc.addImage(imgData, 'PNG', x, 10, imgWidth, imgHeight);
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const data_hora = formatar.formatarDataHoraSeparados(new Date(consulta.data))
 
-  const firstImageY = 10 + imgHeight + 10;
-  // Definir as dimensões da segunda imagem
-  const secondImageWidth = 50;
-  const secondImageHeight = 50;
+  // Centralizando a imagem horizontalmente
+  const imgX = (pageWidth - imgWidth) / 2;
+  const imgY = 10; // Coordenada Y para a imagem, ajustável se necessário
 
-  // Posicionar a segunda imagem e o texto abaixo da primeira imagem
-  const secondImageX = 10; // Posição X da segunda imagem
-  const secondImageY = firstImageY; // Posição Y abaixo da primeira imagem
+  // Adicionando a imagem ao PDF
+  doc.addImage(imgData, 'PNG', imgX, imgY, imgWidth, imgHeight);
 
-  const textX = secondImageX + secondImageWidth + 10; // Texto ao lado direito da segunda imagem
-  const textY = secondImageY + 10;
+  // Definindo o título acima do texto principal
+  const title = `Resumo da Consulta: ${consulta.consulta}`;
+  doc.setFontSize(18);
+  doc.setTextColor(126, 126, 126); // Cor preta para o título
+  const titleX = (pageWidth - doc.getTextWidth(title)) / 2;
+  const titleY = imgY + imgHeight + 20; // 20 unidades abaixo da imagem
+  doc.text(title, titleX, titleY);
 
-  const data_hora = formatar.formatarDataHoraSeparados(new Date(consultas.data_nascimento))
-
+  // Texto principal
   const patientInfo = `
-    Nome: ${consultas.nome};
-Nascido em ${data_hora.data};
-
-Foi atendido na data de -- pela profissional --
-    `;
+Nesta seção, apresentamos os detalhes da consulta realizada com o paciente, incluindo a data e as principais observações registradas. O atendimento foi conduzido pelo profissional responsável, que aplicou seus conhecimentos para garantir a melhor assistência ao paciente. A seguir, você encontrará informações específicas sobre a consulta, bem como os procedimentos realizados durante o atendimento.
+`;
   doc.setFontSize(14);
-  doc.setTextColor(126, 126, 126); // Define a cor do texto como preta
-  doc.text(patientInfo.trim(), textX, textY, { maxWidth: 130, lineHeight: 1.5 });
+  doc.setTextColor(126, 126, 126); // Cor cinza para o texto principal
+  const maxWidth = 180;
+  const textX = (pageWidth - maxWidth) / 2;
+  const textY = titleY + 10; // 10 unidades abaixo do título
+  doc.text(patientInfo.trim(), textX, textY, { maxWidth: maxWidth, lineHeight: 1.5 });
 
-  const image = await getImageAsBase64(consultas.foto);
-  doc.addImage(image, 'JPEG', secondImageX, secondImageY, secondImageWidth, secondImageHeight);
+  // Separando o texto "Registro de consulta"
+  const registroConsulta = `
+Registro de consulta com: ${consulta.consulta}, na data de ${data_hora.data};
 
-  const texto = textY + (lineHeight * patientInfo.split('\n').length) + 1; // Ajuste conforme necessário
-  const consulta = `
-    Nome: ${consultas.nome};
-Nascido em ${data_hora.data};
+O paciente foi atendido na Clinica Maria Luiza por ${consulta.profissional.nome};
 
-Foi atendido na data de -- pela profissional --
-    `;
-  doc.text(consulta.trim(), texto)
+Registro da consulta: ${consulta.descricao}
+`;
+  doc.setFontSize(14);
+  doc.setTextColor(0, 0, 0); // Cor preta para o registro de consulta
+  const registroY = textY + 50; // 50 unidades abaixo do texto principal, ajustável
+  doc.text(registroConsulta.trim(), textX, registroY, { maxWidth: maxWidth, lineHeight: 1.5 });
   addFooter(doc);
+
+
+  for (let i = 0; i < consulta.laudos.length; i++) {
+
+    const laudoUrl = consulta.laudos[i];
+    try {
+      if (consulta.laudos.length > 0) {
+        doc.addPage();
+        addFooter(doc);     // Adiciona uma nova página para cada laudo, exceto o primeiro
+      }
+      const laudoBase64 = await getImageAsBase64(laudoUrl);
+      const laudoWidth = pageWidth - 20; // Ajuste de acordo com o tamanho da página
+      const laudoHeight = (laudoWidth * 0.75); // Mantém a proporção da imagem
+      const laudoX = 10;
+      const laudoY = 20;
+
+      // Adicionar o laudo na nova página
+      doc.addImage(laudoBase64, 'JPEG', laudoX, laudoY, laudoWidth, laudoHeight);
+
+    } catch (error) {
+      console.error('Erro ao adicionar imagem do laudo:');
+    }
+  }
+  // Gerando o buffer do PDF
   const pdfBuffer = doc.output('arraybuffer');
 
   return pdfBuffer;
+
 }
 async function pdfConsultas(id) {
   const doc = new jsPDF();
@@ -252,4 +283,4 @@ async function pdfConsultasAba(req) {
   }
 }
 
-module.exports = {createReportPdf, pdfConsulta, pdfConsultas, pdfConsultasAba, addFooter }
+module.exports = { createReportPdf, pdfConsulta, pdfConsultas, pdfConsultasAba, addFooter }
