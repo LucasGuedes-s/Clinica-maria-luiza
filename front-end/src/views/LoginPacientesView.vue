@@ -1,15 +1,15 @@
 <template>
-     <div class="container_loginpaciente">
+    <div class="container_loginpaciente">
         <div class="esquerda_login">
             <img src="../assets/img.girafas.png" alt="" srcset="">
         </div>
         <div class="direita_login">
-            <form class="login_paciente">
+            <form class="login_paciente" @submit.prevent="login">
                 <h1>Histórico de consulta</h1>
                 <label for="email">E-mail ou CPF:</label>
-                <input type="text" name="email" placeholder="Digite o seu e-mail ou CPF">
+                <input type="text" name="email" placeholder="Digite o seu e-mail ou CPF" v-model="usuario">
                 <div class="button-container">
-                <button type="submit" class="btn-consultar">Consultar</button>
+                    <button type="submit" class="btn-consultar" click="login">Consultar</button>
                 </div>
             </form>
         </div>
@@ -96,33 +96,62 @@ h1 {
 
 .btn-consultar {
     background-color: #F5F5F5;
-    border: 1px solid #D9D9D9; 
+    border: 1px solid #D9D9D9;
 }
 
 .btn-consultar:hover {
     background-color: #E7FAFF;
 }
+
 @media (max-width: 768px) {
     .esquerda_login img {
-    width: 80%;
-    height: auto;
-  }
-  .container_loginpaciente {
-    flex-direction: column;
-  }
+        width: 80%;
+        height: auto;
+    }
 
-  .esquerda_login,
-  .direita_login {
-    width: 90%;
-    height: auto;
-  }
+    .container_loginpaciente {
+        flex-direction: column;
+    }
 
-  .direita_login {
-    padding: 20px;
-  }
+    .esquerda_login,
+    .direita_login {
+        width: 90%;
+        height: auto;
+    }
 
-  .login_paciente {
-    width: 100%;
-  }
+    .direita_login {
+        padding: 20px;
+    }
+
+    .login_paciente {
+        width: 100%;
+    }
 }
 </style>
+<script>
+import Axios from 'axios';
+import Swal from 'sweetalert2'
+import router from '@/router';
+
+export default {
+    data() {
+        return {
+            usuario: '',
+        }
+    },
+    methods: {
+        async login() {
+            const id = this.usuario
+            await Axios.get(`https://clinica-maria-luiza.onrender.com/pacientes/login/${id}`
+            ).then(response => {
+                sessionStorage.setItem('cpf', response.data.paciente[0].cpf);
+                router.push('/cosultasPacientes')
+                //this.$router.push({ name: 'cosultasPacientes' });
+            }).catch(error =>{
+                console.log(error)
+            })
+        }
+    }
+}
+
+</script>

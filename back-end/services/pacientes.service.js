@@ -3,6 +3,22 @@ const prisma = new PrismaClient()
 const bcryptUtil = require("../utils/bcrypt.ultil")
 require('dotenv').config();
 
+async function loginPaciente(user) {
+  const paciente = await prisma.Pacientes.findMany({
+    where: {
+      OR: [
+        { email: user },   
+        { cpf: user }       
+      ]
+    },
+    include: {
+      paciente_dados: true  // Inclui os dados da tabela Pacientes_dados
+    }
+  });
+  return paciente;
+  
+}
+
 async function getPacientes() {
   const pacientes = await prisma.Pacientes.findMany({
     include: {
@@ -141,4 +157,4 @@ async function cadastrarDados(dados) {
   });
   return cad_dados;
 }
-module.exports = { getPacientes, getConsultas, getConsulta, getConsultasAba, cadastrarDados, cadastrarPaciente, registrarConsulta, registrarConsultaAba};
+module.exports = {loginPaciente, getPacientes, getConsultas, getConsulta, getConsultasAba, cadastrarDados, cadastrarPaciente, registrarConsulta, registrarConsultaAba};
