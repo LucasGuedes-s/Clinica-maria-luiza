@@ -180,7 +180,7 @@ async function pdfConsulta(id) {
 Nesta seção, apresentamos os detalhes da consulta realizada com o paciente, incluindo a data e as principais observações registradas. O atendimento foi conduzido pelo profissional responsável, que aplicou seus conhecimentos para garantir a melhor assistência ao paciente. A seguir, você encontrará informações específicas sobre a consulta, bem como os procedimentos realizados durante o atendimento.
 `;
   doc.setFontSize(14);
-  doc.setTextColor(126, 126, 126); // Cor cinza para o texto principal
+  doc.setTextColor(0, 0, 0); // Cor cinza para o texto principal
   const maxWidth = 180;
   const textX = (pageWidth - maxWidth) / 2;
   const textY = titleY + 10; // 10 unidades abaixo do título

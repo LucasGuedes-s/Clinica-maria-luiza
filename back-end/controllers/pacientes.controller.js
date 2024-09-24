@@ -42,7 +42,7 @@ async function getConsultas(req, res, next){
 async function getConsultasAba(req, res, next){
     try {
         const consultas = await consulta.getConsultasAba(req.params.cpf)
-        consultas = consultas.slice(0, 30);
+        console.log(consultas)
         res.status(200).json({consultas});
         next()
     } catch (err) {

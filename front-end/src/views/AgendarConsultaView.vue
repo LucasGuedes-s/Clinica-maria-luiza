@@ -1,6 +1,6 @@
 <template>
     <Sidebar />
-    <div class="main-content">
+    <div class="main-content_agendar">
         <div class="container_agendarconsulta">
             <h1>Agendar Consulta</h1>
             <form @submit.prevent="agendarconsulta">
@@ -50,7 +50,7 @@ body {
     background-color: #E7FAFF;
 }
 
-.main-content {
+.main-content_agendar {
     margin-left: 250px;
     padding: 20px;
     justify-content: center;
@@ -164,7 +164,7 @@ li:hover {
     font-family: 'Montserrat', sans-serif;
 }
 @media (max-width: 768px) {
-    .main-content {
+    .main-content_agendar {
         margin-left: 0;
         padding: 15px;
     }

@@ -16,7 +16,7 @@
                 <p>Pix: {{ usuario.pix }}</p>
             </div>
             <div class="detalhar-div">
-                <button class="detalhar-btn" @click="consultas(usuario.email)">Consultas</button>
+                <button class="detalhar-btn" @click="consultas(usuario.email, usuario.nome)">Consultas</button>
             </div>
         </div>
     </div>
@@ -188,8 +188,7 @@ export default {
         }
     },
     methods: {
-        async consultas(email) {
-            console.log(email)
+        async consultas(email, nome) {
             Swal.fire({
                 title: 'Escolha o período',
                 text: 'Deseja visualizar consultas do mês atual ou do mês anterior?',
@@ -214,7 +213,7 @@ export default {
                         const url = window.URL.createObjectURL(new Blob([response.data]));
                         const link = document.createElement('a');
                         link.href = url;
-                        link.setAttribute('download', `Relatório de atendimentos.pdf`); // Nome do arquivo
+                        link.setAttribute('download', `Relatório de atendimentos - ${nome} .pdf`); // Nome do arquivo
                         document.body.appendChild(link);
                         link.click();
                         link.remove();
@@ -240,7 +239,7 @@ export default {
                         const url = window.URL.createObjectURL(new Blob([response.data]));
                         const link = document.createElement('a');
                         link.href = url;
-                        link.setAttribute('download', `Relatório de atendimentos.pdf`); // Nome do arquivo
+                        link.setAttribute('download', `Relatório de atendimentos - ${nome}.pdf`); // Nome do arquivo
                         document.body.appendChild(link);
                         link.click();
                         link.remove();
