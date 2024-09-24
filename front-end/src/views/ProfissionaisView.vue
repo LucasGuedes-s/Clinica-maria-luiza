@@ -1,6 +1,6 @@
 <template>
     <Sidebar />
-    <div class="main-content">
+    <div class="main-content_profissionais">
         <h1>Profissionais</h1>
         <div class="search-cadastrar">
             <input type="text" id="search-input" placeholder="Nome do profissional..." v-model="pesquisa">
@@ -16,7 +16,7 @@
                 <p>Pix: {{ usuario.pix }}</p>
             </div>
             <div class="detalhar-div">
-                <button class="detalhar-btn">Consultas</button>
+                <button class="detalhar-btn" @click="consultas(usuario.email)">Consultas</button>
             </div>
         </div>
     </div>
@@ -33,7 +33,7 @@ h1 {
     color: #84E7FF;
 }
 
-.main-content {
+.main-content_profissionais {
     margin-left: 250px;
     padding: 20px;
 }
@@ -115,15 +115,17 @@ input {
 .detalhar-btn:hover {
     background-color: #E7FAFF;
 }
+
 @media (max-width: 768px) {
 
-    .main-content {
+    .main-content_profissionais {
         margin-left: 0;
         padding: 10px;
     }
 
     .search-cadastrar {
-        flex-direction: row; /* Alinha lado a lado */
+        flex-direction: row;
+        /* Alinha lado a lado */
         align-items: center;
     }
 
@@ -135,7 +137,8 @@ input {
     .search-cadastrar button {
         padding: 8px 16px;
         font-size: 14px;
-        width: 100px; /* Largura fixa do botão */
+        width: 100px;
+        /* Largura fixa do botão */
     }
 
     .container_profissional {
@@ -147,11 +150,12 @@ input {
 
     .container_profissional img {
         width: 140px;
-        margin-right: 0px; 
+        margin-right: 0px;
         height: 140px;
-        margin-bottom: 10px; 
-        display: block; 
+        margin-bottom: 10px;
+        display: block;
     }
+
     .detalhar-div {
         position: absolute;
         margin-top: 10px;
@@ -162,9 +166,10 @@ input {
 import Sidebar from '@/components/Sidebar.vue'
 import { useAuthStore } from '@/store';
 import Axios from 'axios';
+import Swal from 'sweetalert2';
 export default {
     name: 'profissionais',
-    components:{
+    components: {
         Sidebar
     },
     setup() {
@@ -173,13 +178,81 @@ export default {
             store
         }
     },
-    data(){
-        return{
+    data() {
+        return {
             pesquisa: '',
             profissional: []
         }
     },
     methods: {
+        async consultas(email) {
+            console.log(email)
+            Swal.fire({
+                title: 'Escolha o período',
+                text: 'Deseja visualizar consultas do mês atual ou do mês anterior?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Mes atual',
+                cancelButtonText: 'Cancelar',
+                showDenyButton: true,
+                denyButtonText: 'Mês anterior',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Axios({
+                        url: `https://clinica-maria-luiza.onrender.com/historico/consultas`,  // URL sem parâmetros
+                        method: 'POST',  // Muda o método para POST
+                        responseType: 'blob',  // Importante para tratar a resposta como um blob
+                        data: {
+                            email: email,  // Enviando email no corpo da requisição
+                            mesDesejado: 'atual'       // Enviando o mês selecionado
+                        }
+                    }).then(response => {
+                        // Crie um URL para o blob
+                        const url = window.URL.createObjectURL(new Blob([response.data]));
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.setAttribute('download', `Relatório de atendimentos.pdf`); // Nome do arquivo
+                        document.body.appendChild(link);
+                        link.click();
+                        link.remove();
+                    }).catch(error => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erro ao gerar PDF',
+                            timer: 4000,
+                        })
+                    });
+
+                } else if (result.isDenied) {
+                    Axios({
+                        url: `https://clinica-maria-luiza.onrender.com/historico/consultas`,  // URL sem parâmetros
+                        method: 'POST',  // Muda o método para POST
+                        responseType: 'blob',  // Importante para tratar a resposta como um blob
+                        data: {
+                            email: email,  // Enviando email no corpo da requisição
+                            mesDesejado: 'anterior'       // Enviando o mês selecionado
+                        }
+                    }).then(response => {
+                        // Crie um URL para o blob
+                        const url = window.URL.createObjectURL(new Blob([response.data]));
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.setAttribute('download', `Relatório de atendimentos.pdf`); // Nome do arquivo
+                        document.body.appendChild(link);
+                        link.click();
+                        link.remove();
+                    }).catch(error => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erro ao gerar PDF',
+                            timer: 4000,
+                        })
+                    });
+
+                }
+            });
+
+        },
         async profissionais() {
             const token = this.store.token
             Axios.get("https://clinica-maria-luiza.onrender.com/profissionais", {
@@ -196,22 +269,22 @@ export default {
     },
     computed: {
         filteredProfissional() {
-            return this.profissional.filter(profissional => 
-            profissional.nome.toLowerCase().includes(this.pesquisa.toLowerCase())
-        );
+            return this.profissional.filter(profissional =>
+                profissional.nome.toLowerCase().includes(this.pesquisa.toLowerCase())
+            );
         }
     },
-    mounted (){
+    mounted() {
         this.profissionais()
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            try{
+            try {
                 const authStore = useAuthStore();
                 const userPermissions = authStore.getUser.usuario.permissao; // Obtém as permissões do usuário
-                
+
                 const requiredPermission = 1;
-                
+
                 if (!vm.store.isAuthenticated) {
                     vm.$router.push('/login')
                 }
@@ -219,7 +292,7 @@ export default {
                     vm.$router.push('/unauthorized'); // Redireciona para uma página de acesso negado
                 }
             }
-            catch{
+            catch {
                 console.log("Erro")
             }
 
