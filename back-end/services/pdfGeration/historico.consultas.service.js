@@ -32,7 +32,6 @@ async function createReportPdf(usuario) {
 
   const doc = new jsPDF();
   const consultas = await paciente.getConsultas(usuario)
-  console.log(consultas)
 
   const imgPath = path.resolve(__dirname, '../../src/assets/img.girafas.png');
   const imgData = fs.readFileSync(imgPath).toString('base64');
@@ -80,25 +79,27 @@ Nascido em ${data_hora.data};
 
   // Cabeçalhos da tabela
   const tableColumn = ["Consulta", "Data", "Descrição", "Profissional"];
-
-  // Inicializando as linhas da tabela
   const tableRows = [];
-  const laudos = []
-  consultas.consultas.forEach(consulta => {
-    if (consulta.laudos.length > 0) {  // Verifica se o array de laudos não está vazio
-      laudos.push(...consulta.laudos);  // Adiciona os laudos ao array principal, desestruturando o array interno
+  const laudos = [];
+
+  consultas.forEach(consulta => {
+    // Verifica se o array de laudos não está vazio
+    if (consulta.laudos.length > 0) {
+      laudos.push(...consulta.laudos); // Adiciona os laudos ao array principal
     }
+
+    // Monta a linha da tabela com os dados da consulta
     const row = [
       consulta.consulta,
-      new Date(consulta.data).toLocaleDateString(),  // Formata a data
-      consulta.descricao,
-      consulta.profissionalId,
+      new Date(consulta.data).toLocaleDateString(), // Formata a data
+      consulta.descricao || 'N/A', // Verifica se a descrição está presente
+      consulta.profissional.nome // Use o nome do profissional em vez do email
     ];
     tableRows.push(row);
   });
 
   const lineHeight = 10; // Altura da linha
-  const tableStartY = textY + (lineHeight * patientInfo.split('\n').length); // Ajuste conforme necessário
+  const tableStartY = textY + (lineHeight * 2); // Ajuste o valor conforme necessário para espaçamento
 
   // Adicionando as colunas da tabela
   doc.autoTable({
@@ -148,7 +149,6 @@ Nascido em ${data_hora.data};
 async function pdfConsulta(id) {
   const doc = new jsPDF();
   const consulta = await paciente.getConsulta(id);
-  console.log(consulta)
   // Carregando a imagem
   const imgPath = path.resolve(__dirname, '../../src/assets/img.girafas.png');
   const imgData = fs.readFileSync(imgPath).toString('base64');
@@ -198,6 +198,8 @@ Registro da consulta: ${consulta.descricao}
   doc.setTextColor(0, 0, 0); // Cor preta para o registro de consulta
   const registroY = textY + 50; // 50 unidades abaixo do texto principal, ajustável
   doc.text(registroConsulta.trim(), textX, registroY, { maxWidth: maxWidth, lineHeight: 1.5 });
+
+
   addFooter(doc);
 
 
@@ -228,9 +230,10 @@ Registro da consulta: ${consulta.descricao}
   return pdfBuffer;
 
 }
-async function pdfConsultas(id) {
+async function pdfConsultas(req) {
   const doc = new jsPDF();
-  const consultas = await profissionais.getConsultas(id)
+  const consultas = await profissionais.getConsultas(req.body)
+  console.log(consultas)
   const imgPath = path.resolve(__dirname, '../../src/assets/img.girafas.png');
   const imgData = fs.readFileSync(imgPath).toString('base64');
   const imgHeight = 40;
@@ -269,14 +272,100 @@ Foi atendido na data de -- pela profissional --
   return pdfBuffer;
 }
 async function pdfConsultasAba(req) {
-  const consultas = await paciente.getConsultasAba(req);
+  const consultas = await profissionais.getConsultasAba(req.body);
+  const anoAtual = new Date().getFullYear();
+  const mesAtual = new Date().getMonth(); 
+
+  if (req.body.mesDesejado === 'atual') {
+    inicioMes = new Date(anoAtual, mesAtual, 1); // Primeiro dia do mês atual
+    fimMes = new Date(anoAtual, mesAtual + 1, 0); // Último dia do mês atual
+  } else if (req.body.mesDesejado === 'anterior') {
+      // Definir o intervalo de datas para o mês anterior
+      inicioMes = new Date(anoAtual, mesAtual - 1, 1); // Primeiro dia do mês anterior
+      fimMes = new Date(anoAtual, mesAtual, 0); // Último dia do mês anterior
+  }
   try {
     const doc = new jsPDF();
-    doc.text('pdf do Paciente', 10, 20);
+    // Carregando a imagem
+    const imgPath = path.resolve(__dirname, '../../src/assets/img.girafas.png');
+    const imgData = fs.readFileSync(imgPath).toString('base64');
+    const imgHeight = 40;
+    const imgWidth = 40;
 
+    // Dimensões da página
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+
+    // Centralizando a imagem horizontalmente
+    const imgX = (pageWidth - imgWidth) / 2;
+    const imgY = 10; // Coordenada Y para a imagem, ajustável se necessário
+
+    // Adicionando a imagem ao PDF
+    doc.addImage(imgData, 'PNG', imgX, imgY, imgWidth, imgHeight);
+    const data_inicio = formatar.formatarDataHoraSeparados(new Date(inicioMes))
+    const data_final = formatar.formatarDataHoraSeparados(new Date(fimMes))
+
+    const patientInfo = `
+  Relatório de consultas realizadas entre ${data_inicio.data} e ${data_final.data}
+`;
+    doc.setFontSize(14);
+    doc.setTextColor(126, 126, 126); // Define a cor do texto como cinza
+
+    const lineHeightFactor = 1.5; // Fator de altura da linha
+    const maxWidth = 180; // Largura máxima do texto
+
+    const textX = (pageWidth - doc.getTextWidth(patientInfo)) / 2;
+    const textY = imgY + imgHeight + 10; // 10 unidades abaixo da imagem
+
+    doc.setFontSize(14);
+    doc.setTextColor(0, 0, 0); // Cor preta para o registro de consulta
+    const registroY = textY + 5; // 10 unidades abaixo do texto principal
+
+    // Adicionando o texto ao PDF
+    doc.text(patientInfo.trim(), textX, registroY, { maxWidth: maxWidth, lineHeight: lineHeightFactor });
+
+    // Define as colunas da tabela
+    const columns = [
+      { header: 'Data', dataKey: 'data' },
+      { header: 'Hora Inicio', dataKey: 'hora_inicio' },
+      { header: 'Hora Fim', dataKey: 'hora_fim' },
+      { header: 'Profissional', dataKey: 'profissional' },
+      { header: 'Paciente', dataKey: 'paciente' },
+      { header: 'Atividade', dataKey: 'descricao_atividade' }
+
+    ];
+
+    // Mapeia os dados de consultas para o formato adequado
+    const data = consultas.map(consulta => ({
+      data: new Date(consulta.data).toLocaleDateString(), // Formata a data
+      hora_inicio: new Date(consulta.hora_inicio).toISOString().split('T')[1].substring(0, 5), // Pega a hora em formato HH:mm
+      hora_fim: new Date(consulta.hora_fim).toISOString().split('T')[1].substring(0, 5), // Pega a hora em formato HH:mm
+      profissional: consulta.profissional.nome, // Nome do profissional
+      pacienteId: consulta.pacienteId,
+      paciente: consulta.paciente.nome,
+      descricao_atividade: consulta.descricao_atividade
+
+    }));
+
+    const lineHeight = 10; // Altura da linha
+    const tableStartY = registroY + (lineHeight * 2); // 2 linhas abaixo do texto principal
+
+    // Adiciona a tabela ao PDF
+    doc.autoTable({
+      columns: columns,
+      body: data,
+      startY: tableStartY, // Define a posição inicial da tabela
+      theme: 'grid', // Define o tema da tabela
+      headStyles: {
+        fillColor: [132, 231, 255], // Cor de fundo do cabeçalho (em RGB)
+      },
+    });
+
+    // Gera o buffer do PDF
     const pdfBuffer = doc.output('arraybuffer');
 
     return pdfBuffer;
+
 
   } catch (error) {
     console.error('Erro ao gerar o PDF:', error);

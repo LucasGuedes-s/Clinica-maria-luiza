@@ -55,20 +55,41 @@ async function postProfissional(user){
     });
     return cad;
 }
-/*async function cadastrarProfissional(req){  
-    console.log(req)
-      const profissionais = await prisma.Profissionais.create({
-          data: {
-              nome: req.profissional.nome,
-              data_nascimento: new Date(req.profissional.data_nascimento),
-              email: req.profissional.email,
-              telefone: req.profissional.telefone,
-              pix: req.profissional.pix,
-              foto: req.profissional.foto,
-          }
-      });
-      console.log(profissionais)
-      return profissionais;
-}*/
 
-module.exports = {getProfissionais, getConsultas, postProfissional, getProfissional};
+async function getConsultasAba(req, res){ 
+    const {email, mesDesejado} = req
+    // Obtenha o ano e o mês atuais
+    const anoAtual = new Date().getFullYear();
+    const mesAtual = new Date().getMonth(); 
+
+    let inicioMes, fimMes;
+
+    if (mesDesejado === 'atual') {
+        // Definir o intervalo de datas para o mês atual
+        inicioMes = new Date(anoAtual, mesAtual, 1); // Primeiro dia do mês atual
+        fimMes = new Date(anoAtual, mesAtual + 1, 0); // Último dia do mês atual
+    } else if (mesDesejado === 'anterior') {
+        // Definir o intervalo de datas para o mês anterior
+        inicioMes = new Date(anoAtual, mesAtual - 1, 1); // Primeiro dia do mês anterior
+        fimMes = new Date(anoAtual, mesAtual, 0); // Último dia do mês anterior
+    }
+
+    // Fazer a consulta filtrando pelo email do profissional e pelo intervalo de datas
+    const consultas = await prisma.ConsultaAba.findMany({
+        where: {
+            profissionalId: email,
+            data: {
+                gte: inicioMes, // Data maior ou igual ao início do mês
+                lte: fimMes // Data menor ou igual ao fim do mês
+            }
+        },
+        include: {
+            profissional: true, // Inclui os dados do profissional
+            paciente: true
+        }
+    });
+
+    return consultas;
+}
+
+module.exports = {getProfissionais, getConsultas, getConsultasAba, postProfissional, getProfissional};

@@ -17,6 +17,8 @@
 
             </div>
             <div class="botoes_div">
+                <RouterLink to="/cadastrarinformacoes"><button  class="evolucao_btn" v-if="usuario.paciente_dados.length === 0">Registrar dados</button></RouterLink>
+
                 <button class="evolucao_btn" v-if="usuario.paciente_dados.length > 0" @click="evolucao(usuario.cpf)">Evolução</button>
                 <button class="registroaba_btn" v-if="usuario.paciente_dados.length > 0" @click="aba(usuario.cpf, usuario.nome,)">Registro Aba</button>
                 <RouterLink to="/registrarconsulta"><button class="registrar_btn" @click="consulta(usuario.cpf, usuario.nome)">Registrar consultas</button></RouterLink>
@@ -186,6 +188,7 @@ import Sidebar from '@/components/Sidebar.vue'
 import { useAuthStore } from '@/store';
 import Axios from 'axios';
 import Swal from 'sweetalert2';
+import { RouterLink } from 'vue-router';
 
 export default {
     name: 'pacientes',

@@ -138,21 +138,22 @@ input {
         width: 100px; /* Largura fixa do botão */
     }
 
-    .container-profissional {
-        flex-direction: column;
+    .container_profissional {
         align-items: center;
+        padding: 0px;
         justify-content: center;
+        flex-direction: row;
     }
 
-    .container-profissional img {
-        width: 100%;
-        height: auto;
-        margin: 0 auto 10px; 
+    .container_profissional img {
+        width: 140px;
+        margin-right: 0px; 
+        height: 140px;
+        margin-bottom: 10px; 
         display: block; 
     }
-
     .detalhar-div {
-        position: static;
+        position: absolute;
         margin-top: 10px;
     }
 }
