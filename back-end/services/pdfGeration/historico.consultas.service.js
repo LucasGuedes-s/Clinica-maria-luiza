@@ -170,7 +170,7 @@ async function pdfConsulta(id) {
   // Definindo o título acima do texto principal
   const title = `Resumo da Consulta: ${consulta.consulta}`;
   doc.setFontSize(18);
-  doc.setTextColor(126, 126, 126); // Cor preta para o título
+  doc.setTextColor(0, 0, 0); // Cor preta para o título
   const titleX = (pageWidth - doc.getTextWidth(title)) / 2;
   const titleY = imgY + imgHeight + 20; // 20 unidades abaixo da imagem
   doc.text(title, titleX, titleY);

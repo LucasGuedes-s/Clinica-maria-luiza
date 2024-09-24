@@ -7,6 +7,8 @@ const router = express.Router()
 router.get('/historico/consultas/:id', pdfController.getpdfConsultas);
 router.post('/historico/consultas', pdfController.getpdfConsultasAba);
 
+router.get('/pdf/consulta/:id', pdfController.getpdfConsulta);
+
 router.get('/pdf/consultaAba/:cpf', pdfController.getpdfConsultasAba);
 
 router.get('/pdf/pagamentos', pdfController.getpdfPagamento);
