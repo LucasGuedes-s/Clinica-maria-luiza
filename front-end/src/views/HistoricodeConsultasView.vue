@@ -8,7 +8,7 @@
             <div class="infos_historico">
                 <div class="info_item">
                     <label for="resposta-data">Data:</label>
-                    <input type="text" id="resposta-data" :value="formatDate(consulta.data)">
+                    <input type="text" id="resposta-data" :value="formatDate(consulta.data)" readonly>
                 </div>
                 <div class="info_item">
                     <label for="especialista-nome">Especialista:</label>

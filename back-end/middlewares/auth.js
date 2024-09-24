@@ -2,8 +2,6 @@ const config = require('../config/app.config.js');
 const jwt = require('jsonwebtoken');
 
 function validarJWT(req, res, next) {
-    console.log(req.headers.authorization);
-
     // Verifica se o token foi fornecido
     if (!req.headers.authorization) {
         return res.status(422).send({
@@ -28,8 +26,6 @@ function validarJWT(req, res, next) {
                 });
             }
         }
-
-        console.log("Usuário válidado");
         req.user = userInfo;
         next();
     });

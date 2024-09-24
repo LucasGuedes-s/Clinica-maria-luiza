@@ -117,7 +117,10 @@ input {
 }
 
 @media (max-width: 768px) {
-
+    
+    .info_prof {
+        font-size: 12px;
+    }
     .main-content_profissionais {
         margin-left: 0;
         padding: 10px;
