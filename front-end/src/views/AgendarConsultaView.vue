@@ -23,11 +23,6 @@
                     <label for="datadaconsulta">Data:</label>
                     <input type="datetime-local" id="data_consulta" name="datadaconsulta" v-model="data">
                 </div>
-
-                <div class="form-group">
-                    <label for="horario">Horário:</label>
-                    <input type="time" id="horario_consulta" name="horario" required>
-                </div>
                 <div class="form-group">
                     <label for="especialidade">Especialidade:</label>
                     <select id="especialidade" name="especialidade" v-model="profissional" required>
@@ -242,7 +237,16 @@ export default {
         async agendarconsulta() {
             const token = this.store.token
             console.log(this.profissional)
-            await Axios.post(`http://localhost:3000/cadastrar/agendamento`, {
+            Swal.fire({
+                title: 'Aguarde...',
+                text: `Agendando consulta`,
+                timer: 3000,
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            })
+            await Axios.post(`https://clinica-maria-luiza.onrender.com/cadastrar/agendamento`, {
                 agenda: {
                     agendamento: this.agendamento,
                     data: this.data,
@@ -287,7 +291,7 @@ export default {
         }).catch(Error => {
             console.error(Error)
         })
-        Axios.get("http://localhost:3000/profissionais/agendar", {
+        Axios.get("https://clinica-maria-luiza.onrender.com/profissionais/agendar", {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

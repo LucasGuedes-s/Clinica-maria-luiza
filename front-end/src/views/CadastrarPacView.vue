@@ -226,7 +226,7 @@ export default {
                     if (this.tipo_paciente === 'Paciente externo') {
                         this.$router.push('/pacientes');
                     } else if (this.tipo_paciente === 'Paciente ABA') {
-                        this.$router.push('/pacieneteAba');
+                        this.$router.push('/cadastrarinformacoes');
                     } else {
                         Swal.fire({
                             icon: 'error',
