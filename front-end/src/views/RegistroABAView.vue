@@ -5,7 +5,7 @@
             <div class="header_container">
                 <h1>Registro aba</h1>
                 <div class="paciente_nome">
-                    <p>Nome do Paciente: {{ nome }}</p>
+                    <p>{{ nome }}</p>
                 </div>
             </div>
             <form>
