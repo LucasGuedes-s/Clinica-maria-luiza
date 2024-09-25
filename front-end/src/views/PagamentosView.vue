@@ -104,5 +104,19 @@ export default {
     components: {
         Sidebar
     },
+    setup() {
+        const store = useAuthStore()
+        return {
+            store
+        }
+    },
+    data() {
+        return {
+            pagamento: '',
+            paciente: '',
+            tipo_pagamento: '',
+            profissionalId: ''
+        }
+    },
 }
 </script>
