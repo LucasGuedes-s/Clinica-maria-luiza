@@ -59,7 +59,7 @@ body {
 }
 
 .main-content-paciente {
-    margin-left: 260px;
+    margin-left: 250px;
     padding: 20px;
     justify-content: center;
 }
@@ -128,6 +128,10 @@ select {
 
 .cadastrar-btn:hover {
     background-color: #E7FAFF;
+}
+
+.selecionar {
+    grid-column: 1 / -1;
 }
 
 @media (max-width: 768px) {

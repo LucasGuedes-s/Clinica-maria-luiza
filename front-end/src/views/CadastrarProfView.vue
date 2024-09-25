@@ -58,7 +58,7 @@ body {
     background-color: #E7FAFF;
 }
 .main-content {
-    margin-left: 260px;
+    margin-left: 250px;
     padding: 20px;
     justify-content: center;
 }

@@ -35,7 +35,7 @@ body {
 }
 
 .main-content {
-    margin-left: 260px;
+    margin-left: 250px;
     padding: 20px;
 }
 
