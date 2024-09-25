@@ -5,10 +5,10 @@
             <h1>Realizar Pagamento</h1>
             <form>
                 <div class="form-group">
-                    <label for="tipodepaciente">Tipo de Paciente:</label>
-                    <select id="tipodepaciente" name="tipodepaciente" required>
-                        <option value="pacienteinterno">Interno</option>
-                        <option value="pacienteexterno">Externo</option>
+                    <label for="tipodepagamento">Tipo de Pagamento:</label>
+                    <select id="tipodepagamento" name="tipodepagamento" required>
+                        <option value="pagamentodeentrada">Pagamento de Entrada</option>
+                        <option value="pagamentodesaida">Pagamento de Saida</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -87,7 +87,7 @@ form {
     box-sizing: border-box;
 }
 
-#data_pagamento, #metododepagamento, #tipodepaciente{
+#data_pagamento, #metododepagamento, #tipodepagamento {
     font-family: 'Montserrat', sans-serif;
 }
 
