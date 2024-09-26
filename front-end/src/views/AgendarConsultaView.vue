@@ -11,7 +11,7 @@
                 <div class="form-group">
                     <label for="nome_paciente">Paciente:</label>
                     <input type="text" id="nome_paciente" v-model="buscar" @input="searchpacientes"
-                        @focus="sugestoes = true" @blur="hideSuggestions" autocomplete="off" required />
+                        @focus="sugestoes = true" @blur="hideSuggestions" autocomplete="off"/>
                     <ul v-if="sugestoes && filtrarPacientes.length">
                         <li v-for="paciente in filtrarPacientes" :key="paciente.id"
                             @mousedown.prevent="selecionarPaciente(paciente)">

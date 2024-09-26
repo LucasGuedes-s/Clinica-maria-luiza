@@ -21,7 +21,16 @@ async function getAgendamentos(req, res, next){
     }
     
 }
-
+async function getAgendamentosPacientes(req, res, next){
+    try {
+        const agenda = await Agendamentos.getAgendamentosPacientes(req.params.id)
+        res.status(200).json({agenda});
+        next()
+    } catch (err) {
+        console.error(`Erro ao receber agenda do usuário`);
+    }
+    
+}
 async function updateAgendamentos(req, res, next){
     try {
         console.log(req.body.id)
@@ -33,4 +42,4 @@ async function updateAgendamentos(req, res, next){
         console.error(`Erro ao registrar agendamento para profissional`);
     }
 }
-module.exports = {postAgendamentos, getAgendamentos, updateAgendamentos};
+module.exports = {postAgendamentos, getAgendamentos, getAgendamentosPacientes, updateAgendamentos};

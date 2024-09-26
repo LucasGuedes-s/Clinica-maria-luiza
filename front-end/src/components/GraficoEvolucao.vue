@@ -26,7 +26,11 @@ export default {
             const cpf = props.dado;
             try {
                 const response = await Axios.get(`https://clinica-maria-luiza.onrender.com/consultasAba/paciente/${cpf}`);
-                consultas.value = response.data.consultas;
+                const todasConsultas = response.data.consultas;
+    
+                // Pegar os últimos 15 itens do array de consultas
+                consultas.value = todasConsultas.slice(-15);
+                //consultas.value = response.data.consultas;
                 console.log(response.data.consultas)
                 updateChart();
             } catch (error) {

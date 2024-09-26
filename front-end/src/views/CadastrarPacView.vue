@@ -263,7 +263,6 @@ export default {
             catch {
                 console.log("Erro")
             }
-
         })
     }
 }

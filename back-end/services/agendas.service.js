@@ -27,6 +27,31 @@ async function agendarConsulta(req){
     });
     return agenda;
 }
+async function getAgendamentosPacientes(user){  
+
+    const agenda = await prisma.Agendamentos.findMany({
+        where: { 
+            pacienteId: user,
+            status: 'Andamento'
+        },
+        include: {
+            profissional: {
+              select: {
+                nome: true,
+              },
+            },
+          },
+    });
+    const Agendamentos = agenda.map(agendamento => {
+        const { data, hora } = formatar.formatarDataHoraSeparados(agendamento.data);
+        return {
+            ...agendamento,
+            dataFormatada: data,
+            horaFormatada: hora,
+        };
+    });
+    return Agendamentos;
+}
 async function getAgendamentos(user){  
 
     const agenda = await prisma.Agendamentos.findMany({
@@ -67,4 +92,4 @@ async function updateAgendamentos(id){
     });   
     return agenda;
 }
-module.exports = {agendarConsulta, getAgendamentos, updateAgendamentos};
+module.exports = {agendarConsulta, getAgendamentos, getAgendamentosPacientes, updateAgendamentos};

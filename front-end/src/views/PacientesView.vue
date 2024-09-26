@@ -172,13 +172,19 @@ input {
     }
 
     .info {
+        font-size: 12px;
         display: flex;
         text-align: left;
     }
 
     .botoes_div {
+        gap: 5px;
         flex-wrap: inherit;
         justify-content: inherit;
+    }
+    .botoes_div button {
+        padding: 5px; /* Ajuste o padding conforme a necessidade */
+        font-size: 13px; /* Diminua o tamanho da fonte */
     }
 }
 </style>
