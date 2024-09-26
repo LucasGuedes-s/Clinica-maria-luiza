@@ -15,7 +15,7 @@
                 </div>
                 <div class="form-group descricao">
                     <label for="descricao_atividade">Descrição de atividade:</label>
-                    <textarea id="descricao_atividade" rows="4"></textarea>
+                    <input id="descricao_atividade" rows="4"></input>
                 </div>
                 <div class="form-group pequenos-inputs">
                     <label>Aplicações:</label>
@@ -288,9 +288,6 @@ export default {
     },
     data() {
         return {
-            pacienteId: '',
-            profissionalId: '',
-            data: '',
             consulta: '',
             inicio: '',
             fim: '',
@@ -307,11 +304,17 @@ export default {
     },
     methods: {
         async registrarConsulta() {
-            try {
-                const response = await Axios.post("https://clinica-maria-luiza.onrender.com/consultaAba/registrar", {
+            console.log(sessionStorage.getItem('cpf') || ''
+            )
+            console.log(this.cpf)
+            console.log(this.aplicacao1, this.aplicacao2, this.aplicacao3, this.aplicacao4, this.aplicacao5,)
+            const token = this.store.token
+            const user = this.store.usuario.usuario.email
+            await Axios.post("http://localhost:3000/consultaAba/registrar",
+                {
                     consulta: {
-                        pacienteId: this.pacienteId,
-                        profissionalId: this.profissionalId,
+                        pacienteId: this.cpf,
+                        profissionalId: user,
                         consulta: this.consulta,
                         data: this.data,
                         inicio: this.inicio,
@@ -323,19 +326,20 @@ export default {
                         aplicacao4: this.aplicacao4,
                         aplicacao5: this.aplicacao5,
                         teste: this.teste,
-                        foto: this.foto,
                         observacoes: this.observacoes
-                    }
-                });
+                    },
 
-                if (response.status === 200) {
-                    console.log('Consulta registrada com sucesso!');
-                } else {
-                    console.log('Houve um problema ao registrar a consulta.');
-                }
-            } catch (error) {
-                console.log('Ocorreu um erro durante a requisição.', error);
-            }
+                },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                },
+            ).then(response => {
+                console.log('Consulta registrada com sucesso!');
+            }).catch(response => {
+                console.log('Houve um problema ao registrar a consulta.');
+            })
         }
     }
 }

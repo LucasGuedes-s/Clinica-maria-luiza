@@ -8,7 +8,7 @@ router.get('/consulta/paciente/:cpf', [jwtMiddleware, permission.getDados], user
 router.get('/consultasAba/paciente/:cpf', /*[jwtMiddleware, permission.getDados],*/ userController.getConsultasAba);
 
 router.post('/consulta/registrar', [jwtMiddleware, permission.postConsulta], userController.postConsulta);
-router.post('/consultaAba/registrar', [jwtMiddleware, permission.postConsulta], userController.postConsultaAba);
+router.post('/consultaAba/registrar', /*[jwtMiddleware, permission.postConsulta], */ userController.postConsultaAba);
 
 module.exports = router;
 

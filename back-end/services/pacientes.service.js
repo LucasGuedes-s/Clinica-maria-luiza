@@ -109,7 +109,7 @@ async function registrarConsulta(req) {
   return consulta;
 }
 async function registrarConsultaAba(req) {
-
+  console.log("AQUI", req)
   const paciente = await prisma.Pacientes.findUnique({
     where: { cpf: req.consulta.pacienteId }
   });
