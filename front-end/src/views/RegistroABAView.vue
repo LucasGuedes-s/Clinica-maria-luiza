@@ -8,7 +8,7 @@
                     <p>{{ nome }}</p>
                 </div>
             </div>
-            <form>
+            <form @submit.prevent="registrarConsulta">
                 <div class="form-group">
                     <label for="nome">Nome do Aplicador:</label>
                     <input type="text" id="nome_paciente" name="nome" required>
@@ -20,7 +20,7 @@
                 <div class="form-group pequenos-inputs">
                     <label>Aplicações:</label>
                     <div class="inputs-row">
-                        <select>
+                        <select v-model="aplicacao1">
                             <option value="" disabled selected>Aplicação 01:</option>
                             <option value="AT +">AT +</option>
                             <option value="AT + /">AT + /</option>
@@ -33,7 +33,7 @@
                             <option value="SA -">SA -</option>
                         </select>
 
-                        <select>
+                        <select v-model="aplicacao2">
                             <option value="" disabled selected>Aplicação 02:</option>
                             <option value="AT +">AT +</option>
                             <option value="AT + /">AT + /</option>
@@ -46,7 +46,7 @@
                             <option value="SA -">SA -</option>
                         </select>
 
-                        <select>
+                        <select v-model="aplicacao3">
                             <option value="" disabled selected>Aplicação 03:</option>
                             <option value="AT +">AT +</option>
                             <option value="AT + /">AT + /</option>
@@ -59,7 +59,7 @@
                             <option value="SA -">SA -</option>
                         </select>
 
-                        <select>
+                        <select v-model="aplicacao4">
                             <option value="" disabled selected>Aplicação 04:</option>
                             <option value="AT +">AT +</option>
                             <option value="AT + /">AT + /</option>
@@ -72,7 +72,7 @@
                             <option value="SA -">SA -</option>
                         </select>
 
-                        <select>
+                        <select v-model="aplicacao5">
                             <option value="" disabled selected>Aplicação 05:</option>
                             <option value="AT +">AT +</option>
                             <option value="AT + /">AT + /</option>
@@ -85,7 +85,7 @@
                             <option value="SA -">SA -</option>
                         </select>
 
-                        <select>
+                        <select v-model="teste">
                             <option value="" disabled selected>TESTE:</option>
                             <option value="AT +">AT +</option>
                             <option value="AT + /">AT + /</option>
@@ -115,7 +115,7 @@
 
                 <div class="form-group observacao">
                     <label for="observacao_aba">Observação:</label>
-                    <textarea id="observacao_aba" rows="4"></textarea>
+                    <textarea id="observacao_aba" rows="4" v-model="observacoes"></textarea>
                 </div>
 
                 <div class="form-group selecionar">
@@ -286,5 +286,57 @@ export default {
             nome: sessionStorage.getItem('nome') || '',
         }
     },
+    data() {
+        return {
+            pacienteId: '',
+            profissionalId: '',
+            data: '',
+            consulta: '',
+            inicio: '',
+            fim: '',
+            descricao: '',
+            aplicacao1: '',
+            aplicacao2: '',
+            aplicacao3: '',
+            aplicacao4: '',
+            aplicacao5: '',
+            teste: '',
+            foto: '',
+            observacoes: '',
+        }
+    },
+    methods: {
+        async registrarConsulta() {
+            try {
+                const response = await Axios.post("https://clinica-maria-luiza.onrender.com/consultaAba/registrar", {
+                    consulta: {
+                        pacienteId: this.pacienteId,
+                        profissionalId: this.profissionalId,
+                        consulta: this.consulta,
+                        data: this.data,
+                        inicio: this.inicio,
+                        fim: this.fim,
+                        descricao: this.descricao,
+                        aplicacao1: this.aplicacao1,
+                        aplicacao2: this.aplicacao2,
+                        aplicacao3: this.aplicacao3,
+                        aplicacao4: this.aplicacao4,
+                        aplicacao5: this.aplicacao5,
+                        teste: this.teste,
+                        foto: this.foto,
+                        observacoes: this.observacoes
+                    }
+                });
+
+                if (response.status === 200) {
+                    console.log('Consulta registrada com sucesso!');
+                } else {
+                    console.log('Houve um problema ao registrar a consulta.');
+                }
+            } catch (error) {
+                console.log('Ocorreu um erro durante a requisição.', error);
+            }
+        }
+    }
 }
 </script>
