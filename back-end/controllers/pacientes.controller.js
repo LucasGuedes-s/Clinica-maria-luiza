@@ -22,7 +22,6 @@ async function getPacientes(req, res, next){
 }
 async function getPaciente(req, res, next){
     try {
-        console.log(req.body)
         const paciente = await Paciente.getPaciente(req.body)
         res.status(200).json({paciente});
         next()

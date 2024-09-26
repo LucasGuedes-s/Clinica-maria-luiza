@@ -5,23 +5,29 @@
     <div class="main-content_pagamentos">
         <h1>Pagamentos</h1>
         <div class="container_pagamentos">
-            <h2>Agosto</h2>
-            <table class="tabela">
-                <thead>
-                    <tr>
-                        <th>Nome do Paciente:</th>
-                        <th>Valor:</th>
-                        <th>Data:</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>João Silva</td>
-                        <td>50,00</td>
-                        <td>12.09.2024</td>
-                    </tr>
-                </tbody>
-            </table>
+            <!-- Itera sobre os pagamentos por mês e ano -->
+            <div v-for="(pagamentos, mesAno) in pagamentos" :key="mesAno">
+                <h2>{{ mesAno }}</h2>
+                <table class="tabela">
+                    <thead>
+                        <tr>
+                            <th>Nome do Paciente:</th>
+                            <th>Valor:</th>
+                            <th>Data:</th>
+                            <th>Tipo de pagamento:</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="pagamento in pagamentos" :key="pagamento.id">
+                            <td>{{ pagamento.paciente }}</td>
+                            <td>{{ pagamento.pagamento.toFixed(2) }}</td>
+                            <td>{{ formatDate(pagamento.Data) }}</td>
+                            <td>{{ pagamento.tipo_pagamento }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             <button type="submit" class="btn-pdf">Gerar PDF</button>
         </div>
     </div>
@@ -54,12 +60,16 @@ h2 {
     border: 1px solid #84E7FF;
     border-radius: 8px;
     display: flex;
-    flex-direction: column; /* Empilha os elementos verticalmente */
+    flex-direction: column;
+    /* Empilha os elementos verticalmente */
     position: relative;
 }
 
-.tabela, th, td{
-    border-collapse: collapse; /*define a separação entre as bordar*/
+.tabela,
+th,
+td {
+    border-collapse: collapse;
+    /*define a separação entre as bordar*/
     padding: 10px;
     text-align: left;
     border: 1px solid #D9D9D9;
@@ -79,26 +89,32 @@ h2 {
     font-family: 'Montserrat', sans-serif;
     font-size: 16px;
 }
+
 @media (max-width: 768px) {
     .main-content_pagamentos {
         margin-left: 0;
     }
 
-    .tabela, th, td {
-        font-size: 14px; /* Reduz o tamanho da fonte em telas menores */
+    .tabela,
+    th,
+    td {
+        font-size: 14px;
+        /* Reduz o tamanho da fonte em telas menores */
     }
 
     .btn-pdf {
-        font-size: 14px; /* Ajusta o botão para telas menores */
+        font-size: 14px;
+        /* Ajusta o botão para telas menores */
     }
 }
-
 </style>
 
 <script>
 import Sidebar from '@/components/Sidebar.vue';
 import { useAuthStore } from '@/store';
 import Axios from 'axios';
+import { formatDate } from '../utils/formatarData';
+
 export default {
     name: 'pagamentos',
     components: {
@@ -112,11 +128,32 @@ export default {
     },
     data() {
         return {
-            pagamento: '',
-            paciente: '',
-            tipo_pagamento: '',
-            profissionalId: ''
+            formatDate,
+            pagamentos: [],
+            pagamentosPorMes: {} // Armazena os pagamentos agrupados por mês
+
         }
     },
+    methods: {
+        async getPagamentos() {
+            const token = this.store.token
+
+            await Axios.get(`http://localhost:3000/pagamentos`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }
+            ).then(response => {
+                this.pagamentos = response.data.pagamento
+                console.log(this.pagamentos)
+            }).catch(error => {
+                console.error(error)
+            })
+        }
+    },
+    mounted() {
+        this.getPagamentos()
+    }
+
 }
 </script>

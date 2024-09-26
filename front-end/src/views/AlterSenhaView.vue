@@ -4,19 +4,16 @@
             <img src="../assets/img.girafas.png" alt="" srcset="">
         </div>
         <div class="direita-senha">
-            <form class="senha-form" @submit.prevent="senha">
+            <form class="senha-form" @submit.prevent="Altersenha">
                 <h1>Alterar Senha</h1>
-                <label for="senha">Antiga senha</label>
-                <input type="password" v-model="senhaAntiga" placeholder="Digite a sua antiga senha">
+                <label for="email">Digite seu E-mail</label>
+                <input type="email" v-model="email" placeholder="Digite o seu e-mail">
                 <label for="senha">Nova senha</label>
                 <input type="password" v-model="senha" placeholder="Digite a sua nova senha">
                 <label for="senha">Repita a senha</label>
                 <input type="password" v-model="senha_2" placeholder="Digite a sua nova senha novamente">
 
-                <div class="button-container">
-                    <router-link to="/senhapaciente"><button type="submit" class="btn-paciente">Alterar
-                            Senha</button></router-link>
-                </div>
+                <button click="Altersenha" type="submit" class="btn">Alterar Senha</button>
             </form>
         </div>
     </div>
@@ -90,13 +87,12 @@ h1 {
     font-family: 'Montserrat', sans-serif;
 }
 
-.button-container {
-    display: flex;
+.button {
     justify-content: space-between;
 }
 
 .senha-form button {
-    width: 48%;
+    width: 100%;
     padding: 10px;
     border-radius: 4px;
     cursor: pointer;
@@ -104,22 +100,12 @@ h1 {
     box-sizing: border-box;
 }
 
-.btn-entrar {
-    background-color: #E7FAFF;
-    border: 1px solid #86E7FF;
-    /* Define a borda do botão */
-}
-
-.btn-entrar:hover {
-    background-color: #86E7FF;
-}
-
-.btn-paciente {
+.btn {
     background-color: #FBE9EB;
     border: 1px solid #FAC6CA;
 }
 
-.btn-paciente:hover {
+.btn:hover {
     background-color: #FAC6CA;
 }
 </style>
@@ -141,13 +127,14 @@ export default {
     },
     data() {
         return {
-            senhaAntiga: '',
+            email: '',
             senha: '',
             senha_2: ''
         }
     },
     methods: {
-        async senha() {
+        async Altersenha() {
+            console.log("Aqui")
             if (this.senha != this.senha_2) {
                 Swal.fire({
                     icon: 'error',
@@ -156,23 +143,24 @@ export default {
                 })
             }
             else {
-                await Axios.post("https://clinica-maria-luiza.onrender.com/user/senha", {
+                const nova_senha = this.senha
+                await Axios.post("http://localhost:3000/user/alterar/senha", {
                     usuario: {
                         email: this.email,
-                        senha: this.senhaAntiga,
-                        nova_senha: this.nova_senha,
-                        senha_2: null,
+                        nova_senha: nova_senha,
                     }
                 }).then(response => {
-                    const token = response.headers.authorization.split(' ')[1];
-                    const user = response.data;
-                    this.store.senha(user, token);
-                    router.push('/dashboard')
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Senha alterada com sucesso',
+                        timer: 4000,
+                    })
+                    router.push('/login')
                 }).catch(Error => {
                     console.error(Error);
                     Swal.fire({
                         icon: 'error',
-                        title: 'Usuário ou senhas incorretos',
+                        title: 'Não foi possível alterar sua senha',
                         timer: 4000,
                     })
                 })
