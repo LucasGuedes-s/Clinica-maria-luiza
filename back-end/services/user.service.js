@@ -3,6 +3,7 @@ const config= require('../config/app.config')
 const bcrypt = require('../utils/bcrypt.ultil');
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient()
+require('dotenv').config();
 
 async function LoginUser(usuario, res){ 
     const user = await prisma.Profissionais.findFirst({
@@ -46,28 +47,19 @@ async function updateSenha(users, res){
     if(user == null){
         throw new Error('Senha inválida')
     }
-    console.log(user)
-    const senhaValida = bcrypt.compare(users.usuario.senha, user.senha);
-    const nova_senha = bcrypt.hash(users.usuario.nova_senha)
+    console.log(users)
+    const nova_senha = bcrypt.hash(users.usuario.nova_senha, 10)
+    const usuarios = await prisma.Profissionais.update({
+        where:{
+            email: users.usuario.email
+        },
+        data: {
+            senha: nova_senha
+        }
+    });
 
-    if(senhaValida){
-        console.log(nova_senha)
+    return usuarios;
 
-        const user = await prisma.Profissionais.update({
-            where:{
-                email: users.usuario.email
-            },
-            data: {
-                senha: nova_senha
-            }
-        });
-
-        return 'Alterada com sucesso';
-    }
-    else{
-        console.log(Error)
-        throw new Error('Não foi possível alterar a senha do usuário')
-    }
 
 }
 module.exports = {LoginUser, updateSenha};

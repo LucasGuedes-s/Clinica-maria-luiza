@@ -27,6 +27,7 @@ async function updateSenha(req, res, next){
         res.status(200).json({nova_senha});
         next()
     } catch (err) {
+        console.log(err)
         console.error(`Erro ao atualizar a nova senha`);
     }
 }
