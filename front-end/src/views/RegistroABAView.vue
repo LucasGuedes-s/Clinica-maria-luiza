@@ -20,24 +20,84 @@
                 <div class="form-group pequenos-inputs">
                     <label>Aplicações:</label>
                     <div class="inputs-row">
-                        <input type="text" placeholder="Aplicação 01:" list="aplicacoes-options">
-                        <input type="text" placeholder="Aplicação 02:" list="aplicacoes-options">
-                        <input type="text" placeholder="Aplicação 03:" list="aplicacoes-options">
-                        <input type="text" placeholder="Aplicação 04:" list="aplicacoes-options">
-                        <input type="text" placeholder="Aplicação 05:" list="aplicacoes-options">
-                        <input type="text" placeholder="TESTE:" list="aplicacoes-options">
+                        <select>
+                            <option value="" disabled selected>Aplicação 01:</option>
+                            <option value="AT +">AT +</option>
+                            <option value="AT + /">AT + /</option>
+                            <option value="AT -">AT -</option>
+                            <option value="AP +">AP +</option>
+                            <option value="AP + /">AP + /</option>
+                            <option value="AP -">AP -</option>
+                            <option value="SA +">SA +</option>
+                            <option value="SA + /">SA + /</option>
+                            <option value="SA -">SA -</option>
+                        </select>
+
+                        <select>
+                            <option value="" disabled selected>Aplicação 02:</option>
+                            <option value="AT +">AT +</option>
+                            <option value="AT + /">AT + /</option>
+                            <option value="AT -">AT -</option>
+                            <option value="AP +">AP +</option>
+                            <option value="AP + /">AP + /</option>
+                            <option value="AP -">AP -</option>
+                            <option value="SA +">SA +</option>
+                            <option value="SA + /">SA + /</option>
+                            <option value="SA -">SA -</option>
+                        </select>
+
+                        <select>
+                            <option value="" disabled selected>Aplicação 03:</option>
+                            <option value="AT +">AT +</option>
+                            <option value="AT + /">AT + /</option>
+                            <option value="AT -">AT -</option>
+                            <option value="AP +">AP +</option>
+                            <option value="AP + /">AP + /</option>
+                            <option value="AP -">AP -</option>
+                            <option value="SA +">SA +</option>
+                            <option value="SA + /">SA + /</option>
+                            <option value="SA -">SA -</option>
+                        </select>
+
+                        <select>
+                            <option value="" disabled selected>Aplicação 04:</option>
+                            <option value="AT +">AT +</option>
+                            <option value="AT + /">AT + /</option>
+                            <option value="AT -">AT -</option>
+                            <option value="AP +">AP +</option>
+                            <option value="AP + /">AP + /</option>
+                            <option value="AP -">AP -</option>
+                            <option value="SA +">SA +</option>
+                            <option value="SA + /">SA + /</option>
+                            <option value="SA -">SA -</option>
+                        </select>
+
+                        <select>
+                            <option value="" disabled selected>Aplicação 05:</option>
+                            <option value="AT +">AT +</option>
+                            <option value="AT + /">AT + /</option>
+                            <option value="AT -">AT -</option>
+                            <option value="AP +">AP +</option>
+                            <option value="AP + /">AP + /</option>
+                            <option value="AP -">AP -</option>
+                            <option value="SA +">SA +</option>
+                            <option value="SA + /">SA + /</option>
+                            <option value="SA -">SA -</option>
+                        </select>
+
+                        <select>
+                            <option value="" disabled selected>TESTE:</option>
+                            <option value="AT +">AT +</option>
+                            <option value="AT + /">AT + /</option>
+                            <option value="AT -">AT -</option>
+                            <option value="AP +">AP +</option>
+                            <option value="AP + /">AP + /</option>
+                            <option value="AP -">AP -</option>
+                            <option value="SA +">SA +</option>
+                            <option value="SA + /">SA + /</option>
+                            <option value="SA -">SA -</option>
+                        </select>
                     </div>
-                    <datalist id="aplicacoes-options">
-                        <option value="AT +"></option>
-                        <option value="AT + /"></option>
-                        <option value="AT -"></option>
-                        <option value="AP +"></option>
-                        <option value="AP + /"></option>
-                        <option value="AP -"></option>
-                        <option value="SA +"></option>
-                        <option value="SA + /"></option>
-                        <option value="SA -"></option>
-                    </datalist>
                 </div>
 
                 <div class="legendas">
