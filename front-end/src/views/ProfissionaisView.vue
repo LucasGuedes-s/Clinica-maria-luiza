@@ -209,7 +209,6 @@ export default {
                             mesDesejado: 'atual'       // Enviando o mês selecionado
                         }
                     }).then(response => {
-                        // Crie um URL para o blob
                         const url = window.URL.createObjectURL(new Blob([response.data]));
                         const link = document.createElement('a');
                         link.href = url;

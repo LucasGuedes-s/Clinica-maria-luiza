@@ -2,7 +2,6 @@ const usuario = require('../services/user.service')
 
 async function LoginUsuario(req, res, next){
     try {
-        console.log(req.body)
         const login = await usuario.LoginUser(req.body.usuario);
         res.setHeader('Authorization', `Bearer ${login.token}`);
         res.status(200).json({ 

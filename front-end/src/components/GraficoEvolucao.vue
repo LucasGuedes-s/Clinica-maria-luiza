@@ -121,7 +121,7 @@ export default {
             const ctx = document.getElementById('myChart').getContext('2d');
 
             if (chart.value) {
-                chart.value.destroy(); // Remove the old chart instance
+                chart.value.destroy(); 
             }
 
             chart.value = new Chart(ctx, {

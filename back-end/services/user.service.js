@@ -30,7 +30,6 @@ async function LoginUser(usuario, res){
             expiresIn: 86400 // 24 horas
         });
 
-        console.log(`Usuário Logado token: ${token}`)
         return {token: token, dados_usuario}
         }
     else{
@@ -47,7 +46,6 @@ async function updateSenha(users, res){
     if(user == null){
         throw new Error('Senha inválida')
     }
-    console.log(users)
     const nova_senha = bcrypt.hash(users.usuario.nova_senha, 10)
     const usuarios = await prisma.Profissionais.update({
         where:{

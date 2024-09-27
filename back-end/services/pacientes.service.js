@@ -45,7 +45,14 @@ async function getConsultasAba(req) {
   const consultas = await prisma.ConsultaAba.findMany({
     where: {
       pacienteId: req, // Usando o identificador único do paciente
-  }
+    },
+    include: {
+      profissional: { // Nome do campo que define a relação no seu schema
+        select: {
+          nome: true // Seleciona apenas o campo 'nome' do profissional
+        }
+      }
+    }
   });
   return consultas;
 }
@@ -109,7 +116,6 @@ async function registrarConsulta(req) {
   return consulta;
 }
 async function registrarConsultaAba(req) {
-  console.log("AQUI", req)
   const paciente = await prisma.Pacientes.findUnique({
     where: { cpf: req.consulta.pacienteId }
   });

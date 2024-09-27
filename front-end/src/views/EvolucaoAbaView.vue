@@ -67,8 +67,10 @@ export default {
         async getConsultas() {
             await Axios.get(`https://clinica-maria-luiza.onrender.com/consultasAba/paciente/${this.cpf}`
             ).then(response => {
-                this.consulta = response.data.consultas
-                console.log(this.consulta)
+                const todasConsultas = response.data.consultas;
+    
+                // Pegar os últimos 15 itens do array de consultas
+                consulta.value = todasConsultas.slice(-15);
             }).catch(error => {
                 console.error(error)
             })

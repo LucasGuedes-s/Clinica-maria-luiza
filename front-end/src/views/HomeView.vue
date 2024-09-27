@@ -18,14 +18,14 @@
                 <p>Seja bem-vindo(a)!</p>
             </div>
             <div class="element2">
-    <div class="slider-container" ref="sliderContainer">
-      <div class="slider" :style="{ transform: `translateX(-${slideIndex * slideWidth}px)` }">
-        <img v-for="(image, index) in images" :key="index" :src="image.src" :alt="image.alt">
-      </div>
-      <button class="slider-btn prev-btn" @click="prevSlide">&lt;</button>
-      <button class="slider-btn next-btn" @click="nextSlide">&gt;</button>
-    </div>
-  </div>
+                <div class="slider-container" ref="sliderContainer">
+                    <div class="slider" :style="{ transform: `translateX(-${slideIndex * slideWidth}px)` }">
+                        <img v-for="(image, index) in images" :key="index" :src="image.src" :alt="image.alt">
+                    </div>
+                    <button class="slider-btn prev-btn" @click="prevSlide">&lt;</button>
+                    <button class="slider-btn next-btn" @click="nextSlide">&gt;</button>
+                </div>
+            </div>
         </div>
 
         <section id="quem-somos">
@@ -220,50 +220,49 @@ section p {
     line-height: 1.9;
     font-size: 16px;
 }
-
 </style>
 <script>
 import { RouterLink } from 'vue-router';
 export default {
-  data() {
-    return {
-      slideIndex: 0,
-      slideWidth: 0,
-      images: [
-        { src: require('../assets/Frame1.png'), alt: 'Image 1' },
-        { src: require('../assets/Frame2.png'), alt: 'Image 2' },
-        { src: require('../assets/Frame3.png'), alt: 'Image 3' },
-        { src: require('../assets/Frame4.png'), alt: 'Image 4' },
-        { src: require('../assets/Frame5.png'), alt: 'Image 5' },
-        { src: require('../assets/Frame6.png'), alt: 'Image 6' },
-      ],
-    };
-  },
-  mounted() {
-    this.updateSlideWidth();
-    window.addEventListener('resize', this.updateSlideWidth);
-  },
-  beforeUnmount() {
-    window.removeEventListener('resize', this.updateSlideWidth);
-  },
-  methods: {
-    updateSlideWidth() {
-      if (this.$refs.sliderContainer) {
-        this.slideWidth = this.$refs.sliderContainer.clientWidth;
-      }
+    data() {
+        return {
+            slideIndex: 0,
+            slideWidth: 0,
+            images: [
+                { src: require('../assets/Frame1.png'), alt: 'Image 1' },
+                { src: require('../assets/Frame2.png'), alt: 'Image 2' },
+                { src: require('../assets/Frame3.png'), alt: 'Image 3' },
+                { src: require('../assets/Frame4.png'), alt: 'Image 4' },
+                { src: require('../assets/Frame5.png'), alt: 'Image 5' },
+                { src: require('../assets/Frame6.png'), alt: 'Image 6' },
+            ],
+        };
     },
-    prevSlide() {
-      this.slideIndex--;
-      if (this.slideIndex < 0) {
-        this.slideIndex = this.images.length - 1;
-      }
+    mounted() {
+        this.updateSlideWidth();
+        window.addEventListener('resize', this.updateSlideWidth);
     },
-    nextSlide() {
-      this.slideIndex++;
-      if (this.slideIndex >= this.images.length) {
-        this.slideIndex = 0;
-      }
+    beforeUnmount() {
+        window.removeEventListener('resize', this.updateSlideWidth);
     },
-  },
+    methods: {
+        updateSlideWidth() {
+            if (this.$refs.sliderContainer) {
+                this.slideWidth = this.$refs.sliderContainer.clientWidth;
+            }
+        },
+        prevSlide() {
+            this.slideIndex--;
+            if (this.slideIndex < 0) {
+                this.slideIndex = this.images.length - 1;
+            }
+        },
+        nextSlide() {
+            this.slideIndex++;
+            if (this.slideIndex >= this.images.length) {
+                this.slideIndex = 0;
+            }
+        },
+    },
 };
 </script>
