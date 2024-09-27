@@ -9,10 +9,6 @@
                 </div>
             </div>
             <form @submit.prevent="registrarConsulta">
-                <div class="form-group">
-                    <label for="nome">Nome do Aplicador:</label>
-                    <input type="text" id="nome_paciente" name="nome" required>
-                </div>
                 <div class="form-group descricao">
                     <label for="descricao_atividade">Descrição de atividade:</label>
                     <input id="descricao_atividade" rows="4"></input>
