@@ -145,7 +145,7 @@ export default {
         async getPagamentos() {
             const token = this.store.token
 
-            await Axios.get(`http://localhost:3000/pagamentos`, {
+            await Axios.get(`https://clinica-maria-luiza.onrender.com/pagamentos`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
