@@ -230,8 +230,8 @@ export default {
                         method: 'POST',  // Muda o método para POST
                         responseType: 'blob',  // Importante para tratar a resposta como um blob
                         data: {
-                            email: email,  // Enviando email no corpo da requisição
-                            mesDesejado: 'anterior'       // Enviando o mês selecionado
+                            email: email,  
+                            mesDesejado: 'anterior'
                         }
                     }).then(response => {
                         // Crie um URL para o blob

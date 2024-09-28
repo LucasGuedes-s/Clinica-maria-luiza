@@ -18,7 +18,15 @@ async function postPagamentos(pagamento) {
 async function getPagamentos(req, res) {
   try {
     // Buscar todos os pagamentos
-    const pagamentos = await prisma.Pagamentos.findMany({});
+    const pagamentos = await prisma.Pagamentos.findMany({
+      include: {
+        profissional: { // Nome do campo que define a relação no seu schema
+          select: {
+            nome: true // Seleciona apenas o campo 'nome' do profissional
+          }
+        }
+      }
+    });
 
     // Agrupar os pagamentos por mês
     const pagamentosPorMes = pagamentos.reduce((acc, pagamento) => {
@@ -53,7 +61,6 @@ async function getPagamentos(req, res) {
 }
 async function getPagamentoMes(mes_ano) {
   try {
-    // Extrair o mês e ano do corpo da requisição ou dos parâmetros de query
     const { mes, ano } = mes_ano;
     // Verificar se o mês e o ano foram fornecidos
     if (!mes || !ano) {

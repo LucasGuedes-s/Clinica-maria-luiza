@@ -186,12 +186,13 @@ export default {
                 link.click();
                 link.remove();
             }).catch(error => {
-            Swal.fire({
-                icon: 'error',
-                title: 'Erro ao gerar PDF',
-                timer: 4000,
-            })
-            console.error('Erro ao baixar o PDF:', error)});
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro ao gerar PDF',
+                    timer: 4000,
+                })
+                console.error('Erro ao baixar o PDF:', error)
+            });
         },
         async getConsultas() {
             const token = this.store.token

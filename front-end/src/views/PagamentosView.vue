@@ -7,28 +7,30 @@
         <div class="container_pagamentos">
             <!-- Itera sobre os pagamentos por mês e ano -->
             <div v-for="(pagamentos, mesAno) in pagamentos" :key="mesAno">
-                <h2>{{ mesAno }}</h2>
+                <h2>{{ formatarMesAno(mesAno) }}</h2>
                 <table class="tabela">
                     <thead>
                         <tr>
                             <th>Nome do Paciente:</th>
-                            <th>Valor:</th>
                             <th>Data:</th>
+                            <th>Registrado por:</th>
+                            <th>Valor:</th>
                             <th>Tipo de pagamento:</th>
-
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="pagamento in pagamentos" :key="pagamento.id">
                             <td>{{ pagamento.paciente }}</td>
-                            <td>{{ pagamento.pagamento.toFixed(2) }}</td>
                             <td>{{ formatDate(pagamento.Data) }}</td>
+                            <td>{{ pagamento.profissional.nome }}</td>
+                            <td> R$ {{ pagamento.pagamento.toFixed(2) }}</td>
                             <td>{{ pagamento.tipo_pagamento }}</td>
                         </tr>
                     </tbody>
                 </table>
+                <button type="submit" class="btn-pdf" @click="gerarPdf(mesAno)">Gerar PDF</button>
+
             </div>
-            <button type="submit" class="btn-pdf">Gerar PDF</button>
         </div>
     </div>
 </template>
@@ -69,7 +71,7 @@ h2 {
 th,
 td {
     border-collapse: collapse;
-    /*define a separação entre as bordar*/
+    width: 95%;    
     padding: 10px;
     text-align: left;
     border: 1px solid #D9D9D9;
@@ -88,6 +90,9 @@ td {
     color: #7E7E7E;
     font-family: 'Montserrat', sans-serif;
     font-size: 16px;
+}
+table thead {
+    background-color: #ffffff;
 }
 
 @media (max-width: 768px) {
@@ -113,7 +118,8 @@ td {
 import Sidebar from '@/components/Sidebar.vue';
 import { useAuthStore } from '@/store';
 import Axios from 'axios';
-import { formatDate } from '../utils/formatarData';
+import { formatDate, formatarMesAno } from '../utils/formatarData';
+import Swal from 'sweetalert2';
 
 export default {
     name: 'pagamentos',
@@ -129,6 +135,7 @@ export default {
     data() {
         return {
             formatDate,
+            formatarMesAno,
             pagamentos: [],
             pagamentosPorMes: {} // Armazena os pagamentos agrupados por mês
 
@@ -145,14 +152,74 @@ export default {
             }
             ).then(response => {
                 this.pagamentos = response.data.pagamento
-                console.log(this.pagamentos)
             }).catch(error => {
                 console.error(error)
             })
+        },
+        async gerarPdf(data){
+            const ano_pdf = data.split('-')[0]; // Divide a data e pega a parte do mês
+            const mes_pdf = data.split('-')[1]; // Divide a data e pega a parte do mês
+            const mes =  parseInt(mes_pdf, 10); // Retorna o mês como número inteiro
+            const ano = parseInt(ano_pdf, 10);
+
+            Swal.fire({
+                title: 'Aguarde...',
+                text: 'Estamos gerando o PDF.',
+                timer: 3000,
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            await Axios({
+                url: `https://clinica-maria-luiza.onrender.com/pdf/pagamentos`,  // Altere a URL conforme necessário
+                method: 'POST',
+                responseType: 'blob',
+                data: {
+                    mes: mes,  // Enviando email no corpo da requisição
+                    ano: ano       // Enviando o mês selecionado
+                }
+            }).then(response => {
+                // Crie um URL para o blob
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `Relatório de pagamentos.pdf`); // Nome do arquivo
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+            }).catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro ao gerar PDF',
+                timer: 4000,
+            })
+            console.error('Erro ao baixar o PDF:', error)});
         }
     },
     mounted() {
         this.getPagamentos()
+    },
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            try {
+                const authStore = useAuthStore();
+                const userPermissions = authStore.getUser.usuario.permissao; // Obtém as permissões do usuário
+
+                const requiredPermission = 1;
+
+                if (!vm.store.isAuthenticated) {
+                    vm.$router.push('/login')
+                }
+                else if (userPermissions != requiredPermission) {
+                    vm.$router.push('/unauthorized'); // Redireciona para uma página de acesso negado
+                }
+            }
+            catch {
+                console.log("Erro")
+            }
+
+        })
     }
 
 }
