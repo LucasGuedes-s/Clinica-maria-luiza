@@ -325,7 +325,6 @@ table td {
     font-size: 14px;
 }
 
-button,
 .btn_foto {
     background-color: #84E7FF;
     width: 100%;
