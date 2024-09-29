@@ -268,6 +268,10 @@ import { useAuthStore } from '@/store';
 import Sidebar from '@/components/Sidebar.vue';
 import Axios from 'axios';
 import Swal from 'sweetalert2'
+//Importações de subir imagem
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from '../firebase.js'
+import { v4 as uuidv4 } from 'uuid';
 
 export default {
     name: 'registroaba',
