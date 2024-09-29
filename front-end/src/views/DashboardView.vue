@@ -13,8 +13,9 @@
                 <p>E-mail: {{ email }}</p>
                 <p>Telefone: {{ telefone }}</p>
             </div>
-            <div class="senha_div">
+            <div class="botoes_div">
                 <router-link to="/alterarsenha"><button class="alterar_senha_btn" click="teste">Alterar Senha</button></router-link>
+                <router-link to="/realizarpagamento"><button class="realizarpagamento_btn" click="">Realizar Pagamento</button></router-link>
             </div>
         </div>
         <h2>Agendamentos Solicitados:</h2>
@@ -83,13 +84,13 @@ body {
     flex-grow: 1;
 }
 
-.senha_div {
+.botoes_div {
     position: absolute;
     bottom: 20px;
     right: 20px;
 }
 
-.alterar_senha_btn {
+.alterar_senha_btn, .realizarpagamento_btn {
     padding: 10px 20px;
     background-color: #E7FAFF;
     border: 1px solid #84E7FF;
@@ -98,9 +99,14 @@ body {
     cursor: pointer;
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
+    margin-right: 20px;
 }
 
 .alterar_senha_btn:hover {
+    background-color: #F5F5F5;
+}
+
+.realizarpagamento_btn:hover {
     background-color: #F5F5F5;
 }
 
@@ -179,11 +185,11 @@ h2 {
         margin-bottom: 0;
     }
 
-    .senha_div {
+    .botoes_div {
         display: none;
     }
 
-    .alterar_senha_btn {
+    .alterar_senha_btn, .realizarpagamento_btn {
         width: 100%;
     }
 
