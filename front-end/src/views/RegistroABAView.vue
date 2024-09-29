@@ -303,6 +303,9 @@ export default {
         }
     },
     methods: {
+        async handleFileUpload(event) {
+            this.imagem = event.target.files[0];
+        },
         async registrarConsulta() {
             console.log(sessionStorage.getItem('cpf') || ''
             )
