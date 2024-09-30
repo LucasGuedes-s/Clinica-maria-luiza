@@ -4,9 +4,9 @@
     </div>
     <div class="main-content_pagamentos">
         <h1>Pagamentos</h1>
-        <div class="container_pagamentos">
+        <div class="container_pagamentos" v-for="(pagamentos, mesAno) in pagamentos" :key="mesAno">
             <!-- Itera sobre os pagamentos por mês e ano -->
-            <div v-for="(pagamentos, mesAno) in pagamentos" :key="mesAno">
+            <div>
                 <h2>{{ formatarMesAno(mesAno) }}</h2>
                 <table class="tabela">
                     <thead>
@@ -16,6 +16,7 @@
                             <th>Registrado por:</th>
                             <th>Valor:</th>
                             <th>Tipo de pagamento:</th>
+                            <th>Metodo:</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -25,6 +26,7 @@
                             <td>{{ pagamento.profissional.nome }}</td>
                             <td> R$ {{ pagamento.pagamento.toFixed(2) }}</td>
                             <td>{{ pagamento.tipo_pagamento }}</td>
+                            <td>{{ pagamento.metodo }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -63,7 +65,7 @@ h2 {
     border-radius: 8px;
     display: flex;
     flex-direction: column;
-    /* Empilha os elementos verticalmente */
+    margin-bottom: 10px;
     position: relative;
 }
 
@@ -71,7 +73,7 @@ h2 {
 th,
 td {
     border-collapse: collapse;
-    width: 95%;    
+    width: 100%;
     padding: 10px;
     text-align: left;
     border: 1px solid #D9D9D9;
@@ -100,11 +102,9 @@ table thead {
         margin-left: 0;
     }
 
-    .tabela,
-    th,
-    td {
-        font-size: 14px;
-        /* Reduz o tamanho da fonte em telas menores */
+    .tabela, th, td {
+        font-size: 7px;
+        padding: 4px;
     }
 
     .btn-pdf {

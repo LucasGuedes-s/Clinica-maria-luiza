@@ -7,8 +7,8 @@
                 <div class="form-group">
                     <label for="tipodepagamento">Tipo de Pagamento:</label>
                     <select id="tipodepagamento" name="tipodepagamento" required>
-                        <option value="pagamentodeentrada">Pagamento de Entrada</option>
-                        <option value="pagamentodesaida">Pagamento de Saida</option>
+                        <option value="Pagamento de entrada">Pagamento de Entrada</option>
+                        <option value="Pagamento de saida">Pagamento de Saida</option>
                     </select>
                 </div>
                 <div class="form-group">
