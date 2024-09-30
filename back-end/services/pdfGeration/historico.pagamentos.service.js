@@ -27,7 +27,7 @@ function addFooter(doc) {
       
           // Adiciona o texto do rodapé centralizado na parte inferior da página
           doc.text(
-            `Página ${i} de ${pageCount}, documento retirado no dia ${data_hora.data} às ${data_hora.hora}h`,
+            `Página ${i} de ${pageCount}, documento retirado no dia ${data_hora.data}`,
             doc.internal.pageSize.getWidth() / 2,
             doc.internal.pageSize.getHeight() - 10,
             { align: 'center' }
@@ -78,7 +78,7 @@ async function pdfPagamentos(mes_ano) {
         pagamento[dia].forEach(pagamentos => {
             if (pagamentos.tipo_pagamento === "Pagamento de entrada") {
                 totalPagamentoEntrada += pagamentos.pagamento;
-    
+                console.log("Aqui", totalPagamentoEntrada)
                 const row = [
                     pagamentos.pagamento.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
                     pagamentos.tipo_pagamento,
