@@ -8,6 +8,7 @@ async function postPagamentos(pagamento) {
       pagamento: parseFloat(pagamento.pagar.valor),
       paciente: pagamento.pagar.paciente,
       tipo_pagamento: pagamento.pagar.tipo_pagamento,
+      metodo: pagamento.pagar.metodo,
       profissionalId: pagamento.pagar.profissionalId,
       Data: new Date()
     },

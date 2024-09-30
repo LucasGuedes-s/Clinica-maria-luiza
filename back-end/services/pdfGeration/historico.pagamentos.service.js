@@ -63,48 +63,90 @@ async function pdfPagamentos(mes_ano) {
     doc.setFontSize(12);
     doc.setTextColor(126, 126, 126); // Define a cor do texto como preta
     doc.text(patientInfo.split('\n'), eixox, eixoy, { maxWidth: maxWidth, lineHeight: lineHeight });
-
+    
     // Cabeçalhos da tabela
-    const tableColumn = ["Valor", "Tipo pagamento", "Paciente", "Profissioal", "Data"];
-
+    const tableColumn = ["Valor", "Tipo pagamento", "Paciente", "Profissional", "Data"];
+    
     // Inicializando as linhas da tabela
-    const tableRows = [];
-    let totalPagamento = 0;
-
+    const tableRowsEntrada = [];
+    const tableRowsRestante = [];
+    let totalPagamentoEntrada = 0;
+    let totalPagamentoRestante = 0;
+    
+    // Filtrando os pagamentos
     Object.keys(pagamento).forEach(dia => {
         pagamento[dia].forEach(pagamentos => {
-            totalPagamento += pagamentos.pagamento;
-
-            const row = [
-                pagamentos.pagamento.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
-                pagamentos.tipo_pagamento,
-                pagamentos.paciente,
-                pagamentos.profissionalId,
-                new Date(pagamentos.Data).toLocaleDateString(),  // Formata a data
-            ];
-            tableRows.push(row);
+            if (pagamentos.tipo_pagamento === "Pagamento de entrada") {
+                totalPagamentoEntrada += pagamentos.pagamento;
+    
+                const row = [
+                    pagamentos.pagamento.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+                    pagamentos.tipo_pagamento,
+                    pagamentos.paciente,
+                    pagamentos.profissionalId,
+                    new Date(pagamentos.Data).toLocaleDateString(),  // Formata a data
+                ];
+                tableRowsEntrada.push(row);
+            } else {
+                totalPagamentoRestante += pagamentos.pagamento;
+    
+                const row = [
+                    pagamentos.pagamento.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+                    pagamentos.tipo_pagamento,
+                    pagamentos.paciente,
+                    pagamentos.profissionalId,
+                    new Date(pagamentos.Data).toLocaleDateString(),  // Formata a data
+                ];
+                tableRowsRestante.push(row);
+            }
         });
     });
+    
     const tableStartY = eixoy + (lineHeight * patientInfo.split('\n').length) + 0;
-
-    // Adicionando as colunas da tabela
+    
+    // Adicionando a tabela dos "Pagamentos de entrada"
     doc.autoTable({
         head: [tableColumn],
-        body: tableRows,
+        body: tableRowsEntrada,
         startY: tableStartY,
         theme: 'grid',
         headStyles: {
             fillColor: [132, 231, 255], // Cor de fundo do cabeçalho (em RGB)
         },
     });
-
+    
     const finalY = doc.lastAutoTable.finalY;
-    // Texto informativo sobre o total de pagamentos, logo abaixo da tabela
-    const informacoes = `Foram pagos um total de ${totalPagamento.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
+    
+    // Texto informativo sobre o total de pagamentos de entrada, logo abaixo da primeira tabela
+    const informacoesEntrada = `Total de "Pagamentos de entrada": ${totalPagamentoEntrada.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
+    doc.text(informacoesEntrada, eixox, finalY + 10);
+    
+    // Se houver outros pagamentos, criar outra tabela
+    if (tableRowsRestante.length > 0) {
+        const tableStartYRestante = finalY + 20;
+    
+        // Adicionando a tabela dos outros pagamentos
+        doc.autoTable({
+            head: [tableColumn],
+            body: tableRowsRestante,
+            startY: tableStartYRestante,
+            theme: 'grid',
+            headStyles: {
+                fillColor: [132, 231, 255], // Cor de fundo do cabeçalho (em RGB) para diferenciar
+            },
+        });
+    
+        const finalYRestante = doc.lastAutoTable.finalY;
+    
+        // Texto informativo sobre o total de pagamentos restantes
+        const informacoesRestante = `Total de outros pagamentos: ${totalPagamentoRestante.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
+        doc.setFontSize(13);
+        doc.setTextColor(126, 126, 126); // Define a cor do texto
+        doc.text(informacoesRestante, eixox, finalYRestante + 10);
 
-    doc.setFontSize(13);
-    doc.setTextColor(126, 126, 126); // Define a cor do texto
-    doc.text(informacoes, 14, finalY + 10);
+    }
+    
+
 
     addFooter(doc);
 

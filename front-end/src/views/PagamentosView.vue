@@ -144,7 +144,6 @@ export default {
     methods: {
         async getPagamentos() {
             const token = this.store.token
-
             await Axios.get(`https://clinica-maria-luiza.onrender.com/pagamentos`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -152,8 +151,9 @@ export default {
             }
             ).then(response => {
                 this.pagamentos = response.data.pagamento
+                console.log(this.pagamentos)
             }).catch(error => {
-                console.error(error)
+                console.error(error.data)
             })
         },
         async gerarPdf(data){

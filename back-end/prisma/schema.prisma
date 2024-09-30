@@ -18,8 +18,6 @@ model Profissionais {
   permissao        Permissao    @relation(fields: [permissaoId], references: [id])
   permissaoId      Int
   especialidade    String
-  //paciente         Pacientes? @relation(fields: [pacienteId], references: [cpf])
-  //pacienteId       String? //Adicionado
   agendamentos     Agendamentos[]
   consultas        Consultas[]
   consultasAba     ConsultaAba[]
@@ -119,9 +117,9 @@ model Pagamentos{
   pagamento       Float?
   paciente        String?
   tipo_pagamento  String?
-  movimentacao    String?
   profissional    Profissionais? @relation(fields: [profissionalId], references: [email])     
   profissionalId  String?
+  metodo          String?
   Data            DateTime @default(now())
 }
 model Permissao {

@@ -11,7 +11,6 @@ async function getProfissionais(req, res, next){
 }
 async function getProfissional(req, res, next){
     try {
-        console.log(req.body)
         const profissional = await Profissional.getProfissional(req.body)
         res.status(200).json({profissional});
         next()
