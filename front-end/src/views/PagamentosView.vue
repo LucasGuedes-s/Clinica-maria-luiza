@@ -8,7 +8,7 @@
             <!-- Itera sobre os pagamentos por mês e ano -->
             <div>
                 <h2>{{ formatarMesAno(mesAno) }}</h2>
-                <table class="tabela">
+                <table class="tabela_pagamentos">
                     <thead>
                         <tr>
                             <th>Nome do Paciente:</th>
@@ -69,7 +69,7 @@ h2 {
     position: relative;
 }
 
-.tabela,
+.tabela_pagamentos,
 th,
 td {
     border-collapse: collapse;
@@ -102,7 +102,7 @@ table thead {
         margin-left: 0;
     }
 
-    .tabela, th, td {
+    .tabela_pagamentos, th, td {
         font-size: 7px;
         padding: 4px;
     }
