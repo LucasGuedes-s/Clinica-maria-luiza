@@ -28,7 +28,7 @@ async function getPagamentos(req, res) {
         }
       }
     });
-
+    console.log(pagamentos)
     // Agrupar os pagamentos por mês
     const pagamentosPorMes = pagamentos.reduce((acc, pagamento) => {
       // Certifique-se de que a chave da data esteja correta
@@ -70,7 +70,7 @@ async function getPagamentoMes(mes_ano) {
 
     // Buscar todos os pagamentos
     const pagamentos = await prisma.Pagamentos.findMany({});
-
+    console.log(pagamentos)
     // Filtrar os pagamentos para o mês e ano específicos
     const pagamentosFiltrados = pagamentos.filter(pagamento => {
       const data = new Date(pagamento.Data);
@@ -89,7 +89,7 @@ async function getPagamentoMes(mes_ano) {
       acc[dia].push(pagamento);
       return acc;
     }, {});
-
+    console.log(pagamentosPorDia)
     // Retornar o resultado agrupado por dia do mês
     return pagamentosPorDia;
 

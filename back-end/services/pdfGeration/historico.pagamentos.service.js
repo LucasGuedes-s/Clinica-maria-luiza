@@ -76,7 +76,6 @@ async function pdfPagamentos(mes_ano) {
     // Filtrando os pagamentos
     Object.keys(pagamento).forEach(dia => {
         pagamento[dia].forEach(pagamentos => {
-            console.log(pagamentos.tipo_pagamento)
             if (pagamentos.tipo_pagamento === "Pagamento de entrada") {
                 totalPagamentoEntrada += pagamentos.pagamento;
                 console.log("Aqui", totalPagamentoEntrada)
@@ -147,8 +146,6 @@ async function pdfPagamentos(mes_ano) {
         doc.text(informacoesRestante, eixox, finalYRestante + 10);
 
     }
-    
-
 
     addFooter(doc);
 
