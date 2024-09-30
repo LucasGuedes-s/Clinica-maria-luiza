@@ -161,7 +161,7 @@ export default {
     }
 </script>
 
-<style>
+<style scoped>
 .titulo_evolucao {
     background-color: white;
     margin-bottom: 20px;
