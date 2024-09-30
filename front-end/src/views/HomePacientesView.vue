@@ -25,7 +25,7 @@
         <div class="titulo_evolucao">
             <h1>Histórico de consultas Aba</h1>
         </div>
-        <table>
+        <table class="tabela">
             <thead>
                 <tr>
                     <th>Data</th>
@@ -343,48 +343,30 @@ table td {
 
 /* Tornando a tabela responsiva */
 @media screen and (max-width: 768px) {
-
-    table,
-    thead,
-    tbody,
-    th,
-    td,
-    tr {
-        display: block;
+    table {
+        display: grid;
     }
-
-    /* Oculta o cabeçalho em telas pequenas */
-    table thead {
-        display: none;
+    table th{
+        font-size: 5px;
     }
-
-    table tr {
-        margin-bottom: 15px;
-        border: 1px solid #ddd;
-        padding: 10px;
-        border-radius: 8px;
-        background-color: #fff;
-    }
-
     table td {
-        display: block;
-        text-align: right;
         font-size: 14px;
-        border-bottom: 1px dotted #ccc;
-        padding: 10px 0;
+    }
+    .tabela, th, td {
+        font-size: 5px;
+        padding: 2px;
     }
 
-    table td::before {
-        content: attr(data-label);
-        font-weight: bold;
-        text-transform: uppercase;
-        display: inline-block;
-        margin-right: 10px;
-        color: #84E7FF;
+    .btn_foto {
+        font-size: 12px;
+        padding: 1px;
+        /* Ajusta o botão para telas menores */
     }
-
-    table td:last-child {
-        border-bottom: 0;
+    .conteiner_agendar {
+        justify-content: center;
+    }
+    .container_agendamentos {
+        width: 100%;
     }
 }
 

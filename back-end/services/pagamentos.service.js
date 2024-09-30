@@ -16,7 +16,7 @@ async function postPagamentos(pagamento) {
 
   return pagamentos;
 }
-async function getPagamentos(req, res) {
+async function getPagamentos() {
   try {
     // Buscar todos os pagamentos
     const pagamentos = await prisma.Pagamentos.findMany({
@@ -28,7 +28,6 @@ async function getPagamentos(req, res) {
         }
       }
     });
-    console.log(pagamentos)
     // Agrupar os pagamentos por mês
     const pagamentosPorMes = pagamentos.reduce((acc, pagamento) => {
       // Certifique-se de que a chave da data esteja correta

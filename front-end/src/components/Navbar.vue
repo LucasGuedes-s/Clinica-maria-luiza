@@ -2,11 +2,11 @@
     <header>
       <nav class="nav-bar">
           <div class="logo"><img src="../assets/nome.png" alt="Logo"></div>
-          <ul class="nav-links">
+          <!-- <ul class="nav-links">
               <li><a href="">Sua agenda</a></li>
               <li><a href="">Evolução</a></li>
               <li><a href="">Historico de consultas</a></li>
-          </ul>
+          </ul>-->
       </nav>
   </header>
 </template>
