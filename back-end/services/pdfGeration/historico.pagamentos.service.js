@@ -39,7 +39,7 @@ async function pdfPagamentos(mes_ano) {
 
     const doc = new jsPDF();
     const pagamento = await pagamentos.getPagamentoMes(mes_ano)
-
+    console.log(pagamento)
     const imgPath = path.resolve(__dirname, '../../src/assets/img.girafas.png');
     const imgData = fs.readFileSync(imgPath).toString('base64');
 
@@ -76,6 +76,7 @@ async function pdfPagamentos(mes_ano) {
     // Filtrando os pagamentos
     Object.keys(pagamento).forEach(dia => {
         pagamento[dia].forEach(pagamentos => {
+            console.log(pagamentos.tipo_pagamento)
             if (pagamentos.tipo_pagamento === "Pagamento de entrada") {
                 totalPagamentoEntrada += pagamentos.pagamento;
                 console.log("Aqui", totalPagamentoEntrada)
@@ -88,6 +89,7 @@ async function pdfPagamentos(mes_ano) {
                 ];
                 tableRowsEntrada.push(row);
             } else {
+                console.log(pagamentos.tipo_pagamento)
                 totalPagamentoRestante += pagamentos.pagamento;
     
                 const row = [
