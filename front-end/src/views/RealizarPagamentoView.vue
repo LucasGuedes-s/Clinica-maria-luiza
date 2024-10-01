@@ -117,5 +117,17 @@ export default {
     components: {
         Sidebar
     },
+    setup() {
+        const store = useAuthStore()
+        return {
+            store,
+        }
+    },
+    data() {
+        return {
+            tipo_pagamento: '',
+            metodo: ''
+        }
+    },
 }
 </script>
