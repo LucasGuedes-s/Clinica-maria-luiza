@@ -6,6 +6,7 @@ const router = express.Router()
 
 //router.get('/pacientes/historico/:id', userController.getConsultas);
 router.get('/pacientes/login/:id', userController.loginPaciente);
+router.get('/paciente/dados/:id', userController.getPaciente);
 
 router.get('/pacientes', [jwtMiddleware, permission.getPacientes], userController.getPacientes);
 router.post('/cadastrar/pacientes', [jwtMiddleware, permission.post], userController.postPacientes);

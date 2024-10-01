@@ -22,11 +22,11 @@ async function getPacientes(req, res, next){
 }
 async function getPaciente(req, res, next){
     try {
-        const paciente = await Paciente.getPaciente(req.body)
+        const paciente = await Paciente.getPaciente(req.params.id)
         res.status(200).json({paciente});
         next()
     } catch (err) {
-        console.error(`Erro ao receber esse profissional`);
+        console.error(`Erro ao receber esse paciente`);
     }
 }
 async function getConsultas(req, res, next){

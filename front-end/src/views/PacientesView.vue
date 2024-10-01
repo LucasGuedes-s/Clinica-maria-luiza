@@ -8,7 +8,7 @@
         </div>
         <div class="container_paciente" v-for="usuario in filteredPacientes" :key="usuario.cpf">
             <div class="info">
-                <img :src="usuario.foto">
+                <img :src="usuario.foto" @click="editarDados(usuario.cpf)">
                 <div class="textos"> 
                     <p>Nome: {{ usuario.nome }}</p>
                     <p>Telefone: {{ usuario.telefone }}</p>
@@ -214,6 +214,10 @@ export default {
         }
     },
     methods: {
+        async editarDados(cpf){
+            sessionStorage.setItem('cpf', cpf);
+            this.$router.push({ name: 'editarDados' });    
+        },
         async pacientes() {
             const token = this.store.token
             Axios.get("https://clinica-maria-luiza.onrender.com/pacientes", {

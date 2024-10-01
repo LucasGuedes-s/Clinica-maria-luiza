@@ -18,7 +18,20 @@ async function loginPaciente(user) {
   return paciente;
   
 }
-
+async function getPaciente(user){
+  const paciente = await prisma.Pacientes.findMany({
+    where: {
+      OR: [
+        { email: user },   
+        { cpf: user }       
+      ]
+    },
+    include: {
+      paciente_dados: true // Inclui os dados da tabela Pacientes_dados
+    }
+  });
+  return paciente;
+}
 async function getPacientes() {
   const pacientes = await prisma.Pacientes.findMany({
     include: {
@@ -194,4 +207,4 @@ async function updateDadosPaciente(req) {
     dadosPaciente: dadosAtualizados
   });
 }
-module.exports = {loginPaciente, getPacientes, getConsultas, getConsulta, getConsultasAba, cadastrarDados, cadastrarPaciente, registrarConsulta, registrarConsultaAba, updateDadosPaciente};
+module.exports = {loginPaciente, getPacientes, getPaciente, getConsultas, getConsulta, getConsultasAba, cadastrarDados, cadastrarPaciente, registrarConsulta, registrarConsultaAba, updateDadosPaciente};

@@ -117,10 +117,11 @@ input {
 }
 
 @media (max-width: 768px) {
-    
+
     .info_prof {
         font-size: 12px;
     }
+
     .main-content_profissionais {
         margin-left: 0;
         padding: 10px;
@@ -183,75 +184,80 @@ export default {
     },
     data() {
         return {
+            hora: '',
             pesquisa: '',
             profissional: []
         }
     },
     methods: {
+
         async consultas(email, nome) {
-            Swal.fire({
-                title: 'Escolha o período',
-                text: 'Deseja visualizar consultas do mês atual ou do mês anterior?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Mes atual',
-                cancelButtonText: 'Cancelar',
-                showDenyButton: true,
-                denyButtonText: 'Mês anterior',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Axios({
-                        url: `https://clinica-maria-luiza.onrender.com/historico/consultas`,  // URL sem parâmetros
-                        method: 'POST',  // Muda o método para POST
-                        responseType: 'blob',  // Importante para tratar a resposta como um blob
-                        data: {
-                            email: email,  // Enviando email no corpo da requisição
-                            mesDesejado: 'atual'       // Enviando o mês selecionado
-                        }
-                    }).then(response => {
-                        const url = window.URL.createObjectURL(new Blob([response.data]));
-                        const link = document.createElement('a');
-                        link.href = url;
-                        link.setAttribute('download', `Relatório de atendimentos - ${nome} .pdf`); // Nome do arquivo
-                        document.body.appendChild(link);
-                        link.click();
-                        link.remove();
-                    }).catch(error => {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Erro ao gerar PDF',
-                            timer: 4000,
-                        })
-                    });
+            try {
+                // Pergunta se o usuário quer ver consultas com ou sem hora
+                const horaResult = await Swal.fire({
+                    title: 'Deseja',
+                    text: 'Deseja visualizar consultas com hora ou sem?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Com hora das consultas',
+                    cancelButtonText: 'Cancelar',
+                    showDenyButton: true,
+                    denyButtonText: 'Sem hora das consultas',
+                });
 
-                } else if (result.isDenied) {
-                    Axios({
-                        url: `https://clinica-maria-luiza.onrender.com/historico/consultas`,  // URL sem parâmetros
-                        method: 'POST',  // Muda o método para POST
-                        responseType: 'blob',  // Importante para tratar a resposta como um blob
-                        data: {
-                            email: email,  
-                            mesDesejado: 'anterior'
-                        }
-                    }).then(response => {
-                        // Crie um URL para o blob
-                        const url = window.URL.createObjectURL(new Blob([response.data]));
-                        const link = document.createElement('a');
-                        link.href = url;
-                        link.setAttribute('download', `Relatório de atendimentos - ${nome}.pdf`); // Nome do arquivo
-                        document.body.appendChild(link);
-                        link.click();
-                        link.remove();
-                    }).catch(error => {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Erro ao gerar PDF',
-                            timer: 4000,
-                        })
-                    });
-
+                if (horaResult.isDismissed) {
+                    return; // Se o usuário cancelar, interrompe o fluxo
                 }
-            });
+
+                const hora = horaResult.isConfirmed;
+
+                // Pergunta se o usuário quer ver o mês atual ou anterior
+                const periodoResult = await Swal.fire({
+                    title: 'Escolha o período',
+                    text: 'Deseja visualizar consultas do mês atual ou do mês anterior?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Mês atual',
+                    cancelButtonText: 'Cancelar',
+                    showDenyButton: true,
+                    denyButtonText: 'Mês anterior',
+                });
+
+                if (periodoResult.isDismissed) {
+                    return; // Se o usuário cancelar, interrompe o fluxo
+                }
+
+                const mesDesejado = periodoResult.isConfirmed ? 'atual' : 'anterior';
+
+                // Faz a requisição para gerar o PDF
+                const response = await Axios({
+                    url: 'http://localhost:3000/historico/consultas',
+                    method: 'POST',
+                    responseType: 'blob', // Para tratar a resposta como arquivo
+                    data: {
+                        email: email,
+                        mesDesejado: mesDesejado,
+                        hora: hora
+                    }
+                });
+
+                // Cria e baixa o arquivo PDF
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `Relatório de atendimentos - ${nome}.pdf`);
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+
+            } catch (error) {
+                // Exibe erro em caso de falha
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro ao gerar PDF',
+                    timer: 4000,
+                });
+            }
 
         },
         async profissionais() {
