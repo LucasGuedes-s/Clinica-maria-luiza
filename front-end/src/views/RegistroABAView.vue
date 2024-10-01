@@ -307,42 +307,55 @@ export default {
             this.imagem = event.target.files[0];
         },
         async registrarConsulta() {
-            console.log(sessionStorage.getItem('cpf') || ''
-            )
-            console.log(this.cpf)
-            console.log(this.aplicacao1, this.aplicacao2, this.aplicacao3, this.aplicacao4, this.aplicacao5,)
             const token = this.store.token
-            const user = this.store.usuario.usuario.email
-            await Axios.post("http://localhost:3000/consultaAba/registrar",
-                {
-                    consulta: {
-                        pacienteId: this.cpf,
-                        profissionalId: user,
-                        consulta: this.consulta,
-                        data: this.data,
-                        inicio: this.inicio,
-                        fim: this.fim,
-                        descricao: this.descricao,
-                        aplicacao1: this.aplicacao1,
-                        aplicacao2: this.aplicacao2,
-                        aplicacao3: this.aplicacao3,
-                        aplicacao4: this.aplicacao4,
-                        aplicacao5: this.aplicacao5,
-                        teste: this.teste,
-                        observacoes: this.observacoes
-                    },
-
-                },
-                {
+            try {
+                // Gera um identificador único para a imagem
+                const uniqueImageName = uuidv4() + '_' + this.imagem.name;
+                // Cria uma referência para o armazenamento
+                const storageRef = ref(storage, 'consultaAba/' + uniqueImageName);
+                // Faz o upload da imagem
+                const snapshot = await uploadBytes(storageRef, this.imagem);
+                // Obtém a URL pública da imagem
+                this.foto = await getDownloadURL(snapshot.ref);
+            }
+            catch {
+                this.foto = 'https://firebasestorage.googleapis.com/v0/b/clinica-maria-luiza.appspot.com/o/uploads%2Ffuncionarios2.svg?alt=media&token=cc7511c0-9e76-4cd6-9e33-891bbb3cfd1c'
+            }
+            try {
+                console.log(sessionStorage.getItem('cpf') || '')
+                console.log(this.cpf)
+                console.log(this.aplicacao1, this.aplicacao2, this.aplicacao3, this.aplicacao4, this.aplicacao5,)
+                const token = this.store.token
+                const user = this.store.usuario.usuario.email
+                await Axios.post("http://localhost:3000/consultaAba/registrar",
+                    {
+                        consulta: {
+                            pacienteId: this.cpf,
+                            profissionalId: user,
+                            consulta: this.consulta,
+                            data: this.data,
+                            inicio: this.inicio,
+                            fim: this.fim,
+                            descricao: this.descricao,
+                            aplicacao1: this.aplicacao1,
+                            aplicacao2: this.aplicacao2,
+                            aplicacao3: this.aplicacao3,
+                            aplicacao4: this.aplicacao4,
+                            aplicacao5: this.aplicacao5,
+                            teste: this.teste,
+                            observacoes: this.observacoes
+                        },
+                    }, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 },
-            ).then(response => {
-                console.log('Consulta registrada com sucesso!');
-            }).catch(response => {
-                console.log('Houve um problema ao registrar a consulta.');
-            })
+                ).then(response => {
+                    console.log('Consulta registrada com sucesso!');
+                }).catch(response => {
+                    console.log('Houve um problema ao registrar a consulta.');
+                })
+            }
         }
     }
 }
