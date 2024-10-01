@@ -19,10 +19,6 @@
                     <label for="valorpagamento">Valor do Pagamento (R$):</label>
                     <input type="number" id="valor_pagamento" name="valorpagamento" required>
                 </div>
-                <div class="form-group">
-                    <label for="data_pagamento">Data:</label>
-                    <input type="date" id="data_pagamento" name="data_pagamento" required>
-                </div>
             
                 <div class="form-group">
                     <label for="metodo_de_pagamento">Método de Pagamento:</label>

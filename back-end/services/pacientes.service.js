@@ -163,4 +163,35 @@ async function cadastrarDados(dados) {
   });
   return cad_dados;
 }
-module.exports = {loginPaciente, getPacientes, getConsultas, getConsulta, getConsultasAba, cadastrarDados, cadastrarPaciente, registrarConsulta, registrarConsultaAba};
+async function updateDadosPaciente(req) {
+  const pacienteAtualizado = await prisma.Pacientes.update({
+    where: {
+      cpf: req.dados.cpf,  //  CPF é identificador único
+    },
+    data: {
+      email: req.dados.email,
+      telefone: req.dados.telefone,
+      endereco: req.dados.endereco,
+      foto: req.dados.foto,
+    }
+  })
+  const dadosAtualizados = await prisma.Pacientes_dados.updateMany({
+    where: {
+      pacienteId: req.dados.cpf,
+    },
+    data: {
+      peso: parseFloat(req.dados.peso),
+      altura: parseFloat(req.dados.altura),
+      comestiveis: req.dados.comestiveis,
+      tangiveis: req.dados.tangiveis,
+      fisicos: req.dados.fisicos,
+      data_neuro: new Date(req.dados.data_neuro),
+      alergicos: req.dados.alergicos,
+    },
+  });
+  return ({
+    paciente: pacienteAtualizado,
+    dadosPaciente: dadosAtualizados
+  });
+}
+module.exports = {loginPaciente, getPacientes, getConsultas, getConsulta, getConsultasAba, cadastrarDados, cadastrarPaciente, registrarConsulta, registrarConsultaAba, updateDadosPaciente};

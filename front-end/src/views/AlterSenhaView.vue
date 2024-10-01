@@ -19,6 +19,7 @@
     </div>
 </template>
 <style scoped>
+
 body {
     margin: 0;
     font-family: 'Montserrat', sans-serif;
@@ -26,9 +27,11 @@ body {
     height: 100vh;
     justify-content: center;
     align-items: center;
-    background-color: white !important;
+    background-color: white;
 }
-
+form {
+    display: block;
+}
 .container_senha {
     width: 100vw;
     height: 100vh;

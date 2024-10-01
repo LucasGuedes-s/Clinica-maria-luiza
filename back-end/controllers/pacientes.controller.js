@@ -87,4 +87,14 @@ async function postConsultaAba(req, res, next){
         console.error(`Erro ao registrar a consulta aba`);
     }
 }
-module.exports = {loginPaciente, getPacientes, getPaciente, getConsultas, getConsultasAba, postPacientes, postDados, postConsulta, postConsultaAba};
+async function updateDados(req, res, next){
+    try {
+        const dados = await Paciente.updateDadosPaciente(req.body)
+        res.status(200).json({dados});
+        next()
+    } catch (err) {
+        console.log(err)
+        console.error(`Erro ao alterar dados do paciente`);
+    }
+}
+module.exports = {loginPaciente, getPacientes, getPaciente, getConsultas, getConsultasAba, postPacientes, postDados, postConsulta, postConsultaAba, updateDados};

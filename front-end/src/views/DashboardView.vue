@@ -24,7 +24,7 @@
                 <label for="paciente-nome">Agendamento:</label>
                 <input type="text" id="paciente-nome" :value="agenda.agendamento" readonly>
                 <label for="paciente-nome" v-if="agenda.paciente != null">Nome do Paciente:</label>
-                <input type="text" id="paciente-nome" v-if="agenda.paciente != null" :value="agenda.paciente" readonly>
+                <input type="text" id="paciente-nome" v-if="agenda.paciente != null" :value="agenda.paciente.nome" readonly>
                 <label for="resposta-data">Data:</label>
                 <input type="data" id="resposta-data" :value="agenda.dataFormatada" readonly>
                 <label for="resposta-hora">Hora:</label>

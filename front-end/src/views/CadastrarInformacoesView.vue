@@ -29,6 +29,7 @@
                 <div class="formgroup_pequenosinputs">
                     <input type="number" id="altura" name="altura" placeholder="Altura:">
                     <input type="number" id="peso" name="peso" placeholder="Peso:">
+                    <input type="data" id="data" name="data_neuro" placeholder="Cons.Neuro">
                     <input type="text" id="alergia" name="alergia" placeholder="Alérgico(a) à:">
                 </div>
 
