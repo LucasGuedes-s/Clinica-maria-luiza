@@ -1,6 +1,6 @@
 <template>
     <Sidebar />
-    <div class="main_content">
+    <div class="main_content_paciente">
         <h1>Pacientes</h1>
         <div class="search_cadastrar">
             <input type="text" id="search-input" placeholder="Nome do paciente..." v-model="pesquisa" >
@@ -35,7 +35,7 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
-.main_content {
+.main_content_paciente {
     margin-left: 250px;
     padding: 20px;
 }
@@ -136,7 +136,7 @@ input {
         padding: 8px 8px;
         min-width: auto;
     }
-    .main_content {
+    .main_content_paciente {
         margin-left: 0;
         padding: 10px;
     }

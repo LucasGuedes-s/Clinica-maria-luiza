@@ -2,7 +2,7 @@
     <Sidebar />
     <div class="main-content-paciente">
         <div class="container_cadastrarpac">
-            <h1>Cadastrar Paciente</h1>
+            <h1>Alterar dados</h1>
             <form @submit.prevent="cadastrarpaciente">
                 <div class="form-group">
                     <label for="email">Email:</label>
@@ -20,7 +20,31 @@
                     <label for="imagem">Nova foto:</label>
                     <input type="file" id="imagem" name="imagem" @change="handleFileUpload">
                 </div>
+                <div class="form-group">
+                    <label for="comestiveis">Comestíveis:</label>
+                    <input type="text" id="comestiveis" name="comestiveis" required>
+                </div>
+                <div class="form-group">
+                    <label for="tangiveis">Tangíveis:</label>
+                    <input type="text" id="tangiveis" name="tangiveis" required>
+                </div>
+                <div class="form-group">
+                    <label for="nome">Físico:</label>
+                    <input type="text" id="fisico" name="fisico" required>
+                </div>
+                <div class="form-group">
+                    <label for="atividades">Atividades:</label>
+                    <input type="text" id="atividades" name="atividades" required>
+                </div>
+
+                <div class="formgroup_pequenosinputs">
+                    <input type="number" id="altura" name="altura" placeholder="Altura:">
+                    <input type="number" id="peso" name="peso" placeholder="Peso:">
+                    <input type="data" id="data" name="data_neuro" placeholder="Cons.Neuro">
+                    <input type="text" id="alergia" name="alergia" placeholder="Alérgico(a) à:">
+                </div>
                 <button type="submit" class="cadastrar-btn" click="cadastrarpaciente">Cadastrar</button>
+
             </form>
         </div>
     </div>
