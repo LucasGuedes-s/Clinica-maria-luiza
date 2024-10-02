@@ -178,10 +178,12 @@ async function cadastrarDados(dados) {
 }
 async function updateDadosPaciente(req) {
   const pacienteAtualizado = await prisma.Pacientes.update({
+    
     where: {
       cpf: req.dados.cpf,  //  CPF é identificador único
     },
     data: {
+      cpf: req.dados.cpf,  //  CPF é identificador único
       email: req.dados.email,
       telefone: req.dados.telefone,
       endereco: req.dados.endereco,

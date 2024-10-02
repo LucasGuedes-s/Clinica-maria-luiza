@@ -137,7 +137,6 @@ export default {
     },
     methods: {
         async Altersenha() {
-            console.log("Aqui")
             if (this.senha != this.senha_2) {
                 Swal.fire({
                     icon: 'error',

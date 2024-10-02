@@ -8,7 +8,7 @@
         </div>
         <div class="container_paciente" v-for="usuario in filteredPacientes" :key="usuario.cpf">
             <div class="info">
-                <img :src="usuario.foto" @click="editarDados(usuario.cpf)">
+                <img :src="usuario.foto" @click="editarDados(usuario.cpf, usuario.email)">
                 <div class="textos"> 
                     <p>Nome: {{ usuario.nome }}</p>
                     <p>Telefone: {{ usuario.telefone }}</p>
@@ -214,8 +214,10 @@ export default {
         }
     },
     methods: {
-        async editarDados(cpf){
+        async editarDados(cpf, email){
             sessionStorage.setItem('cpf', cpf);
+            sessionStorage.setItem('email', email);
+
             this.$router.push({ name: 'editarDados' });    
         },
         async pacientes() {

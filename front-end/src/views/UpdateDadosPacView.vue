@@ -1,49 +1,59 @@
 <template>
     <Sidebar />
     <div class="main-content-paciente">
-        <div class="container_cadastrarpac">
+        <div class="container_cadastrarpac" v-for="usuario in dados" :key="usuario.cpf">
             <h1>Alterar dados</h1>
-            <form @submit.prevent="cadastrarpaciente">
+            <form @submit.prevent="editarDadosPaciente">
+                <div class="form-group">
+                    <label for="email">CPF:</label>
+                    <input type="text" id="email" name="email" v-model="usuario.cpf" required>
+                </div>
                 <div class="form-group">
                     <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" v-model="email" required>
+                    <input type="email" id="email" name="email" v-model="usuario.email" required>
                 </div>
                 <div class="form-group">
                     <label for="telefone">Telefone:</label>
-                    <input type="tel" id="telefone" name="telefone" v-model="telefone" required>
+                    <input type="tel" id="telefone" name="telefone" v-model="usuario.telefone" required>
                 </div>
                 <div class="form-group">
                     <label for="endereco">Endereço:</label>
-                    <input type="text" id="endereco" name="endereco" v-model="endereco" required>
+                    <input type="text" id="endereco" name="endereco" v-model="usuario.endereco" required>
+                </div>
+                <div class="form-group">
+                    <label for="comestiveis">Comestíveis:</label>
+                    <input type="text" id="comestiveis" name="comestiveis" v-model="usuario.paciente_dados[0].comestiveis" required>
+                </div>
+                <div class="form-group">
+                    <label for="tangiveis">Tangíveis:</label>
+                    <input type="text" id="tangiveis" name="tangiveis" v-model="usuario.paciente_dados[0].tangiveis" required>
+                </div>
+                <div class="form-group">
+                    <label for="nome">Físico:</label>
+                    <input type="text" id="fisico" name="fisico" v-model="usuario.paciente_dados[0].fisicos" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="nome">Altura:</label>
+                    <input type="number" id="altura" name="altura" v-model="usuario.paciente_dados[0].altura" placeholder="Altura:">
+                </div>
+                <div class="form-group">
+                    <label for="nome">Peso:</label>
+                    <input type="number" id="peso" name="peso" v-model="usuario.paciente_dados[0].peso" placeholder="Peso:">
+                </div>
+                <div class="form-group">
+                    <label for="nome">Consulta com o neuro: {{ formatDate(usuario.paciente_dados[0].data_neuro) }}</label>
+                    <input type="data" id="data" name="data_neuro" v-model="data_neuro" placeholder="Cons.Neuro">
+                </div>
+                <div class="form-group">
+                    <label for="nome">Alergicos:</label>
+                    <input type="text" id="alergia" name="alergia" v-model="usuario.paciente_dados[0].alergicos" placeholder="Alérgico(a) à:">
                 </div>
                 <div class="form-group selecionar">
                     <label for="imagem">Nova foto:</label>
                     <input type="file" id="imagem" name="imagem" @change="handleFileUpload">
                 </div>
-                <div class="form-group">
-                    <label for="comestiveis">Comestíveis:</label>
-                    <input type="text" id="comestiveis" name="comestiveis" required>
-                </div>
-                <div class="form-group">
-                    <label for="tangiveis">Tangíveis:</label>
-                    <input type="text" id="tangiveis" name="tangiveis" required>
-                </div>
-                <div class="form-group">
-                    <label for="nome">Físico:</label>
-                    <input type="text" id="fisico" name="fisico" required>
-                </div>
-                <div class="form-group">
-                    <label for="atividades">Atividades:</label>
-                    <input type="text" id="atividades" name="atividades" required>
-                </div>
-
-                <div class="formgroup_pequenosinputs">
-                    <input type="number" id="altura" name="altura" placeholder="Altura:">
-                    <input type="number" id="peso" name="peso" placeholder="Peso:">
-                    <input type="data" id="data" name="data_neuro" placeholder="Cons.Neuro">
-                    <input type="text" id="alergia" name="alergia" placeholder="Alérgico(a) à:">
-                </div>
-                <button type="submit" class="cadastrar-btn" click="cadastrarpaciente">Cadastrar</button>
+                <button type="submit" class="cadastrar-btn" click="editarDadosPaciente">Cadastrar</button>
 
             </form>
         </div>
@@ -153,6 +163,7 @@ import router from '@/router';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from '../firebase.js'
 import { v4 as uuidv4 } from 'uuid';
+import { formatDate } from '@/utils/formatarData.js';
 
 export default {
     name: 'cadastrar_paciente',
@@ -163,18 +174,15 @@ export default {
         const store = useAuthStore()
         return {
             store,
-            cpf: sessionStorage.getItem('cpf') || ''
+            cpf: sessionStorage.getItem('cpf') || '',
+            email: sessionStorage.getItem('email') || ''
         }
     },
     data() {
         return {
-            cpf: '',
-            email: '',
-            nome: '',
-            nome_mae: '',
-            data_nascimento: '',
-            telefone: '',
-            endereco: '',
+            formatDate,
+            dados: [],
+            id: '',
             imagem: null,
             foto: null,
             tipo_paciente: ''
@@ -185,9 +193,25 @@ export default {
             this.imagem = event.target.files[0];
         },
         async getDados() {
-            console.log("Aqui")
+            const token = this.store.token
+            if(this.email != ''){
+                this.id = this.email
+            }
+            else{
+                this.id = this.cpf
+            }
+            Axios.get(`http://localhost:3000/paciente/dados/${this.id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then(response => {
+                this.dados = response.data.paciente
+                console.log(this.dados)
+            }).catch(error => {
+                console.error(error)
+            })
         },
-        async cadastrarpaciente() {
+        async editarDadosPaciente() {
             const token = this.store.token
             try{
                 // Gera um identificador único para a imagem
@@ -200,48 +224,44 @@ export default {
                 this.foto = await getDownloadURL(snapshot.ref);
             }
             catch{
-                this.foto = 'https://firebasestorage.googleapis.com/v0/b/clinica-maria-luiza.appspot.com/o/uploads%2Ffuncionarios2.svg?alt=media&token=cc7511c0-9e76-4cd6-9e33-891bbb3cfd1c'
+                this.foto = this.dados[0].foto
+
             }
             try {
                 // Envia os dados do paciente para o backend
-                await Axios.post(`https://clinica-maria-luiza.onrender.com/cadastrar/pacientes`, {
-                    paciente: {
-                        cpf: this.cpf,
-                        nome: this.nome,
-                        nome_mae: this.nome_mae,
-                        data_nascimento: this.data_nascimento,
-                        email: this.email,
-                        telefone: this.telefone,
-                        endereco: this.endereco,
+                await Axios.post(`http://localhost:3000/editar/dados/paciente`, {
+                    dados: {
+                        cpf: this.dados[0].cpf,
+                        nome: this.dados[0].nome,
+                        email: this.dados[0].email,
+                        telefone: this.dados[0].telefone,
+                        endereco: this.dados[0].endereco,
                         foto: this.foto, 
-                        tipo_paciente: this.tipo_paciente 
+                        peso: this.dados[0].paciente_dados[0].peso,
+                        altura: this.dados[0].paciente_dados[0].altura,
+                        comestiveis: this.dados[0].paciente_dados[0].comestiveis,
+                        tangiveis: this.dados[0].paciente_dados[0].tangiveis,
+                        fisicos: this.dados[0].paciente_dados[0].fisicos,
+                        data_neuro: this.dados[0].paciente_dados[0].data_neuro,
+                        alergicos: this.dados[0].paciente_dados[0].alergicos
                     }
                 }, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 }).then(response =>{
-                    console.log(response.status)
+                    sessionStorage.removeItem('cpf');
+                    sessionStorage.removeItem('email');
+
                     Swal.fire({
                         icon: 'success',
-                        title: 'Cadastrado com sucesso',
+                        title: 'Dados alterados com sucesso',
                         timer: 8000,
                         didOpen: () => {
                             Swal.showLoading();
                         }
                     });
-                    if (this.tipo_paciente === 'Paciente externo') {
-                        this.$router.push('/pacientes');
-                    } else if (this.tipo_paciente === 'Paciente ABA') {
-                        this.$router.push('/cadastrarinformacoes');
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Tipo de paciente não especificado',
-                            timer: 4000,
-                        });
-                        console.error('Tipo de paciente desconhecido');
-                    }
+                    this.$router.push('/pacientes');
                 })
             } catch (error) {
                 // Tratamento de erro
@@ -249,13 +269,14 @@ export default {
                 Swal.fire({
                     icon: 'error',
                     title: 'Não foi possível realizar o cadastro',
-                    text: error.response.data.message,
                     timer: 4000,
                 });
             }
         }
     },
-
+    mounted(){
+        this.getDados()
+    },
     beforeRouteEnter(to, from, next) {
         next(vm => {
             try {
