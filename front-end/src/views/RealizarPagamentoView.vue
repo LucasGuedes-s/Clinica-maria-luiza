@@ -6,23 +6,23 @@
             <form>
                 <div class="form-group">
                     <label for="tipodepagamento">Tipo de Pagamento:</label>
-                    <select id="tipodepagamento" name="tipodepagamento" required>
+                    <select id="tipodepagamento" name="tipodepagamento" v-model="tipo_pagamento" required>
                         <option value="Pagamento de entrada">Pagamento de Entrada</option>
                         <option value="Pagamento de saida">Pagamento de Saida</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="nome">Nome do Paciente:</label>
-                    <input type="text" id="nome_paciente" name="nome" required>
+                    <input type="text" id="nome_paciente" name="nome" v-model="paciente" required>
                 </div>
                 <div class="form-group">
                     <label for="valorpagamento">Valor do Pagamento (R$):</label>
-                    <input type="number" id="valor_pagamento" name="valorpagamento" required>
+                    <input type="number" id="valor_pagamento" name="valorpagamento" v-model="valor" required>
                 </div>
             
                 <div class="form-group">
                     <label for="metodo_de_pagamento">Método de Pagamento:</label>
-                    <select id="metododepagamento" name="metodo_de_pagamento" required>
+                    <select id="metododepagamento" name="metodo_de_pagamento" v-model="metodo" required>
                         <option value="metododepagamento1">Dinheiro</option>
                         <option value="metododepagamento2">PIX</option>
                         <option value="metododepagamento3">Cartão de Crédito | Débito</option>
@@ -134,8 +134,12 @@ export default {
     methods: {
         async pagar() {
             try {
+                // await Axios.post("http://localhost:3000/registrar/pagamentos",
+                // {
                 this.user = this.store.usuario.usuario.email
-                
+                this.valor = this.valor
+                this.paciente = this.paciente
+                this.metodo = this.metodo
             }
             catch {
                 console.log('Erro ao realizar pagamento')
