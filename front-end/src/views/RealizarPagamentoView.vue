@@ -3,7 +3,7 @@
     <div class="main-content">
         <div class="container_registrarpagamento">
             <h1>Realizar Pagamento</h1>
-            <form>
+            <form @submit.prevent="realizarpagamento">
                 <div class="form-group">
                     <label for="tipodepagamento">Tipo de Pagamento:</label>
                     <select id="tipodepagamento" name="tipodepagamento" v-model="tipo_pagamento" required>
@@ -109,16 +109,17 @@ form {
 </style>
 
 <script>
-import Sidebar from '@/components/Sidebar.vue'
+import Sidebar from '@/components/Sidebar.vue';
 import { useAuthStore } from '@/store';
 import Axios from 'axios';
+
 export default {
     name: 'registrarconsulta',
     components: {
         Sidebar
     },
     setup() {
-        const store = useAuthStore()
+        const store = useAuthStore();
         return {
             store,
         }
@@ -132,19 +133,22 @@ export default {
         }
     },
     methods: {
-        async pagar() {
+        async realizarpagamento() {
             try {
-                // await Axios.post("http://localhost:3000/registrar/pagamentos",
-                // {
-                this.user = this.store.usuario.usuario.email
-                this.valor = this.valor
-                this.paciente = this.paciente
-                this.metodo = this.metodo
+                const profissionalId = this.store.usuario.usuario.email;
+                const valorFloat = parseFloat(this.valor);
+                await Axios.post("http://localhost:3000/registrar/pagamentos", {
+                    pagar: {
+                        user: profissionalId,
+                        valor: valorFloat,
+                        paciente: this.paciente,
+                        metodo: this.metodo
+                    }
+                });
+            } catch (error) {
+                console.error("Erro ao realizar pagamento:", error);
             }
-            catch {
-                console.log('Erro ao realizar pagamento')
-            }
-        },
-}
+        }
+    }
 }
 </script>
