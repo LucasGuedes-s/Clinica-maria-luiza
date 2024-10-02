@@ -355,6 +355,8 @@ export default {
                 }).catch(response => {
                     console.log('Houve um problema ao registrar a consulta.');
                 })
+            }catch{
+                console.log("Erro")
             }
         }
     }
