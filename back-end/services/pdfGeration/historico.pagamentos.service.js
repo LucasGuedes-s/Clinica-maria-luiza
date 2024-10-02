@@ -75,7 +75,7 @@ async function pdfPagamentos(mes_ano) {
     // Filtrando os pagamentos
     Object.keys(pagamento).forEach(dia => {
         pagamento[dia].forEach(pagamentos => {
-            if (pagamentos.tipo_pagamento === "Pagamento de entrada") {
+            if (pagamentos.tipo_pagamento === "Pagamento de entrada" || pagamentos.tipo_pagamento === "Paciente externo") {
                 totalPagamentoEntrada += pagamentos.pagamento;
                 const row = [
                     pagamentos.pagamento.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),

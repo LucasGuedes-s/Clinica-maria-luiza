@@ -8,6 +8,7 @@
                     <label for="tipodepagamento">Tipo de Pagamento:</label>
                     <select id="tipodepagamento" name="tipodepagamento" v-model="tipo_pagamento" required>
                         <option value="Pagamento de entrada">Pagamento de Entrada</option>
+                        <option value="Paciente externo">Paciente externo</option>
                         <option value="Pagamento de saida">Pagamento de Saida</option>
                     </select>
                 </div>

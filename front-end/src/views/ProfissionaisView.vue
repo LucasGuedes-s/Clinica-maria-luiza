@@ -117,9 +117,20 @@ input {
 }
 
 @media (max-width: 768px) {
+    
+    .container_profissional {
+        align-items: flex-start;
+        justify-content: center;
+        flex-direction: row;
+    }
+
+    .container_profissional img {
+        width: 110px;
+        margin-right: 0px;
+    }
 
     .info_prof {
-        font-size: 12px;
+        font-size: 11px;
     }
 
     .main-content_profissionais {
@@ -143,21 +154,6 @@ input {
         font-size: 14px;
         width: 100px;
         /* Largura fixa do botão */
-    }
-
-    .container_profissional {
-        align-items: center;
-        padding: 0px;
-        justify-content: center;
-        flex-direction: row;
-    }
-
-    .container_profissional img {
-        width: 140px;
-        margin-right: 0px;
-        height: 140px;
-        margin-bottom: 10px;
-        display: block;
     }
 
     .detalhar-div {
@@ -231,7 +227,7 @@ export default {
 
                 // Faz a requisição para gerar o PDF
                 const response = await Axios({
-                    url: 'http://localhost:3000/historico/consultas',
+                    url: 'https://clinica-maria-luiza.onrender.com/historico/consultas',
                     method: 'POST',
                     responseType: 'blob', // Para tratar a resposta como arquivo
                     data: {

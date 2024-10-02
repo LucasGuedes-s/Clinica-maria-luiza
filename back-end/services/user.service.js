@@ -7,10 +7,13 @@ require('dotenv').config();
 
 async function LoginUser(usuario, res){ 
     const user = await prisma.Profissionais.findFirst({
-        where:{
-            email: usuario.email
+        where: {
+            email: {
+                equals: usuario.email,
+                mode: 'insensitive'
+            }
         }
-    });
+    });    
 
     if(user == null){
         throw new Error('Usuário ou senha inválido')

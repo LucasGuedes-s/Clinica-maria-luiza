@@ -320,7 +320,7 @@ export default {
                 this.foto = await getDownloadURL(snapshot.ref);
             }
             catch {
-                this.foto = ''
+                this.foto = null
             try {
                 console.log(sessionStorage.getItem('cpf') || '')
                 console.log(this.cpf)
