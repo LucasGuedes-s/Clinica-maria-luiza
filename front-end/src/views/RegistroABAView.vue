@@ -186,6 +186,7 @@ form {
     border-radius: 4px;
     box-sizing: border-box;
     font-family: 'Montserrat', sans-serif;
+    resize: none;
 
 }
 

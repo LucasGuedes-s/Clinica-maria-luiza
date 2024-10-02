@@ -94,7 +94,7 @@ form {
 }
 
 .form-group textarea {
-    resize: vertical;
+    resize: none;
 }
 
 .registrarconsulta_btn {

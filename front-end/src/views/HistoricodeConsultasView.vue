@@ -91,7 +91,7 @@ h1 {
 }
 
 .info_item textarea {
-    resize: vertical;
+    resize: none;
 }
 
 .btn_detalhar_hist,

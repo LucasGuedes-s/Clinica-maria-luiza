@@ -23,7 +23,7 @@
                     <label for="datadaconsulta">Data:</label>
                     <input type="datetime-local" id="data_consulta" name="datadaconsulta" v-model="data">
                 </div>
-                <div class="form-group">
+                <div class="form-group especialidade">
                     <label for="especialidade">Especialidade:</label>
                     <select id="especialidade" name="especialidade" v-model="profissional" required>
                         <option v-for="profissional in profissionais" :key="profissional.email" :value="profissional.email">
@@ -110,9 +110,14 @@ select {
     background-color: white;
     font-size: 16px;
     color: #7E7E7E;
+    resize: none;
 }
 
 .observacao {
+    grid-column: 1 / -1;
+}
+
+.especialidade {
     grid-column: 1 / -1;
 }
 

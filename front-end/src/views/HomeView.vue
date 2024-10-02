@@ -220,6 +220,7 @@ section p {
     line-height: 1.9;
     font-size: 16px;
 }
+
 </style>
 <script>
 import { RouterLink } from 'vue-router';
