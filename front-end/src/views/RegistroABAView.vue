@@ -320,8 +320,7 @@ export default {
                 this.foto = await getDownloadURL(snapshot.ref);
             }
             catch {
-                this.foto = 'https://firebasestorage.googleapis.com/v0/b/clinica-maria-luiza.appspot.com/o/uploads%2Ffuncionarios2.svg?alt=media&token=cc7511c0-9e76-4cd6-9e33-891bbb3cfd1c'
-            }
+                this.foto = ''
             try {
                 console.log(sessionStorage.getItem('cpf') || '')
                 console.log(this.cpf)
