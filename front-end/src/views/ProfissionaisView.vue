@@ -117,7 +117,7 @@ input {
 }
 
 @media (max-width: 768px) {
-    
+
     .container_profissional {
         align-items: flex-start;
         justify-content: center;
@@ -224,7 +224,15 @@ export default {
                 }
 
                 const mesDesejado = periodoResult.isConfirmed ? 'atual' : 'anterior';
-
+                Swal.fire({
+                    title: 'Aguarde...',
+                    text: 'Estamos gerando o PDF.',
+                    timer: 3000,
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
                 // Faz a requisição para gerar o PDF
                 const response = await Axios({
                     url: 'https://clinica-maria-luiza.onrender.com/historico/consultas',

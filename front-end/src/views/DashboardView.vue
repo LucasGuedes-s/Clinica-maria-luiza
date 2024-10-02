@@ -162,7 +162,8 @@ h2 {
         margin-left: 0;
     }
     .informacao{
-        margin-left: 10px;
+        font-size: 12px;
+        margin-left: 5px;
         text-align: left;
     }
 
