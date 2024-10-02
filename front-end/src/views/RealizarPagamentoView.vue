@@ -125,6 +125,8 @@ export default {
     },
     data() {
         return {
+            valor: '',
+            paciente: '',
             tipo_pagamento: '',
             metodo: ''
         }
