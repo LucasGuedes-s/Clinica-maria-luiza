@@ -134,7 +134,7 @@ export default {
     methods: {
         async pagar() {
             try {
-                this.user = this.store.usuario.usuario
+                this.user = this.store.usuario.usuario.email
                 
             }
             catch {
