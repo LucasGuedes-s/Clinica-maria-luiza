@@ -106,6 +106,24 @@ form {
     background-color: #E7FAFF;
 }
 
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0; /* Remove a margem esquerda em telas menores */
+        padding: 10px; /* Reduz o padding */
+    }
+    
+    .container_registrarpagamento {
+        padding: 15px; /* Diminui o padding */
+    }
+
+    form {
+        gap: 15px; /* Ajusta o espaço entre os campos */
+    }
+
+    .btn_realizarpagamento {
+        margin-top: 10px; /* Ajusta a margem superior */
+    }
+}
 </style>
 
 <script>
