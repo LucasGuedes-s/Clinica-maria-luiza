@@ -92,22 +92,14 @@ body {
 
 .alterar_senha_btn, .realizarpagamento_btn {
     padding: 10px 20px;
-    background-color: #E7FAFF;
-    border: 1px solid #84E7FF;
+    background-color: #F5F5F5;
+    border: 1px solid #D9D9D9;
     color: #7E7E7E;
     border-radius: 5px;
     cursor: pointer;
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
     margin-right: 20px;
-}
-
-.alterar_senha_btn:hover {
-    background-color: #F5F5F5;
-}
-
-.realizarpagamento_btn:hover {
-    background-color: #F5F5F5;
 }
 
 .informacao {
