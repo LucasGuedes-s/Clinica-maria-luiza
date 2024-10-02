@@ -116,7 +116,7 @@
 
                 <div class="form-group selecionar">
                     <label for="imagem">Adicionar Imagem:</label>
-                    <input type="file" id="imagem_prof" name="imagem" accept="image/*">
+                    <input type="file" id="imagem_prof" name="imagem" accept="image/*" @change="handleFileUpload">
                 </div>
 
                 <button type="submit" class="btn_registrarconsultaaba">Registrar Consulta</button>
