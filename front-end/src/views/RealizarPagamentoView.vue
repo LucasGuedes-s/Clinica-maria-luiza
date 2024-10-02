@@ -131,5 +131,16 @@ export default {
             metodo: ''
         }
     },
+    methods: {
+        async pagar() {
+            try {
+                this.user = this.store.usuario.usuario
+                
+            }
+            catch {
+                console.log('Erro ao realizar pagamento')
+            }
+        },
+}
 }
 </script>
