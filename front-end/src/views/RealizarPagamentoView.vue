@@ -156,7 +156,7 @@ export default {
             try {
                 const profissionalId = this.store.usuario.usuario.email;
                 const valorFloat = parseFloat(this.valor);
-                await Axios.post("http://localhost:3000/registrar/pagamentos", {
+                await Axios.post("https://clinica-maria-luiza.onrender.com/registrar/pagamentos", {
                     pagar: {
                         user: profissionalId,
                         valor: valorFloat,
