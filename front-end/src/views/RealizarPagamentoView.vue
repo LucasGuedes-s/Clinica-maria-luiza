@@ -153,24 +153,29 @@ export default {
         }
     },
     methods: {
-        async realizarpagamento() {
-            try {
-                const profissionalId = this.store.usuario.usuario.email;
-                const token = this.store.token;
-                const valorFloat = parseFloat(this.valor);
-                await Axios.post("https://clinica-maria-luiza.onrender.com/registrar/pagamentos", {
-                    pagar: {
-                        user: profissionalId,
-                        valor: valorFloat,
-                        paciente: this.paciente,
-                        tipo_pagamento: this.tipo_pagamento,
-                        metodo: this.metodo
-                    }
-                });
-            } catch (error) {
-                console.error("Erro ao realizar pagamento:", error);
-            }
+    async realizarpagamento() {
+        try {
+            const profissionalId = this.store.usuario.usuario.email;
+            const token = this.store.token;
+            const valorFloat = parseFloat(this.valor);
+            
+            await Axios.post("https://clinica-maria-luiza.onrender.com/registrar/pagamentos", {
+                pagar: {
+                    user: profissionalId,
+                    valor: valorFloat,
+                    paciente: this.paciente,
+                    tipo_pagamento: this.tipo_pagamento,
+                    metodo: this.metodo
+                }
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}` // Adiciona o cabeçalho de autorização
+                }
+            });
+        } catch (error) {
+            console.error("Erro ao realizar pagamento:", error);
         }
     }
+}
 }
 </script>
