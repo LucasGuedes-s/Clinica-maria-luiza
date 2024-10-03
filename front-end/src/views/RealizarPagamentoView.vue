@@ -31,7 +31,7 @@
                     </select>
                 </div>
             
-                <button type="submit" class="btn_realizarpagamento" click="realizarpagamento">Finalizar Pagamento</button>
+                <button type="submit" class="btn_realizarpagamento">Finalizar Pagamento</button>
             </form>            
         </div>
     </div>
@@ -153,29 +153,37 @@ export default {
         }
     },
     methods: {
-    async realizarpagamento() {
-        try {
-            const profissionalId = this.store.usuario.usuario.email;
-            const token = this.store.token;
-            const valorFloat = parseFloat(this.valor);
-            
-            await Axios.post("https://clinica-maria-luiza.onrender.com/registrar/pagamentos", {
-                pagar: {
-                    user: profissionalId,
-                    valor: valorFloat,
-                    paciente: this.paciente,
-                    tipo_pagamento: this.tipo_pagamento,
-                    metodo: this.metodo
-                }
-            }, {
-                headers: {
-                    'Authorization': `Bearer ${token}` // Adiciona o cabeçalho de autorização
-                }
-            });
-        } catch (error) {
-            console.error("Erro ao realizar pagamento:", error);
-        }
+        async realizarpagamento() {
+    console.log("Tentando realizar pagamento com os dados:", {
+        valor: this.valor,
+        paciente: this.paciente,
+        tipo_pagamento: this.tipo_pagamento,
+        metodo: this.metodo
+    });
+
+    try {
+        const profissionalId = this.store.usuario.usuario.email;
+        const token = this.store.token;
+        const valorFloat = parseFloat(this.valor);
+
+        await Axios.post("https://clinica-maria-luiza.onrender.com/registrar/pagamentos", {
+            pagar: {
+                user: profissionalId,
+                valor: valorFloat,
+                paciente: this.paciente,
+                tipo_pagamento: this.tipo_pagamento,
+                metodo: this.metodo
+            }
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        console.log("Pagamento realizado com sucesso!");
+    } catch (error) {
+        console.error("Erro ao realizar pagamento:", error);
     }
+}
 }
 }
 </script>
