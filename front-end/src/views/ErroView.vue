@@ -1,5 +1,5 @@
 <template>
-     <div class="container">
+     <div class="container_error">
         <img src="../assets/girafas.png" alt="Imagem de girafas">
         <h1>Acesso não autorizado!</h1>
         <h2>Você não tem permissão para acessar a página solicitada.</h2>
@@ -21,20 +21,21 @@ body {
     background-color: #E7FAFF;
 }
 
-.container {
-    width: 90vw; /* 80% da largura da viewport */
-    height: 90vh; /* 80% da altura da viewport */
-    background-color: #ffffff; /* Cor de fundo da div */
+.container_error{
+    width: 90vw;
+    height: 90vh;
+    background-color: #ffffff;
+    margin: 30px auto;
     border: 1px solid #84E7FF;
     border-radius: 5px;
     display: flex;
-    flex-direction: column; /* Alinha os itens verticalmente */
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-evenly;
     align-items: center;
-    text-align: center; /* Alinha o texto ao centro */
-    box-sizing: border-box; /* Inclui padding e border no tamanho total */
-    padding: 20px; /* Adiciona espaçamento interno */
-    overflow: hidden; /* Garante que os elementos não saiam do container */
+    text-align: center;
+    box-sizing: border-box;
+    padding: 20px;
+    overflow: hidden;
 }
 
 img {
