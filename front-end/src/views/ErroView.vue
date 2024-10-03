@@ -51,11 +51,12 @@ h1 {
     border: 1px solid #D9D9D9;
     border-radius: 5px;
     margin: 10px 0; /* Margem acima e abaixo do h1 */
+    padding: 5px;
 }
 
 h2 {
     color: #D9D9D9;
-    margin: 10px 0; /* Margem acima e abaixo do h2 */
+    margin: 10px; /* Margem acima e abaixo do h2 */
 }
 
 .button-container {
@@ -77,9 +78,40 @@ h2 {
     cursor: pointer;
 }
 
-.btn:hover {
-    background-color: #F5F5F5;
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        padding: 15px;
+        box-sizing: border-box; /* Garante que o padding esteja dentro da largura */
+    }
+
+    img {
+        max-width: 180px; /* Reduz a imagem em telas menores */
+    }
+
+    h1 {
+        font-size: 14px;
+        width: 90%;
+    }
+
+    h2 {
+        font-size: 14px;
+        margin: 5px 0;
+    }
+
+    .button-container {
+        flex-direction: column;
+        gap: 10px;
+        width: 90%;
+    }
+
+    .btn {
+        font-size: 12px;
+        padding: 10px;
+        margin-top: 10px;
+    }
 }
+
 </style>
 <script>
 import router from '@/router';
