@@ -132,6 +132,7 @@ import Sidebar from '@/components/Sidebar.vue';
 import { useAuthStore } from '@/store';
 import Axios from 'axios';
 
+
 export default {
     name: 'registrarconsulta',
     components: {
@@ -155,6 +156,7 @@ export default {
         async realizarpagamento() {
             try {
                 const profissionalId = this.store.usuario.usuario.email;
+                const token = this.store.token;
                 const valorFloat = parseFloat(this.valor);
                 await Axios.post("https://clinica-maria-luiza.onrender.com/registrar/pagamentos", {
                     pagar: {
