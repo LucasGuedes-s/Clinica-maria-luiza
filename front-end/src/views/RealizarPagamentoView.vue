@@ -31,7 +31,7 @@
                     </select>
                 </div>
             
-                <button type="submit" class="btn_realizarpagamento">Finalizar Pagamento</button>
+                <button type="submit" class="btn_realizarpagamento" click="realizarpagamento">Finalizar Pagamento</button>
             </form>            
         </div>
     </div>
@@ -161,6 +161,7 @@ export default {
                         user: profissionalId,
                         valor: valorFloat,
                         paciente: this.paciente,
+                        tipo_pagamento: this.tipo_pagamento,
                         metodo: this.metodo
                     }
                 });
