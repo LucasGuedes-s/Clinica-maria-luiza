@@ -1,6 +1,6 @@
 <template>
     <Sidebar />
-    <div class="main-content">
+    <div class="main-content_registrar_pagamentos">
         <div class="container_registrarpagamento">
             <h1>Realizar Pagamento</h1>
             <form @submit.prevent="realizarpagamento">
@@ -44,7 +44,7 @@ body {
     background-color: #E7FAFF;
 }
 
-.main-content {
+.main-content_registrar_pagamentos {
     margin-left: 250px;
     padding: 20px;
     justify-content: center;
@@ -112,11 +112,9 @@ select {
 }
 
 @media (max-width: 768px) {
-    .main-content {
+    .main-content_registrar_pagamentos {
         margin-left: 0;
-        /* Remove a margem esquerda em telas menores */
         padding: 10px;
-        /* Reduz o padding */
     }
 
     .container_registrarpagamento {
