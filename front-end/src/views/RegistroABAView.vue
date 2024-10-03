@@ -11,7 +11,7 @@
             <form @submit.prevent="registrarConsulta">
                 <div class="form-group descricao">
                     <label for="descricao_atividade">Descrição de atividade:</label>
-                    <input id="descricao_atividade" rows="4"></input>
+                    <input id="descricao_atividade" rows="4" v-model="descricao"></input>
                 </div>
                 <div class="form-group pequenos-inputs">
                     <label>Aplicações:</label>
@@ -327,7 +327,7 @@ export default {
                 console.log(this.aplicacao1, this.aplicacao2, this.aplicacao3, this.aplicacao4, this.aplicacao5,)
                 const token = this.store.token
                 const user = this.store.usuario.usuario.email
-                await Axios.post("http://localhost:3000/consultaAba/registrar",
+                await Axios.post("https://clinica-maria-luiza.onrender.com/consultaAba/registrar",
                     {
                         consulta: {
                             pacienteId: this.cpf,
