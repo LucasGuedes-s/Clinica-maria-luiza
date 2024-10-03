@@ -18,21 +18,21 @@
                 </div>
                 <div class="form-group">
                     <label for="valorpagamento">Valor do Pagamento (R$):</label>
-                    <input type="number" id="valor_pagamento" name="valorpagamento" v-model="valor" required>
+                    <input type="number" id="valor_pagamento" name="valorpagamento" v-model="valor" step="0.01" required>
                 </div>
-            
+
                 <div class="form-group">
                     <label for="metodo_de_pagamento">Método de Pagamento:</label>
                     <select id="metododepagamento" name="metodo_de_pagamento" v-model="metodo" required>
-                        <option value="metododepagamento1">Dinheiro</option>
-                        <option value="metododepagamento2">PIX</option>
-                        <option value="metododepagamento3">Cartão de Crédito | Débito</option>
+                        <option value="Dinheiro">Dinheiro</option>
+                        <option value="PIX">PIX</option>
+                        <option value="Cartão de Crédito | Débito">Cartão de Crédito | Débito</option>
 
                     </select>
                 </div>
-            
+
                 <button type="submit" class="btn_realizarpagamento">Finalizar Pagamento</button>
-            </form>            
+            </form>
         </div>
     </div>
 </template>
@@ -43,6 +43,7 @@ body {
     font-family: 'Montserrat', sans-serif;
     background-color: #E7FAFF;
 }
+
 .main-content {
     margin-left: 250px;
     padding: 20px;
@@ -64,7 +65,7 @@ body {
 
 form {
     display: grid;
-    gap: 30px; 
+    gap: 30px;
 }
 
 .form-group {
@@ -73,10 +74,11 @@ form {
 }
 
 .form-group label {
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
 }
 
-.form-group input, select {
+.form-group input,
+select {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
@@ -84,7 +86,9 @@ form {
     box-sizing: border-box;
 }
 
-#data_pagamento, #metododepagamento, #tipodepagamento {
+#data_pagamento,
+#metododepagamento,
+#tipodepagamento {
     font-family: 'Montserrat', sans-serif;
 }
 
@@ -99,7 +103,7 @@ form {
     font-size: 16px;
     cursor: pointer;
     width: 100%;
-    margin-top: 15px; 
+    margin-top: 15px;
     margin-bottom: 15px;
 }
 
@@ -109,20 +113,25 @@ form {
 
 @media (max-width: 768px) {
     .main-content {
-        margin-left: 0; /* Remove a margem esquerda em telas menores */
-        padding: 10px; /* Reduz o padding */
+        margin-left: 0;
+        /* Remove a margem esquerda em telas menores */
+        padding: 10px;
+        /* Reduz o padding */
     }
-    
+
     .container_registrarpagamento {
-        padding: 15px; /* Diminui o padding */
+        padding: 15px;
+        /* Diminui o padding */
     }
 
     form {
-        gap: 15px; /* Ajusta o espaço entre os campos */
+        gap: 15px;
+        /* Ajusta o espaço entre os campos */
     }
 
     .btn_realizarpagamento {
-        margin-top: 10px; /* Ajusta a margem superior */
+        margin-top: 10px;
+        /* Ajusta a margem superior */
     }
 }
 </style>
@@ -131,7 +140,8 @@ form {
 import Sidebar from '@/components/Sidebar.vue';
 import { useAuthStore } from '@/store';
 import Axios from 'axios';
-
+import Swal from 'sweetalert2'
+import router from '@/router';
 
 export default {
     name: 'registrarconsulta',
@@ -154,36 +164,55 @@ export default {
     },
     methods: {
         async realizarpagamento() {
-    console.log("Tentando realizar pagamento com os dados:", {
-        valor: this.valor,
-        paciente: this.paciente,
-        tipo_pagamento: this.tipo_pagamento,
-        metodo: this.metodo
-    });
-
-    try {
-        const profissionalId = this.store.usuario.usuario.email;
-        const token = this.store.token;
-        const valorFloat = parseFloat(this.valor);
-
-        await Axios.post("https://clinica-maria-luiza.onrender.com/registrar/pagamentos", {
-            pagar: {
-                user: profissionalId,
-                valor: valorFloat,
+            console.log("Tentando realizar pagamento com os dados:", {
+                valor: this.valor,
                 paciente: this.paciente,
                 tipo_pagamento: this.tipo_pagamento,
                 metodo: this.metodo
+            });
+
+            try {
+                if(this.tipo_pagamento === 'Paciente externo'){
+                    this.tipo_pagamento = 'Pagamento de entrada'
+                    const valor = parseFloat(this.valor);
+                    this.valor = valor * 0.2;
+                }
+                const profissionalId = this.store.usuario.usuario.email;
+                const token = this.store.token;
+                const valorFloat = parseFloat(this.valor);
+
+                await Axios.post("https://clinica-maria-luiza.onrender.com/registrar/pagamentos", {
+                    pagar: {
+                        profissionalId: profissionalId,
+                        valor: valorFloat,
+                        paciente: this.paciente,
+                        tipo_pagamento: this.tipo_pagamento,
+                        metodo: this.metodo
+                    }
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Pagamento registrado',
+                    text: 'Seu pagamento foi registrado com sucesso!',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                })
+                router.push('/dashboard')
+            } catch (error) {
+                console.error("Erro ao realizar pagamento:", error);
+                Swal.fire({
+                icon: 'error',
+                title: 'Pagamento não registrado',
+                text: 'Ops, algo de errado ao registrar seu pagamento',
+                timer: 4000,
+            })
             }
-        }, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        console.log("Pagamento realizado com sucesso!");
-    } catch (error) {
-        console.error("Erro ao realizar pagamento:", error);
+        }
     }
-}
-}
 }
 </script>

@@ -12,10 +12,10 @@
                 <p>Nome: {{ nome }}</p>
                 <p>E-mail: {{ email }}</p>
                 <p>Telefone: {{ telefone }}</p>
-            </div>
-            <div class="botoes_div">
+                <div class="botoes_div">
                 <router-link to="/alterarsenha"><button class="alterar_senha_btn" click="teste">Alterar Senha</button></router-link>
                 <router-link to="/realizarpagamento"><button class="realizarpagamento_btn" click="">Realizar Pagamento</button></router-link>
+            </div>
             </div>
         </div>
         <h2>Agendamentos Solicitados:</h2>
@@ -37,7 +37,7 @@
 
 <style scoped>
 body {
-    margin: 0;
+    margin: 0px;
     background-color: #E7FAFF;
     font-family: 'Montserrat', sans-serif;
     display: block;
@@ -158,13 +158,16 @@ h2 {
     background-color: #E7FAFF;
 }
 @media (max-width: 768px) {
-    .main-content {
+    .main_content_dashboard {
         margin-left: 0;
+        padding: 10px 5px;
     }
     .informacao{
         font-size: 12px;
-        margin-left: 5px;
+        width: 50%;
+        margin-left: 15px;
         text-align: left;
+        margin-bottom: auto;
     }
 
     .container_dashboard {
@@ -178,20 +181,24 @@ h2 {
         margin-bottom: 0;
     }
 
-    .botoes_div {
+    .alterar_senha_btn {
         display: none;
     }
+    .botoes_div{
+        position: static;
 
+    }
+    .realizarpagamento_btn{
+        width: 40%;
+        padding: 5px 5px;
+    }
     .alterar_senha_btn, .realizarpagamento_btn {
         width: 100%;
+        font-size: 12px;
     }
 
     .container_agendamentos {
         width: 100%;
-    }
-    .main_content_dashboard {
-        margin-left: 0px;
-        padding: 20px;
     }
 
     .resposta-informacao {
