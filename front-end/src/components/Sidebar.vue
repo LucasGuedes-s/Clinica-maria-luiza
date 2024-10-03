@@ -140,6 +140,9 @@
   .sidebar-toggle svg {
     width: 20px;
   }
+  .logout-button {
+    bottom: 50px;
+  }
 
   .sidebar {
         display: block;
