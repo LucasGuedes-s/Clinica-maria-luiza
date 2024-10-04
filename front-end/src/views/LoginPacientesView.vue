@@ -142,6 +142,7 @@ export default {
     methods: {
         async login() {
             const id = this.usuario
+            
             await Axios.get(`https://clinica-maria-luiza.onrender.com/pacientes/login/${id}`
             ).then(response => {
                 sessionStorage.setItem('cpf', response.data.paciente[0].cpf);
