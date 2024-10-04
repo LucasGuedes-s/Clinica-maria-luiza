@@ -111,6 +111,29 @@ h1 {
 .btn:hover {
     background-color: #FAC6CA;
 }
+@media (max-width: 768px) {
+    .container_senha {
+        flex-direction: column;
+    }
+
+    .esquerda-senha, .direita-senha {
+        width: 100%;
+        height: auto;
+    }
+
+    .senha-form {
+        width: 90%;
+    }
+
+    .esquerda-senha img {
+        width: 90%;
+        height: auto;
+    }
+
+    .senha-form input {
+        margin-bottom: 20px; 
+    }
+}
 </style>
 
 <script>
