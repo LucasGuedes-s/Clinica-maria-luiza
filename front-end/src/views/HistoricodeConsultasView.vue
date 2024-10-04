@@ -204,6 +204,7 @@ export default {
                 }
             }).then(response => {
                 this.consultas = response.data.consultas.consultas.slice().reverse()
+                console.log(this.consultas)
             }).catch(error => {
                 console.error(error)
             })
