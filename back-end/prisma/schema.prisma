@@ -25,9 +25,8 @@ model Profissionais {
 }
 
 model Pacientes{
-  id              Int   @default(autoincrement()) // MUDEI
-  cpf             String?   @unique // MUDEI
-  email           String    @id // MUDEI
+  cpf             String       @id
+  email           String?      @unique
   nome            String
   nome_responsavel String?
   data_nascimento DateTime?
@@ -35,15 +34,16 @@ model Pacientes{
   endereco        String?
   foto            String?      @db.VarChar(2048)
   tipo_paciente   String?
+  laudos          String[] @db.VarChar(2048)
   agendamentos    Agendamentos[]
   consultas       Consultas[]
   paciente_dados  Pacientes_dados[]
   ConsultaAba     ConsultaAba[]
-  avaliacaoAba    AvaliacaoAba[] 
+  avaliacaoAba    AvaliacaoAba[] //Adicionado
 }
 model Pacientes_dados{
-  pacientes       Int @id @default(autoincrement()) 
-  paciente        Pacientes? @relation(fields: [pacienteId], references: [email])
+  pacientes       Int @id @default(autoincrement())
+  paciente        Pacientes? @relation(fields: [pacienteId], references: [cpf])
   pacienteId      String?
   peso            Float?      
   altura          Float?
@@ -65,7 +65,7 @@ model Agendamentos{
   status          String?
   profissional    Profissionais? @relation(fields: [profissionalId], references: [email])
   profissionalId  String
-  paciente        Pacientes? @relation(fields: [pacienteId], references: [email])
+  paciente        Pacientes? @relation(fields: [pacienteId], references: [cpf])
   pacienteId      String?
   sala_consulta   Salas? @relation(fields: [sala], references: [id])
   sala            Int?
@@ -84,20 +84,20 @@ model Consultas{
   descricao       String?
   laudos          String[] @db.VarChar(2048)
   foto            String[] @db.VarChar(2048)
-  paciente        Pacientes? @relation(fields: [pacienteId], references: [email])
+  paciente        Pacientes? @relation(fields: [pacienteId], references: [cpf])
   profissional    Profissionais? @relation(fields: [profissionalId], references: [email])
   pacienteId      String?
   profissionalId  String?
 }
 model ConsultaAba{
   pacientes       Int @id @default(autoincrement())
-  paciente        Pacientes? @relation(fields: [pacienteId], references: [email])
+  paciente        Pacientes? @relation(fields: [pacienteId], references: [cpf])
   pacienteId      String?
   profissional    Profissionais? @relation(fields: [profissionalId], references: [email])
   profissionalId  String?
   data            DateTime?
-  hora_inicio     String? // MUDEI
-  hora_fim        String? // MUDEI
+  hora_inicio     String?
+  hora_fim        String?
   descricao_atividade String? @db.VarChar(2048)
   Aplicacao1      String?
   Aplicacao2      String?
@@ -110,7 +110,7 @@ model ConsultaAba{
 }
 model AvaliacaoAba{
   pacientes       Int @id @default(autoincrement())
-  paciente        Pacientes? @relation(fields: [pacienteId], references: [email])
+  paciente        Pacientes? @relation(fields: [pacienteId], references: [cpf])
   pacienteId      String?
   foto            String[] @db.VarChar(2048)
 }

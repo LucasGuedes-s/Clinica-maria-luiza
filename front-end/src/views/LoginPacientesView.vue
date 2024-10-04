@@ -146,9 +146,13 @@ export default {
             ).then(response => {
                 sessionStorage.setItem('cpf', response.data.paciente[0].cpf);
                 router.push('/cosultasPacientes')
-                //this.$router.push({ name: 'cosultasPacientes' });
             }).catch(error =>{
                 console.log(error)
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Paciente não encontrado, verifique o CPF ou e-mail digitado',
+                    timer: 4000,
+                });
             })
         }
     }

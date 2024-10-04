@@ -243,29 +243,6 @@ async function pdfConsultas(req) {
   const x = (pageWidth - imgWidth) / 2;
   doc.addImage(imgData, 'PNG', x, 10, imgWidth, imgHeight);
 
-  //const data_hora = formatar.formatarDataHoraSeparados(new Date(consultas.data_nascimento))
-  /*
-  const patientInfo = `
-  Nome: ${consultas.nome};
-Nascido em ${data_hora.data};
-
-Foi atendido na data de -- pela profissional --
-  `;
-  doc.setFontSize(14);
-  doc.setTextColor(126, 126, 126); // Define a cor do texto como preta
-  doc.text(patientInfo.trim(), textX, textY, { maxWidth: 130, lineHeight: 1.5 });
-
-  const image = await getImageAsBase64(consultas.foto);
-  doc.addImage(image, 'JPEG', secondImageX, secondImageY, secondImageWidth, secondImageHeight);
-
-  const texto = textY + (lineHeight * patientInfo.split('\n').length) + 1; // Ajuste conforme necessário
-  const consulta = `
-  Nome: ${consultas.nome};
-Nascido em ${data_hora.data};
-
-Foi atendido na data de -- pela profissional --
-  `;
-  doc.text(consulta.trim(), texto) */
   addFooter(doc);
   const pdfBuffer = doc.output('arraybuffer');
 
