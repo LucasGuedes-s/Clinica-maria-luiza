@@ -221,6 +221,46 @@ section p {
     font-size: 16px;
 }
 
+@media (max-width: 768px) {
+    .nav-links li {
+        display: none; 
+    }
+
+    .container {
+        flex-direction: column;
+    }
+    
+    .element1, .element2 {
+        width: 100%; /* Usa toda a largura disponível */
+    }
+
+    .element1 img{
+        width: 100%;
+    }
+
+    .element1 p{
+        padding: 5px;
+    }
+
+    .slider img {
+        width: 100%; /* Faz com que as imagens do slider ocupem toda a largura */
+    }
+    .logo img {
+        width: 170px; /* Logo ainda menor em telas menores */
+        margin-left: 10px; /* Diminua a margem à esquerda da logo */
+    }
+
+    .button1 {
+        padding: 5px 20px; /* Ajuste adicional no preenchimento do botão */
+        font-size: 14px; /* Ajuste adicional no tamanho da fonte do botão */
+        margin-left: 2px;
+    }
+
+    .nav-links li {
+        margin: 5px; /* Ajuste na margem dos itens de menu */
+    }
+}
+
 </style>
 <script>
 import { RouterLink } from 'vue-router';
