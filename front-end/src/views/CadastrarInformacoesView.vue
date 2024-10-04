@@ -133,6 +133,27 @@ input::placeholder {
     color: black;
     font-size: 15px;
 }
+@media screen and (max-width: 768px) {
+    .main_content {
+        margin-left: 0;
+    }
+
+    .header_container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .formgroup_pequenosinputs {
+        flex-direction: column;
+    }
+
+    .form-group input, 
+    .formgroup_pequenosinputs input,
+    .btn_cadastrarinformacoes {
+        width: 100%;
+    }
+}
+
 </style>
 
 <script>
