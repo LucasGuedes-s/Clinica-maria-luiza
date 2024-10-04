@@ -5,13 +5,28 @@
             <h1>Alterar dados</h1>
             <form @submit.prevent="editarDadosPaciente">
                 <div class="form-group">
-                    <label for="email">CPF:</label>
-                    <input type="text" id="email" name="email" v-model="usuario.cpf" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" v-model="usuario.email" required>
-                </div>
+        <label for="cpf">CPF:</label>
+        <input
+            type="text"
+            id="cpf"
+            name="cpf"
+            v-model="usuario.cpf"
+            @input="handleCpfChange"
+            :disabled="isCpfDisabled"
+            required
+        />
+    </div>
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input
+            type="email"
+            id="email"
+            name="email"
+            v-model="usuario.email"
+            :disabled="isEmailDisabled"
+            required
+        />
+    </div>
                 <div class="form-group">
                     <label for="telefone">Telefone:</label>
                     <input type="tel" id="telefone" name="telefone" v-model="usuario.telefone" required>
@@ -185,10 +200,18 @@ export default {
             id: '',
             imagem: null,
             foto: null,
-            tipo_paciente: ''
+            tipo_paciente: '',
+            isEmailDisabled: false,
+            isCpfDisabled: false
         }
+        
     },
     methods: {
+        handleCpfChange() {
+            if (!this.isEmailDisabled) {
+                this.isEmailDisabled = true; // Desabilita o campo de email ao modificar CPF
+            }
+        },
         async handleFileUpload(event) {
             this.imagem = event.target.files[0];
         },

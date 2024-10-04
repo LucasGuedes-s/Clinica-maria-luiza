@@ -136,11 +136,100 @@ input::placeholder {
 </style>
 
 <script>
-import Sidebar from '@/components/Sidebar.vue'
+import Sidebar from '@/components/Sidebar.vue';
+import Swal from 'sweetalert2';
+
 export default {
     name: 'registrarconsulta',
     components: {
         Sidebar
     },
+    data() {
+        return {
+            email: '',
+            imagem: null,
+            foto: null,
+        }
+    },
+    methods:{
+        async cadastrarInformacoes(){
+            try{
+                // Gera um identificador único para a imagem
+                const uniqueImageName = uuidv4() + '_' + this.imagem.name;
+                // Cria uma referência para o armazenamento
+                const storageRef = ref(storage, 'laudos/' + uniqueImageName);
+                // Faz o upload da imagem
+                const snapshot = await uploadBytes(storageRef, this.imagem);
+                // Obtém a URL pública da imagem
+                this.foto = await getDownloadURL(snapshot.ref);
+            }
+            catch{
+                this.foto = null
+            }
+            try {
+                // Envia os dados do paciente para o backend
+                await Axios.post(`https://clinica-maria-luiza.onrender.com/cadastrar/pacientes`, {
+                    paciente: {
+                        cpf: this.cpf,
+                        nome: this.nome,
+                        nome_mae: this.nome_mae,
+                        data_nascimento: this.data_nascimento,
+                        email: this.email,
+                        telefone: this.telefone,
+                        endereco: this.endereco,
+                        foto: this.foto, 
+                        tipo_paciente: this.tipo_paciente 
+                    }
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }).then(response =>{
+                    console.log(response.status)
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Cadastrado com sucesso',
+                        timer: 8000,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                    if (this.tipo_paciente === 'Paciente externo') {
+                        this.$router.push('/pacientes');
+                    } else if (this.tipo_paciente === 'Paciente ABA') {
+                        this.$router.push('/cadastrarinformacoes');
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Tipo de paciente não especificado',
+                            timer: 4000,
+                        });
+                        console.error('Tipo de paciente desconhecido');
+                    }
+                })
+            } catch (error) {
+                // Tratamento de erro
+                console.error('Erro:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Não foi possível realizar o cadastro',
+                    text: error.response.data.message,
+                    timer: 4000,
+                });
+            }
+        }
+    },
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            try {
+                if (!vm.store.isAuthenticated) {
+                    vm.$router.push('/login')
+                }
+            }
+            catch {
+                console.log("Erro")
+            }
+        })
+    }
 }
 </script>

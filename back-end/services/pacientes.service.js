@@ -42,10 +42,12 @@ async function getPacientes() {
   return pacientes;
 }
 async function getConsultas(user) {
-
   const consultas = await prisma.Pacientes.findUnique({
     where: {
-      cpf: user // Usando o identificador único do paciente
+      OR: [
+        { email: user },   
+        { cpf: user }       
+      ] // Usando o identificador único do paciente
     },
     include: {
       consultas: true // Inclui todas as consultas relacionadas ao paciente
@@ -178,7 +180,6 @@ async function cadastrarDados(dados) {
 }
 async function updateDadosPaciente(req) {
   const pacienteAtualizado = await prisma.Pacientes.update({
-    
     where: {
       cpf: req.dados.cpf,  //  CPF é identificador único
     },

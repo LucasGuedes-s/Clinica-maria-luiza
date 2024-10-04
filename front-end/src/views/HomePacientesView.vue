@@ -344,23 +344,23 @@ table td {
 /* Tornando a tabela responsiva */
 @media screen and (max-width: 768px) {
     table {
-        display: grid;
+        font-size: 10px; /* Diminui ainda mais o tamanho da fonte */
     }
-    table th{
-        font-size: 5px;
-    }
+
+    table th,
     table td {
-        font-size: 14px;
+        padding: 6px 8px; /* Diminui ainda mais o padding */
     }
-    .tabela, th, td {
-        font-size: 5px;
-        padding: 2px;
+
+    /* Para esconder colunas que podem ser menos importantes */
+    table th:nth-child(n+3), /* Altera o n conforme necessário */
+    table td:nth-child(n+3) {
+        display: none; /* Esconde colunas a partir da quarta */
     }
 
     .btn_foto {
-        font-size: 12px;
-        padding: 1px;
-        /* Ajusta o botão para telas menores */
+        font-size: 12px; /* Diminui o tamanho do botão */
+        padding: 6px; /* Ajusta o padding do botão */
     }
     .conteiner_agendar {
         justify-content: center;
