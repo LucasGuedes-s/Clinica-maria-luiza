@@ -38,21 +38,18 @@ async function getPacientes() {
       paciente_dados: true // Inclui os dados da tabela Pacientes_dados
     }
   });
+  //const pacientes = await prisma.Pacientes.findMany();
   return pacientes;
 }
 async function getConsultas(user) {
   const consultas = await prisma.Pacientes.findUnique({
     where: {
-      OR: [
-        { email: user },   
-        { cpf: user }       
-      ] // Usando o identificador único do paciente
+      cpf: user // Usando o identificador único do paciente
     },
     include: {
       consultas: true // Inclui todas as consultas relacionadas ao paciente
     }
   });
-
   return consultas;
 }
 async function getConsultasAba(req) {
@@ -110,6 +107,7 @@ async function registrarConsulta(req) {
   if (!paciente) {
     throw new Error('Paciente não encontrado');
   }
+  console.log(req)
   const consulta = await prisma.Consultas.create({
     data: {
       consulta: req.consulta.consulta,
