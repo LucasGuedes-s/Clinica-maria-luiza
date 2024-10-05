@@ -352,6 +352,9 @@ export default {
                 },
                 ).then(response => {
                     console.log('Consulta registrada com sucesso!');
+                    sessionStorage.removeItem('cpf');
+                    sessionStorage.removeItem('email');
+
                 }).catch(response => {
                     console.log('Houve um problema ao registrar a consulta.');
                 })

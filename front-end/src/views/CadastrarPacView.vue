@@ -230,7 +230,13 @@ export default {
                     if (this.tipo_paciente === 'Paciente externo') {
                         this.$router.push('/pacientes');
                     } else if (this.tipo_paciente === 'Paciente ABA') {
-                        this.$router.push('/cadastrarinformacoes');
+                        sessionStorage.removeItem('cpf');
+                        sessionStorage.removeItem('email');
+                        sessionStorage.removeItem('nome');
+
+                        sessionStorage.setItem('nome', this.nome);
+                        sessionStorage.setItem('cpf', this.cpf);
+                        this.$router.push({ name: 'cadastrarinformacoes' });
                     } else {
                         Swal.fire({
                             icon: 'error',

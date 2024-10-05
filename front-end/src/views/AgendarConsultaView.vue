@@ -293,7 +293,6 @@ export default {
             }
         }).then(response => {
             this.pacientes = response.data.pacientes
-            console.log(this.pacientes)
         }).catch(Error => {
             console.error(Error)
         })
@@ -303,7 +302,6 @@ export default {
             }
         }).then(response => {
             this.profissionais = response.data.profissionais
-            console.log(this.profissionais)
         }).catch(Error => {
             console.error(Error)
         })

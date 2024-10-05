@@ -5,35 +5,34 @@
             <div class="header_container">
                 <h1>Cadastrar Informações</h1>
                 <div class="paciente_nome">
-                    <p>Nome do Paciente:</p>
+                    <p>{{ nome }}</p>
                 </div>
             </div>
-            <form>
+            <form @submit.prevent="cadastrarInformacoes">
                 <div class="form-group">
                     <label for="comestiveis">Comestíveis:</label>
-                    <input type="text" id="comestiveis" name="comestiveis" required>
+                    <input type="text" id="comestiveis" name="comestiveis" v-model="comestiveis" required>
                 </div>
                 <div class="form-group">
                     <label for="tangiveis">Tangíveis:</label>
-                    <input type="text" id="tangiveis" name="tangiveis" required>
+                    <input type="text" id="tangiveis" name="tangiveis" v-model="tangiveis" required>
                 </div>
                 <div class="form-group">
                     <label for="nome">Físico:</label>
-                    <input type="text" id="fisico" name="fisico" required>
+                    <input type="text" id="fisico" name="fisico" v-model="fisicos" required>
                 </div>
                 <div class="form-group">
-                    <label for="atividades">Atividades:</label>
-                    <input type="text" id="atividades" name="atividades" required>
+                    <label for="comestiveis">Consulta com o Neurologista:</label>
+                    <input type="date" id="data" name="data_neuro" v-model="data_neuro" placeholder="Cons.Neuro">
                 </div>
-
                 <div class="formgroup_pequenosinputs">
-                    <input type="number" id="altura" name="altura" placeholder="Altura:">
-                    <input type="number" id="peso" name="peso" placeholder="Peso:">
-                    <input type="data" id="data" name="data_neuro" placeholder="Cons.Neuro">
-                    <input type="text" id="alergia" name="alergia" placeholder="Alérgico(a) à:">
+                    <input type="number" id="altura" name="altura" v-model="altura" placeholder="Altura:">
+                    <input type="number" id="peso" name="peso" v-model="peso" placeholder="Peso:">
+        
+                    <input type="text" id="alergia" name="alergia" v-model="alergicos" placeholder="Alérgico(a) à:">
                 </div>
 
-                <button type="submit" class="btn_cadastrarinformacoes">Cadastrar</button>
+                <button type="submit" click="cadastrarInformacoes" class="btn_cadastrarinformacoes">Cadastrar</button>
             </form>
         </div>
     </div>
@@ -159,47 +158,54 @@ input::placeholder {
 <script>
 import Sidebar from '@/components/Sidebar.vue';
 import Swal from 'sweetalert2';
+import { useAuthStore } from '@/store.js'
+import Axios from 'axios';
 
 export default {
     name: 'registrarconsulta',
     components: {
         Sidebar
     },
+    setup(){
+        const store = useAuthStore() //Importação da função do Store.js
+
+        return{
+            store,
+            cpf: sessionStorage.getItem('cpf') || '',
+            nome: sessionStorage.getItem('nome') || '',
+        }
+    },
     data() {
         return {
-            email: '',
-            imagem: null,
-            foto: null,
+            pacienteId: '',
+            peso: '',
+            altura: '',
+            comestiveis: '',
+            tangiveis: '',
+            fisicos: '',
+            data_neuro: '',
+            alergicos: ''
         }
     },
     methods:{
         async cadastrarInformacoes(){
-            try{
-                // Gera um identificador único para a imagem
-                const uniqueImageName = uuidv4() + '_' + this.imagem.name;
-                // Cria uma referência para o armazenamento
-                const storageRef = ref(storage, 'laudos/' + uniqueImageName);
-                // Faz o upload da imagem
-                const snapshot = await uploadBytes(storageRef, this.imagem);
-                // Obtém a URL pública da imagem
-                this.foto = await getDownloadURL(snapshot.ref);
-            }
-            catch{
-                this.foto = null
-            }
+
             try {
+                const token = this.store.token
+
+                const peso = parseFloat(this.peso)
+                const altura = parseFloat(this.altura)
                 // Envia os dados do paciente para o backend
-                await Axios.post(`https://clinica-maria-luiza.onrender.com/cadastrar/pacientes`, {
-                    paciente: {
-                        cpf: this.cpf,
-                        nome: this.nome,
-                        nome_mae: this.nome_mae,
-                        data_nascimento: this.data_nascimento,
-                        email: this.email,
-                        telefone: this.telefone,
-                        endereco: this.endereco,
-                        foto: this.foto, 
-                        tipo_paciente: this.tipo_paciente 
+                await Axios.post(`https://clinica-maria-luiza.onrender.com/dados/pacientes`, {
+                    dados: {
+                        pacienteId: this.cpf,
+                        peso: peso,
+                        altura: altura,
+                        comestiveis: this.comestiveis,
+                        tangiveis: this.tangiveis,
+                        fisicos: this.fisicos,
+                        data_neuro: this.data_neuro,
+                        alergicos: this.alergicos, 
                     }
                 }, {
                     headers: {
@@ -209,24 +215,15 @@ export default {
                     console.log(response.status)
                     Swal.fire({
                         icon: 'success',
-                        title: 'Cadastrado com sucesso',
-                        timer: 8000,
+                        title: 'Dados do paciente cadastrados com sucesso',
+                        timer: 3000,
                         didOpen: () => {
                             Swal.showLoading();
                         }
                     });
-                    if (this.tipo_paciente === 'Paciente externo') {
-                        this.$router.push('/pacientes');
-                    } else if (this.tipo_paciente === 'Paciente ABA') {
-                        this.$router.push('/cadastrarinformacoes');
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Tipo de paciente não especificado',
-                            timer: 4000,
-                        });
-                        console.error('Tipo de paciente desconhecido');
-                    }
+                    sessionStorage.removeItem('cpf');
+                    sessionStorage.removeItem('email');
+                    router.push('/dashboard')
                 })
             } catch (error) {
                 // Tratamento de erro
@@ -234,7 +231,6 @@ export default {
                 Swal.fire({
                     icon: 'error',
                     title: 'Não foi possível realizar o cadastro',
-                    text: error.response.data.message,
                     timer: 4000,
                 });
             }
