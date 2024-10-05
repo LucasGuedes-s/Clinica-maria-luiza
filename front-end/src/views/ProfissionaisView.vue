@@ -115,16 +115,14 @@ input {
 .detalhar-btn:hover {
     background-color: #E7FAFF;
 }
-
 @media (max-width: 768px) {
-
-    .container_profissional {
+    .container-profissional {
         align-items: flex-start;
         justify-content: center;
         flex-direction: row;
     }
 
-    .container_profissional img {
+    .container-profissional img {
         width: 110px;
         margin-right: 0px;
     }
@@ -140,7 +138,6 @@ input {
 
     .search-cadastrar {
         flex-direction: row;
-        /* Alinha lado a lado */
         align-items: center;
     }
 
@@ -153,7 +150,6 @@ input {
         padding: 8px 16px;
         font-size: 14px;
         width: 100px;
-        /* Largura fixa do botão */
     }
 
     .detalhar-div {
