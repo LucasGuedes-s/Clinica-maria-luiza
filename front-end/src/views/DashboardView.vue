@@ -139,6 +139,9 @@ h2 {
     font-size: 16px;
     font-family: 'Montserrat', sans-serif;
     color: #7E7E7E;
+    width: 100%; /* Certifica que o input ocupe 100% da largura */
+    box-shadow: none; 
+    box-sizing: border-box; /* Inclui o padding e borda na largura total */
 }
 
 .btn-concluido {
