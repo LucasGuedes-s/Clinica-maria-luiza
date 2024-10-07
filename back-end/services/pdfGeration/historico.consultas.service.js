@@ -8,6 +8,14 @@ const formatar = require('../../utils/formatdata.ultil')
 const { getImageAsBase64 } = require('../../utils/img.ultil');
 const { PDFDocument } = require('pdf-lib');
 
+function addCenteredText(doc, text, fontSize, yOffset) {
+  doc.setFontSize(fontSize);
+  doc.setTextColor(0, 0, 0); 
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const textX = (pageWidth - doc.getTextWidth(text)) / 2;
+  doc.text(text, textX, yOffset);
+}
+
 function addFooter(doc) {
   const pageCount = doc.internal.getNumberOfPages();
   const data_hora = formatar.formatarDataHoraSeparados(new Date())
@@ -243,61 +251,50 @@ async function pdfConsultas(req) {
 }
 async function pdfLaudos(req) {
   const doc = new jsPDF();
-  const pacientes = await paciente.getPaciente(req)
+  const pacientes = await paciente.getPaciente(req);
   const imgPath = path.resolve(__dirname, '../../src/assets/img.girafas.png');
   const imgData = fs.readFileSync(imgPath).toString('base64');
+  
+  // Configurações da imagem do cabeçalho
   const imgHeight = 40;
   const imgWidth = 40;
-
   const pageWidth = doc.internal.pageSize.getWidth();
   const x = (pageWidth - imgWidth) / 2;
-  const imgY = 10;
-
+  
+  // Adiciona a imagem do cabeçalho
   doc.addImage(imgData, 'PNG', x, 10, imgWidth, imgHeight);
-
-  const title = `Laudos anexados ao paciente`;
-  doc.setFontSize(18);
-  doc.setTextColor(0, 0, 0); // Cor preta para o título
-  const titleX = (pageWidth - doc.getTextWidth(title)) / 2;
-  const titleY = imgY + imgHeight + 20; // 20 unidades abaixo da imagem
-  doc.text(title, titleX, titleY);
+  
+  // Adiciona o título
+  addCenteredText(doc, `Laudos anexados ao paciente`, 18, imgHeight + 30);
   doc.addPage();
 
-  const laudos = []
+  const laudos = pacientes.flatMap(paciente => paciente.laudos || []);
 
-  pacientes.forEach(paciente => {
-    // Verifica se o array de laudos não está vazio
-    if (paciente.laudos.length > 0) {
-      laudos.push(paciente.laudos); // Adiciona os laudos ao array principal
-    }
-  })
+  // Carregar todas as imagens em paralelo
+  const laudoPromises = laudos.map(laudoUrl => getImageAsBase64(laudoUrl).catch(error => {
+    console.error('Erro ao adicionar imagem do laudo:', error);
+    return null; // Retorna nulo se houver erro
+  }));
 
-  for (let i = 0; i < laudos.length; i++) {
-    const laudoUrl = laudos[i];
-    try {
+  const laudoBase64s = await Promise.all(laudoPromises);
+
+  for (let i = 0; i < laudoBase64s.length; i++) {
+    const laudoBase64 = laudoBase64s[i];
+    if (laudoBase64) {
       if (i > 0) {
         doc.addPage();
-        addFooter(doc);     // Adiciona uma nova página para cada laudo, exceto o primeiro
+        addFooter(doc);
       }
-      const laudoBase64 = await getImageAsBase64(laudoUrl);
-      const laudoWidth = pageWidth - 20; // Ajuste de acordo com o tamanho da página
-      const laudoHeight = (laudoWidth * 0.75); // Mantém a proporção da imagem
-      const laudoX = 10;
-      const laudoY = 20;
-
-      // Adicionar o laudo na nova página
-      doc.addImage(laudoBase64, 'JPEG', laudoX, laudoY, laudoWidth, laudoHeight);
-
-    } catch (error) {
-      console.error('Erro ao adicionar imagem do laudo:', error);
+      const laudoWidth = pageWidth - 20; 
+      const laudoHeight = (laudoWidth * 0.75); 
+      doc.addImage(laudoBase64, 'JPEG', 10, 20, laudoWidth, laudoHeight);
     }
   }
 
   addFooter(doc);
-  const pdfBuffer = doc.output('arraybuffer');
-
-  return pdfBuffer;
+  return doc.output('arraybuffer');
 }
+
 async function pdfConsultasAba(req) {
   const consultas = await profissionais.getConsultasAba(req.body);
   const anoAtual = new Date().getFullYear();
