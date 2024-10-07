@@ -23,11 +23,11 @@
                 </div>
                 <div class="form-group">
                     <label for="comestiveis">Consulta com o Neurologista:</label>
-                    <input type="date" id="data" name="data_neuro" v-model="data_neuro" placeholder="Cons.Neuro">
+                    <input type="date" id="data" name="data_neuro" v-model="data_neuro">
                 </div>
                 <div class="formgroup_pequenosinputs">
-                    <input type="number" id="altura" name="altura" v-model="altura" placeholder="Altura:">
-                    <input type="number" id="peso" name="peso" v-model="peso" placeholder="Peso:">
+                    <input type="number" id="altura" name="altura" v-model="altura" placeholder="Altura:" step="0.01">
+                    <input type="number" id="peso" name="peso" v-model="peso" placeholder="Peso:" step="0.01">
         
                     <input type="text" id="alergia" name="alergia" v-model="alergicos" placeholder="Alérgico(a) à:">
                 </div>
@@ -160,6 +160,7 @@ import Sidebar from '@/components/Sidebar.vue';
 import Swal from 'sweetalert2';
 import { useAuthStore } from '@/store.js'
 import Axios from 'axios';
+import router from '@/router';
 
 export default {
     name: 'registrarconsulta',
@@ -224,6 +225,7 @@ export default {
                     sessionStorage.removeItem('cpf');
                     sessionStorage.removeItem('email');
                     router.push('/dashboard')
+
                 })
             } catch (error) {
                 // Tratamento de erro

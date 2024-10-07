@@ -57,8 +57,8 @@
                     <input type="number" id="peso" name="peso" v-model="usuario.paciente_dados[0].peso" placeholder="Peso:">
                 </div>
                 <div class="form-group">
-                    <label for="nome">Consulta com o neuro: {{ formatDate(usuario.paciente_dados[0].data_neuro) }}</label>
-                    <input type="data" id="data" name="data_neuro" v-model="data_neuro" placeholder="Cons.Neuro">
+                    <label for="nome">Consulta com o neuro: {{ formatarData(usuario.paciente_dados[0].data_neuro) }}</label>
+                    <input type="date" id="data" name="data_neuro" v-model="data_neuro">
                 </div>
                 <div class="form-group">
                     <label for="nome">Alergicos:</label>
@@ -178,7 +178,7 @@ import router from '@/router';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from '../firebase.js'
 import { v4 as uuidv4 } from 'uuid';
-import { formatDate } from '@/utils/formatarData.js';
+import { formatarData } from '@/utils/formatarData.js';
 
 export default {
     name: 'cadastrar_paciente',
@@ -195,7 +195,8 @@ export default {
     },
     data() {
         return {
-            formatDate,
+            formatarData,
+            data_neuro: '',
             dados: [],
             id: '',
             imagem: null,
@@ -248,9 +249,11 @@ export default {
             }
             catch{
                 this.foto = this.dados[0].foto
-
             }
             try {
+                if(this.data_neuro === ''){
+                    this.data_neuro = this.dados[0].paciente_dados[0].data_neuro
+                }
                 // Envia os dados do paciente para o backend
                 await Axios.post(`http://localhost:3000/editar/dados/paciente`, {
                     dados: {
@@ -265,7 +268,7 @@ export default {
                         comestiveis: this.dados[0].paciente_dados[0].comestiveis,
                         tangiveis: this.dados[0].paciente_dados[0].tangiveis,
                         fisicos: this.dados[0].paciente_dados[0].fisicos,
-                        data_neuro: this.dados[0].paciente_dados[0].data_neuro,
+                        data_neuro: this.data_neuro,
                         alergicos: this.dados[0].paciente_dados[0].alergicos
                     }
                 }, {
@@ -279,12 +282,14 @@ export default {
                     Swal.fire({
                         icon: 'success',
                         title: 'Dados alterados com sucesso',
-                        timer: 8000,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
                         didOpen: () => {
                             Swal.showLoading();
                         }
                     });
-                    this.$router.push('/pacientes');
+                    router.push('/pacientes');
                 })
             } catch (error) {
                 // Tratamento de erro

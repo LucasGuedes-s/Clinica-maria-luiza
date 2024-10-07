@@ -176,9 +176,21 @@ async function cadastrarDados(dados) {
   return cad_dados;
 }
 async function updateDadosPaciente(req) {
+  const paciente = await prisma.Pacientes.findMany({
+    where: {
+      OR: [
+        { email: req.dados.email },   
+        { cpf: req.dados.cpf }       
+      ]
+    },
+  });
+
+  if (!paciente) {
+    throw new Error("Paciente não encontrado.");
+  }
   const pacienteAtualizado = await prisma.Pacientes.update({
     where: {
-      cpf: req.dados.cpf,  //  CPF é identificador único
+      cpf: paciente[0].cpf,  // Usa o CPF se fornecido
     },
     data: {
       cpf: req.dados.cpf,  //  CPF é identificador único
@@ -188,9 +200,10 @@ async function updateDadosPaciente(req) {
       foto: req.dados.foto,
     }
   })
+  console.log(req.dados.data_neuro)
   const dadosAtualizados = await prisma.Pacientes_dados.updateMany({
     where: {
-      pacienteId: req.dados.cpf,
+      pacienteId: paciente[0].cpf,
     },
     data: {
       peso: parseFloat(req.dados.peso),

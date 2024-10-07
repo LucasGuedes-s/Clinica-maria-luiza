@@ -6,7 +6,7 @@ const firebaseConfig = {
     apiKey: process.env.apiKey,
     authDomain: process.env.authDomain,
     projectId: process.env.projectId,
-    storageBucket:"clinica-maria-luiza.appspot.com",
+    storageBucket:"clinica-maria-luiza-17cef.appspot.com",
     messagingSenderId: process.env.messagingSenderId,
     appId: process.env.appId,
     measurementId: process.env.measurementId

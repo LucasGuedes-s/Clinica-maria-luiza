@@ -41,9 +41,14 @@
                         <option>Outro</option>
                     </select>
                 </div>
+                
                 <div class="form-group selecionar">
                     <label for="imagem">Adicionar Imagem:</label>
                     <input type="file" id="imagem" name="imagem" @change="handleFileUpload">
+                </div>
+                <div class="form-group selecionar">
+                    <label for="imagem">Laudos:</label>
+                    <input type="file" @change="handleFileUploads" multiple>
                 </div>
                 <button type="submit" class="cadastrar-btn" click="cadastrarpaciente">Cadastrar</button>
             </form>
@@ -177,10 +182,35 @@ export default {
             endereco: '',
             imagem: null,
             foto: null,
-            tipo_paciente: ''
+            tipo_paciente: '',
+            imagens: [],
+            laudos: []
         }
     },
     methods: {
+        async handleFileUploads(event) {
+            try {
+                this.imagens = Array.from(event.target.files); // Armazena as imagens selecionadas
+
+                // Loop para processar cada imagem
+                for (const imagem of this.imagens) {
+                    const uniqueImageName = uuidv4() + '_' + imagem.name;
+                    const storageRef = ref(storage, 'laudos/' + uniqueImageName);
+
+                    // Faz o upload de cada imagem
+                    const snapshot = await uploadBytes(storageRef, imagem);
+
+                    // Obtém a URL pública de cada imagem e adiciona ao array de laudos
+                    const downloadURL = await getDownloadURL(snapshot.ref);
+                    this.laudos.push(downloadURL); // Adiciona a URL ao array de laudos
+                }
+
+                console.log("Laudos carregados:", this.laudos);
+            } catch (error) {
+                console.log("Erro ao carregar laudos", error);
+            }
+
+        },
         async handleFileUpload(event) {
             this.imagem = event.target.files[0];
         },
@@ -210,7 +240,8 @@ export default {
                         email: this.email,
                         telefone: this.telefone,
                         endereco: this.endereco,
-                        foto: this.foto, 
+                        foto: this.foto,
+                        laudos: this.laudos, 
                         tipo_paciente: this.tipo_paciente 
                     }
                 }, {
@@ -218,11 +249,12 @@ export default {
                         'Authorization': `Bearer ${token}`
                     }
                 }).then(response =>{
-                    console.log(response.status)
                     Swal.fire({
                         icon: 'success',
                         title: 'Cadastrado com sucesso',
-                        timer: 8000,
+                        timer: 4000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
                         didOpen: () => {
                             Swal.showLoading();
                         }
