@@ -70,12 +70,9 @@ Nascido em ${data_hora.data};
   const lineHeightFactor = 1.5;
 
   doc.text(patientInfo.trim(), textX, textY, { maxWidth: 130, lineHeightFactor: lineHeightFactor });
-
-  const inicio = new Date().getTime();
   const image = await getImageAsBase64(consultas.foto);
 
   doc.addImage(image, 'JPEG', secondImageX, secondImageY, secondImageWidth, secondImageHeight);
-  var fim = new Date().getTime();
 
   // Cabeçalhos da tabela
   const tableColumn = ["Consulta", "Data", "Descrição", "Profissional"];
@@ -117,6 +114,7 @@ Nascido em ${data_hora.data};
   // Adicionar o título para a nova página
   doc.setFontSize(16);
   doc.setTextColor(0, 0, 0); // Preto
+  
   doc.text('Laudos do Paciente', 10, 20);
 
   for (let i = 0; i < laudos.length; i++) {
@@ -139,9 +137,6 @@ Nascido em ${data_hora.data};
       console.error('Erro ao adicionar imagem do laudo:', error);
     }
   }
-  var tempo = fim - inicio;
-  console.log('Tempo de execução: ' + tempo);
-
   const pdfBuffer = doc.output('arraybuffer');
 
   return pdfBuffer;
@@ -199,12 +194,9 @@ Registro da consulta: ${consulta.descricao}
   const registroY = textY + 50; // 50 unidades abaixo do texto principal, ajustável
   doc.text(registroConsulta.trim(), textX, registroY, { maxWidth: maxWidth, lineHeight: 1.5 });
 
-
   addFooter(doc);
 
-
   for (let i = 0; i < consulta.laudos.length; i++) {
-
     const laudoUrl = consulta.laudos[i];
     try {
       if (consulta.laudos.length > 0) {
@@ -234,6 +226,7 @@ async function pdfConsultas(req) {
   const doc = new jsPDF();
   const consultas = await profissionais.getConsultas(req.body)
   console.log(consultas)
+
   const imgPath = path.resolve(__dirname, '../../src/assets/img.girafas.png');
   const imgData = fs.readFileSync(imgPath).toString('base64');
   const imgHeight = 40;
@@ -242,6 +235,63 @@ async function pdfConsultas(req) {
   const pageWidth = doc.internal.pageSize.getWidth();
   const x = (pageWidth - imgWidth) / 2;
   doc.addImage(imgData, 'PNG', x, 10, imgWidth, imgHeight);
+
+  addFooter(doc);
+  const pdfBuffer = doc.output('arraybuffer');
+
+  return pdfBuffer;
+}
+async function pdfLaudos(req) {
+  const doc = new jsPDF();
+  const pacientes = await paciente.getPaciente(req)
+  const imgPath = path.resolve(__dirname, '../../src/assets/img.girafas.png');
+  const imgData = fs.readFileSync(imgPath).toString('base64');
+  const imgHeight = 40;
+  const imgWidth = 40;
+
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const x = (pageWidth - imgWidth) / 2;
+  const imgY = 10;
+
+  doc.addImage(imgData, 'PNG', x, 10, imgWidth, imgHeight);
+
+  const title = `Laudos anexados ao paciente`;
+  doc.setFontSize(18);
+  doc.setTextColor(0, 0, 0); // Cor preta para o título
+  const titleX = (pageWidth - doc.getTextWidth(title)) / 2;
+  const titleY = imgY + imgHeight + 20; // 20 unidades abaixo da imagem
+  doc.text(title, titleX, titleY);
+  doc.addPage();
+
+  const laudos = []
+
+  pacientes.forEach(paciente => {
+    // Verifica se o array de laudos não está vazio
+    if (paciente.laudos.length > 0) {
+      laudos.push(paciente.laudos); // Adiciona os laudos ao array principal
+    }
+  })
+
+  for (let i = 0; i < laudos.length; i++) {
+    const laudoUrl = laudos[i];
+    try {
+      if (i > 0) {
+        doc.addPage();
+        addFooter(doc);     // Adiciona uma nova página para cada laudo, exceto o primeiro
+      }
+      const laudoBase64 = await getImageAsBase64(laudoUrl);
+      const laudoWidth = pageWidth - 20; // Ajuste de acordo com o tamanho da página
+      const laudoHeight = (laudoWidth * 0.75); // Mantém a proporção da imagem
+      const laudoX = 10;
+      const laudoY = 20;
+
+      // Adicionar o laudo na nova página
+      doc.addImage(laudoBase64, 'JPEG', laudoX, laudoY, laudoWidth, laudoHeight);
+
+    } catch (error) {
+      console.error('Erro ao adicionar imagem do laudo:', error);
+    }
+  }
 
   addFooter(doc);
   const pdfBuffer = doc.output('arraybuffer');
@@ -350,4 +400,4 @@ async function pdfConsultasAba(req) {
   }
 }
 
-module.exports = { createReportPdf, pdfConsulta, pdfConsultas, pdfConsultasAba, addFooter }
+module.exports = { createReportPdf, pdfConsulta, pdfLaudos, pdfConsultas, pdfConsultasAba, addFooter }

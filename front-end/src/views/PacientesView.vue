@@ -23,6 +23,8 @@
                 <button class="registroaba_btn" v-if="usuario.paciente_dados.length > 0" @click="aba(usuario.cpf, usuario.nome,)">Registro Aba</button>
                 <RouterLink to="/registrarconsulta"><button class="registrar_btn" @click="consulta(usuario.cpf, usuario.nome)">Registrar consultas</button></RouterLink>
                 <button class="histconsultas_btn" @click="historico(usuario.cpf)">Hist. consultas</button>
+                <button class="laudosconsultas_btn" @click="laudos(usuario.cpf)">Anexos</button>
+
             </div>
         </div>
     </div>
@@ -112,6 +114,7 @@ input {
 .evolucao_btn,
 .registroaba_btn,
 .histconsultas_btn,
+.laudosconsultas_btn,
 .registrar_btn {
     padding: 10px 20px;
     background-color: white;
@@ -124,11 +127,14 @@ input {
     min-width: 120px;
 }
 
-.histconsultas_btn {
+.histconsultas_btn, .laudosconsultas_btn {
     background-color: #E7FAFF;
 }
 
 @media (max-width: 768px) {
+    .laudosconsultas_btn{
+        display: none
+    }
     .evolucao_btn,
     .registroaba_btn,
     .histconsultas_btn,
@@ -253,7 +259,8 @@ export default {
 
             this.$router.push({ name: 'registrarconsulta' });
         },
-        async teste(nome, cpf) {
+        async laudos(cpf) {
+            console.log(cpf)
             Swal.fire({
                 title: 'Aguarde...',
                 text: 'Estamos gerando o PDF.',
@@ -264,7 +271,7 @@ export default {
                 }
             });
             Axios({
-                url: `https://clinica-maria-luiza.onrender.com/historico/consultas/${cpf}`,  // Altere a URL conforme necessário
+                url: `https://clinica-maria-luiza.onrender.com/pdf/laudos/${cpf}`,  // Altere a URL conforme necessário
                 method: 'GET',
                 responseType: 'blob',  // Importante para tratar a resposta como um blob
             }).then(response => {
@@ -272,7 +279,7 @@ export default {
                     const url = window.URL.createObjectURL(new Blob([response.data]));
                     const link = document.createElement('a');
                     link.href = url;
-                    link.setAttribute('download', `consultas de ${nome} .pdf`); // Nome do arquivo
+                    link.setAttribute('download', `Laudos e anexos.pdf`); // Nome do arquivo
                     document.body.appendChild(link);
                     link.click();
                     link.remove();

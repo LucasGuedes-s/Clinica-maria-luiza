@@ -93,6 +93,7 @@ async function cadastrarPaciente(req) {
       data_nascimento: new Date(req.paciente.data_nascimento),
       telefone: req.paciente.telefone,
       endereco: req.paciente.endereco,
+      laudos: req.paciente.laudos,
       tipo_paciente: req.paciente.tipo_paciente,
       foto: req.paciente.foto,
     }
@@ -143,8 +144,8 @@ async function registrarConsultaAba(req) {
         connect: { email: req.consulta.profissionalId }
       },
       data: new Date(),
-      hora_inicio: new Date(req.consulta.inicio),
-      hora_fim: new Date(req.consulta.fim),
+      hora_inicio: req.consulta.inicio,
+      hora_fim: req.consulta.fim,
       descricao_atividade: req.consulta.descricao,
       Aplicacao1:  req.consulta.aplicacao1,
       Aplicacao2:  req.consulta.aplicacao2,
