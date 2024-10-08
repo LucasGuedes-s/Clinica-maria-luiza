@@ -17,7 +17,7 @@
                     <label>Aplicações:</label>
                     <div class="inputs-row">
                         <select v-model="aplicacao1">
-                            <option value="" disabled selected>Aplicação 01:</option>
+                            <option value="" disabled selected>01:</option>
                             <option value="AT +">AT +</option>
                             <option value="AT + /">AT + /</option>
                             <option value="AT -">AT -</option>
@@ -30,7 +30,7 @@
                         </select>
 
                         <select v-model="aplicacao2">
-                            <option value="" disabled selected>Aplicação 02:</option>
+                            <option value="" disabled selected>02:</option>
                             <option value="AT +">AT +</option>
                             <option value="AT + /">AT + /</option>
                             <option value="AT -">AT -</option>
@@ -43,7 +43,7 @@
                         </select>
 
                         <select v-model="aplicacao3">
-                            <option value="" disabled selected>Aplicação 03:</option>
+                            <option value="" disabled selected>03:</option>
                             <option value="AT +">AT +</option>
                             <option value="AT + /">AT + /</option>
                             <option value="AT -">AT -</option>
@@ -56,7 +56,7 @@
                         </select>
 
                         <select v-model="aplicacao4">
-                            <option value="" disabled selected>Aplicação 04:</option>
+                            <option value="" disabled selected>04:</option>
                             <option value="AT +">AT +</option>
                             <option value="AT + /">AT + /</option>
                             <option value="AT -">AT -</option>
@@ -69,7 +69,7 @@
                         </select>
 
                         <select v-model="aplicacao5">
-                            <option value="" disabled selected>Aplicação 05:</option>
+                            <option value="" disabled selected>05:</option>
                             <option value="AT +">AT +</option>
                             <option value="AT + /">AT + /</option>
                             <option value="AT -">AT -</option>
