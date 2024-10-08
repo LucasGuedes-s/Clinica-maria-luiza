@@ -7,14 +7,7 @@ const profissionais = require('../profissionais.service')
 const formatar = require('../../utils/formatdata.ultil')
 const { getImageAsBase64 } = require('../../utils/img.ultil');
 const { PDFDocument } = require('pdf-lib');
-
-function addCenteredText(doc, text, fontSize, yOffset) {
-  doc.setFontSize(fontSize);
-  doc.setTextColor(0, 0, 0); 
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const textX = (pageWidth - doc.getTextWidth(text)) / 2;
-  doc.text(text, textX, yOffset);
-}
+const axios = require('axios');
 
 function addFooter(doc) {
   const pageCount = doc.internal.getNumberOfPages();
@@ -249,51 +242,6 @@ async function pdfConsultas(req) {
 
   return pdfBuffer;
 }
-async function pdfLaudos(req) {
-  const doc = new jsPDF();
-  const pacientes = await paciente.getPaciente(req);
-  const imgPath = path.resolve(__dirname, '../../src/assets/img.girafas.png');
-  const imgData = fs.readFileSync(imgPath).toString('base64');
-  
-  // Configurações da imagem do cabeçalho
-  const imgHeight = 40;
-  const imgWidth = 40;
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const x = (pageWidth - imgWidth) / 2;
-  
-  // Adiciona a imagem do cabeçalho
-  doc.addImage(imgData, 'PNG', x, 10, imgWidth, imgHeight);
-  
-  // Adiciona o título
-  addCenteredText(doc, `Laudos anexados ao paciente`, 18, imgHeight + 30);
-  doc.addPage();
-
-  const laudos = pacientes.flatMap(paciente => paciente.laudos || []);
-
-  // Carregar todas as imagens em paralelo
-  const laudoPromises = laudos.map(laudoUrl => getImageAsBase64(laudoUrl).catch(error => {
-    console.error('Erro ao adicionar imagem do laudo:', error);
-    return null; // Retorna nulo se houver erro
-  }));
-
-  const laudoBase64s = await Promise.all(laudoPromises);
-
-  for (let i = 0; i < laudoBase64s.length; i++) {
-    const laudoBase64 = laudoBase64s[i];
-    if (laudoBase64) {
-      if (i > 0) {
-        doc.addPage();
-        addFooter(doc);
-      }
-      const laudoWidth = pageWidth - 20; 
-      const laudoHeight = (laudoWidth * 0.75); 
-      doc.addImage(laudoBase64, 'JPEG', 10, 20, laudoWidth, laudoHeight);
-    }
-  }
-
-  addFooter(doc);
-  return doc.output('arraybuffer');
-}
 
 async function pdfConsultasAba(req) {
   const consultas = await profissionais.getConsultasAba(req.body);
@@ -369,8 +317,8 @@ async function pdfConsultasAba(req) {
       };
 
       if (req.body.hora === true) {
-        consultaData.hora_inicio = new Date(consulta.hora_inicio).toISOString().split('T')[1].substring(0, 5);
-        consultaData.hora_fim = new Date(consulta.hora_fim).toISOString().split('T')[1].substring(0, 5);
+        consultaData.hora_inicio = consulta.hora_inicio
+        consultaData.hora_fim = consulta.hora_fim
       }
 
       return consultaData;
@@ -397,4 +345,4 @@ async function pdfConsultasAba(req) {
   }
 }
 
-module.exports = { createReportPdf, pdfConsulta, pdfLaudos, pdfConsultas, pdfConsultasAba, addFooter }
+module.exports = { createReportPdf, pdfConsulta, pdfConsultas, pdfConsultasAba, addFooter }

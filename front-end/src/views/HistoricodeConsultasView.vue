@@ -198,7 +198,7 @@ export default {
             const token = this.store.token
             const cpf = this.cpf
 
-            Axios.get(`http://localhost:3000/consulta/paciente/${cpf}`, {
+            Axios.get(`https://clinica-maria-luiza.onrender.com/consulta/paciente/${cpf}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

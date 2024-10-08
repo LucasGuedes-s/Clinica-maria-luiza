@@ -127,6 +127,7 @@ async function registrarConsulta(req) {
 
   return consulta;
 }
+
 async function registrarConsultaAba(req) {
   const paciente = await prisma.Pacientes.findUnique({
     where: { cpf: req.consulta.pacienteId }
@@ -160,6 +161,30 @@ async function registrarConsultaAba(req) {
   
   return consulta;
 }
+async function postLaudos(dados) {
+  const paciente = await prisma.Pacientes.findFirst({
+    where: {
+      OR: [
+        { email: dados.email },
+        { cpf: dados.cpf }
+      ]
+    }
+  });
+  const laudoPaciente = await prisma.Pacientes.update({
+    where: {
+      cpf: paciente.cpf    
+
+    },
+    data: {
+      laudos: {
+        push: dados.laudo // Adiciona o novo laudo ao array existente
+      }
+    }
+  });
+
+  return laudoPaciente;
+}
+
 async function cadastrarDados(dados) {
   const cad_dados = await prisma.Pacientes_dados.create({
     data: {
@@ -194,6 +219,7 @@ async function updateDadosPaciente(req) {
     },
     data: {
       cpf: req.dados.cpf,  //  CPF é identificador único
+      nome: req.dados.nome,
       email: req.dados.email,
       telefone: req.dados.telefone,
       endereco: req.dados.endereco,
@@ -220,4 +246,4 @@ async function updateDadosPaciente(req) {
     dadosPaciente: dadosAtualizados
   });
 }
-module.exports = {loginPaciente, getPacientes, getPaciente, getConsultas, getConsulta, getConsultasAba, cadastrarDados, cadastrarPaciente, registrarConsulta, registrarConsultaAba, updateDadosPaciente};
+module.exports = {loginPaciente, getPacientes, postLaudos, getPaciente, getConsultas, getConsulta, getConsultasAba, cadastrarDados, cadastrarPaciente, registrarConsulta, registrarConsultaAba, updateDadosPaciente};

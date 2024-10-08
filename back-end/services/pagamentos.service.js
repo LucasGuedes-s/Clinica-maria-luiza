@@ -69,7 +69,6 @@ async function getPagamentoMes(mes_ano) {
 
     // Buscar todos os pagamentos
     const pagamentos = await prisma.Pagamentos.findMany({});
-    console.log(pagamentos)
     // Filtrar os pagamentos para o mês e ano específicos
     const pagamentosFiltrados = pagamentos.filter(pagamento => {
       const data = new Date(pagamento.Data);

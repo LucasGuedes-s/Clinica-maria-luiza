@@ -5,28 +5,19 @@
             <h1>Alterar dados</h1>
             <form @submit.prevent="editarDadosPaciente">
                 <div class="form-group">
-        <label for="cpf">CPF:</label>
-        <input
-            type="text"
-            id="cpf"
-            name="cpf"
-            v-model="usuario.cpf"
-            @input="handleCpfChange"
-            :disabled="isCpfDisabled"
-            required
-        />
-    </div>
-    <div class="form-group">
-        <label for="email">Email:</label>
-        <input
-            type="email"
-            id="email"
-            name="email"
-            v-model="usuario.email"
-            :disabled="isEmailDisabled"
-            required
-        />
-    </div>
+                    <label for="cpf">CPF:</label>
+                    <input type="text" id="cpf" name="cpf" v-model="usuario.cpf" @input="handleCpfChange"
+                        :disabled="isCpfDisabled" required />
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" v-model="usuario.email" :disabled="isEmailDisabled"
+                        required />
+                </div>
+                <div class="form-group">
+                    <label for="nome">Nome:</label>
+                    <input type="text" id="nome" name="nome" v-model="usuario.nome" required>
+                </div>
                 <div class="form-group">
                     <label for="telefone">Telefone:</label>
                     <input type="tel" id="telefone" name="telefone" v-model="usuario.telefone" required>
@@ -37,11 +28,13 @@
                 </div>
                 <div class="form-group">
                     <label for="comestiveis">Comestíveis:</label>
-                    <input type="text" id="comestiveis" name="comestiveis" v-model="usuario.paciente_dados[0].comestiveis" required>
+                    <input type="text" id="comestiveis" name="comestiveis"
+                        v-model="usuario.paciente_dados[0].comestiveis" required>
                 </div>
                 <div class="form-group">
                     <label for="tangiveis">Tangíveis:</label>
-                    <input type="text" id="tangiveis" name="tangiveis" v-model="usuario.paciente_dados[0].tangiveis" required>
+                    <input type="text" id="tangiveis" name="tangiveis" v-model="usuario.paciente_dados[0].tangiveis"
+                        required>
                 </div>
                 <div class="form-group">
                     <label for="nome">Físico:</label>
@@ -50,19 +43,23 @@
 
                 <div class="form-group">
                     <label for="nome">Altura:</label>
-                    <input type="number" id="altura" name="altura" v-model="usuario.paciente_dados[0].altura" placeholder="Altura:">
+                    <input type="number" id="altura" name="altura" v-model="usuario.paciente_dados[0].altura"
+                        placeholder="Altura:" step="0.01">
                 </div>
                 <div class="form-group">
                     <label for="nome">Peso:</label>
-                    <input type="number" id="peso" name="peso" v-model="usuario.paciente_dados[0].peso" placeholder="Peso:">
+                    <input type="number" id="peso" name="peso" v-model="usuario.paciente_dados[0].peso"
+                        placeholder="Peso:" step="0.01">
                 </div>
                 <div class="form-group">
-                    <label for="nome">Consulta com o neuro: {{ formatarData(usuario.paciente_dados[0].data_neuro) }}</label>
+                    <label for="nome">Consulta com o neuro: {{ formatarData(usuario.paciente_dados[0].data_neuro)
+                        }}</label>
                     <input type="date" id="data" name="data_neuro" v-model="data_neuro">
                 </div>
                 <div class="form-group">
                     <label for="nome">Alergicos:</label>
-                    <input type="text" id="alergia" name="alergia" v-model="usuario.paciente_dados[0].alergicos" placeholder="Alérgico(a) à:">
+                    <input type="text" id="alergia" name="alergia" v-model="usuario.paciente_dados[0].alergicos"
+                        placeholder="Alérgico(a) à:">
                 </div>
                 <div class="form-group selecionar">
                     <label for="imagem">Nova foto:</label>
@@ -162,6 +159,7 @@ select {
     .main-content-paciente {
         margin-left: 0;
     }
+
     form {
         grid-template-columns: 1fr;
     }
@@ -205,7 +203,7 @@ export default {
             isEmailDisabled: false,
             isCpfDisabled: false
         }
-        
+
     },
     methods: {
         handleCpfChange() {
@@ -218,13 +216,13 @@ export default {
         },
         async getDados() {
             const token = this.store.token
-            if(this.email != ''){
+            if (this.email != '') {
                 this.id = this.email
             }
-            else{
+            else {
                 this.id = this.cpf
             }
-            Axios.get(`http://localhost:3000/paciente/dados/${this.id}`, {
+            Axios.get(`https://clinica-maria-luiza.onrender.com/paciente/dados/${this.id}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -237,7 +235,7 @@ export default {
         },
         async editarDadosPaciente() {
             const token = this.store.token
-            try{
+            try {
                 // Gera um identificador único para a imagem
                 const uniqueImageName = uuidv4() + '_' + this.imagem.name;
                 // Cria uma referência para o armazenamento
@@ -247,22 +245,22 @@ export default {
                 // Obtém a URL pública da imagem
                 this.foto = await getDownloadURL(snapshot.ref);
             }
-            catch{
+            catch {
                 this.foto = this.dados[0].foto
             }
             try {
-                if(this.data_neuro === ''){
+                if (this.data_neuro === '') {
                     this.data_neuro = this.dados[0].paciente_dados[0].data_neuro
                 }
                 // Envia os dados do paciente para o backend
-                await Axios.post(`http://localhost:3000/editar/dados/paciente`, {
+                await Axios.post(`https://clinica-maria-luiza.onrender.com/editar/dados/paciente`, {
                     dados: {
                         cpf: this.dados[0].cpf,
                         nome: this.dados[0].nome,
                         email: this.dados[0].email,
                         telefone: this.dados[0].telefone,
                         endereco: this.dados[0].endereco,
-                        foto: this.foto, 
+                        foto: this.foto,
                         peso: this.dados[0].paciente_dados[0].peso,
                         altura: this.dados[0].paciente_dados[0].altura,
                         comestiveis: this.dados[0].paciente_dados[0].comestiveis,
@@ -275,7 +273,7 @@ export default {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
-                }).then(response =>{
+                }).then(response => {
                     sessionStorage.removeItem('cpf');
                     sessionStorage.removeItem('email');
 
@@ -302,7 +300,7 @@ export default {
             }
         }
     },
-    mounted(){
+    mounted() {
         this.getDados()
     },
     beforeRouteEnter(to, from, next) {

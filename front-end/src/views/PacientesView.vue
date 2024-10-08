@@ -3,27 +3,32 @@
     <div class="main_content_paciente">
         <h1>Pacientes</h1>
         <div class="search_cadastrar">
-            <input type="text" id="search-input" placeholder="Nome do paciente..." v-model="pesquisa" >
+            <input type="text" id="search-input" placeholder="Nome do paciente..." v-model="pesquisa">
             <RouterLink to="/cadastrarpaciente"><button>Cadastrar</button></RouterLink>
         </div>
         <div class="container_paciente" v-for="usuario in filteredPacientes" :key="usuario.cpf">
             <div class="info">
                 <img :src="usuario.foto" @click="editarDados(usuario.cpf, usuario.email)">
-                <div class="textos"> 
+                <div class="textos">
                     <p>Nome: {{ usuario.nome }}</p>
                     <p>Telefone: {{ usuario.telefone }}</p>
-                    <p v-if="usuario.paciente_dados && usuario.paciente_dados.length > 0">Alergico a: {{ usuario.paciente_dados[0].alergicos }}</p>
-            </div>
+                    <p v-if="usuario.paciente_dados && usuario.paciente_dados.length > 0">Alergico a: {{
+                        usuario.paciente_dados[0].alergicos }}</p>
+                </div>
 
             </div>
             <div class="botoes_div">
-                <RouterLink to="/cadastrarinformacoes"><button  class="evolucao_btn" v-if="usuario.paciente_dados.length === 0">Registrar dados</button></RouterLink>
+                <RouterLink to="/cadastrarinformacoes"><button class="evolucao_btn"
+                        v-if="usuario.paciente_dados.length === 0">Registrar dados</button></RouterLink>
 
-                <button class="evolucao_btn" v-if="usuario.paciente_dados.length > 0" @click="evolucao(usuario.cpf)">Evolução</button>
-                <button class="registroaba_btn" v-if="usuario.paciente_dados.length > 0" @click="aba(usuario.cpf, usuario.nome,)">Registro Aba</button>
-                <RouterLink to="/registrarconsulta"><button class="registrar_btn" @click="consulta(usuario.cpf, usuario.nome)">Registrar consultas</button></RouterLink>
+                <button class="evolucao_btn" v-if="usuario.paciente_dados.length > 0"
+                    @click="evolucao(usuario.cpf)">Evolução</button>
+                <button class="registroaba_btn" v-if="usuario.paciente_dados.length > 0"
+                    @click="aba(usuario.cpf, usuario.nome,)">Registro Aba</button>
+                <RouterLink to="/registrarconsulta"><button class="registrar_btn"
+                        @click="consulta(usuario.cpf, usuario.nome)">Registrar consultas</button></RouterLink>
                 <button class="histconsultas_btn" @click="historico(usuario.cpf)">Hist. consultas</button>
-                <button class="laudosconsultas_btn" @click="laudos(usuario.cpf)">Anexos</button>
+                <button class="laudosconsultas_btn" @click="Adicionarlaudos(usuario.cpf)">Anexos</button>
 
             </div>
         </div>
@@ -81,10 +86,13 @@ input {
     margin-bottom: 20px;
     border: 1px solid #84E7FF;
     border-radius: 8px;
-    flex-direction: row; /* Organiza itens em linha */
-    align-items: flex-start; /* Alinha itens ao topo */
+    flex-direction: row;
+    /* Organiza itens em linha */
+    align-items: flex-start;
+    /* Alinha itens ao topo */
     position: relative;
-    gap: 20px; /* Espaçamento entre a imagem e a info */
+    gap: 20px;
+    /* Espaçamento entre a imagem e a info */
 }
 
 .container_paciente img {
@@ -100,15 +108,19 @@ input {
     display: inline-flex;
     color: #7E7E7E;
 }
-.textos{
-        margin: 10px;
-    }
+
+.textos {
+    margin: 10px;
+}
+
 .botoes_div {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-top: auto; /* Move os botões para a parte inferior */
-    justify-content: flex-end; /* Alinha os botões à direita */
+    margin-top: auto;
+    /* Move os botões para a parte inferior */
+    justify-content: flex-end;
+    /* Alinha os botões à direita */
 }
 
 .evolucao_btn,
@@ -127,14 +139,16 @@ input {
     min-width: 120px;
 }
 
-.histconsultas_btn, .laudosconsultas_btn {
+.histconsultas_btn,
+.laudosconsultas_btn {
     background-color: #E7FAFF;
 }
 
 @media (max-width: 768px) {
-    .laudosconsultas_btn{
+    .laudosconsultas_btn {
         display: none
     }
+
     .evolucao_btn,
     .registroaba_btn,
     .histconsultas_btn,
@@ -142,15 +156,19 @@ input {
         padding: 8px 8px;
         min-width: auto;
     }
+
     .main_content_paciente {
         margin-left: 0;
         padding: 10px;
     }
+
     .search_cadastrar {
-        flex-direction: row; /* Alinha lado a lado */
+        flex-direction: row;
+        /* Alinha lado a lado */
         align-items: center;
     }
-    .textos{
+
+    .textos {
         margin: 10px;
     }
 
@@ -162,8 +180,10 @@ input {
     .search_cadastrar button {
         padding: 8px 16px;
         font-size: 14px;
-        width: 100px; /* Largura fixa do botão */
+        width: 100px;
+        /* Largura fixa do botão */
     }
+
     .container_paciente {
         flex-direction: column;
         align-items: center;
@@ -173,8 +193,8 @@ input {
     .container_paciente img {
         width: 150px;
         height: 150px;
-        margin-bottom: 10px; 
-        display: block; 
+        margin-bottom: 10px;
+        display: block;
     }
 
     .info {
@@ -188,9 +208,12 @@ input {
         flex-wrap: inherit;
         justify-content: inherit;
     }
+
     .botoes_div button {
-        padding: 5px; /* Ajuste o padding conforme a necessidade */
-        font-size: 13px; /* Diminua o tamanho da fonte */
+        padding: 5px;
+        /* Ajuste o padding conforme a necessidade */
+        font-size: 13px;
+        /* Diminua o tamanho da fonte */
     }
 }
 </style>
@@ -201,6 +224,9 @@ import { useAuthStore } from '@/store';
 import Axios from 'axios';
 import Swal from 'sweetalert2';
 import { RouterLink } from 'vue-router';
+import { storage } from '../firebase.js'
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { v4 as uuidv4 } from 'uuid';
 
 export default {
     name: 'pacientes',
@@ -209,6 +235,10 @@ export default {
     },
     setup() {
         const store = useAuthStore()
+        sessionStorage.removeItem('cpf');
+        sessionStorage.removeItem('nome');
+        sessionStorage.removeItem('email');
+
         return {
             store
         }
@@ -216,15 +246,18 @@ export default {
     data() {
         return {
             pesquisa: '',
-            paciente: []
+            paciente: [],
+            laudo: null,
+            laudos: [],
+            cpf: null,
         }
     },
     methods: {
-        async editarDados(cpf, email){
+        async editarDados(cpf, email) {
             sessionStorage.setItem('cpf', cpf);
             sessionStorage.setItem('email', email);
 
-            this.$router.push({ name: 'editarDados' });    
+            this.$router.push({ name: 'editarDados' });
         },
         async pacientes() {
             const token = this.store.token
@@ -238,63 +271,153 @@ export default {
                 console.error(Error)
             })
         },
-        async historico(cpf){
+        async historico(cpf) {
             sessionStorage.setItem('cpf', cpf);
             this.$router.push({ name: 'historicodeconsulta' });
         },
-        async aba(cpf, nome){
+        async aba(cpf, nome) {
             sessionStorage.setItem('cpf', cpf);
             sessionStorage.setItem('nome', nome);
 
             this.$router.push({ name: 'registroaba' });
         },
-        async evolucao(cpf){
+        async evolucao(cpf) {
             sessionStorage.setItem('cpf', cpf);
-            
+
             this.$router.push({ name: 'evolucao' });
         },
-        async consulta(cpf, nome){
+        async consulta(cpf, nome) {
             sessionStorage.setItem('cpf', cpf);
             sessionStorage.setItem('nome', nome);
 
             this.$router.push({ name: 'registrarconsulta' });
         },
-        async laudos(cpf) {
-            console.log(cpf)
+        async Adicionarlaudos(cpf) {
             Swal.fire({
-                title: 'Aguarde...',
-                text: 'Estamos gerando o PDF.',
-                timer: 6000,
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
+                title: 'O que você gostaria de fazer?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Subir Laudo',
+                cancelButtonText: 'Ver Laudos',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.openUploadModal();
+                    this.cpf = cpf
+                } else if (result.isDismissed) {
+                    sessionStorage.setItem('cpf', cpf);
+                    this.$router.push({ name: 'laudos' });
                 }
             });
-            Axios({
-                url: `https://clinica-maria-luiza.onrender.com/pdf/laudos/${cpf}`,  // Altere a URL conforme necessário
-                method: 'GET',
-                responseType: 'blob',  // Importante para tratar a resposta como um blob
-            }).then(response => {
-                    // Crie um URL para o blob
-                    const url = window.URL.createObjectURL(new Blob([response.data]));
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.setAttribute('download', `Laudos e anexos.pdf`); // Nome do arquivo
-                    document.body.appendChild(link);
-                    link.click();
-                    link.remove();
+        },
+
+        async uploadFiles(files) {
+            for (const file of files) {
+                const uniqueFileName = uuidv4() + '_' + file.name;
+                const storageRef = ref(storage, `laudos/${uniqueFileName}`);
+
+                try {
+                    const snapshot = await uploadBytes(storageRef, file);
+                    const downloadURL = await getDownloadURL(snapshot.ref);
+                    this.laudo = downloadURL
+                    this.addLaudo()
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end', // ou 'top-right', 'bottom-end', etc.
+                        icon: 'success', // ou 'error', 'warning', 'info', 'question'
+                        title: 'Fazendo o upload do laudo',
+                        text: 'Fazendo o upload do laudo adicionado',
+                        showConfirmButton: false,
+                        timer: 3000, // Tempo em milissegundos antes de desaparecer
+                        timerProgressBar: true
+                    });
+
+                } catch (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Não foi possível concluir',
+                        text: 'Laudo não adicionado',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    })
+                    console.error('Erro ao fazer upload:', error);
+                }
+            }
+        },
+        async addLaudo() {
+            const token = this.store.token
+            console.log(this.cpf, this.laudo)
+            Axios.post("https://clinica-maria-luiza.onrender.com/paciente/laudos",
+                {
+                    cpf: this.cpf,
+                    laudo: this.laudo
+                },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }).then(response => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Laudo adicionado com sucesso!',
+                        text: 'Laudo adicionado com sucesso',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    })
+                    this.cpf = null
+                }).catch(Error => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Não foi possível concluir',
+                        text: 'Laudo não adicionado',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    })
                 })
-                .catch(error => console.error('Erro ao baixar o PDF:', error));
-        }
+        },
+        openUploadModal() {
+            Swal.fire({
+                title: 'Escolha o tipo de arquivo para fazer upload',
+                input: 'select',
+                inputOptions: {
+                    image: 'Imagem (PNG)',
+                    pdf: 'PDF',
+                },
+                inputPlaceholder: 'Selecione um tipo de arquivo',
+                showCancelButton: true,
+                confirmButtonText: 'Selecionar',
+                cancelButtonText: 'Cancelar',
+            }).then((result) => {
+                if (result.isConfirmed && result.value) {
+                    this.openFileInput(result.value);
+                }
+            });
+
+        },
+        openFileInput(fileType) {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = fileType === 'image' ? 'image/*' : 'application/pdf';
+            input.multiple = true; // Permite seleção de múltiplos arquivos
+            input.onchange = (event) => {
+                const files = event.target.files;
+                if (files.length) {
+                    this.uploadFiles(Array.from(files));
+                }
+            };
+            input.click();
+        },
     },
     mounted() {
         this.pacientes()
     },
     computed: {
         filteredPacientes() {
-            return this.paciente.filter(paciente => 
-            paciente.nome.toLowerCase().includes(this.pesquisa.toLowerCase())
-        );
+            return this.paciente.filter(paciente =>
+                paciente.nome.toLowerCase().includes(this.pesquisa.toLowerCase())
+            );
         }
     },
     beforeRouteEnter(to, from, next) {
