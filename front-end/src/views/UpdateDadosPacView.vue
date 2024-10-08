@@ -194,6 +194,7 @@ export default {
     data() {
         return {
             formatarData,
+            dado: [],
             data_neuro: '',
             dados: [],
             id: '',
@@ -227,8 +228,25 @@ export default {
                     'Authorization': `Bearer ${token}`
                 }
             }).then(response => {
-                this.dados = response.data.paciente
-                console.log(this.dados)
+                console.log(response.data)
+                if (Array.isArray(response.data.paciente[0].paciente_dados) && response.data.paciente[0].paciente_dados.length === 0) {
+                    // Adiciona um objeto com campos nulos ao array
+
+                    this.dado = response.data.paciente[0]
+                    this.dado.paciente_dados.push({
+                        comestiveis: null,
+                        tangiveis: null,
+                        fisicos: null,
+                        consulta_neuro: null,
+                        peso: null,
+                        altura: null
+                    });
+                    this.dados = this.dado
+                    console.log(this.dados)
+                }
+                else{
+                    this.dados = response.data.paciente[0]
+                }
             }).catch(error => {
                 console.error(error)
             })

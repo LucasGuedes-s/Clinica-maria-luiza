@@ -203,7 +203,7 @@ methods: {
         else if(this.permissaoId == 'Recepcionista'){
             this.permissao = 3
         }
-        await Axios.post(`http://localhost:3000/cadastrar/profissional`, {
+        await Axios.post(`https://clinica-maria-luiza.onrender.com/cadastrar/profissional`, {
             usuario: {
                 nome: this.nome,
                 data_nascimento: this.data_nascimento,
@@ -230,6 +230,7 @@ methods: {
             }),
             router.push("/profissionais")
         ).catch(error => {
+            console.log(error)
             Swal.fire({
                 icon: 'erro',
                 title: 'Não foi possível realizar o cadastro',
