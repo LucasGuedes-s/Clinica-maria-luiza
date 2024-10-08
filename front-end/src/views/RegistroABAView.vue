@@ -9,6 +9,10 @@
                 </div>
             </div>
             <form @submit.prevent="registrarConsulta">
+                <div class="form-group horainicio">
+                    <label for="inicio">Hora de Início:</label>
+                    <input type="time" v-model="inicio" id="inicio" />
+                </div>
                 <div class="form-group descricao">
                     <label for="descricao_atividade">Descrição de atividade:</label>
                     <input id="descricao_atividade" rows="4" v-model="descricao"></input>
@@ -117,6 +121,11 @@
                 <div class="form-group selecionar">
                     <label for="imagem">Adicionar Imagem:</label>
                     <input type="file" id="imagem_prof" name="imagem" accept="image/*" @change="handleFileUpload">
+                </div>
+
+                <div class="form-group horafinal">
+                    <label for="fim">Hora de Fim:</label>
+                    <input type="time" v-model="fim" id="fim" />
                 </div>
 
                 <button type="submit" class="btn_registrarconsultaaba">Registrar Consulta</button>
@@ -268,10 +277,9 @@ form {
 import { useAuthStore } from '@/store';
 import Sidebar from '@/components/Sidebar.vue';
 import Axios from 'axios';
-import Swal from 'sweetalert2'
-//Importações de subir imagem
+import Swal from 'sweetalert2';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from '../firebase.js'
+import { storage } from '../firebase.js';
 import { v4 as uuidv4 } from 'uuid';
 
 export default {
@@ -280,12 +288,12 @@ export default {
         Sidebar
     },
     setup() {
-        const store = useAuthStore()
+        const store = useAuthStore();
         return {
             store,
             cpf: sessionStorage.getItem('cpf') || '',
             nome: sessionStorage.getItem('nome') || '',
-        }
+        };
     },
     data() {
         return {
@@ -301,41 +309,56 @@ export default {
             teste: '',
             foto: '',
             observacoes: '',
-        }
+            imagem: null, // Adicionando a variável para armazenar a imagem
+        };
     },
     methods: {
         async handleFileUpload(event) {
-            this.imagem = event.target.files[0];
+            this.imagem = event.target.files[0]; // Armazena a imagem selecionada
         },
         async registrarConsulta() {
-            const token = this.store.token
+            const token = this.store.token;
             try {
                 // Gera um identificador único para a imagem
-                const uniqueImageName = uuidv4() + '_' + this.imagem.name;
-                // Cria uma referência para o armazenamento
-                const storageRef = ref(storage, 'consultaAba/' + uniqueImageName);
-                // Faz o upload da imagem
-                const snapshot = await uploadBytes(storageRef, this.imagem);
-                // Obtém a URL pública da imagem
-                this.foto = await getDownloadURL(snapshot.ref);
-            }
-            catch {
-                this.foto = null
-            try {
-                console.log(sessionStorage.getItem('cpf') || '')
-                console.log(this.cpf)
-                console.log(this.aplicacao1, this.aplicacao2, this.aplicacao3, this.aplicacao4, this.aplicacao5,)
-                const token = this.store.token
-                const user = this.store.usuario.usuario.email
+                if (this.imagem) { // Verifica se a imagem foi selecionada
+                    const uniqueImageName = uuidv4() + '_' + this.imagem.name;
+                    // Cria uma referência para o armazenamento
+                    const storageRef = ref(storage, 'consultaAba/' + uniqueImageName);
+                    // Faz o upload da imagem
+                    const snapshot = await uploadBytes(storageRef, this.imagem);
+                    // Obtém a URL pública da imagem
+                    this.foto = await getDownloadURL(snapshot.ref);
+                } else {
+                    this.foto = null; // Se não houver imagem, define como nulo
+                }
+
+                // Logando as informações da consulta para depuração
+                console.log('Dados da consulta:', {
+                    pacienteId: this.cpf,
+                    profissionalId: this.store.usuario.usuario.email,
+                    descricao: this.descricao,
+                    aplicacao1: this.aplicacao1,
+                    aplicacao2: this.aplicacao2,
+                    aplicacao3: this.aplicacao3,
+                    aplicacao4: this.aplicacao4,
+                    aplicacao5: this.aplicacao5,
+                    teste: this.teste,
+                    inicio: this.inicio,  // Hora de início como string
+                    fim: this.fim,        // Hora de fim como string
+                    observacoes: this.observacoes,
+                    foto: this.foto // Loga a URL da imagem se houver
+                });
+
+                // Realiza a requisição para registrar a consulta
                 await Axios.post("https://clinica-maria-luiza.onrender.com/consultaAba/registrar",
                     {
                         consulta: {
                             pacienteId: this.cpf,
-                            profissionalId: user,
+                            profissionalId: this.store.usuario.usuario.email,
                             consulta: this.consulta,
                             data: this.data,
-                            inicio: this.inicio,
-                            fim: this.fim,
+                            inicio: this.inicio,  // Hora de início passada como string
+                            fim: this.fim,        // Hora de fim passada como string
                             descricao: this.descricao,
                             aplicacao1: this.aplicacao1,
                             aplicacao2: this.aplicacao2,
@@ -343,26 +366,27 @@ export default {
                             aplicacao4: this.aplicacao4,
                             aplicacao5: this.aplicacao5,
                             teste: this.teste,
-                            observacoes: this.observacoes
+                            observacoes: this.observacoes,
+                            foto: this.foto // Incluindo a URL da imagem
                         },
                     }, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
-                },
-                ).then(response => {
-                    console.log('Consulta registrada com sucesso!');
-                    sessionStorage.removeItem('cpf');
-                    sessionStorage.removeItem('email');
-
-                }).catch(response => {
-                    console.log('Houve um problema ao registrar a consulta.');
                 })
-            }catch{
-                console.log("Erro")
+                    .then(response => {
+                        console.log('Consulta registrada com sucesso!', response.data);
+                        Swal.fire('Sucesso!', 'Consulta registrada com sucesso!', 'success'); // Adicionando feedback visual
+                    })
+                    .catch(error => {
+                        console.error('Erro ao registrar consulta:', error);
+                        Swal.fire('Erro!', 'Falha ao registrar a consulta.', 'error'); // Feedback em caso de erro
+                    });
+            } catch (error) {
+                console.error('Erro durante o upload da imagem:', error);
+                Swal.fire('Erro!', 'Falha ao fazer upload da imagem.', 'error'); // Feedback para erro no upload
             }
         }
     }
-}
 }
 </script>
