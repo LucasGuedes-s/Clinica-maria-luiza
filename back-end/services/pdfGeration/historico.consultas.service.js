@@ -309,8 +309,9 @@ async function pdfConsultasAba(req) {
 
     // Mapeia os dados de consultas
     const data = consultas.map(consulta => {
+      const data = formatar.formatarDataHoraSeparados(new Date(consulta.data))
       const consultaData = {
-        data: new Date(consulta.data).toLocaleDateString(),
+        data: data.data,
         profissional: consulta.profissional.nome,
         paciente: consulta.paciente.nome,
         descricao_atividade: consulta.descricao_atividade

@@ -108,7 +108,6 @@ async function registrarConsulta(req) {
   if (!paciente) {
     throw new Error('Paciente não encontrado');
   }
-  console.log(req)
   const consulta = await prisma.Consultas.create({
     data: {
       consulta: req.consulta.consulta,
@@ -208,6 +207,9 @@ async function updateDadosPaciente(req) {
         { cpf: req.dados.cpf }       
       ]
     },
+    include: {
+      paciente_dados: true // Inclui os dados da tabela Pacientes_dados
+    }
   });
 
   if (!paciente) {
@@ -226,24 +228,39 @@ async function updateDadosPaciente(req) {
       foto: req.dados.foto,
     }
   })
-  console.log(req.dados.data_neuro)
-  const dadosAtualizados = await prisma.Pacientes_dados.updateMany({
+  const pacienteId = paciente[0].cpf; // O CPF do paciente como identificador
+
+  const dadosAtualizados = await prisma.Pacientes_dados.upsert({
     where: {
-      pacienteId: paciente[0].cpf,
+      pacienteId: pacienteId, // Usando o pacienteId como identificador único
     },
-    data: {
-      peso: parseFloat(req.dados.peso),
-      altura: parseFloat(req.dados.altura),
-      comestiveis: req.dados.comestiveis,
-      tangiveis: req.dados.tangiveis,
-      fisicos: req.dados.fisicos,
-      data_neuro: new Date(req.dados.data_neuro),
-      alergicos: req.dados.alergicos,
+    update: {
+      peso: req.dados.peso !== undefined && req.dados.peso !== '' ? parseFloat(req.dados.peso) : null,
+      altura: req.dados.altura !== undefined && req.dados.altura !== '' ? parseFloat(req.dados.altura) : null,
+      comestiveis: req.dados.comestiveis !== undefined && req.dados.comestiveis !== '' ? req.dados.comestiveis : null,
+      tangiveis: req.dados.tangiveis !== undefined && req.dados.tangiveis !== '' ? req.dados.tangiveis : null,
+      fisicos: req.dados.fisicos !== undefined && req.dados.fisicos !== '' ? req.dados.fisicos : null,
+      data_neuro: req.dados.data_neuro ? new Date(req.dados.data_neuro) : null,
+      alergicos: req.dados.alergicos !== undefined && req.dados.alergicos !== '' ? req.dados.alergicos : null,
+    },
+    create: {
+      pacienteId: pacienteId,
+      peso: req.dados.peso !== undefined && req.dados.peso !== '' ? parseFloat(req.dados.peso) : null,
+      altura: req.dados.altura !== undefined && req.dados.altura !== '' ? parseFloat(req.dados.altura) : null,
+      comestiveis: req.dados.comestiveis !== undefined && req.dados.comestiveis !== '' ? req.dados.comestiveis : null,
+      tangiveis: req.dados.tangiveis !== undefined && req.dados.tangiveis !== '' ? req.dados.tangiveis : null,
+      fisicos: req.dados.fisicos !== undefined && req.dados.fisicos !== '' ? req.dados.fisicos : null,
+      data_neuro: req.dados.data_neuro ? new Date(req.dados.data_neuro) : null,
+      alergicos: req.dados.alergicos !== undefined && req.dados.alergicos !== '' ? req.dados.alergicos : null,
     },
   });
-  return ({
+  
+  // Retornar os dados atualizados ou criados
+  return {
     paciente: pacienteAtualizado,
-    dadosPaciente: dadosAtualizados
-  });
+    dadosPaciente: dadosAtualizados,
+  };
+  
+  
 }
 module.exports = {loginPaciente, getPacientes, postLaudos, getPaciente, getConsultas, getConsulta, getConsultasAba, cadastrarDados, cadastrarPaciente, registrarConsulta, registrarConsultaAba, updateDadosPaciente};

@@ -1,7 +1,7 @@
 <template>
     <Sidebar />
     <div class="main-content-paciente">
-        <div class="container_cadastrarpac" v-for="usuario in dados" :key="usuario.cpf">
+        <div class="container_cadastrarpac" v-for="usuario in dados.paciente" :key="usuario.cpf">
             <h1>Alterar dados</h1>
             <form @submit.prevent="editarDadosPaciente">
                 <div class="form-group">
@@ -20,25 +20,24 @@
                 </div>
                 <div class="form-group">
                     <label for="telefone">Telefone:</label>
-                    <input type="tel" id="telefone" name="telefone" v-model="usuario.telefone" required>
+                    <input type="tel" id="telefone" name="telefone" v-model="usuario.telefone">
                 </div>
                 <div class="form-group">
                     <label for="endereco">Endereço:</label>
-                    <input type="text" id="endereco" name="endereco" v-model="usuario.endereco" required>
+                    <input type="text" id="endereco" name="endereco" v-model="usuario.endereco">
                 </div>
                 <div class="form-group">
                     <label for="comestiveis">Comestíveis:</label>
                     <input type="text" id="comestiveis" name="comestiveis"
-                        v-model="usuario.paciente_dados[0].comestiveis" required>
+                        v-model="usuario.paciente_dados[0].comestiveis">
                 </div>
                 <div class="form-group">
                     <label for="tangiveis">Tangíveis:</label>
-                    <input type="text" id="tangiveis" name="tangiveis" v-model="usuario.paciente_dados[0].tangiveis"
-                        required>
+                    <input type="text" id="tangiveis" name="tangiveis" v-model="usuario.paciente_dados[0].tangiveis">
                 </div>
                 <div class="form-group">
                     <label for="nome">Físico:</label>
-                    <input type="text" id="fisico" name="fisico" v-model="usuario.paciente_dados[0].fisicos" required>
+                    <input type="text" id="fisico" name="fisico" v-model="usuario.paciente_dados[0].fisicos">
                 </div>
 
                 <div class="form-group">
@@ -52,7 +51,7 @@
                         placeholder="Peso:" step="0.01">
                 </div>
                 <div class="form-group">
-                    <label for="nome">Consulta com o neuro: {{ formatarData(usuario.paciente_dados[0].data_neuro)
+                    <label for="nome">Consulta com o neuro: {{ formatarData(usuario.paciente_dados[0].consulta_neuro)
                         }}</label>
                     <input type="date" id="data" name="data_neuro" v-model="data_neuro">
                 </div>
@@ -228,24 +227,74 @@ export default {
                     'Authorization': `Bearer ${token}`
                 }
             }).then(response => {
-                console.log(response.data)
                 if (Array.isArray(response.data.paciente[0].paciente_dados) && response.data.paciente[0].paciente_dados.length === 0) {
                     // Adiciona um objeto com campos nulos ao array
+                    const paciente = response.data.paciente[0];
 
-                    this.dado = response.data.paciente[0]
-                    this.dado.paciente_dados.push({
+                    // Define this.dados como um objeto que contém o array paciente
+                    this.dados = {
+                        paciente: [
+                            {
+                                cpf: paciente.cpf,
+                                email: paciente.email,
+                                nome: paciente.nome,
+                                nome_responsavel: paciente.nome_responsavel,
+                                data_nascimento: paciente.data_nascimento,
+                                endereco: paciente.endereco,
+                                foto: paciente.foto,
+                                laudos: paciente.laudos,
+                                telefone: paciente.telefone,
+                                tipo_paciente: paciente.tipo_paciente,
+                                paciente_dados: [] // Inicializa como array vazio
+                            }
+                        ]
+                    };
+
+                    // Se paciente_dados precisa ter valores padrão, você pode adicionar assim
+                    this.dados.paciente[0].paciente_dados.push({
                         comestiveis: null,
                         tangiveis: null,
                         fisicos: null,
                         consulta_neuro: null,
                         peso: null,
-                        altura: null
+                        altura: null,
+                        alergicos: null
+
                     });
-                    this.dados = this.dado
-                    console.log(this.dados)
+
+                    console.log(this.dados); // Para verificar a estrutura final
                 }
-                else{
-                    this.dados = response.data.paciente[0]
+                else {
+                    const paciente = response.data.paciente[0]
+                    this.dados = {
+                        paciente: [
+                            {
+                                cpf: paciente.cpf,
+                                email: paciente.email,
+                                nome: paciente.nome,
+                                nome_responsavel: paciente.nome_responsavel,
+                                data_nascimento: paciente.data_nascimento,
+                                endereco: paciente.endereco,
+                                foto: paciente.foto,
+                                laudos: paciente.laudos,
+                                telefone: paciente.telefone,
+                                tipo_paciente: paciente.tipo_paciente,
+                                paciente_dados: [] // Inicializa como array vazio
+                            }
+                        ]
+                    };
+                    console.log(paciente.paciente_dados)
+                    this.dados.paciente[0].paciente_dados.push({
+                        comestiveis: paciente.paciente_dados[0].comestiveis,
+                        tangiveis: paciente.paciente_dados[0].tangiveis,
+                        fisicos: paciente.paciente_dados[0].fisicos,
+                        consulta_neuro: paciente.paciente_dados[0].data_neuro,
+                        peso: paciente.paciente_dados[0].peso,
+                        altura: paciente.paciente_dados[0].altura,
+                        alergicos: paciente.paciente_dados[0].alergicos
+                    });
+                    console.log(this.dados); // Para verificar a estrutura final
+
                 }
             }).catch(error => {
                 console.error(error)
@@ -264,28 +313,28 @@ export default {
                 this.foto = await getDownloadURL(snapshot.ref);
             }
             catch {
-                this.foto = this.dados[0].foto
+                this.foto = this.dados.paciente[0].foto
             }
             try {
                 if (this.data_neuro === '') {
-                    this.data_neuro = this.dados[0].paciente_dados[0].data_neuro
+                    this.data_neuro = this.dados.paciente[0].paciente_dados[0].data_neuro
                 }
                 // Envia os dados do paciente para o backend
                 await Axios.post(`https://clinica-maria-luiza.onrender.com/editar/dados/paciente`, {
                     dados: {
-                        cpf: this.dados[0].cpf,
-                        nome: this.dados[0].nome,
-                        email: this.dados[0].email,
-                        telefone: this.dados[0].telefone,
-                        endereco: this.dados[0].endereco,
+                        cpf: this.dados.paciente[0].cpf,
+                        nome: this.dados.paciente[0].nome,
+                        email: this.dados.paciente[0].email,
+                        telefone: this.dados.paciente[0].telefone,
+                        endereco: this.dados.paciente[0].endereco,
                         foto: this.foto,
-                        peso: this.dados[0].paciente_dados[0].peso,
-                        altura: this.dados[0].paciente_dados[0].altura,
-                        comestiveis: this.dados[0].paciente_dados[0].comestiveis,
-                        tangiveis: this.dados[0].paciente_dados[0].tangiveis,
-                        fisicos: this.dados[0].paciente_dados[0].fisicos,
+                        peso: this.dados.paciente[0].paciente_dados[0].peso,
+                        altura: this.dados.paciente[0].paciente_dados[0].altura,
+                        comestiveis: this.dados.paciente[0].paciente_dados[0].comestiveis,
+                        tangiveis: this.dados.paciente[0].paciente_dados[0].tangiveis,
+                        fisicos: this.dados.paciente[0].paciente_dados[0].fisicos,
                         data_neuro: this.data_neuro,
-                        alergicos: this.dados[0].paciente_dados[0].alergicos
+                        alergicos: this.dados.paciente[0].paciente_dados[0].alergicos
                     }
                 }, {
                     headers: {

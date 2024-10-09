@@ -44,7 +44,7 @@ model Pacientes{
 model Pacientes_dados{
   pacientes       Int @id @default(autoincrement())
   paciente        Pacientes? @relation(fields: [pacienteId], references: [cpf])
-  pacienteId      String?
+  pacienteId      String? @unique
   peso            Float?      
   altura          Float?
   laudos          String[] @db.VarChar(2048)
