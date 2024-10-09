@@ -25,7 +25,6 @@ export default {
         const agendarconsulta = async () => {
             const cpf = props.dado;
             try {
-                console.log("Aqui")
 
                 const response = await Axios.get(`https://clinica-maria-luiza.onrender.com/consultasAba/paciente/${cpf}`);
                 const todasConsultas = response.data.consultas;
@@ -105,17 +104,17 @@ export default {
 
         const mapResultToNumber = (result) => {
             switch (result) {
-                case 'AT+': return 3;
-                case 'AT-': return 1;
-                case 'AT/+': return 4;
+                case 'AT +': return 3;
+                case 'AT -': return 1;
+                case 'AT + /': return 4;
 
-                case 'AP+': return 6;
-                case 'AP-': return 5;
-                case 'AP/+': return 7;
+                case 'AP +': return 6;
+                case 'AP -': return 5;
+                case 'AP + /': return 7;
 
-                case 'SA+': return 9;
-                case 'SA-': return 8;
-                case 'SA/+': return 10;
+                case 'SA +': return 9;
+                case 'SA -': return 8;
+                case 'SA + /': return 10;
                 default: return 0; // Valor padrão para outros resultados
             }
         };

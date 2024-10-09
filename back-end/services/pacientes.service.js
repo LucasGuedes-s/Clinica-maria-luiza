@@ -254,7 +254,6 @@ async function updateDadosPaciente(req) {
       alergicos: req.dados.alergicos !== undefined && req.dados.alergicos !== '' ? req.dados.alergicos : null,
     },
   });
-  console.log(dadosAtualizados)
   // Retornar os dados atualizados ou criados
   return {
     paciente: pacienteAtualizado,
