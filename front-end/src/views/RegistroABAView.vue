@@ -3,7 +3,7 @@
     <div class="main_content">
         <div class="container_registroaba">
             <div class="header_container">
-                <h1>Registro aba</h1>
+                <h1>Registro ABA</h1>
                 <div class="paciente_nome">
                     <p>{{ nome }}</p>
                 </div>
@@ -281,6 +281,7 @@ import Swal from 'sweetalert2';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from '../firebase.js';
 import { v4 as uuidv4 } from 'uuid';
+import router from '@/router/index.js';
 
 export default {
     name: 'registroaba',
@@ -377,6 +378,7 @@ export default {
                     .then(response => {
                         console.log('Consulta registrada com sucesso!', response.data);
                         Swal.fire('Sucesso!', 'Consulta registrada com sucesso!', 'success'); // Adicionando feedback visual
+                        router.push('/pacientes')
                     })
                     .catch(error => {
                         console.error('Erro ao registrar consulta:', error);

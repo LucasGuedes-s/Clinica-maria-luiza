@@ -4,20 +4,31 @@ const bcryptUtil = require("../utils/bcrypt.ultil")
 require('dotenv').config();
 
 async function loginPaciente(user) {
-  const paciente = await prisma.Pacientes.findMany({
+  if (!user) {
+    throw new Error('Identificador necessário'); // Lança um erro se user for inválido
+  }
+
+  const paciente = await prisma.Pacientes.findFirst({
     where: {
       OR: [
-        { email: user },   
-        { cpf: user }       
-      ]
+        {
+          email: {
+            equals: user,
+            mode: 'insensitive',
+          },
+        },
+        { cpf: user },
+      ],
     },
     include: {
-      paciente_dados: true  // Inclui os dados da tabela Pacientes_dados
-    }
+      paciente_dados: true, // Inclui os dados da tabela Pacientes_dados
+    },
   });
-  return paciente;
-  
+
+  // Retorna o paciente encontrado ou null se não houver
+  return paciente || null; 
 }
+
 async function getPaciente(user){
   const paciente = await prisma.Pacientes.findMany({
     where: {

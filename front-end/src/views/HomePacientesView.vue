@@ -122,12 +122,10 @@ export default {
                     }
                     else if (link) {
                         window.open(link, '_blank');
-                        
                     }
 
                 }
                 catch {
-
                 }
 
             },

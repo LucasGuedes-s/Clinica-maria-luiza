@@ -42,7 +42,10 @@ async function LoginUser(usuario, res){
 async function updateSenha(users, res){ 
     const user = await prisma.Profissionais.findFirst({
         where:{
-            email: users.usuario.email
+            email: {
+                equals: users.usuario.email,
+                mode: 'insensitive'
+            }
         }
     });
 
