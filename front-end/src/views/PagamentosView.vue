@@ -155,13 +155,15 @@ export default {
         }
     },
     methods: {
+
         async editarPagamento(id, valor, paciente, tipo_pagamento, metodo){            
-            const { value: novo_valor } = await Swal.fire({
+            const { value: inputValue } = await Swal.fire({
                 title: "Digite o valor",
                 input: "text",
                 inputValue: valor,
                 inputLabel: `Digite o novo valor que você deseja adicionar a: R$ ${valor}`,
             });
+            const novo_valor = inputValue;
             const { value: novo_paciente } = await Swal.fire({
                 title: "Pagamento de: ",
                 input: "text",
@@ -199,8 +201,9 @@ export default {
             }
             if(novo_tipo === 'externo'){
                 this.tipoPagamento = 'Pagamento de entrada'
-                const valor = parseFloat(this.novo_valor);
+                const valor = parseFloat(novo_valor);
                 this.novo_val = valor * 0.2;
+                console.log(this.novo_val)
             }
             else if(novo_tipo === 'entrada'){
                 this.tipoPagamento = 'Pagamento de entrada'
@@ -211,7 +214,7 @@ export default {
                 this.novo_val = parseFloat(novo_valor)
             }
 
-            //console.log(id, this.novo_val, novo_paciente, this.tipoPagamento, this.tipoPagamento)
+            console.log(id, this.novo_val, novo_paciente, this.tipoPagamento, this.tipoPagamento)
             try{
                 const token = this.store.token;
                 Axios.post("https://clinica-maria-luiza.onrender.com/alterar/pagamento", {
