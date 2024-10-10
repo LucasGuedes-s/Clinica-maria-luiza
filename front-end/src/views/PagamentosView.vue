@@ -196,12 +196,13 @@ export default {
             }
             else if(novo_tipo === 'entrada'){
                 this.tipoPagamento = 'Pagamento de entrada'
-                this.novo_val = novo_valor
+                this.novo_val = parseFloat(novo_valor)
             }
             else{
                 this.tipoPagamento = 'Pagamento de saida'
-                this.novo_val = novo_valor
+                this.novo_val = parseFloat(novo_valor)
             }
+
             //console.log(id, this.novo_val, novo_paciente, this.tipoPagamento, this.tipoPagamento)
             try{
                 const token = this.store.token;
