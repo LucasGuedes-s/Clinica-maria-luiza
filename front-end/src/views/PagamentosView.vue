@@ -17,6 +17,7 @@
                             <th>Valor:</th>
                             <th>Tipo de pagamento:</th>
                             <th>Metodo:</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -27,6 +28,7 @@
                             <td> R$ {{ pagamento.pagamento.toFixed(2) }}</td>
                             <td>{{ pagamento.tipo_pagamento }}</td>
                             <td>{{ pagamento.metodo }}</td>
+                            <button @click="editarPagamento(pagamento.id, pagamento.pagamento.toFixed(2), pagamento.paciente, pagamento.tipo_pagamento, pagamento.metodo)">Editar</button>
                         </tr>
                     </tbody>
                 </table>
@@ -136,12 +138,107 @@ export default {
         return {
             formatDate,
             formatarMesAno,
+            metodoPagamento: '',
+            tipoPagamento: '',
+            novo_val: '',
             pagamentos: [],
             pagamentosPorMes: {} // Armazena os pagamentos agrupados por mês
 
         }
     },
     methods: {
+        async editarPagamento(id, valor, paciente, tipo_pagamento, metodo){            
+            const { value: novo_valor } = await Swal.fire({
+                title: "Digite o valor",
+                input: "text",
+                inputValue: valor,
+                inputLabel: `Digite o novo valor que você deseja adicionar a: R$ ${valor}`,
+            });
+            const { value: novo_paciente } = await Swal.fire({
+                title: "Pagamento de: ",
+                input: "text",
+                inputValue: paciente,
+                inputLabel: `Digite o novo paciente para: ${paciente}` ,
+            });
+            const { value: novo_tipo } = await Swal.fire({
+                title: `Tipo de pagamento para: ${tipo_pagamento}`,
+                input: "select",
+                inputOptions: {
+                    Pagamentos: {
+                        saida: "Pagamento de saida",
+                        entrada: "Pagamento de entrada",
+                        externo: "Paciente externo",
+                    },
+                }
+            });
+            const { value: novo_metodo } = await Swal.fire({
+                title: `Novo método de pagamento para: ${metodo}`,
+                input: "select",
+                inputOptions: {
+                    Pagamentos: {
+                        Dinheiro: "Dinheiro",
+                        PIX: "PIX",
+                        Cartao: "Cartão de Crédito | Débito",
+                    },
+                }
+            });
+
+            if(novo_metodo === 'Cartao'){
+                this.metodoPagamento = 'Cartão de Crédito | Débito'
+            }
+            else{
+                this.metodoPagamento = novo_metodo
+            }
+            if(novo_tipo === 'externo'){
+                this.tipoPagamento = 'Pagamento de entrada'
+                const valor = parseFloat(this.novo_valor);
+                this.novo_val = valor * 0.2;
+            }
+            else if(novo_tipo === 'entrada'){
+                this.tipoPagamento = 'Pagamento de entrada'
+                this.novo_val = novo_valor
+            }
+            else{
+                this.tipoPagamento = 'Pagamento de saida'
+                this.novo_val = novo_valor
+            }
+            //console.log(id, this.novo_val, novo_paciente, this.tipoPagamento, this.tipoPagamento)
+            try{
+                const token = this.store.token;
+                Axios.post("https://clinica-maria-luiza.onrender.com/alterar/pagamento", {
+                    pagar: {
+                        id: id,
+                        valor: this.novo_val,
+                        paciente: novo_paciente,
+                        tipo_pagamento: this.tipoPagamento,
+                        metodo: this.tipoPagamento
+                    }
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Alteração do pagamento registrado com sucesso',
+                    text: 'Seu pagamento foi alterado com sucesso!',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                })
+                this.getPagamentos()
+            }
+            catch{
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro na alteração do seu pagamento',
+                    text: 'Tente novamente depois',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                })
+            }
+        },
         async getPagamentos() {
             const token = this.store.token
             await Axios.get(`https://clinica-maria-luiza.onrender.com/pagamentos`, {

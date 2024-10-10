@@ -95,4 +95,19 @@ async function getPagamentoMes(mes_ano) {
     console.error(error);
   }
 }
-module.exports = { postPagamentos, getPagamentos, getPagamentoMes };
+async function updatePagamento(pagamento) {
+  const pagamentos = await prisma.Pagamentos.update({
+    where: {
+      id: pagamento.pagar.id
+    },
+    data: {
+      paciente: pagamento.pagar.paciente,
+      pagamento: parseFloat(pagamento.pagar.valor),
+      tipo_pagamento: pagamento.pagar.tipo_pagamento,
+      metodo: pagamento.pagar.metodo,
+    },
+  });
+
+  return pagamentos;
+}
+module.exports = { postPagamentos, getPagamentos, getPagamentoMes, updatePagamento };

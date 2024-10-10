@@ -33,7 +33,6 @@ async function getAgendamentosPacientes(req, res, next){
 }
 async function updateAgendamentos(req, res, next){
     try {
-        console.log(req.body.id)
         const consulta = await Agendamentos.updateAgendamentos(req.params.id)
         res.status(200).json({consulta});
         next()

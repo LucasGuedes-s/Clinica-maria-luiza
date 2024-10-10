@@ -145,7 +145,8 @@ export default {
             
             await Axios.get(`https://clinica-maria-luiza.onrender.com/pacientes/login/${id}`
             ).then(response => {
-                sessionStorage.setItem('cpf', response.data.paciente[0].cpf);
+                console.log(response.data)
+                sessionStorage.setItem('cpf', response.data.paciente.cpf);
                 router.push('/cosultasPacientes')
             }).catch(error =>{
                 console.log(error)
