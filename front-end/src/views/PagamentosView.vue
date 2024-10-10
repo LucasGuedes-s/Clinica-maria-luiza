@@ -28,7 +28,7 @@
                             <td> R$ {{ pagamento.pagamento.toFixed(2) }}</td>
                             <td>{{ pagamento.tipo_pagamento }}</td>
                             <td>{{ pagamento.metodo }}</td>
-                            <button @click="editarPagamento(pagamento.id, pagamento.pagamento.toFixed(2), pagamento.paciente, pagamento.tipo_pagamento, pagamento.metodo)">Editar</button>
+                            <button @click="editarPagamento(pagamento.id, pagamento.pagamento.toFixed(2), pagamento.paciente, pagamento.tipo_pagamento, pagamento.metodo)" class="btn_editarpag">Editar</button>
                         </tr>
                     </tbody>
                 </table>
@@ -98,7 +98,15 @@ td {
 table thead {
     background-color: #ffffff;
 }
-
+.btn_editarpag{
+    background-color: #F5F5F5;
+    border: 1px solid #D9D9D9;
+    cursor: pointer;
+    color: #7E7E7E;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    
+}
 @media (max-width: 768px) {
     .main-content_pagamentos {
         margin-left: 0;
