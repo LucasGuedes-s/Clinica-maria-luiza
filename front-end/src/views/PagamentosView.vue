@@ -211,7 +211,7 @@ export default {
                         valor: this.novo_val,
                         paciente: novo_paciente,
                         tipo_pagamento: this.tipoPagamento,
-                        metodo: this.tipoPagamento
+                        metodo: this.metodoPagamento
                     }
                 }, {
                     headers: {
