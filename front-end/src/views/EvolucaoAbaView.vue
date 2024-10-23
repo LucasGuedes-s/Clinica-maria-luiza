@@ -20,7 +20,6 @@
                     <th>Aplicação 03</th>
                     <th>Aplicação 04</th>
                     <th>Aplicação 05</th>
-                    <th>Teste</th>
                     <th>Foto</th>
                 </tr>
             </thead>
@@ -34,7 +33,6 @@
                     <td>{{ consult.Aplicacao3 }}</td>
                     <td>{{ consult.Aplicacao4 }}</td>
                     <td>{{ consult.Aplicacao5 }}</td>
-                    <td>{{ consult.teste }}</td>
                     <button class="btn_foto" @click="abrirFoto(consult.foto)">Ver foto</button>
                 </tr>
             </tbody>
@@ -76,6 +74,20 @@ export default {
         GraficoEvolucao
     },
     methods: {
+        async abrirFoto(link) {
+                try {
+                    if (link.length === 0) {
+                        Swal.fire("Nenhuma imagem foi anexada nessa consulta");
+                    }
+                    else if (link) {
+                        window.open(link, '_blank');
+                    }
+
+                }
+                catch {
+                }
+
+            },
         async getConsultas() {
             await Axios.get(`https://clinica-maria-luiza.onrender.com/consultasAba/paciente/${this.cpf}`
             ).then(response => {
