@@ -6,27 +6,39 @@
         <div>
             <GraficoEvolucao :dado="cpf" />
         </div>
-        <!--<div class="titulo_evolucao">
-            <h1>Evolução</h1>
+        <div class="titulo_evolucao">
+            <h1>Histórico de consultas Aba</h1>
         </div>
-        <table>
+        <table class="tabela">
             <thead>
                 <tr>
                     <th>Data</th>
+                    <th>Atividade</th>
+                    <th>Aplicador</th>
                     <th>Aplicação 01</th>
                     <th>Aplicação 02</th>
                     <th>Aplicação 03</th>
+                    <th>Aplicação 04</th>
+                    <th>Aplicação 05</th>
+                    <th>Teste</th>
+                    <th>Foto</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="consult in consulta" :key="consult.pacientes">
                     <td>{{ formatDate(consult.data) }}</td>
+                    <td>{{ consult.descricao_atividade }}</td>
+                    <td>{{ consult.profissional.nome }}</td>
                     <td>{{ consult.Aplicacao1 }}</td>
                     <td>{{ consult.Aplicacao2 }}</td>
                     <td>{{ consult.Aplicacao3 }}</td>
+                    <td>{{ consult.Aplicacao4 }}</td>
+                    <td>{{ consult.Aplicacao5 }}</td>
+                    <td>{{ consult.teste }}</td>
+                    <button class="btn_foto" @click="abrirFoto(consult.foto)">Ver foto</button>
                 </tr>
             </tbody>
-        </table>-->
+        </table>
     </div>
 </template>
 
@@ -67,10 +79,7 @@ export default {
         async getConsultas() {
             await Axios.get(`https://clinica-maria-luiza.onrender.com/consultasAba/paciente/${this.cpf}`
             ).then(response => {
-                const todasConsultas = response.data.consultas;
-                // Pegar os últimos 15 itens do array de consultas
-                consulta.value = todasConsultas.slice(-15);
-                sessionStorage.removeItem('cpf');
+                this.consulta = response.data.consultas.slice(-7)
 
             }).catch(error => {
                 console.error(error)
@@ -97,10 +106,88 @@ export default {
     margin-left: 250px;
     padding: 10px;
 }
+
+/* Cabeçalho da tabela */
+table thead {
+    background-color: #84E7FF;
+    color: #fff;
+}
+
+table {
+    background-color: white;
+    width: 100%;
+}
+
+table th,
+table td {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+table th {
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+/* Linhas da tabela */
+table tbody tr {
+    border-bottom: 1px solid #ddd;
+}
+
+/* Cor alternada nas linhas da tabela */
+table tbody tr:nth-of-type(even) {
+    background-color: #f2f2f2;
+}
+
+table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Estilo das células */
+table td {
+    font-size: 14px;
+}
+
+.btn_foto {
+    background-color: #84E7FF;
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    box-sizing: border-box;
+    border: none;
+    text-align: center;
+    display: inline-block;
+    text-decoration: none;
+    color: inherit;
+}
+
 @media (max-width: 768px) {
     .main-content_evolucao {
         margin-left: 0;
         padding: 10px;
+    }
+    table {
+        font-size: 10px; /* Diminui ainda mais o tamanho da fonte */
+    }
+
+    table th,
+    table td {
+        padding: 6px 8px; /* Diminui ainda mais o padding */
+    }
+
+    /* Para esconder colunas que podem ser menos importantes */
+    table th:nth-child(n+3), /* Altera o n conforme necessário */
+    table td:nth-child(n+3) {
+        display: none; /* Esconde colunas a partir da quarta */
+    }
+
+    .btn_foto {
+        font-size: 12px; /* Diminui o tamanho do botão */
+        padding: 6px; /* Ajusta o padding do botão */
     }
 }
 </style>
