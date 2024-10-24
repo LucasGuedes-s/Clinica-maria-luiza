@@ -89,7 +89,7 @@ Nascido em ${data_hora.data};
     // Monta a linha da tabela com os dados da consulta
     const row = [
       consulta.consulta,
-      new Date(consulta.data).toLocaleDateString(), // Formata a data
+      formatar.formatarDataHoraSeparados(consulta.data), // Formata a data
       consulta.descricao || 'N/A', // Verifica se a descrição está presente
       consulta.profissional.nome // Use o nome do profissional em vez do email
     ];
@@ -154,7 +154,7 @@ async function pdfConsulta(id) {
   // Dimensões da página
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
-  const data_hora = formatar.formatarDataHoraSeparados(new Date(consulta.data))
+  const data_hora = formatar.formatarDataHoraSeparados(consulta.data)
 
   // Centralizando a imagem horizontalmente
   const imgX = (pageWidth - imgWidth) / 2;
@@ -309,7 +309,7 @@ async function pdfConsultasAba(req) {
 
     // Mapeia os dados de consultas
     const data = consultas.map(consulta => {
-      const data = formatar.formatarDataHoraSeparados(new Date(consulta.data))
+      const data = formatar.formatarDataHoraSeparados(consulta.data)
       const consultaData = {
         data: data.data,
         profissional: consulta.profissional.nome,

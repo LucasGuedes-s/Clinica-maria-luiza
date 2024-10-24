@@ -31,8 +31,6 @@ export default {
 
                 // Pegar os últimos 15 itens do array de consultas
                 consultas.value = todasConsultas.slice(-15);
-                //consultas.value = response.data.consultas;
-                sessionStorage.removeItem('cpf');
 
                 updateChart();
             } catch (error) {

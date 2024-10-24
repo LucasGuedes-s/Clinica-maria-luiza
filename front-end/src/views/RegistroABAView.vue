@@ -10,6 +10,10 @@
             </div>
             <form @submit.prevent="registrarConsulta">
                 <div class="form-group horainicio">
+                    <label for="data">Data:</label>
+                    <input type="date" v-model="data" id="data" />
+                </div>
+                <div class="form-group horainicio">
                     <label for="inicio">Hora de Início:</label>
                     <input type="time" v-model="inicio" id="inicio" />
                 </div>
@@ -298,6 +302,7 @@ export default {
     },
     data() {
         return {
+            data: '',
             consulta: '',
             inicio: '',
             fim: '',
@@ -367,6 +372,7 @@ export default {
                             aplicacao4: this.aplicacao4,
                             aplicacao5: this.aplicacao5,
                             teste: this.teste,
+                            data: this.data,
                             observacoes: this.observacoes,
                             foto: this.foto // Incluindo a URL da imagem
                         },

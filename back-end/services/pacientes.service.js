@@ -74,6 +74,9 @@ async function getConsultasAba(req) {
           nome: true // Seleciona apenas o campo 'nome' do profissional
         }
       }
+    },
+    orderBy: {
+      data: 'desc' // Ordena as consultas da mais recente para a mais antiga
     }
   });
   return consultas;
@@ -154,7 +157,7 @@ async function registrarConsultaAba(req) {
       profissional: {
         connect: { email: req.consulta.profissionalId }
       },
-      data: new Date(),
+      data: new Date(req.consulta.data),
       hora_inicio: req.consulta.inicio,
       hora_fim: req.consulta.fim,
       descricao_atividade: req.consulta.descricao,

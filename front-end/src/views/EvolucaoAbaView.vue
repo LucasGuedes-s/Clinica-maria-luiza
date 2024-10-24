@@ -91,7 +91,8 @@ export default {
         async getConsultas() {
             await Axios.get(`https://clinica-maria-luiza.onrender.com/consultasAba/paciente/${this.cpf}`
             ).then(response => {
-                this.consulta = response.data.consultas.slice(-7)
+    
+                this.consulta = response.data.consultas.slice(-15)
 
             }).catch(error => {
                 console.error(error)
