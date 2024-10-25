@@ -5,6 +5,14 @@ const timezone = require('dayjs/plugin/timezone');
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
+const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    const day = String(date.getUTCDate()).padStart(2, '0');
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+    const year = date.getUTCFullYear();
+    return `${day}/${month}/${year}`;
+};
+
 // Função para formatar data e hora// Função para formatar data e hora
 const formatarDataHoraSeparados = (dataCompleta) => {
     if (!dataCompleta) return { data: undefined, hora: undefined };
@@ -29,4 +37,4 @@ const formatarDataHoraSeparados = (dataCompleta) => {
     return { data: `${dia}/${mes}/${ano}`, hora: `${horas}:${minutos}` };
 };
 
-module.exports = { formatarDataHoraSeparados };
+module.exports = { formatarDataHoraSeparados, formatDate };

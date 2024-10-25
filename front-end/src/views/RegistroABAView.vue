@@ -353,9 +353,6 @@ export default {
                     foto: this.foto // Loga a URL da imagem se houver
                 });
 
-                const dataBrasilia = DateTime.now().setZone('America/Sao_Paulo').toISO(); // Obtém a data atual em Brasília
-                console.log(dataBrasilia)
-
                 // Realiza a requisição para registrar a consulta
                 await Axios.post("http://localhost:3000/consultaAba/registrar",
                     {
@@ -373,7 +370,6 @@ export default {
                             aplicacao4: this.aplicacao4,
                             aplicacao5: this.aplicacao5,
                             teste: this.teste,
-                            data: dataBrasilia,
                             observacoes: this.observacoes,
                             foto: this.foto // Incluindo a URL da imagem
                         },

@@ -3,6 +3,7 @@ const prisma = new PrismaClient()
 const bcryptUtil = require("../utils/bcrypt.ultil")
 require('dotenv').config();
 const { DateTime }= require('luxon');
+const { zonedTimeToUtc } = require('date-fns-tz');
 
 async function loginPaciente(user) {
   if (!user) {
@@ -80,7 +81,7 @@ async function getConsultasAba(req) {
       data: 'desc' // Ordena as consultas da mais recente para a mais antiga
     }
   });
-  console.log(consultas)
+
   return consultas;
 }
 async function getConsulta(consulta) {
@@ -151,9 +152,12 @@ async function registrarConsultaAba(req) {
   if (!paciente) {
     throw new Error('Paciente não encontrado');
   }
-  // Obtém a data e hora no fuso horário de Brasília
-  const dataHoraBrasilia = DateTime.now().setZone('America/Sao_Paulo').toISO();
-
+  const dateInLocalTime = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });  
+  const [date, time] = dateInLocalTime.split(', ');
+  const [day, month, year] = date.split('/').map(Number);
+  const localDate = new Date(Date.UTC(year, month - 1, day));
+  localDate.setUTCHours(0, 0, 0, 0);
+  
   const consulta = await prisma.ConsultaAba.create({
     data: {
       paciente: {
@@ -162,7 +166,7 @@ async function registrarConsultaAba(req) {
       profissional: {
         connect: { email: req.consulta.profissionalId }
       },
-      data: dataHoraBrasilia,
+      data: localDate.toISOString(),
       hora_inicio: req.consulta.inicio,
       hora_fim: req.consulta.fim,
       descricao_atividade: req.consulta.descricao,

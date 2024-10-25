@@ -82,7 +82,7 @@ async function pdfPagamentos(mes_ano) {
                     pagamentos.tipo_pagamento,
                     pagamentos.paciente,
                     pagamentos.profissionalId,
-                    formatar.formatarDataHoraSeparados(new Date(pagamentos.Data)).data,  // Formata a data
+                    formatar.formatDate(new Date(pagamentos.Data)),  // Formata a data
                 ];
                 tableRowsEntrada.push(row);
             } else {

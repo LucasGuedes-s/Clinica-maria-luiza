@@ -87,7 +87,6 @@ async function getPagamentoMes(mes_ano) {
       acc[dia].push(pagamento);
       return acc;
     }, {});
-    console.log(pagamentosPorDia)
     // Retornar o resultado agrupado por dia do mês
     return pagamentosPorDia;
 
