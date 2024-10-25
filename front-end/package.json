@@ -10,6 +10,8 @@
     "axios": "^1.7.2",
     "chart.js": "^4.4.4",
     "core-js": "^3.8.3",
+    "dayjs": "^1.11.13",
+    "dayjs-plugin-utc": "^0.1.2",
     "firebase": "^10.13.0",
     "js-cookie": "^3.0.5",
     "pinia": "^2.2.0",
