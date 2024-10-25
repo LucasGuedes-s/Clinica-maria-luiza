@@ -9,10 +9,7 @@
                 </div>
             </div>
             <form @submit.prevent="registrarConsulta">
-                <div class="form-group horainicio">
-                    <label for="data">Data:</label>
-                    <input type="date" v-model="data" id="data" />
-                </div>
+
                 <div class="form-group horainicio">
                     <label for="inicio">Hora de Início:</label>
                     <input type="time" v-model="inicio" id="inicio" />
@@ -286,6 +283,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from '../firebase.js';
 import { v4 as uuidv4 } from 'uuid';
 import router from '@/router/index.js';
+import { DateTime } from 'luxon'; // Certifique-se de que Luxon está instalado
 
 export default {
     name: 'registroaba',
@@ -355,8 +353,11 @@ export default {
                     foto: this.foto // Loga a URL da imagem se houver
                 });
 
+                const dataBrasilia = DateTime.now().setZone('America/Sao_Paulo').toISO(); // Obtém a data atual em Brasília
+                console.log(dataBrasilia)
+
                 // Realiza a requisição para registrar a consulta
-                await Axios.post("https://clinica-maria-luiza.onrender.com/consultaAba/registrar",
+                await Axios.post("http://localhost:3000/consultaAba/registrar",
                     {
                         consulta: {
                             pacienteId: this.cpf,
@@ -372,7 +373,7 @@ export default {
                             aplicacao4: this.aplicacao4,
                             aplicacao5: this.aplicacao5,
                             teste: this.teste,
-                            data: this.data,
+                            data: dataBrasilia,
                             observacoes: this.observacoes,
                             foto: this.foto // Incluindo a URL da imagem
                         },

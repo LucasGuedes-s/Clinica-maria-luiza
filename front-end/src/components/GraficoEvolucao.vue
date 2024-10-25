@@ -31,6 +31,7 @@ export default {
 
                 // Pegar os últimos 15 itens do array de consultas
                 consultas.value = todasConsultas.slice(-15);
+                //consultas.value = response.data.consultas;
 
                 updateChart();
             } catch (error) {
@@ -49,7 +50,7 @@ export default {
                         backgroundColor: 'rgba(247, 121, 121, 0.5)',
                         borderColor: 'rgba(247, 121, 121, 1)',
                         data: consultas.value.map(consulta => ({
-                            x: new Date(consulta.data).toLocaleDateString(),
+                            x: new Date(consulta.data).toLocaleDateString('pt-BR'), // Formatação direta para o formato brasileiro
                             y: mapResultToNumber(consulta.Aplicacao1),
                             result: consulta.Aplicacao1
                         })),
@@ -59,7 +60,7 @@ export default {
                         backgroundColor: 'rgba(121, 247, 121, 0.5)',
                         borderColor: 'rgba(121, 247, 121, 1)',
                         data: consultas.value.map(consulta => ({
-                            x: new Date(consulta.data).toLocaleDateString(),
+                            x: new Date(consulta.data).toLocaleDateString('pt-BR'), // Formatação direta para o formato brasileiro
                             y: mapResultToNumber(consulta.Aplicacao2),
                             result: consulta.Aplicacao2
                         })),
@@ -69,7 +70,7 @@ export default {
                         backgroundColor: 'rgba(121, 121, 247, 0.5)',
                         borderColor: 'rgba(121, 121, 247, 1)',
                         data: consultas.value.map(consulta => ({
-                            x: new Date(consulta.data).toLocaleDateString(),
+                            x: new Date(consulta.data).toLocaleDateString('pt-BR'), // Formatação direta para o formato brasileiro
                             y: mapResultToNumber(consulta.Aplicacao3),
                             result: consulta.Aplicacao3
                         })),
@@ -79,7 +80,7 @@ export default {
                         backgroundColor: 'rgba(247, 247, 121, 0.5)',
                         borderColor: 'rgba(247, 247, 121, 1)',
                         data: consultas.value.map(consulta => ({
-                            x: new Date(consulta.data).toLocaleDateString(),
+                            x: new Date(consulta.data).toLocaleDateString('pt-BR'), // Formatação direta para o formato brasileiro
                             y: mapResultToNumber(consulta.Aplicacao4),
                             result: consulta.Aplicacao4
                         })),
@@ -89,7 +90,7 @@ export default {
                         backgroundColor: 'rgba(121, 247, 247, 0.5)',
                         borderColor: 'rgba(121, 247, 247, 1)',
                         data: consultas.value.map(consulta => ({
-                            x: new Date(consulta.data).toLocaleDateString(),
+                            x: new Date(consulta.data).toLocaleDateString('pt-BR'), // Formatação direta para o formato brasileiro
                             y: mapResultToNumber(consulta.Aplicacao5),
                             result: consulta.Aplicacao5
                         })),

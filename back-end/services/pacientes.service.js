@@ -2,6 +2,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient()
 const bcryptUtil = require("../utils/bcrypt.ultil")
 require('dotenv').config();
+const { DateTime }= require('luxon');
 
 async function loginPaciente(user) {
   if (!user) {
@@ -150,6 +151,9 @@ async function registrarConsultaAba(req) {
   if (!paciente) {
     throw new Error('Paciente não encontrado');
   }
+  // Obtém a data e hora no fuso horário de Brasília
+  const dataHoraBrasilia = DateTime.now().setZone('America/Sao_Paulo').toISO();
+
   const consulta = await prisma.ConsultaAba.create({
     data: {
       paciente: {
@@ -158,7 +162,7 @@ async function registrarConsultaAba(req) {
       profissional: {
         connect: { email: req.consulta.profissionalId }
       },
-      data: new Date(req.consulta.data),
+      data: dataHoraBrasilia,
       hora_inicio: req.consulta.inicio,
       hora_fim: req.consulta.fim,
       descricao_atividade: req.consulta.descricao,

@@ -1,15 +1,12 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-dayjs.extend(utc);
 
 export const formatDate = (dateStr) => {
-    console.log(dateStr);
-
-    // Usa o `dayjs` para tratar a data como UTC
-    const date = dayjs.utc(dateStr); // Lida com a data em UTC
-  
-    // Formata a data no padrão DD/MM/YYYY
-    return date.format('DD/MM/YYYY');
+    const date = new Date(dateStr);
+    const day = String(date.getUTCDate()).padStart(2, '0');
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+    const year = date.getUTCFullYear();
+    return `${day}/${month}/${year}`;
 };
 
 export const formatarData = (dateStr) => {
