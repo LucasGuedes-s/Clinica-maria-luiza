@@ -299,7 +299,13 @@ async function pdfConsultasAba(req) {
       { header: 'Data', dataKey: 'data' },
       { header: 'Profissional', dataKey: 'profissional' },
       { header: 'Paciente', dataKey: 'paciente' },
-      { header: 'Atividade', dataKey: 'descricao_atividade' }
+      { header: 'Atividade', dataKey: 'descricao_atividade' },
+      { header: 'A1', dataKey: 'aplicacao1' },
+      { header: 'A2', dataKey: 'aplicacao2' },
+      { header: 'A3', dataKey: 'aplicacao3' },
+      { header: 'A4', dataKey: 'aplicacao4' },
+      { header: 'A5', dataKey: 'aplicacao5' }
+
     ];
 
     if (req.body.hora === true) {
@@ -314,7 +320,12 @@ async function pdfConsultasAba(req) {
         data: data.data,
         profissional: consulta.profissional.nome,
         paciente: consulta.paciente.nome,
-        descricao_atividade: consulta.descricao_atividade
+        descricao_atividade: consulta.descricao_atividade,
+        aplicacao1: consulta.Aplicacao1,
+        aplicacao2: consulta.Aplicacao2,
+        aplicacao3: consulta.Aplicacao3,
+        aplicacao4: consulta.Aplicacao4,
+        aplicacao5: consulta.Aplicacao5,
       };
 
       if (req.body.hora === true) {

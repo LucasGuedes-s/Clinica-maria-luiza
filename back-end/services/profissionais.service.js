@@ -86,6 +86,9 @@ async function getConsultasAba(req, res){
         include: {
             profissional: true, // Inclui os dados do profissional
             paciente: true
+        },
+        orderBy: {
+            data: 'desc' // Ordena as consultas da mais recente para a mais antiga
         }
     });
 

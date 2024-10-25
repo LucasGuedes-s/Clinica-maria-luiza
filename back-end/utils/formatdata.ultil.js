@@ -1,20 +1,32 @@
+const dayjs = require('dayjs');
+const utc = require('dayjs/plugin/utc');
+const timezone = require('dayjs/plugin/timezone');
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+// Função para formatar data e hora// Função para formatar data e hora
 const formatarDataHoraSeparados = (dataCompleta) => {
     if (!dataCompleta) return { data: undefined, hora: undefined };
 
-    const dataObj = new Date(dataCompleta);
+    // Cria um objeto Date a partir da string de data
+    const data = new Date(dataCompleta);
 
-    const data = dataObj.toLocaleDateString('pt-BR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-    });
+    // Converte para o fuso horário de Brasília (UTC-3)
+    const offsetBrasilia = -3 * 60; // UTC-3 em minutos
+    const offsetServidor = data.getTimezoneOffset(); // Offset do servidor em minutos
+    const dataBrasilia = new Date(data.getTime() + (offsetServidor * 60000) + (offsetBrasilia * 60000));
 
-    const hora = dataObj.toLocaleTimeString('pt-BR', {
-        hour: '2-digit',
-        minute: '2-digit',
-    });
+    // Formatação da data
+    const dia = String(dataBrasilia.getUTCDate()).padStart(2, '0');
+    const mes = String(dataBrasilia.getUTCMonth() + 1).padStart(2, '0'); // Janeiro é 0!
+    const ano = dataBrasilia.getUTCFullYear();
 
-    return { data, hora };
+    // Formatação da hora
+    const horas = String(dataBrasilia.getUTCHours()).padStart(2, '0');
+    const minutos = String(dataBrasilia.getUTCMinutes()).padStart(2, '0');
+
+    return { data: `${dia}/${mes}/${ano}`, hora: `${horas}:${minutos}` };
 };
 
 module.exports = { formatarDataHoraSeparados };

@@ -4,13 +4,14 @@ dayjs.extend(utc);
 
 export const formatDate = (dateStr) => {
     console.log(dateStr);
-  
+
     // Usa o `dayjs` para tratar a data como UTC
     const date = dayjs.utc(dateStr); // Lida com a data em UTC
   
     // Formata a data no padrão DD/MM/YYYY
     return date.format('DD/MM/YYYY');
 };
+
 export const formatarData = (dateStr) => {
 // Verifica se a string de data é válida
 if (!dateStr) {

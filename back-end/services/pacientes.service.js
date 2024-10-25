@@ -79,6 +79,7 @@ async function getConsultasAba(req) {
       data: 'desc' // Ordena as consultas da mais recente para a mais antiga
     }
   });
+  console.log(consultas)
   return consultas;
 }
 async function getConsulta(consulta) {
