@@ -11,7 +11,7 @@
 import { onMounted, ref } from 'vue'
 import Chart from 'chart.js/auto'
 import Axios from 'axios';
-
+import { formatDate } from '@/utils/formatarData';
 export default {
     props: {
         dado: {
@@ -40,7 +40,7 @@ export default {
         };
 
         const processData = () => {
-            const labels = consultas.value.map(consulta => new Date(consulta.data).toLocaleDateString());
+            const labels = consultas.value.map(consulta => formatDate(consulta.data));
 
             const data = {
                 labels: labels,
@@ -50,7 +50,7 @@ export default {
                         backgroundColor: 'rgba(247, 121, 121, 0.5)',
                         borderColor: 'rgba(247, 121, 121, 1)',
                         data: consultas.value.map(consulta => ({
-                            x: new Date(consulta.data).toLocaleDateString('pt-BR'), // Formatação direta para o formato brasileiro
+                            x: formatDate(consulta.data), // Formatação direta para o formato brasileiro
                             y: mapResultToNumber(consulta.Aplicacao1),
                             result: consulta.Aplicacao1
                         })),
@@ -60,7 +60,7 @@ export default {
                         backgroundColor: 'rgba(121, 247, 121, 0.5)',
                         borderColor: 'rgba(121, 247, 121, 1)',
                         data: consultas.value.map(consulta => ({
-                            x: new Date(consulta.data).toLocaleDateString('pt-BR'), // Formatação direta para o formato brasileiro
+                            x: formatDate(consulta.data), // Formatação direta para o formato brasileiro
                             y: mapResultToNumber(consulta.Aplicacao2),
                             result: consulta.Aplicacao2
                         })),
@@ -70,7 +70,7 @@ export default {
                         backgroundColor: 'rgba(121, 121, 247, 0.5)',
                         borderColor: 'rgba(121, 121, 247, 1)',
                         data: consultas.value.map(consulta => ({
-                            x: new Date(consulta.data).toLocaleDateString('pt-BR'), // Formatação direta para o formato brasileiro
+                            x: formatDate(consulta.data), // Formatação direta para o formato brasileiro
                             y: mapResultToNumber(consulta.Aplicacao3),
                             result: consulta.Aplicacao3
                         })),
@@ -80,7 +80,7 @@ export default {
                         backgroundColor: 'rgba(247, 247, 121, 0.5)',
                         borderColor: 'rgba(247, 247, 121, 1)',
                         data: consultas.value.map(consulta => ({
-                            x: new Date(consulta.data).toLocaleDateString('pt-BR'), // Formatação direta para o formato brasileiro
+                            x: formatDate(consulta.data), // Formatação direta para o formato brasileiro
                             y: mapResultToNumber(consulta.Aplicacao4),
                             result: consulta.Aplicacao4
                         })),
@@ -90,7 +90,7 @@ export default {
                         backgroundColor: 'rgba(121, 247, 247, 0.5)',
                         borderColor: 'rgba(121, 247, 247, 1)',
                         data: consultas.value.map(consulta => ({
-                            x: new Date(consulta.data).toLocaleDateString('pt-BR'), // Formatação direta para o formato brasileiro
+                            x: formatDate(consulta.data), // Formatação direta para o formato brasileiro
                             y: mapResultToNumber(consulta.Aplicacao5),
                             result: consulta.Aplicacao5
                         })),
