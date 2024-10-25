@@ -25,7 +25,6 @@ export default {
         const agendarconsulta = async () => {
             const cpf = props.dado;
             try {
-
                 const response = await Axios.get(`https://clinica-maria-luiza.onrender.com/consultasAba/paciente/${cpf}`);
                 const todasConsultas = response.data.consultas;
 

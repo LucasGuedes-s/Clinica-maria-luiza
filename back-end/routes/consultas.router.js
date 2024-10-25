@@ -8,6 +8,7 @@ router.get('/consultas/paciente/:cpf', userController.getConsultas);
 
 router.get('/consulta/paciente/:cpf', userController.getConsultas);
 router.get('/consultasAba/paciente/:cpf', userController.getConsultasAba);
+router.get('/apagar/consulta/:id', [jwtMiddleware, permission.apagar], userController.deleteConsultaAba);
 
 router.post('/consulta/registrar', [jwtMiddleware, permission.postConsulta], userController.postConsulta);
 router.post('/consultaAba/registrar', [jwtMiddleware, permission.postConsulta], userController.postConsultaAba);

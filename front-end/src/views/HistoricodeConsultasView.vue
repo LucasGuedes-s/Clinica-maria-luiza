@@ -206,7 +206,6 @@ export default {
                 this.consultas = response.data.consultas.consultas.slice().reverse()
                 sessionStorage.removeItem('cpf');
             }).catch(error => {
-                console.log("Aqui")
                 console.error(error)
             })
         }

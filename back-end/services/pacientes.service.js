@@ -222,6 +222,14 @@ async function cadastrarDados(dados) {
   });
   return cad_dados;
 }
+async function deleteConsultaAba(id) {
+  const deletar = await prisma.ConsultaAba.delete({
+    where:{
+      pacientes: parseInt(id)
+    }
+  });
+  return deletar;
+}
 async function updateDadosPaciente(req) {
   const paciente = await prisma.Pacientes.findMany({
     where: {
@@ -282,7 +290,5 @@ async function updateDadosPaciente(req) {
     paciente: pacienteAtualizado,
     dadosPaciente: dadosAtualizados,
   };
-  
-  
 }
-module.exports = {loginPaciente, getPacientes, postLaudos, getPaciente, getConsultas, getConsulta, getConsultasAba, cadastrarDados, cadastrarPaciente, registrarConsulta, registrarConsultaAba, updateDadosPaciente};
+module.exports = {loginPaciente, getPacientes, postLaudos, getPaciente, getConsultas, getConsulta, getConsultasAba, cadastrarDados, cadastrarPaciente, registrarConsulta, registrarConsultaAba, deleteConsultaAba, updateDadosPaciente};

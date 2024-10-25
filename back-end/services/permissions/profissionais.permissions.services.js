@@ -49,6 +49,14 @@ async function postProfissionais(req, res, next) {
         next(err);
     }
 }
+async function apagar(req, res, next) {
+    try {
+        await verificarPermissoes(req.user, permissions.PERMISSAO_ADMIN);
+        next(); 
+    } catch (err) {
+        next(err);
+    }
+}
 async function postProfissional(req, res, next) {
     try {
         await verificarPermissoes(req.user, permissions.PERMISSAO_ADMIN);
@@ -65,4 +73,4 @@ async function postConsulta(req, res, next) {
         next(err);
     }
 }
-module.exports = {get, getDados, post, postProfissionais, getAgendamentos, getPacientes, postProfissional, postConsulta};
+module.exports = {get, apagar, getDados, post, postProfissionais, getAgendamentos, getPacientes, postProfissional, postConsulta};

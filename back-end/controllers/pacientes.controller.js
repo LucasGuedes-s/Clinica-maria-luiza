@@ -77,7 +77,6 @@ async function postConsulta(req, res, next){
         console.error(`Erro ao registrar a consulta`);
     }
 }
-// 
 async function postLaudos(req, res, next){
     try {
         const laudo = await Paciente.postLaudos(req.body)
@@ -98,6 +97,16 @@ async function postConsultaAba(req, res, next){
         console.error(`Erro ao registrar a consulta aba`);
     }
 }
+async function deleteConsultaAba(req, res, next){
+    try {
+        const consulta = await Paciente.deleteConsultaAba(req.params.id)
+        res.status(200).json({consulta});
+        next()
+    } catch (err) {
+        console.log(err)
+        console.error(`Erro ao deletar a consulta aba`);
+    }
+}
 async function updateDados(req, res, next){
     try {
         const dados = await Paciente.updateDadosPaciente(req.body)
@@ -108,4 +117,4 @@ async function updateDados(req, res, next){
         console.error(`Erro ao alterar dados do paciente`);
     }
 }
-module.exports = {loginPaciente, getPacientes, postLaudos, getPaciente, getConsultas, getConsultasAba, postPacientes, postDados, postConsulta, postConsultaAba, updateDados};
+module.exports = {loginPaciente, getPacientes, postLaudos, deleteConsultaAba, getPaciente, getConsultas, getConsultasAba, postPacientes, postDados, postConsulta, postConsultaAba, updateDados};
