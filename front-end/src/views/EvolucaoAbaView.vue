@@ -97,7 +97,7 @@ export default {
 
         },
         async getConsultas() {
-            await Axios.get(`https://clinica-maria-luiza.onrender.com/consultasAba/paciente/${this.cpf}`
+            await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/consultasAba/paciente/${this.cpf}`
             ).then(response => {
 
                 this.consulta = response.data.consultas.slice(-15)
@@ -128,7 +128,7 @@ export default {
                 }).then((result) => {
                     if (result.isConfirmed) {
                         // O usuário confirmou, envia a requisição
-                        Axios.get(`https://clinica-maria-luiza.onrender.com/apagar/consulta/${id}`, {
+                        Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/apagar/consulta/${id}`, {
                             headers: {
                                 'Authorization': `Bearer ${token}`
                             }

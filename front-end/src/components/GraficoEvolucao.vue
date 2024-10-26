@@ -25,7 +25,7 @@ export default {
         const agendarconsulta = async () => {
             const cpf = props.dado;
             try {
-                const response = await Axios.get(`https://clinica-maria-luiza.onrender.com/consultasAba/paciente/${cpf}`);
+                const response = await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/consultasAba/paciente/${cpf}`);
                 const todasConsultas = response.data.consultas;
 
                 // Pegar os últimos 15 itens do array de consultas

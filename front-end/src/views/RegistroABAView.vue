@@ -354,7 +354,7 @@ export default {
                 });
 
                 // Realiza a requisição para registrar a consulta
-                await Axios.post("https://clinica-maria-luiza.onrender.com/consultaAba/registrar",
+                await Axios.post("https://clinica-maria-luiza-bjdd.onrender.com/consultaAba/registrar",
                     {
                         consulta: {
                             pacienteId: this.cpf,

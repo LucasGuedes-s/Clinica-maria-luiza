@@ -192,7 +192,7 @@ export default {
     },
 methods:{
     async login(){
-        await Axios.post("https://clinica-maria-luiza.onrender.com/user/login", {
+        await Axios.post("https://clinica-maria-luiza-bjdd.onrender.com/user/login", {
             usuario:{
                 email:this.email,
                 senha:this.senha
