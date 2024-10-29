@@ -29,7 +29,7 @@ export default {
                 const todasConsultas = response.data.consultas;
 
                 // Pegar os últimos 15 itens do array de consultas
-                consultas.value = todasConsultas.slice(-15);
+                consultas.value = todasConsultas.slice(0, 15);
                 //consultas.value = response.data.consultas;
 
                 updateChart();

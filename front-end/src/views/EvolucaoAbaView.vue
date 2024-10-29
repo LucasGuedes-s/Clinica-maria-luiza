@@ -24,7 +24,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="consult in consulta" :key="consult.pacientes">
+                <tr v-for="(consult, index) in consulta.slice(0, 20)" :key="consult.pacientes">
                     <td>{{ formatDate(consult.data) }}</td>
                     <td>{{ consult.descricao_atividade }}</td>
                     <td>{{ consult.profissional.nome }}</td>
@@ -99,9 +99,7 @@ export default {
         async getConsultas() {
             await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/consultasAba/paciente/${this.cpf}`
             ).then(response => {
-
-                this.consulta = response.data.consultas.slice(-15)
-
+                this.consulta = response.data.consultas
             }).catch(error => {
                 console.error(error)
             })

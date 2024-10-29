@@ -2,23 +2,23 @@
     <Navbar />
     <div class="main-content_consultas">
 
-    <div class="titulo_evolucao">
-        <h1>Agenda do paciente</h1>
-    </div>
-    <div class="conteiner_agendar">
-        <div class="container_agendamentos" v-for="agenda in agendamentos" :key="agenda.id">
-            <div class="resposta-informacao">
-                <label for="paciente-nome">Agendamento:</label>
-                <input type="text" id="paciente-nome" :value="agenda.agendamento" readonly>
-                <label for="paciente-nome">Nome do Profissional:</label>
-                <input type="text" id="paciente-nome" :value="agenda.profissional.nome" readonly>
-                <label for="resposta-data">Data:</label>
-                <input type="data" id="resposta-data" :value="agenda.dataFormatada" readonly>
-                <label for="resposta-hora">Hora:</label>
-                <input type="hora" id="resposta-hora" :value="agenda.horaFormatada" readonly>
+        <div class="titulo_evolucao">
+            <h1>Agenda do paciente</h1>
+        </div>
+        <div class="conteiner_agendar">
+            <div class="container_agendamentos" v-for="agenda in agendamentos" :key="agenda.id">
+                <div class="resposta-informacao">
+                    <label for="paciente-nome">Agendamento:</label>
+                    <input type="text" id="paciente-nome" :value="agenda.agendamento" readonly>
+                    <label for="paciente-nome">Nome do Profissional:</label>
+                    <input type="text" id="paciente-nome" :value="agenda.profissional.nome" readonly>
+                    <label for="resposta-data">Data:</label>
+                    <input type="data" id="resposta-data" :value="agenda.dataFormatada" readonly>
+                    <label for="resposta-hora">Hora:</label>
+                    <input type="hora" id="resposta-hora" :value="agenda.horaFormatada" readonly>
+                </div>
             </div>
         </div>
-    </div>
         <div>
             <GraficoEvolucao :dado="cpf" />
         </div>
@@ -29,6 +29,7 @@
             <thead>
                 <tr>
                     <th>Data</th>
+                    <th>Descrição</th>
                     <th>Aplicador</th>
                     <th>Aplicação 01</th>
                     <th>Aplicação 02</th>
@@ -42,6 +43,7 @@
             <tbody>
                 <tr v-for="consult in consulta" :key="consult.pacientes">
                     <td>{{ formatDate(consult.data) }}</td>
+                    <td>{{ consult.descricao_atividade }}</td>
                     <td>{{ consult.profissional.nome }}</td>
                     <td>{{ consult.Aplicacao1 }}</td>
                     <td>{{ consult.Aplicacao2 }}</td>
@@ -71,6 +73,10 @@
                 <div class="info_item descricao">
                     <label for="historico_descricao">Descrição:</label>
                     <textarea id="historico_descricao" rows="4" :value="consulta.descricao" readonly></textarea>
+                </div>
+                <div class="botoes">
+                    <button class="btn_detalhar_hist" @click="laudo(consulta.laudos)">Laudo ou foto</button>
+                    <button class="btn_arquivopdf_hist" @click="arquivoPdf(consulta.id)">Arquivo em PDF</button>
                 </div>
             </div>
         </div>
@@ -115,48 +121,97 @@ export default {
         Navbar
     },
     methods: {
-            async abrirFoto(link) {
-                try {
-                    if (link.length === 0) {
-                        Swal.fire("Nenhuma imagem foi anexada nessa consulta");
-                    }
-                    else if (link) {
-                        window.open(link, '_blank');
-                    }
-
+        async laudo(link) {
+            try {
+                if (link.length === 0) {
+                    Swal.fire("Nenhum laudo anexado nesta consulta");
                 }
-                catch {
+                else if (link) {
+                    for (let i = 0; i < link.length; i++) {
+                        window.open(link[i], '_blank');
+                    }
                 }
 
-            },
-            async getAgenda() {
-                await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/pacientes/agendamentos/${this.cpf}`
-                ).then(response => {
-                    this.agendamentos = response.data.agenda
-                }).catch(error => {
-                    console.error(error)
-                })
-            },
-            async getConsultasAba() {
-                await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/consultasAba/paciente/${this.cpf}`
-                ).then(response => {
-                    this.consulta = response.data.consultas.slice(-7)
-                }).catch(error => {
-                    console.error(error)
-                })
-            },
-            async getConsultas() {
-                Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/consultas/paciente/${this.cpf}`,
-
-                ).then(response => {
-                    this.consultas = response.data.consultas.consultas.slice().reverse().slice(-7)
-                    console.log(this.consultas)
-                }).catch(error => {
-                    console.error(error)
-                })
             }
+            catch {
+
+            }
+
+        },
+        async arquivoPdf(id) {
+            Swal.fire({
+                title: 'Aguarde...',
+                text: 'Estamos gerando o PDF.',
+                timer: 3000,
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            await Axios({
+                url: `https://clinica-maria-luiza-bjdd.onrender.com/pdf/consulta/${id}`,  // Altere a URL conforme necessário
+                method: 'GET',
+                responseType: 'blob',  // Importante para tratar a resposta como um blob
+            }).then(response => {
+                // Crie um URL para o blob
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `consulta.pdf`); // Nome do arquivo
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+            }).catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro ao gerar PDF',
+                    timer: 4000,
+                })
+                console.error('Erro ao baixar o PDF:', error)
+            });
+        },
+        async abrirFoto(link) {
+            try {
+                if (link.length === 0) {
+                    Swal.fire("Nenhuma imagem foi anexada nessa consulta");
+                }
+                else if (link) {
+                    window.open(link, '_blank');
+                }
+
+            }
+            catch {
+            }
+
+        },
+        async getAgenda() {
+            await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/pacientes/agendamentos/${this.cpf}`
+            ).then(response => {
+                this.agendamentos = response.data.agenda
+            }).catch(error => {
+                console.error(error)
+            })
+        },
+        async getConsultasAba() {
+            await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/consultasAba/paciente/${this.cpf}`
+            ).then(response => {
+                this.consulta = response.data.consultas.slice(-7)
+            }).catch(error => {
+                console.error(error)
+            })
+        },
+        async getConsultas() {
+            Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/consultas/paciente/${this.cpf}`,
+
+            ).then(response => {
+                this.consultas = response.data.consultas.consultas.slice().reverse().slice(-7)
+                console.log(this.consultas)
+            }).catch(error => {
+                console.error(error)
+            })
         }
     }
+}
 </script>
 
 <style scoped>
@@ -217,6 +272,7 @@ export default {
     font-family: 'Montserrat', sans-serif;
     color: #7E7E7E;
 }
+
 .container_historico {
     background-color: white;
     padding: 20px;
@@ -228,7 +284,6 @@ export default {
 
 .infos_historico {
     display: grid;
-    grid-template-columns: 1fr 1fr;
     gap: 20px;
 }
 
@@ -281,6 +336,7 @@ export default {
     font-size: 14px;
     cursor: pointer;
 }
+
 /* Cabeçalho da tabela */
 table thead {
     background-color: #84E7FF;
@@ -342,30 +398,46 @@ table td {
 /* Tornando a tabela responsiva */
 @media screen and (max-width: 768px) {
     table {
-        font-size: 10px; /* Diminui ainda mais o tamanho da fonte */
+        font-size: 10px;
+        /* Diminui ainda mais o tamanho da fonte */
     }
 
     table th,
     table td {
-        padding: 6px 8px; /* Diminui ainda mais o padding */
+        padding: 6px 8px;
+        /* Diminui ainda mais o padding */
     }
 
     /* Para esconder colunas que podem ser menos importantes */
-    table th:nth-child(n+3), /* Altera o n conforme necessário */
+    table th:nth-child(n+3),
+    /* Altera o n conforme necessário */
     table td:nth-child(n+3) {
-        display: none; /* Esconde colunas a partir da quarta */
+        display: none;
+        /* Esconde colunas a partir da quarta */
     }
 
     .btn_foto {
-        font-size: 12px; /* Diminui o tamanho do botão */
-        padding: 6px; /* Ajusta o padding do botão */
+        font-size: 12px;
+        /* Diminui o tamanho do botão */
+        padding: 6px;
+        /* Ajusta o padding do botão */
     }
+
     .conteiner_agendar {
         justify-content: center;
     }
+
     .container_agendamentos {
         width: 100%;
     }
+    .botoes {
+        grid-column: auto;
+        display: flex;
+        justify-content: space-between;
+        /* Alinha os botões com espaçamento entre eles */
+        gap: 10px;
+    }
+
 }
 
 /* Espaçamento e layout geral */
