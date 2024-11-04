@@ -4,7 +4,7 @@
     </div>
     <div class="main-content_pagamentos">
         <h1>Pagamentos</h1>
-        <div class="container_pagamentos" v-for="(pagamentos, mesAno) in pagamentos" :key="mesAno">
+        <div class="container_pagamentos" v-for="(pagamentos, mesAno) in pagamentosOrdenados" :key="mesAno">
             <!-- Itera sobre os pagamentos por mês e ano -->
             <div>
                 <h2>{{ formatarMesAno(mesAno) }}</h2>
@@ -28,7 +28,9 @@
                             <td> R$ {{ pagamento.pagamento.toFixed(2) }}</td>
                             <td>{{ pagamento.tipo_pagamento }}</td>
                             <td>{{ pagamento.metodo }}</td>
-                            <button @click="editarPagamento(pagamento.id, pagamento.pagamento.toFixed(2), pagamento.paciente, pagamento.tipo_pagamento, pagamento.metodo)" class="btn_editarpag">Editar</button>
+                            <button
+                                @click="editarPagamento(pagamento.id, pagamento.pagamento.toFixed(2), pagamento.paciente, pagamento.tipo_pagamento, pagamento.metodo)"
+                                class="btn_editarpag">Editar</button>
                         </tr>
                     </tbody>
                 </table>
@@ -95,24 +97,29 @@ td {
     font-family: 'Montserrat', sans-serif;
     font-size: 16px;
 }
+
 table thead {
     background-color: #ffffff;
 }
-.btn_editarpag{
+
+.btn_editarpag {
     background-color: #F5F5F5;
     border: 1px solid #D9D9D9;
     cursor: pointer;
     color: #7E7E7E;
     font-family: 'Montserrat', sans-serif;
     font-size: 16px;
-    
+
 }
+
 @media (max-width: 768px) {
     .main-content_pagamentos {
         margin-left: 0;
     }
 
-    .tabela_pagamentos, th, td {
+    .tabela_pagamentos,
+    th,
+    td {
         font-size: 7px;
         padding: 4px;
     }
@@ -142,6 +149,21 @@ export default {
             store
         }
     },
+    computed: {
+        pagamentosOrdenados() {
+            // Ordenar as chaves (mesAno)
+            const mesesOrdenados = Object.keys(this.pagamentos).sort();
+
+            // Criar um novo objeto com os meses ordenados
+            let pagamentosOrdenados = {};
+
+            mesesOrdenados.forEach(mesAno => {
+                pagamentosOrdenados[mesAno] = this.pagamentos[mesAno];
+            });
+
+            return pagamentosOrdenados;
+        }
+    },
     data() {
         return {
             formatDate,
@@ -156,7 +178,7 @@ export default {
     },
     methods: {
 
-        async editarPagamento(id, valor, paciente, tipo_pagamento, metodo){            
+        async editarPagamento(id, valor, paciente, tipo_pagamento, metodo) {
             const { value: inputValue } = await Swal.fire({
                 title: "Digite o valor",
                 input: "text",
@@ -168,7 +190,7 @@ export default {
                 title: "Pagamento de: ",
                 input: "text",
                 inputValue: paciente,
-                inputLabel: `Digite o novo paciente para: ${paciente}` ,
+                inputLabel: `Digite o novo paciente para: ${paciente}`,
             });
             const { value: novo_tipo } = await Swal.fire({
                 title: `Tipo de pagamento para: ${tipo_pagamento}`,
@@ -193,29 +215,29 @@ export default {
                 }
             });
 
-            if(novo_metodo === 'Cartao'){
+            if (novo_metodo === 'Cartao') {
                 this.metodoPagamento = 'Cartão de Crédito | Débito'
             }
-            else{
+            else {
                 this.metodoPagamento = novo_metodo
             }
-            if(novo_tipo === 'externo'){
+            if (novo_tipo === 'externo') {
                 this.tipoPagamento = 'Pagamento de entrada'
                 const valor = parseFloat(novo_valor);
                 this.novo_val = valor * 0.2;
                 console.log(this.novo_val)
             }
-            else if(novo_tipo === 'entrada'){
+            else if (novo_tipo === 'entrada') {
                 this.tipoPagamento = 'Pagamento de entrada'
                 this.novo_val = parseFloat(novo_valor)
             }
-            else{
+            else {
                 this.tipoPagamento = 'Pagamento de saida'
                 this.novo_val = parseFloat(novo_valor)
             }
 
             console.log(id, this.novo_val, novo_paciente, this.tipoPagamento, this.tipoPagamento)
-            try{
+            try {
                 const token = this.store.token;
                 Axios.post("https://clinica-maria-luiza-bjdd.onrender.com/alterar/pagamento", {
                     pagar: {
@@ -240,7 +262,7 @@ export default {
                 })
                 this.getPagamentos()
             }
-            catch{
+            catch {
                 Swal.fire({
                     icon: 'error',
                     title: 'Erro na alteração do seu pagamento',
@@ -265,10 +287,10 @@ export default {
                 console.error(error.data)
             })
         },
-        async gerarPdf(data){
+        async gerarPdf(data) {
             const ano_pdf = data.split('-')[0]; // Divide a data e pega a parte do mês
             const mes_pdf = data.split('-')[1]; // Divide a data e pega a parte do mês
-            const mes =  parseInt(mes_pdf, 10); // Retorna o mês como número inteiro
+            const mes = parseInt(mes_pdf, 10); // Retorna o mês como número inteiro
             const ano = parseInt(ano_pdf, 10);
 
             Swal.fire({
@@ -298,12 +320,13 @@ export default {
                 link.click();
                 link.remove();
             }).catch(error => {
-            Swal.fire({
-                icon: 'error',
-                title: 'Erro ao gerar PDF',
-                timer: 4000,
-            })
-            console.error('Erro ao baixar o PDF:', error)});
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro ao gerar PDF',
+                    timer: 4000,
+                })
+                console.error('Erro ao baixar o PDF:', error)
+            });
         }
     },
     mounted() {
