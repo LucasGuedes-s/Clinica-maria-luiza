@@ -12,7 +12,7 @@
 
                 <div class="form-group horainicio">
                     <label for="inicio">Hora de Início:</label>
-                    <input type="time" v-model="inicio" id="inicio" />
+                    <input type="time" v-model="inicio" id="inicio" required />
                 </div>
                 <div class="form-group descricao">
                     <label for="descricao_atividade">Descrição de atividade:</label>
@@ -88,6 +88,7 @@
 
                         <select v-model="teste">
                             <option value="" disabled selected>TESTE:</option>
+                            <option value="Sem atividade">Sem atividade</option>
                             <option value="AT +">AT +</option>
                             <option value="AT + /">AT + /</option>
                             <option value="AT -">AT -</option>
@@ -322,74 +323,66 @@ export default {
         },
         async registrarConsulta() {
             const token = this.store.token;
-            try {
-                // Gera um identificador único para a imagem
-                if (this.imagem) { // Verifica se a imagem foi selecionada
-                    const uniqueImageName = uuidv4() + '_' + this.imagem.name;
-                    // Cria uma referência para o armazenamento
-                    const storageRef = ref(storage, 'consultaAba/' + uniqueImageName);
-                    // Faz o upload da imagem
-                    const snapshot = await uploadBytes(storageRef, this.imagem);
-                    // Obtém a URL pública da imagem
-                    this.foto = await getDownloadURL(snapshot.ref);
-                } else {
-                    this.foto = null; // Se não houver imagem, define como nulo
-                }
+            const { aplicacao1, aplicacao2, aplicacao3, aplicacao4, aplicacao5, teste } = this;
 
-                // Logando as informações da consulta para depuração
-                console.log('Dados da consulta:', {
-                    pacienteId: this.cpf,
-                    profissionalId: this.store.usuario.usuario.email,
-                    descricao: this.descricao,
-                    aplicacao1: this.aplicacao1,
-                    aplicacao2: this.aplicacao2,
-                    aplicacao3: this.aplicacao3,
-                    aplicacao4: this.aplicacao4,
-                    aplicacao5: this.aplicacao5,
-                    teste: this.teste,
-                    inicio: this.inicio,  // Hora de início como string
-                    fim: this.fim,        // Hora de fim como string
-                    observacoes: this.observacoes,
-                    foto: this.foto // Loga a URL da imagem se houver
-                });
+            if ([aplicacao1, aplicacao2, aplicacao3, aplicacao4, aplicacao5, teste].every(aplicacao => !aplicacao)) {
+                // Todas as aplicações estão vazias (null, undefined ou string vazia)
+                Swal.fire('Erro!', 'Registre pelo menos uma aplicação', 'error'); // Feedback em caso de erro
+            }
+            else {
 
-                // Realiza a requisição para registrar a consulta
-                await Axios.post("https://clinica-maria-luiza-bjdd.onrender.com/consultaAba/registrar",
-                    {
-                        consulta: {
-                            pacienteId: this.cpf,
-                            profissionalId: this.store.usuario.usuario.email,
-                            consulta: this.consulta,
-                            data: this.data,
-                            inicio: this.inicio,  // Hora de início passada como string
-                            fim: this.fim,        // Hora de fim passada como string
-                            descricao: this.descricao,
-                            aplicacao1: this.aplicacao1,
-                            aplicacao2: this.aplicacao2,
-                            aplicacao3: this.aplicacao3,
-                            aplicacao4: this.aplicacao4,
-                            aplicacao5: this.aplicacao5,
-                            teste: this.teste,
-                            observacoes: this.observacoes,
-                            foto: this.foto // Incluindo a URL da imagem
-                        },
-                    }, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
+                try {
+                    // Gera um identificador único para a imagem
+                    if (this.imagem) { // Verifica se a imagem foi selecionada
+                        const uniqueImageName = uuidv4() + '_' + this.imagem.name;
+                        // Cria uma referência para o armazenamento
+                        const storageRef = ref(storage, 'consultaAba/' + uniqueImageName);
+                        // Faz o upload da imagem
+                        const snapshot = await uploadBytes(storageRef, this.imagem);
+                        // Obtém a URL pública da imagem
+                        this.foto = await getDownloadURL(snapshot.ref);
+                    } else {
+                        this.foto = null; // Se não houver imagem, define como nulo
                     }
-                })
-                    .then(response => {
-                        console.log('Consulta registrada com sucesso!', response.data);
-                        Swal.fire('Sucesso!', 'Consulta registrada com sucesso!', 'success'); // Adicionando feedback visual
-                        router.push('/pacientes')
+
+                    // Realiza a requisição para registrar a consulta
+                    await Axios.post("https://clinica-maria-luiza-bjdd.onrender.com/consultaAba/registrar",
+                        {
+                            consulta: {
+                                pacienteId: this.cpf,
+                                profissionalId: this.store.usuario.usuario.email,
+                                consulta: this.consulta,
+                                data: this.data,
+                                inicio: this.inicio,  // Hora de início passada como string
+                                fim: this.fim,        // Hora de fim passada como string
+                                descricao: this.descricao,
+                                aplicacao1: this.aplicacao1,
+                                aplicacao2: this.aplicacao2,
+                                aplicacao3: this.aplicacao3,
+                                aplicacao4: this.aplicacao4,
+                                aplicacao5: this.aplicacao5,
+                                teste: this.teste,
+                                observacoes: this.observacoes,
+                                foto: this.foto // Incluindo a URL da imagem
+                            },
+                        }, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
                     })
-                    .catch(error => {
-                        console.error('Erro ao registrar consulta:', error);
-                        Swal.fire('Erro!', 'Falha ao registrar a consulta.', 'error'); // Feedback em caso de erro
-                    });
-            } catch (error) {
-                console.error('Erro durante o upload da imagem:', error);
-                Swal.fire('Erro!', 'Falha ao fazer upload da imagem.', 'error'); // Feedback para erro no upload
+                        .then(response => {
+                            console.log('Consulta registrada com sucesso!', response.data);
+                            Swal.fire('Sucesso!', 'Consulta registrada com sucesso!', 'success'); // Adicionando feedback visual
+                            router.push('/pacientes')
+                        })
+                        .catch(error => {
+                            console.error('Erro ao registrar consulta:', error);
+                            Swal.fire('Erro!', 'Falha ao registrar a consulta.', 'error'); // Feedback em caso de erro
+                        });
+                } catch (error) {
+                    console.error('Erro durante o upload da imagem:', error);
+                    Swal.fire('Erro!', 'Falha ao fazer upload da imagem.', 'error'); // Feedback para erro no upload
+                }
             }
         }
     }
