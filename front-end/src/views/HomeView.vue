@@ -30,21 +30,43 @@
 
         <section id="quem-somos">
             <h1>Quem somos?</h1>
-            <p>Nossa Clínica de Desenvolvimento Infantil oferece atendimento especializado com foco na Intervenção em
-                ABA,
-                promovendo melhorias no comportamento e na aprendizagem. Contamos com uma equipe multidisciplinar
-                dedicada a
-                garantir o desenvolvimento integral e o bem-estar das crianças e suas famílias. Acreditamos que cada
-                criança
-                é única e nosso compromisso é proporcionar um ambiente acolhedor, seguro e estimulante.</p>
+            <p>
+                Nossa Clínica de Desenvolvimento Infantil oferece atendimento especializado com foco na Intervenção em
+                ABA, promovendo melhorias no comportamento e na aprendizagem.
+            </p>
+            <p>
+                Acreditamos que cada criança é única e nosso compromisso é proporcionar um ambiente acolhedor, seguro e
+                estimulante.
+            </p>
         </section>
 
         <section id="servicos">
             <h1>Nossos serviços</h1>
+            <p>
+                Na nossa clínica de desenvolvimento infantil, oferecemos um conjunto completo de serviços para apoiar o
+                crescimento e bem-estar das crianças de forma integrada. Nossa equipe multidisciplinar é composta por
+                profissionais especializados, prontos para atender as diversas necessidades do desenvolvimento infantil.
+            </p>
+            <p>
+                Aqui, você encontra acompanhamentos em <strong>Nutrição</strong>, <strong>Fisioterapia</strong>,
+                <strong>Psicopedagogia</strong>, <strong>Fonoaudiologia</strong>,
+                <strong>Psicologia</strong>, <strong>Musicalização</strong>, entre muitos outros. Com um ambiente
+                acolhedor e adequado para os
+                pequenos, trabalhamos com abordagens personalizadas e inovadoras que promovem a saúde e o
+                desenvolvimento de cada criança.
+            </p>
         </section>
 
         <section id="contato">
             <h1>Contato</h1>
+            <div class="botao-container">
+                <a href="https://www.instagram.com/clinicamarialuizaacari/" target="_blank">
+                    <button class="btn_instagram">Instagram</button>
+                </a>
+                <a href="https://web.whatsapp.com/send?phone=5584991611038" target="_blank">
+                    <button class="btn_whatsapp">WhatsApp</button>
+                </a>
+            </div>
         </section>
     </div>
 </template>
@@ -221,46 +243,76 @@ section p {
     font-size: 16px;
 }
 
+.botao-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.btn_instagram, .btn_whatsapp {
+    background-color: #E7FAFF;
+    padding: 15px 20px;
+    font-size: 16px;
+    width: 50%;
+    margin: 0 auto;
+    border: 1px solid #84E7FF;
+    color: #7E7E7E;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    transition: background-color 0.3s;
+}
+
 @media (max-width: 768px) {
     .nav-links li {
-        display: none; 
+        display: none;
     }
 
     .container {
         flex-direction: column;
     }
-    
-    .element1, .element2 {
-        width: 100%; /* Usa toda a largura disponível */
+
+    .element1,
+    .element2 {
+        width: 100%;
+        /* Usa toda a largura disponível */
     }
 
-    .element1 img{
+    .element1 img {
         width: 100%;
     }
 
-    .element1 p{
+    .element1 p {
         padding: 5px;
     }
 
     .slider img {
-        width: 100%; /* Faz com que as imagens do slider ocupem toda a largura */
+        width: 100%;
+        /* Faz com que as imagens do slider ocupem toda a largura */
     }
+
     .logo img {
-        width: 170px; /* Logo ainda menor em telas menores */
-        margin-left: 10px; /* Diminua a margem à esquerda da logo */
+        width: 170px;
+        /* Logo ainda menor em telas menores */
+        margin-left: 10px;
+        /* Diminua a margem à esquerda da logo */
     }
 
     .button1 {
-        padding: 5px 20px; /* Ajuste adicional no preenchimento do botão */
-        font-size: 14px; /* Ajuste adicional no tamanho da fonte do botão */
+        padding: 5px 20px;
+        /* Ajuste adicional no preenchimento do botão */
+        font-size: 14px;
+        /* Ajuste adicional no tamanho da fonte do botão */
         margin-left: 2px;
     }
 
     .nav-links li {
-        margin: 5px; /* Ajuste na margem dos itens de menu */
+        margin: 5px;
+        /* Ajuste na margem dos itens de menu */
     }
 }
-
 </style>
 <script>
 import { RouterLink } from 'vue-router';
