@@ -59,7 +59,7 @@
 
         <section id="contato">
             <h1>Contato</h1>
-            <div class="botao-container">
+            <div class="btn_contatos">
                 <a href="https://www.instagram.com/clinicamarialuizaacari/" target="_blank">
                     <button class="btn_instagram">Instagram</button>
                 </a>
@@ -243,7 +243,7 @@ section p {
     font-size: 16px;
 }
 
-.botao-container {
+.btn_contatos {
     margin-top: 20px;
     display: flex;
     flex-direction: column;
