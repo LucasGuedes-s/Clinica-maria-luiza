@@ -139,6 +139,9 @@ export default {
             usuario: '',
         }
     },
+    mounted(){
+        router.push('/unauthorized')
+    },
     methods: {
         async login() {
             const id = this.usuario

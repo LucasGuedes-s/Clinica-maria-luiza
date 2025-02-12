@@ -90,13 +90,16 @@ import GraficoEvolucao from '@/components/GraficoEvolucao.vue';
 import Navbar from '@/components/Navbar.vue';
 import Axios from 'axios';
 import Swal from 'sweetalert2';
-
 import { formatDate } from '../utils/formatarData';
+import router from '@/router';
+
+
 
 export default {
 
     name: 'historicodeconsulta',
     mounted() {
+        router.push('/unauthorized')
         this.getConsultas()
         this.getAgenda()
         this.getConsultasAba()
@@ -210,7 +213,7 @@ export default {
                 console.error(error)
             })
         }
-    }
+    },
 }
 </script>
 
