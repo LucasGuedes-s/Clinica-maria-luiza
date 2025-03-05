@@ -183,6 +183,29 @@ async function registrarConsultaAba(req) {
   
   return consulta;
 }
+async function updateConsultaAba(req) {
+  //console.log(req)
+  const update_consulta = await prisma.ConsultaAba.update({
+    where:{
+      pacientes: req.consultaAba.id
+    },
+    data: {
+      data: new Date(req.consultaAba.data),
+      hora_inicio: req.consultaAba.inicio,
+      hora_fim: req.consultaAba.fim,
+      descricao_atividade: req.consultaAba.descricao,
+      Aplicacao1:  req.consultaAba.aplicacao1,
+      Aplicacao2:  req.consultaAba.aplicacao2,
+      Aplicacao3:  req.consultaAba.aplicacao3,
+      Aplicacao4:  req.consultaAba.aplicacao4,
+      Aplicacao5:  req.consultaAba.aplicacao5,
+      teste:       req.consultaAba.teste,
+      observacoes: req.consultaAba.observacoes,      
+      foto:        req.consultaAba.foto
+    }
+  });
+  return update_consulta;
+}
 async function postLaudos(dados) {
   const paciente = await prisma.Pacientes.findFirst({
     where: {
@@ -291,4 +314,4 @@ async function updateDadosPaciente(req) {
     dadosPaciente: dadosAtualizados,
   };
 }
-module.exports = {loginPaciente, getPacientes, postLaudos, getPaciente, getConsultas, getConsulta, getConsultasAba, cadastrarDados, cadastrarPaciente, registrarConsulta, registrarConsultaAba, deleteConsultaAba, updateDadosPaciente};
+module.exports = {loginPaciente, getPacientes, postLaudos, updateConsultaAba, getPaciente, getConsultas, getConsulta, getConsultasAba, cadastrarDados, cadastrarPaciente, registrarConsulta, registrarConsultaAba, deleteConsultaAba, updateDadosPaciente};

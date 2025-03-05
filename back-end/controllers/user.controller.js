@@ -30,5 +30,14 @@ async function updateSenha(req, res, next){
         console.error(`Erro ao atualizar a nova senha`);
     }
 }
+async function alterarSenha(req, res, next){
+    try {
+        const alterarSenha = await usuario.alterarSenha(req.body)
+        res.status(200).json({alterarSenha});
+        next()
+    } catch (err) {
+        next(err);
+    }
+}
 
-module.exports = {LoginUsuario, updateSenha};
+module.exports = {LoginUsuario, updateSenha, alterarSenha};

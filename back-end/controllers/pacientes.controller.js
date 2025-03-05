@@ -57,6 +57,16 @@ async function postPacientes(req, res, next){
         console.error(`Erro ao receber os pacientes`);
     }
 }
+async function updateConsulta(req, res, next){
+    try {
+        const consulta = await Paciente.updateConsultaAba(req.body)
+        res.status(200).json({consulta});
+        next()
+    } catch (err) {
+        console.log(err)
+        console.error(`Erro ao receber os pacientes`);
+    }
+}
 async function postDados(req, res, next){
     try {
         const dados = await Paciente.cadastrarDados(req.body)
@@ -117,4 +127,4 @@ async function updateDados(req, res, next){
         console.error(`Erro ao alterar dados do paciente`);
     }
 }
-module.exports = {loginPaciente, getPacientes, postLaudos, deleteConsultaAba, getPaciente, getConsultas, getConsultasAba, postPacientes, postDados, postConsulta, postConsultaAba, updateDados};
+module.exports = {loginPaciente, getPacientes, postLaudos, updateConsulta, deleteConsultaAba, getPaciente, getConsultas, getConsultasAba, postPacientes, postDados, postConsulta, postConsultaAba, updateDados};

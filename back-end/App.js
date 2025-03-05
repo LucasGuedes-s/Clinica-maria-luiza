@@ -21,7 +21,6 @@ const firstRun = require('./firstRun.util.js');
 firstRun.FirstRun();
 
 //ROTAS
-
 app.get('/', (req, res) => {
   res.send('Teste - clínica Maria Luiza')
 })

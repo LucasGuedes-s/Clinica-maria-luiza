@@ -90,6 +90,7 @@ model Consultas{
   profissionalId  String?
 }
 model ConsultaAba{
+  //MUDAR ESSE IDENTIFICADOR
   pacientes       Int @id @default(autoincrement())
   paciente        Pacientes? @relation(fields: [pacienteId], references: [cpf])
   pacienteId      String?

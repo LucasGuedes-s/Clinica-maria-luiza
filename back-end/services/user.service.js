@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 const config= require('../config/app.config')
 const bcrypt = require('../utils/bcrypt.ultil');
 const { PrismaClient } = require('@prisma/client');
+const enviarEmail = require('./emails.service');
 const prisma = new PrismaClient()
 require('dotenv').config();
 
@@ -66,4 +67,22 @@ async function updateSenha(users, res){
 
 
 }
-module.exports = {LoginUser, updateSenha};
+
+async function alterarSenha(req, res){ 
+    const user = await prisma.Profissionais.findFirst({
+        where:{
+            email: {
+                equals: req.usuario.email,
+                mode: 'insensitive'
+            }
+        }
+    });
+
+    if(user == null){
+        throw new Error('Usuário inválido')
+    }
+    else{
+        enviarEmail(req.usuario.email)
+    }
+}
+module.exports = {LoginUser, updateSenha, alterarSenha};
