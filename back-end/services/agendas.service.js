@@ -2,6 +2,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient()
 const formatar = require('../utils/formatdata.ultil')
 const { DateTime } = require('luxon');
+const { enviarNotificacaoAgendamento } = require('./emails.service');
 
 async function agendarConsulta(req){  
     const paciente = await prisma.Pacientes.findUnique({
@@ -25,6 +26,16 @@ async function agendarConsulta(req){
 			sala: 2
           },
     });
+    //console.log(agenda)
+    //console.log(paciente)
+    // console.log(profissional)
+    const agendamento = {
+        email: paciente.email,
+        data: agenda.data,
+        nome: paciente.nome,
+        profissional: profissional.nome
+    }
+    enviarNotificacaoAgendamento(agenda.profissionalId, agendamento)
     return agenda;
 }
 async function getAgendamentosPacientes(user){  

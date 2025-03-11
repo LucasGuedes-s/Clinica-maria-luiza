@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const { formatarDataHoraSeparados } = require('../utils/formatdata.ultil');
 
 const transporter = nodemailer.createTransport({
     service: 'gmail', // Pode usar "hotmail", "yahoo", etc.
@@ -8,11 +9,11 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-async function enviarEmail() {
+async function enviarEmail(destinatario) {
     try {
         const info = await transporter.sendMail({
             from: '"Clinica Maria Luiza" <lucasguedes2908@gmail.com>',
-            to:  'joaopaulosv068@gmail.com',
+            to:  destinatario,
             subject: 'Alterar Senha',
             html: `
       <div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 500px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
@@ -43,4 +44,42 @@ async function enviarEmail() {
     }
 }
 
-module.exports = enviarEmail;
+async function enviarNotificacaoAgendamento(destinatario, agendamento) {
+  try {
+    const dataFormatada = formatarDataHoraSeparados(agendamento.data);
+
+      //console.log(destinatario, agendamento)
+      const info = await transporter.sendMail({
+          from: '"Clinica Maria Luiza"',
+          to: destinatario,
+          subject: 'Lembrete de Agendamento',
+          html: `
+            <p>Olá, <strong>${agendamento.profissional}</strong>! 😊</p>
+            <p>Este é um lembrete do seu agendamento de consulta na clínica Maria Luiza.</p>
+            <p><strong>📅 Data e hora:</strong> ${dataFormatada.data} ${dataFormatada.hora} </p>
+            <p>Se precisar remarcar, entre em contato conosco.</p>
+            <p>Tenha um ótimo dia!<br>Atenciosamente, <br><strong>Equipe da Clínica Maria Luiza</strong> 🏥</p>
+          `
+      });
+      
+      await transporter.sendMail({
+          from: '"Clinica Maria Luiza"',
+          to: agendamento.email,
+          subject: 'Lembrete de Agendamento',
+          html: `
+            <p>Olá, <strong>${agendamento.nome}</strong>! 😊</p>
+            <p>Este é um lembrete do seu agendamento na Clínica Maria Luiza.</p>
+            <p><strong>📅 Data e hora:</strong> ${dataFormatada.data} ${dataFormatada.hora}</p>
+            <p><strong>👨‍⚕️ Profissional:</strong> ${agendamento.profissional}</p>
+            <p>Se precisar remarcar ou cancelar, entre em contato conosco.</p>
+            <p>Tenha um ótimo dia!<br>Atenciosamente, <br><strong>Equipe da Clínica Maria Luiza</strong> 🏥</p>
+          `
+      });
+      
+      console.log('E-mails enviados com sucesso');
+  } catch (error) {
+      console.error('Erro ao enviar e-mails:', error);
+  }
+}
+
+module.exports = {enviarEmail, enviarNotificacaoAgendamento};

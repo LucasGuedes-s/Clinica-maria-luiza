@@ -251,7 +251,7 @@ export default {
                     Swal.showLoading();
                 }
             })
-            await Axios.post(`https://clinica-maria-luiza-bjdd.onrender.com/cadastrar/agendamento`, {
+            await Axios.post(`http://localhost:3000/cadastrar/agendamento`, {
                 agenda: {
                     agendamento: this.agendamento,
                     data: this.data,
