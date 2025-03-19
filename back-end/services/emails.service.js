@@ -47,7 +47,7 @@ async function enviarEmail(destinatario) {
 async function enviarNotificacaoAgendamento(destinatario, agendamento) {
   try {
     const dataFormatada = formatarDataHoraSeparados(agendamento.data);
-
+    console.log("Chegando aqui")
       //console.log(destinatario, agendamento)
       const info = await transporter.sendMail({
           from: '"Clinica Maria Luiza"',
