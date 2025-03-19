@@ -1,10 +1,4 @@
 const nodemailer = require('nodemailer');
-const { format } = require("date-fns");
-const dateFnsTz = require("date-fns-tz");
-const { ptBR } = require("date-fns/locale");
-
-
-const utcToZonedTime = dateFnsTz.utcToZonedTime; // Extraindo a função corretamente
 
 const transporter = nodemailer.createTransport({
   service: 'gmail', // Pode usar "hotmail", "yahoo", etc.
@@ -17,7 +11,7 @@ const transporter = nodemailer.createTransport({
 async function enviarEmail(destinatario) {
   try {
     const info = await transporter.sendMail({
-      from: '"Clinica Maria Luiza" <lucasguedes2908@gmail.com>',
+      from: '"Clinica Maria Luiza"',
       to: destinatario,
       subject: 'Alterar Senha',
       html: `

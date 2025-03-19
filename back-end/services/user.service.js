@@ -2,7 +2,8 @@ const jwt = require('jsonwebtoken')
 const config= require('../config/app.config')
 const bcrypt = require('../utils/bcrypt.ultil');
 const { PrismaClient } = require('@prisma/client');
-const enviarEmail = require('./emails.service');
+const { enviarEmail } = require('./emails.service');
+
 const prisma = new PrismaClient()
 require('dotenv').config();
 
