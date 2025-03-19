@@ -145,7 +145,7 @@ export default {
     },
     methods: {
         async Altersenha() {
-            await Axios.post(" http://localhost:3000/alterar/senha", {
+            await Axios.post("https://clinica-maria-luiza-bjdd.onrender.com/alterar/senha", {
                 usuario: {
                     email: this.email,
                 }
