@@ -37,4 +37,19 @@ const formatarDataHoraSeparados = (dataCompleta) => {
     return { data: `${dia}/${mes}/${ano}`, hora: `${horas}:${minutos}` };
 };
 
-module.exports = { formatarDataHoraSeparados, formatDate };
+const formatacao = (data) =>{
+    const dataUTC = data.data;
+
+    // Extraindo cada componente da data no formato UTC
+    const ano = dataUTC.getUTCFullYear();
+    const mes = String(dataUTC.getUTCMonth() + 1).padStart(2, '0'); // Meses começam do 0 em JavaScript
+    const dia = String(dataUTC.getUTCDate()).padStart(2, '0');
+    const hora = String(dataUTC.getUTCHours()).padStart(2, '0');
+    const minuto = String(dataUTC.getUTCMinutes()).padStart(2, '0');
+    const segundo = String(dataUTC.getUTCSeconds()).padStart(2, '0');
+
+    const dataFormatada = `${dia}/${mes}/${ano} ${hora}:${minuto}:${segundo}`;
+    console.log(dataFormatada)
+    return dataFormatada;
+}
+module.exports = { formatarDataHoraSeparados, formatDate, formatacao};

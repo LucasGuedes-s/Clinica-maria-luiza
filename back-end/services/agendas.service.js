@@ -26,9 +26,6 @@ async function agendarConsulta(req){
 			sala: 2
           },
     });
-    //console.log(agenda)
-    //console.log(paciente)
-    // console.log(profissional)
     const agendamento = {
         email: paciente.email,
         data: agenda.data,
@@ -54,11 +51,10 @@ async function getAgendamentosPacientes(user){
           },
     });
     const Agendamentos = agenda.map(agendamento => {
-        const { data, hora } = formatar.formatarDataHoraSeparados(agendamento.data);
+        const { data, hora } = formatar.formatacao(agendamento.data);
         return {
             ...agendamento,
             dataFormatada: data,
-            horaFormatada: hora,
         };
     });
     return Agendamentos;
@@ -78,14 +74,29 @@ async function getAgendamentos(user){
             },
           },
     });
+
     const Agendamentos = agenda.map(agendamento => {
-        const { data, hora } = formatar.formatarDataHoraSeparados(agendamento.data);
+        // Suponho que formatar.formataao seja uma função de formatação de data
+        const dataUTC = new Date(agendamento.data); // Aqui você cria a data no formato UTC
+    
+        // Extraindo data e hora de forma manual para evitar conversões de fuso horário
+        const ano = dataUTC.getUTCFullYear();
+        const mes = String(dataUTC.getUTCMonth() + 1).padStart(2, '0'); // Meses começam em 0
+        const dia = String(dataUTC.getUTCDate()).padStart(2, '0');
+        const hora = String(dataUTC.getUTCHours()).padStart(2, '0');
+        const minuto = String(dataUTC.getUTCMinutes()).padStart(2, '0');
+        const segundo = String(dataUTC.getUTCSeconds()).padStart(2, '0');
+    
+        const data = `${dia}/${mes}/${ano}`;
+        const horaFormatada = `${hora}:${minuto}:${segundo}`;
+    
         return {
             ...agendamento,
             dataFormatada: data,
-            horaFormatada: hora,
+            horaFormatada: horaFormatada,
         };
     });
+    
     return Agendamentos;
 }
 async function updateAgendamentos(id){
