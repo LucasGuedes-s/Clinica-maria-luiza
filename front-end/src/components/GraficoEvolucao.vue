@@ -11,6 +11,8 @@
 import { onMounted, ref } from 'vue'
 import Chart from 'chart.js/auto'
 import Axios from 'axios';
+import { useAuthStore } from '@/store.js'
+
 import { formatDate } from '@/utils/formatarData';
 export default {
     props: {
@@ -20,12 +22,19 @@ export default {
         }
     },
     setup(props) {
+        const store = useAuthStore()
+
         const consultas = ref([]);
         const chart = ref(null);
         const agendarconsulta = async () => {
             const cpf = props.dado;
             try {
-                const response = await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/consultasAba/paciente/${cpf}`);
+                const token = store.token;
+                const response = await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/consultasAba/paciente/${cpf}`,{
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
                 const todasConsultas = response.data.consultas;
 
                 // Pegar os últimos 15 itens do array de consultas
@@ -170,6 +179,7 @@ export default {
 
         return {
             consultas,
+            store,
             updateChart,
         };
     },
