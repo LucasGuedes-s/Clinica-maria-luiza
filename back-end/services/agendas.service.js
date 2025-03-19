@@ -8,13 +8,11 @@ async function agendarConsulta(req){
     const paciente = await prisma.Pacientes.findUnique({
         where: { cpf: req.agenda.paciente }
     });
-
     const profissional = await prisma.Profissionais.findUnique({
         where: { email: req.agenda.profissional }
     });
     const data = new Date(req.agenda.data); // Valor vindo do front-end
     const data_ajustada = new Date(data.getTime() - data.getTimezoneOffset() * 60000);
-
     const agenda = await prisma.Agendamentos.create({
         data: {
 			data: data_ajustada,

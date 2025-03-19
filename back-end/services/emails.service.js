@@ -59,8 +59,6 @@ async function enviarNotificacaoAgendamento(destinatario, agendamento) {
 
     const dataFormatada = `${dia}/${mes}/${ano} ${hora}:${minuto}:${segundo}`;
 
-    console.log(dataFormatada)
-    //console.log(destinatario, agendamento)
     const info = await transporter.sendMail({
       from: '"Clinica Maria Luiza"',
       to: destinatario,
@@ -68,9 +66,16 @@ async function enviarNotificacaoAgendamento(destinatario, agendamento) {
       html: `
             <p>Olá, <strong>${agendamento.profissional}</strong>! 😊</p>
             <p>Este é um lembrete do seu agendamento de consulta na clínica Maria Luiza.</p>
-            <p><strong>📅 Data e hora:</strong> ${dataFormatada} </p>
+            <p><strong>📅 Data e hora:</strong> ${dataFormatada}h</p>
             <p>Se precisar remarcar, entre em contato conosco.</p>
             <p>Tenha um ótimo dia!<br>Atenciosamente, <br><strong>Equipe da Clínica Maria Luiza</strong> 🏥</p>
+            <p>
+              <a href="https://wa.me/5584991611038?text=Olá!%20Gostaria%20de%20remarcar%20meu%20agendamento." target="_blank">
+                  <button style="background-color: #84E7FF; color: black; border: none; padding: 8px 16px; font-size: 12px; border-radius: 5px;">
+                      Remarcar via WhatsApp
+                  </button>
+              </a>
+          </p>
           `
     });
 
@@ -85,6 +90,13 @@ async function enviarNotificacaoAgendamento(destinatario, agendamento) {
             <p><strong>👨‍⚕️ Profissional:</strong> ${agendamento.profissional}</p>
             <p>Se precisar remarcar ou cancelar, entre em contato conosco.</p>
             <p>Tenha um ótimo dia!<br>Atenciosamente, <br><strong>Equipe da Clínica Maria Luiza</strong> 🏥</p>
+            <p>
+              <a href="https://wa.me/5584994280599?text=Olá!%20Gostaria%20de%20remarcar%20meu%20agendamento." target="_blank">
+                  <button style="background-color: #84E7FF; color: black; border: none; padding: 8px 16px; font-size: 12px; border-radius: 5px;">
+                      Remarcar via WhatsApp
+                  </button>
+              </a>
+          </p>
           `
     });
 
