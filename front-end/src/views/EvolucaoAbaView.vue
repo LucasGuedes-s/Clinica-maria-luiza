@@ -6,6 +6,9 @@
         <div>
             <GraficoEvolucao :dado="cpf" />
         </div>
+        <!--<div>
+            <GraficoEvolucaoBarras :dado="cpf" />
+        </div> -->
         <div class="titulo_evolucao">
             <h1>Histórico de consultas Aba</h1>
         </div>
@@ -50,6 +53,8 @@ import Axios from 'axios';
 import Swal from 'sweetalert2';
 import { formatDate } from '../utils/formatarData';
 import router from '@/router';
+import GraficoEvolucaoBarras from '@/components/GraficoEvolucaoBarras.vue';
+
 export default {
 
     name: 'historicodeconsulta',
@@ -80,7 +85,8 @@ export default {
     },
     components: {
         Sidebar,
-        GraficoEvolucao
+        GraficoEvolucao,
+        GraficoEvolucaoBarras
     },
     methods: {
         async abrirFoto(link) {
@@ -97,8 +103,13 @@ export default {
 
         },
         async getConsultas() {
-            await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/consultasAba/paciente/${this.cpf}`
-            ).then(response => {
+            const token = this.store.token
+
+            await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/consultasAba/paciente/${this.cpf}`,{
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then(response => {
                 this.consulta = response.data.consultas
             }).catch(error => {
                 console.error(error)

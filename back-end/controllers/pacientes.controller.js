@@ -40,7 +40,7 @@ async function getConsultas(req, res, next){
 }
 async function getConsultasAba(req, res, next){
     try {
-        const consultas = await consulta.getConsultasAba(req.params.cpf)
+        const consultas = await consulta.getConsultasAba(req.params.cpf, req.user)
         res.status(200).json({consultas});
         next()
     } catch (err) {

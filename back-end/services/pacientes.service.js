@@ -65,11 +65,24 @@ async function getConsultas(user) {
   });
   return consultas;
 }
-async function getConsultasAba(req) {
+async function getConsultasAba(req, user) {
+  let whereCondition = {};
+
+  if (user.permissao === 1) {
+      // Se for admin, vê todas as consultas
+      whereCondition = {pacienteId: req};
+  } else if (user.permissao === 2) {
+      // Se for profissional, vê apenas as consultas que ele atende
+      whereCondition = {
+          pacienteId: req, // Usando o identificador único do paciente
+          profissional: {
+              email: user.email // Ou id, dependendo do seu schema
+          }
+      };
+  }
   const consultas = await prisma.ConsultaAba.findMany({
-    where: {
-      pacienteId: req, // Usando o identificador único do paciente
-    },
+    where: whereCondition,
+
     include: {
       profissional: { // Nome do campo que define a relação no seu schema
         select: {
