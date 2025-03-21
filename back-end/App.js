@@ -32,14 +32,14 @@ const agendaRouter = require('./routes/agenda.router.js');
 const consultasRouter = require('./routes/consultas.router.js');
 const pagamentosRouter = require('./routes/pagamentos.router.js');
 const pdfsRouter = require('./routes/pdfs.router.js');
+
 const { enviarEmailsAgendamentos, enviarEmailsTodosAgendamentos } = require('./services/emails.service.js');
 const cron = require('node-cron');
 
-/*cron.schedule("0 7 * * 1-5", () => {
-  console.log("Executando envio de e-mails de agendamentos às 7h da manhã...");
+cron.schedule("0 7 * * 1-5", () => {
   enviarEmailsAgendamentos();
   enviarEmailsTodosAgendamentos();
-});*/
+});
 
 
 app.use(UserRouter, profissionaisRouter, pacientesRouter, agendaRouter, consultasRouter, pagamentosRouter, pdfsRouter)

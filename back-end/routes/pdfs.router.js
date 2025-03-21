@@ -11,4 +11,6 @@ router.get('/pdf/consulta/:id', pdfController.getpdfConsulta);
 router.get('/pdf/consultaAba/:cpf', pdfController.getpdfConsultasAba);
 router.post('/pdf/pagamentos', pdfController.getpdfPagamento);
 
+router.get('/pdf/consultasAba/:cpf', pdfController.getpdfTodasConsultasAba);
+
 module.exports = router;

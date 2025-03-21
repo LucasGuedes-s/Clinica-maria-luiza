@@ -84,6 +84,7 @@ async function getConsultas(req, user) {
   });
   return consultas;
 }
+
 async function getConsultasAba(req, user) {
   let whereCondition = {};
 
@@ -116,6 +117,31 @@ async function getConsultasAba(req, user) {
 
   return consultas;
 }
+
+async function getTodasConsultasAba(req) {
+  const consultas = await prisma.ConsultaAba.findMany({
+    where: {
+      pacienteId: req // Filtra pelo ID do paciente
+    },
+    include: {
+      profissional: {
+        select: {
+          nome: true
+        }
+      },
+      paciente: {
+        select: {
+          nome: true
+        }
+      }
+    },
+    orderBy: {
+      data: 'desc'
+    }
+  });
+  return consultas;
+}
+
 async function getConsulta(consulta) {
   const consult = parseInt(consulta)
   const consultas = await prisma.Consultas.findUnique({
@@ -346,4 +372,4 @@ async function updateDadosPaciente(req) {
     dadosPaciente: dadosAtualizados,
   };
 }
-module.exports = {loginPaciente, getPacientes, postLaudos, updateConsultaAba, getPaciente, getConsultas, getConsulta, getConsultasAba, cadastrarDados, cadastrarPaciente, registrarConsulta, registrarConsultaAba, deleteConsultaAba, updateDadosPaciente};
+module.exports = {getTodasConsultasAba, loginPaciente, getPacientes, postLaudos, updateConsultaAba, getPaciente, getConsultas, getConsulta, getConsultasAba, cadastrarDados, cadastrarPaciente, registrarConsulta, registrarConsultaAba, deleteConsultaAba, updateDadosPaciente};

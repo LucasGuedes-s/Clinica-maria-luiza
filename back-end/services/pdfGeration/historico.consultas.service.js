@@ -4,8 +4,6 @@ const fs = require('fs');
 const path = require('path');
 const paciente = require('../pacientes.service')
 
-//const paciente = require('../consultas.service')
-
 const profissionais = require('../profissionais.service')
 const formatar = require('../../utils/formatdata.ultil')
 const { getImageAsBase64 } = require('../../utils/img.ultil');
@@ -34,7 +32,7 @@ function addFooter(doc) {
 }
 async function createReportPdf(usuario) {
   const doc = new jsPDF();
-  const consultas = await paciente.getConsultas(usuario);
+  const consultas = await paciente.getConsultas(usuario, 1);
   console.log(consultas);
 
   const imgPath = path.resolve(__dirname, '../../src/assets/img.girafas.png');
@@ -108,17 +106,6 @@ Nascido em ${data_hora.data};
   const pdfBuffer = doc.output('arraybuffer');
   return pdfBuffer;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 async function pdfConsulta(id) {
@@ -224,6 +211,7 @@ async function pdfConsultas(req) {
 
 async function pdfConsultasAba(req) {
   const consultas = await profissionais.getConsultasAba(req.body);
+
   const anoAtual = new Date().getFullYear();
   const mesAtual = new Date().getMonth();
 
@@ -284,7 +272,6 @@ async function pdfConsultasAba(req) {
       { header: 'A3', dataKey: 'aplicacao3' },
       { header: 'A4', dataKey: 'aplicacao4' },
       { header: 'A5', dataKey: 'aplicacao5' }
-
     ];
 
     if (req.body.hora === true) {
@@ -335,5 +322,84 @@ async function pdfConsultasAba(req) {
     console.error('Erro ao gerar o PDF:', error);
   }
 }
+async function pdftodasConsultasAba(req) {
+  const consultas = await paciente.getTodasConsultasAba(req);
+  try {
+    const doc = new jsPDF();
+    const imgPath = path.resolve(__dirname, '../../src/assets/img.girafas.png');
+    const imgData = fs.readFileSync(imgPath).toString('base64');
+    const imgHeight = 40;
+    const imgWidth = 40;
 
-module.exports = { createReportPdf, pdfConsulta, pdfConsultas, pdfConsultasAba, addFooter }
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const imgX = (pageWidth - imgWidth) / 2;
+    const imgY = 10;
+
+    doc.addImage(imgData, 'PNG', imgX, imgY, imgWidth, imgHeight);
+
+    let textY = imgY + imgHeight + 10;
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Relatório de Consultas ABA', pageWidth / 2, textY, { align: 'center' });
+
+    textY += 10;
+    doc.setFontSize(12);
+    doc.text("As consultas ABA (Análise do Comportamento Aplicada) são intervenções voltadas para desenvolver habilidades e melhorar o comportamento de pacientes. Este relatório contém os registros dessas sessões.", 15, textY, { maxWidth: pageWidth - 30 });
+
+    textY += 15;
+    doc.setFontSize(14);
+
+    let columns = [
+      { header: 'Data', dataKey: 'data' },
+      { header: 'Profissional', dataKey: 'profissional' },
+      { header: 'Paciente', dataKey: 'paciente' },
+      { header: 'Atividade', dataKey: 'descricao_atividade' },
+      { header: 'A1', dataKey: 'aplicacao1' },
+      { header: 'A2', dataKey: 'aplicacao2' },
+      { header: 'A3', dataKey: 'aplicacao3' },
+      { header: 'A4', dataKey: 'aplicacao4' },
+      { header: 'A5', dataKey: 'aplicacao5' },
+      { header: 'Observações', dataKey: 'observacoes' }
+
+    ];
+
+    const data = consultas.map(consulta => {
+      const dataFormatada = formatar.formatDate(consulta.data);
+      const consultaData = {
+        data: dataFormatada,
+        profissional: consulta.profissional.nome,
+        paciente: consulta.paciente.nome,
+        descricao_atividade: consulta.descricao_atividade,
+        aplicacao1: consulta.Aplicacao1,
+        aplicacao2: consulta.Aplicacao2,
+        aplicacao3: consulta.Aplicacao3,
+        aplicacao4: consulta.Aplicacao4,
+        aplicacao5: consulta.Aplicacao5,
+        observacoes: consulta.observacoes,
+
+      };
+      if (consulta.hora_inicio === true) {
+        consultaData.hora_inicio = consulta.hora_inicio;
+        consultaData.hora_fim = consulta.hora_fim;
+      }
+      return consultaData;
+    });
+
+    const tableStartY = textY + 5;
+    doc.autoTable({
+      columns: columns,
+      body: data,
+      startY: tableStartY,
+      theme: 'grid',
+      headStyles: {
+        fillColor: [132, 231, 255],
+      },
+    });
+
+    const pdfBuffer = doc.output('arraybuffer');
+    return pdfBuffer;
+  } catch (error) {
+    console.error('Erro ao gerar o PDF:', error);
+  }
+}
+module.exports = { createReportPdf, pdfConsulta, pdfConsultas, pdfConsultasAba, pdftodasConsultasAba, addFooter }

@@ -29,10 +29,17 @@ async function getpdfPagamento(req, res){
 };
 async function getpdfConsultasAba(req, res){
     const pdfBuffer = await pdf.pdfConsultasAba(req)
-    // Envie o PDF como resposta
     
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'attachment; filename=arquivo.pdf');
     res.send(Buffer.from(pdfBuffer));
 };
-module.exports = { getpdfConsultas, getpdfConsulta, getpdfConsultasAba, getpdfPagamento }
+
+async function getpdfTodasConsultasAba(req, res){
+    const pdfBuffer = await pdf.pdftodasConsultasAba(req.params.cpf)
+    
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=arquivo.pdf');
+    res.send(Buffer.from(pdfBuffer));
+};
+module.exports = { getpdfConsultas, getpdfConsulta, getpdfConsultasAba, getpdfPagamento, getpdfTodasConsultasAba}
