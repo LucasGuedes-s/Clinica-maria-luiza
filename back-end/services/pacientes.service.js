@@ -54,13 +54,32 @@ async function getPacientes() {
   //const pacientes = await prisma.Pacientes.findMany();
   return pacientes;
 }
-async function getConsultas(user) {
+async function getConsultas(req, user) {
+  let whereCondition = {};
+
+  if (user.permissao === 1) {
+      // Se for admin, vê todas as consultas
+      whereCondition = {cpf: req};
+
+  } else if (user.permissao === 2) {
+      // Se for profissional, vê apenas as consultas que ele atende
+      whereCondition = {
+          cpf: req, // Usando o identificador único do paciente
+          profissional: {
+              email: user.email // Ou id, dependendo do seu schema
+          }
+      };
+  }
+
   const consultas = await prisma.Pacientes.findUnique({
-    where: {
-      cpf: user // Usando o identificador único do paciente
-    },
+    where: whereCondition,
     include: {
-      consultas: true // Inclui todas as consultas relacionadas ao paciente
+      consultas: {
+        include: {
+          profissional: true // Garante que toda a relação do profissional seja carregada
+        },
+        orderBy: { consulta: 'asc' } // Ordena as consultas por tipo
+      }
     }
   });
   return consultas;

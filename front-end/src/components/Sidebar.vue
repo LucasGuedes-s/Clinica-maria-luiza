@@ -14,7 +14,7 @@
         </svg>
         Dashboard
       </router-link>
-      <router-link to="/profissionais">
+      <router-link to="/profissionais" v-if="Number(userPermissions) === 1">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people-fill"
           viewBox="0 0 16 16">
           <path
@@ -39,7 +39,7 @@
         </svg>
         Agendamentos
       </router-link>
-      <router-link to="/pagamentos">
+      <router-link to="/pagamentos" v-if="Number(userPermissions) === 1">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-coin"
           viewBox="0 0 16 16">
           <path
@@ -181,6 +181,14 @@ export default {
         return {
         isSidebarActive: false
             };
+    },
+    setup(){
+      const store = useAuthStore()
+      const userPermissions = store.getUser.usuario.permissao; // Obtém as permissões do usuário
+      return {
+        store,
+        userPermissions
+      }
     },
     methods: {
         toggleSidebar() {

@@ -19,7 +19,7 @@
                     <textarea id="historico_descricao" rows="4" :value="consulta.descricao" readonly></textarea>
                 </div>
                 <div class="botoes">
-                    <button class="btn_detalhar_hist" @click="laudo(consulta.laudos)">Laudo</button>
+                    <button class="btn_detalhar_hist" @click="laudo(consulta.laudos)">Fotos</button>
                     <button class="btn_arquivopdf_hist" @click="arquivoPdf(consulta.id)">Arquivo em PDF</button>
                 </div>
             </div>

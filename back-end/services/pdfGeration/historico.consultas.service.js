@@ -3,6 +3,9 @@ const autoTable = require('jspdf-autotable');
 const fs = require('fs');
 const path = require('path');
 const paciente = require('../pacientes.service')
+
+//const paciente = require('../consultas.service')
+
 const profissionais = require('../profissionais.service')
 const formatar = require('../../utils/formatdata.ultil')
 const { getImageAsBase64 } = require('../../utils/img.ultil');
@@ -30,9 +33,9 @@ function addFooter(doc) {
   }
 }
 async function createReportPdf(usuario) {
-
   const doc = new jsPDF();
-  const consultas = await paciente.getConsultas(usuario)
+  const consultas = await paciente.getConsultas(usuario);
+  console.log(consultas);
 
   const imgPath = path.resolve(__dirname, '../../src/assets/img.girafas.png');
   const imgData = fs.readFileSync(imgPath).toString('base64');
@@ -44,108 +47,85 @@ async function createReportPdf(usuario) {
   doc.addImage(imgData, 'PNG', x, 10, imgWidth, imgHeight);
 
   const firstImageY = 10 + imgHeight + 10;
-
-  // Definir as dimensões da segunda imagem
   const secondImageWidth = 40;
   const secondImageHeight = 40;
-
-  // Posicionar a segunda imagem e o texto abaixo da primeira imagem
-  const secondImageX = 15; // Posição X da segunda imagem
-  const secondImageY = firstImageY + 5; // Posição Y abaixo da primeira imagem
-
-  const textX = secondImageX + secondImageWidth + 10; // Texto ao lado direito da segunda imagem
+  const secondImageX = 15;
+  const secondImageY = firstImageY + 5;
+  const textX = secondImageX + secondImageWidth + 10;
   const textY = secondImageY + 5;
 
-  const data_hora = formatar.formatarDataHoraSeparados(new Date(consultas.data_nascimento))
-  //Foi atendido na Clínica Maria Luíza. A seguir, são detalhados os dados de todas as consultas realizada sob esse paciente na clínica.   
-
+  const data_hora = formatar.formatarDataHoraSeparados(new Date(consultas.data_nascimento));
+  
   const patientInfo = `
-    Nome: ${consultas.nome};
-CPF: ${consultas.cpf};
+  Nome: ${consultas.nome};
 E-mail: ${consultas.email}
 Residente em: ${consultas.endereco}
 Nascido em ${data_hora.data};
-    `;
+  `;
+
   doc.setFontSize(14);
-  doc.setTextColor(126, 126, 126); // Define a cor do texto como preta
+  doc.setTextColor(126, 126, 126);
   const lineHeightFactor = 1.5;
-
   doc.text(patientInfo.trim(), textX, textY, { maxWidth: 130, lineHeightFactor: lineHeightFactor });
-  const image = await getImageAsBase64(consultas.foto);
 
+  const image = await getImageAsBase64(consultas.foto);
   doc.addImage(image, 'JPEG', secondImageX, secondImageY, secondImageWidth, secondImageHeight);
 
-  // Cabeçalhos da tabela
+  // Ajuste para que a tabela inicie após a imagem da criança com a descrição
+  const tableStartY = secondImageY + secondImageHeight + 15;
+
   const tableColumn = ["Consulta", "Data", "Descrição", "Profissional"];
   const tableRows = [];
   const laudos = [];
 
-  consultas.forEach(consulta => {
-    // Verifica se o array de laudos não está vazio
-    if (consulta.laudos.length > 0) {
-      laudos.push(...consulta.laudos); // Adiciona os laudos ao array principal
+  for (const consulta of consultas.consultas) {
+    if (consulta.laudos && consulta.laudos.length > 0) {
+      laudos.push(...consulta.laudos);
     }
-
-    // Monta a linha da tabela com os dados da consulta
-    const row = [
+    tableRows.push([
       consulta.consulta,
-      formatar.formatarDataHoraSeparados(consulta.data), // Formata a data
-      consulta.descricao || 'N/A', // Verifica se a descrição está presente
-      consulta.profissional.nome // Use o nome do profissional em vez do email
-    ];
-    tableRows.push(row);
-  });
+      formatar.formatDate(consulta.data),
+      consulta.descricao || 'N/A',
+      consulta.profissional.nome || 'Desconhecido'
+    ]);
+  }
 
-  const lineHeight = 10; // Altura da linha
-  const tableStartY = textY + (lineHeight * 2); // Ajuste o valor conforme necessário para espaçamento
-
-  // Adicionando as colunas da tabela
   doc.autoTable({
     head: [tableColumn],
     body: tableRows,
     startY: tableStartY,
     theme: 'grid',
     headStyles: {
-      fillColor: [132, 231, 255], // Cor de fundo do cabeçalho (em RGB)
+      fillColor: [132, 231, 255],
     },
   });
+
   addFooter(doc);
   doc.addPage();
-
-  // Adicionar o título para a nova página
   doc.setFontSize(16);
-  doc.setTextColor(0, 0, 0); // Preto
-  
-  doc.text('Laudos do Paciente', 10, 20);
+  doc.setTextColor(0, 0, 0);
 
-  for (let i = 0; i < laudos.length; i++) {
-    const laudoUrl = laudos[i];
-    try {
-      if (i > 0) {
-        doc.addPage();
-        addFooter(doc);     // Adiciona uma nova página para cada laudo, exceto o primeiro
-      }
-      const laudoBase64 = await getImageAsBase64(laudoUrl);
-      const laudoWidth = pageWidth - 20; // Ajuste de acordo com o tamanho da página
-      const laudoHeight = (laudoWidth * 0.75); // Mantém a proporção da imagem
-      const laudoX = 10;
-      const laudoY = 20;
-
-      // Adicionar o laudo na nova página
-      doc.addImage(laudoBase64, 'JPEG', laudoX, laudoY, laudoWidth, laudoHeight);
-
-    } catch (error) {
-      console.error('Erro ao adicionar imagem do laudo:', error);
-    }
-  }
   const pdfBuffer = doc.output('arraybuffer');
-
   return pdfBuffer;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 async function pdfConsulta(id) {
   const doc = new jsPDF();
   const consulta = await paciente.getConsulta(id);
   // Carregando a imagem
+
   const imgPath = path.resolve(__dirname, '../../src/assets/img.girafas.png');
   const imgData = fs.readFileSync(imgPath).toString('base64');
   const imgHeight = 40;
@@ -226,7 +206,6 @@ Registro da consulta: ${consulta.descricao}
 async function pdfConsultas(req) {
   const doc = new jsPDF();
   const consultas = await profissionais.getConsultas(req.body)
-  console.log(consultas)
 
   const imgPath = path.resolve(__dirname, '../../src/assets/img.girafas.png');
   const imgData = fs.readFileSync(imgPath).toString('base64');
@@ -246,7 +225,7 @@ async function pdfConsultas(req) {
 async function pdfConsultasAba(req) {
   const consultas = await profissionais.getConsultasAba(req.body);
   const anoAtual = new Date().getFullYear();
-  const mesAtual = new Date().getMonth(); 
+  const mesAtual = new Date().getMonth();
 
   let inicioMes, fimMes;
 
@@ -254,8 +233,8 @@ async function pdfConsultasAba(req) {
     inicioMes = new Date(anoAtual, mesAtual, 1); // Primeiro dia do mês atual
     fimMes = new Date(anoAtual, mesAtual + 1, 0); // Último dia do mês atual
   } else if (req.body.mesDesejado === 'anterior') {
-      inicioMes = new Date(anoAtual, mesAtual - 1, 1); // Primeiro dia do mês anterior
-      fimMes = new Date(anoAtual, mesAtual, 0); // Último dia do mês anterior
+    inicioMes = new Date(anoAtual, mesAtual - 1, 1); // Primeiro dia do mês anterior
+    fimMes = new Date(anoAtual, mesAtual, 0); // Último dia do mês anterior
   }
 
   try {

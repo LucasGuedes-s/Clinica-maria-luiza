@@ -31,10 +31,11 @@ async function getPaciente(req, res, next){
 }
 async function getConsultas(req, res, next){
     try {
-        const consultas = await Paciente.getConsultas(req.params.cpf)
+        const consultas = await Paciente.getConsultas(req.params.cpf, req.user)
         res.status(200).json({consultas});
         next()
     } catch (err) {
+        console.log(err)
         console.error(`Erro ao receber as consultas do paciente ${req.params.cpf}`);
     }
 }

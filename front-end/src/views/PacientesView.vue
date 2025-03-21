@@ -297,8 +297,8 @@ export default {
                 title: 'O que você gostaria de fazer?',
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonText: 'Subir Laudo',
-                cancelButtonText: 'Ver Laudos',
+                confirmButtonText: 'Subir anexo',
+                cancelButtonText: 'Ver anexo',
             }).then((result) => {
                 if (result.isConfirmed) {
                     this.openUploadModal();
@@ -324,8 +324,8 @@ export default {
                         toast: true,
                         position: 'top-end', // ou 'top-right', 'bottom-end', etc.
                         icon: 'success', // ou 'error', 'warning', 'info', 'question'
-                        title: 'Fazendo o upload do laudo',
-                        text: 'Fazendo o upload do laudo adicionado',
+                        title: 'Fazendo o upload do anexo',
+                        text: 'Fazendo o upload do anexo adicionado',
                         showConfirmButton: false,
                         timer: 3000, // Tempo em milissegundos antes de desaparecer
                         timerProgressBar: true
@@ -335,7 +335,7 @@ export default {
                     Swal.fire({
                         icon: 'error',
                         title: 'Não foi possível concluir',
-                        text: 'Laudo não adicionado',
+                        text: 'Anexo não adicionado',
                         timer: 2000,
                         timerProgressBar: true,
                         showConfirmButton: false
@@ -359,8 +359,8 @@ export default {
                 }).then(response => {
                     Swal.fire({
                         icon: 'success',
-                        title: 'Laudo adicionado com sucesso!',
-                        text: 'Laudo adicionado com sucesso',
+                        title: 'Anexo adicionado com sucesso!',
+                        text: 'Anexo adicionado com sucesso',
                         timer: 2000,
                         timerProgressBar: true,
                         showConfirmButton: false
@@ -370,7 +370,7 @@ export default {
                     Swal.fire({
                         icon: 'error',
                         title: 'Não foi possível concluir',
-                        text: 'Laudo não adicionado',
+                        text: 'Anexo não adicionado',
                         timer: 2000,
                         timerProgressBar: true,
                         showConfirmButton: false
