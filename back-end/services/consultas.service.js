@@ -16,23 +16,35 @@ async function getConsultas() {
 
 async function getTotalConsultas() {
   const totalConsultas = await prisma.consultas.count();
-  return totalConsultas;
-}
+  const totalConsultasAba = await prisma.consultaAba.count();
 
+  return totalConsultas + totalConsultasAba;
+}
 
 async function getConsultasPorProfissional(email) {
-  const consultasporprofissional = await prisma.consultas.count({
+  const consultasPorProfissionalTradicionais = await prisma.consultas.count({
       where: { profissionalId: email }
   });
-  return consultasporprofissional;
+
+  const consultasPorProfissionalAba = await prisma.ConsultaAba.count({
+      where: { profissionalId: email }
+  });
+
+  return consultasPorProfissionalTradicionais + consultasPorProfissionalAba;
 }
 
-
 async function getConsultasPorPaciente(cpf) {
-  const consultasporpaciente = await prisma.consultas.count({
-      where: { pacienteId: cpf }
+  const consultasPorPacienteTradicionais = await prisma.consultas.count({
+    where: { pacienteId: cpf }
   });
-  return consultasporpaciente;
+
+  const consultasPorPacienteAba = await prisma.consultaAba.count({
+    where: { pacienteId: cpf }
+  });
+
+  const totalConsultaspacientes = consultasPorPacienteTradicionais + consultasPorPacienteAba;
+
+  return totalConsultaspacientes;
 }
 
 

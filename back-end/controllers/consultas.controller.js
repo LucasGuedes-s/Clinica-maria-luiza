@@ -12,17 +12,18 @@ async function getTodasConsultas(req, res, next){
 }
 async function getTotalConsultas(req, res) {
     try {
-        const totalConsultas = await consultas.getTotalConsultas();
+        const totalConsultas = await consultas.getTotalConsultas();  
         res.status(200).json({ totalConsultas });
     } catch (err) {
         console.error('Erro ao obter contagem total de consultas:', err);
         res.status(500).json({ error: 'Erro ao obter contagem total de consultas' });
     }
 }
+
 async function getConsultasPorProfissional(req, res, next) {
     try {
         const { email } = req.params;
-        const consultasProfissional = await consultas.getConsultasPorProfissional(email);
+        const consultasProfissional = await consultas.getConsultasPorProfissional(email); 
         res.status(200).json({ profissional: email, consultas: consultasProfissional });
         next();
     } catch (err) {
@@ -34,7 +35,7 @@ async function getConsultasPorProfissional(req, res, next) {
 async function getConsultasPorPaciente(req, res, next) {
     try {
         const { cpf } = req.params;
-        const consultasPaciente = await consultas.getConsultasPorPaciente(cpf);
+        const consultasPaciente = await consultas.getConsultasPorPaciente(cpf);  // Soma as consultas do paciente (tradicionais + ABAS)
         res.status(200).json({ paciente: cpf, consultas: consultasPaciente });
         next();
     } catch (err) {
