@@ -56,11 +56,13 @@ h1 {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
+    box-sizing: border-box; /* Garante que a largura da grid seja 100% do contêiner */
 }
 
 .info_item {
     display: flex;
     flex-direction: column;
+    width: 100%; /* Garante que os itens fiquem dentro da largura do contêiner */
 }
 
 .descricao {
@@ -72,7 +74,7 @@ h1 {
     display: flex;
     justify-content: space-between;
     /* Alinha os botões com espaçamento entre eles */
-    gap: 10px;
+    gap: 20px;
 }
 
 .info_item label {
@@ -88,12 +90,17 @@ h1 {
     background-color: white;
     font-size: 16px;
     color: #7E7E7E;
+    width: 100%; /* Garante que os inputs e o textarea tenham a mesma largura */
+    box-sizing: border-box; /* Garante que padding e bordas sejam incluídos no cálculo da largura */
+    outline: none;
+    box-shadow: none;  
 }
 
 .info_item textarea {
     resize: none;
     font-family: 'Montserrat', sans-serif;
     line-height: 1.5;
+    text-align: justify;
 }
 
 .btn_detalhar_hist,
@@ -115,6 +122,7 @@ h1 {
     }
 }
 </style>
+
 <script>
 import Sidebar from '@/components/Sidebar.vue';
 import Axios from 'axios';
