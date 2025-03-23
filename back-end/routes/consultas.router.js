@@ -17,5 +17,9 @@ router.get('/apagar/consulta/:id', [jwtMiddleware, permission.apagar], userContr
 router.post('/consulta/registrar', [jwtMiddleware, permission.postConsulta], userController.postConsulta);
 router.post('/consultaAba/registrar', [jwtMiddleware, permission.postConsulta], userController.postConsultaAba);
 
+router.get('/consultas/total', consultaController.getTotalConsultas);
+router.get('/consultas/profissional/:email', consultaController.getConsultasPorProfissional);
+router.get('/consultas/paciente/:cpf', consultaController.getConsultasPorPaciente);
+
 module.exports = router;
 

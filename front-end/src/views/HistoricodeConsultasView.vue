@@ -92,6 +92,8 @@ h1 {
 
 .info_item textarea {
     resize: none;
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.5;
 }
 
 .btn_detalhar_hist,
