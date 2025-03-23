@@ -14,6 +14,7 @@
                 <p>E-mail: {{ usuario.email }}</p>
                 <p>Telefone: {{ usuario.telefone }}</p>
                 <p>Pix: {{ usuario.pix }}</p>
+                <p>Total de Consultas: {{ consultasPorProfissional[usuario.email] || 0 }}</p> 
             </div>
             <div class="detalhar-div">
                 <button class="detalhar-btn" @click="consultas(usuario.email, usuario.nome)">Consultas</button>
@@ -178,11 +179,31 @@ export default {
         return {
             hora: '',
             pesquisa: '',
-            profissional: []
+            profissional: [],
+            consultasPorProfissional: {}
         }
     },
     methods: {
+        async carregarConsultasPorProfissional() {
+            try {
+                const requests = this.profissional.map(async (prof) => {
+                    const response = await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/consultas/profissional/${prof.email}`);
+                    return { email: prof.email, total: response.data.consultas };
+                });
 
+                // Aguarda todas as requisições finalizarem
+                const resultados = await Promise.all(requests);
+
+                // Atualiza o estado com os valores retornados
+                this.consultasPorProfissional = resultados.reduce((acc, item) => {
+                    acc[item.email] = item.total;
+                    return acc;
+                }, {});
+
+            } catch (error) {
+                console.error("Erro ao carregar consultas por profissional:", error);
+            }
+        },
         async consultas(email, nome) {
             try {
                 // Pergunta se o usuário quer ver consultas com ou sem hora
@@ -267,8 +288,9 @@ export default {
                     'Authorization': `Bearer ${token}`
                 }
             }).then(response => {
-                this.profissional = response.data.profissionais
+                this.profissional = response.data.profissionais;
                 console.log(this.profissional)
+                this.carregarConsultasPorProfissional();
             }).catch(Error => {
                 console.error(Error)
             })

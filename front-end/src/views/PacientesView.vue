@@ -14,6 +14,7 @@
                     <p>Telefone: {{ usuario.telefone }}</p>
                     <p v-if="usuario.paciente_dados && usuario.paciente_dados.length > 0">Alergico a: {{
                         usuario.paciente_dados[0].alergicos }}</p>
+                    <p>Total de Consultas: {{ consultasPorPaciente[usuario.cpf] || 0 }}</p> 
                 </div>
 
             </div>
@@ -250,9 +251,31 @@ export default {
             laudo: null,
             laudos: [],
             cpf: null,
+            consultasPorPaciente: {},
         }
     },
     methods: {
+        async carregarConsultasPorPaciente() {
+            try {
+                // Faz a requisição para cada paciente
+                const requests = this.paciente.map(async (paciente) => {
+                    const response = await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/consultas/paciente/${paciente.cpf}`);
+                    return { cpf: paciente.cpf, total: response.data.consultas };
+                });
+
+                // Aguarda todas as requisições
+                const resultados = await Promise.all(requests);
+
+                // Atualiza o estado com os valores retornados
+                this.consultasPorPaciente = resultados.reduce((acc, item) => {
+                    acc[item.cpf] = item.total;
+                    return acc;
+                }, {});
+
+            } catch (error) {
+                console.error("Erro ao carregar consultas por paciente:", error);
+            }
+        },
         async editarDados(cpf, email) {
             sessionStorage.setItem('cpf', cpf);
             sessionStorage.setItem('email', email);
@@ -266,7 +289,8 @@ export default {
                     'Authorization': `Bearer ${token}`
                 }
             }).then(response => {
-                this.paciente = response.data.pacientes
+                this.paciente = response.data.pacientes;
+                this.carregarConsultasPorPaciente();
             }).catch(Error => {
                 console.error(Error)
             })
