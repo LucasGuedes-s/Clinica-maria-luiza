@@ -21,16 +21,18 @@ async function getTotalConsultas() {
   return totalConsultas + totalConsultasAba;
 }
 
-async function getConsultasPorProfissional(email) {
-  const consultasPorProfissionalTradicionais = await prisma.consultas.count({
+async function getConsultasProfissional(email) {
+  const getConsultasProfissionalTradicionais = await prisma.consultas.count({
       where: { profissionalId: email }
   });
 
-  const consultasPorProfissionalAba = await prisma.ConsultaAba.count({
+  const getConsultasProfissionalAba = await prisma.ConsultaAba.count({
       where: { profissionalId: email }
   });
 
-  return consultasPorProfissionalTradicionais + consultasPorProfissionalAba;
+  const totalConsultaspacientes = getConsultasProfissionalTradicionais + getConsultasProfissionalAba;
+
+  return totalConsultaspacientes;
 }
 
 async function getConsultasPorPaciente(cpf) {
@@ -48,4 +50,4 @@ async function getConsultasPorPaciente(cpf) {
 }
 
 
-module.exports = { getConsultas, getTotalConsultas, getConsultasPorProfissional, getConsultasPorPaciente }
+module.exports = { getConsultas, getTotalConsultas, getConsultasProfissional, getConsultasPorPaciente }

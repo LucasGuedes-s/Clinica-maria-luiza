@@ -20,10 +20,10 @@ async function getTotalConsultas(req, res) {
     }
 }
 
-async function getConsultasPorProfissional(req, res, next) {
+async function getConsultasProfissional(req, res, next) {
     try {
         const { email } = req.params;
-        const consultasProfissional = await consultas.getConsultasPorProfissional(email); 
+        const consultasProfissional = await consultas.getConsultasProfissional(email); 
         res.status(200).json({ profissional: email, consultas: consultasProfissional });
         next();
     } catch (err) {
@@ -45,4 +45,4 @@ async function getConsultasPorPaciente(req, res, next) {
 }
 
 
-module.exports = { getTodasConsultas, getTotalConsultas, getConsultasPorProfissional, getConsultasPorPaciente };
+module.exports = { getTodasConsultas, getTotalConsultas, getConsultasProfissional, getConsultasPorPaciente };
