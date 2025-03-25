@@ -223,6 +223,8 @@ import { useAuthStore } from '@/store';
 import Sidebar from '@/components/Sidebar.vue';
 import Axios from 'axios';
 import Swal from 'sweetalert2'
+//import CalendarAgendamentos from '@/components/Calendario.vue';
+// PRECISA AINDA CHAMAR O COMPONENTE CalendarAgendamentos
 
 export default {
     name: 'dashboard',
