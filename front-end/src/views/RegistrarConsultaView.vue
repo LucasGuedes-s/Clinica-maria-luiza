@@ -5,6 +5,10 @@
             <h1>Registrar Consulta</h1>
             <form @submit.prevent="registrarConsulta">
                 <div class="form-group">
+                    <label for="inicio">Data da consulta:</label>
+                    <input type="date" v-model="data" id="data"/>
+                </div>
+                <div class="form-group">
                     <label for="nome">Registrando a consulta de: </label>
                     <input type="text" id="nome_paciente" name="nome" :value="nome" required>
                 </div>
@@ -17,7 +21,7 @@
                     </select>
                 </div>
                 <div class="form-group selecionar">
-                    <label for="imagem">Laudos:</label>
+                    <label for="imagem">Fotos:</label>
                     <input type="file" @change="handleFileUpload" multiple>
                 </div>
                 <div class="form-group descricao">
@@ -162,6 +166,7 @@ export default {
     },
     data() {
         return {
+            data: null,
             especialidade: '',
             especialidades: [],
             consulta: '',
@@ -209,6 +214,7 @@ export default {
             await Axios.post("https://clinica-maria-luiza-bjdd.onrender.com/consulta/registrar", {
                 consulta: {
                     consulta: this.especialidade,
+                    data: this.data,
                     descricao: this.descricao,
                     pacienteId: this.cpf,
                     profissionalId: profissionalId,
