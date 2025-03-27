@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.get('/pacientes/agendamentos/:id', userController.getAgendamentosPacientes);
 
-router.get('/profissionais/agendamentos/:id', [jwtMiddleware, permission.getAgendamentos], userController.getAgendamentos);
+router.get('/profissionais/agendamentos', [jwtMiddleware, permission.getAgendamentos], userController.getAgendamentos);
 router.get('/profissional/agendamento/:id', [jwtMiddleware, permission.post], userController.updateAgendamentos);
 router.post('/cadastrar/agendamento', [jwtMiddleware, permission.post], userController.postAgendamentos);
 

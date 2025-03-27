@@ -1,66 +1,60 @@
 <template>
-    <div class="calendar-container">
-      <VCalendar 
-        is-expanded
-        :columns="2" 
-        :attributes="eventos"
-      />
-    </div>
-  </template>
-  
-  <script>
-  import { ref, onMounted } from 'vue';
-  import axios from 'axios';
-  import { useAuthStore } from '@/store';
-  import { parseISO } from 'date-fns';
-  
-  export default {
-    setup() {
-      const eventos = ref([]);
-      const store = useAuthStore()
-  
-      // Função para buscar os agendamentos do backend
-      const buscarAgendamentos = async () => {
-        try {
-            const token = store.token
-            const user = this.store.usuario.usuario
-            const email = user.email
+  <div class="calendar-container">
+    <VCalendar is-expanded :columns="2" :attributes="eventosTratados" />
+  </div>
+</template>
 
-          const response = await axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/profissionais/agendamentos/${email}`,{
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-          });
-          eventos.value = response.data.agenda.map((agendamento) => {
-            const [day, month, year] = agendamento.dataFormatada.split('/'); // Divide a data pelo "/"
-  
-            return {
-              key: agendamento.id,
-              dates: new Date(Number(year), Number(month) - 1, Number(day)), // Cria a data corretamente
-              highlight: { color: 'blue', fillMode: 'light' },
-              popover: {
-                label: `Consulta com ${agendamento.profissional?.nome || 'Profissional'}`
-              }
-            };
-          });
-  
-        } catch (error) {
-          console.error('Erro ao buscar agendamentos:', error);
-        }
-      };
-  
-      onMounted(buscarAgendamentos);
-  
-      return { eventos };
-    }
-  };
-  </script>
-  
-  <style scoped>
-  .calendar-container {
-    width: 100%;  /* Faz o calendário ocupar toda a largura */
-    max-width: 900px; /* Define um limite para não ficar muito grande */
-    margin: auto; /* Centraliza o calendário */
-  }
-  </style>
-  
+<script>
+import { computed } from 'vue';
+
+export default {
+  props: {
+    agendamentos: {
+      type: Array,
+      required: true,
+    },
+  },
+  setup(props) {
+    // Função para tratar a data e zerar a hora
+    const processarData = (dataStr) => {
+      // Cria um objeto Date a partir da string recebida
+      const date = new Date(dataStr);
+
+      // Zera a hora para 00:00:00, mantendo a data intacta
+      date.setHours(0, 0, 0, 0);
+
+      return date;
+    };
+
+    // Converte os agendamentos recebidos para o formato do calendário
+    const eventosTratados = computed(() => {
+      if (!props.agendamentos || !Array.isArray(props.agendamentos)) {
+        return []; // Se não for um array válido, retorna um array vazio
+      }
+
+      return props.agendamentos.map((agendamento) => {
+        const data = processarData(agendamento.data); // Processa a data e zera a hora
+
+        return {
+          key: agendamento.id,
+          dates: data, // Cria a data corretamente
+          highlight: { color: 'blue', fillMode: 'light' },
+          popover: {
+            label: `Consulta com ${agendamento.profissional?.nome || 'Profissional'}`,
+          },
+        };
+      });
+    });
+
+    return { eventosTratados };
+  },
+};
+</script>
+
+<style scoped>
+.calendar-container {
+  width: 100%;
+  max-width: 900px;
+  margin: auto;
+}
+</style>

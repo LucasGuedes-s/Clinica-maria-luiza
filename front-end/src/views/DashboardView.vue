@@ -18,8 +18,13 @@
             </div>
             </div>
         </div>
+
+        <!--<div>
+            <CalendarAgendamentos :agendamentos="agendamentos" />
+        </div>--> 
+
         <h2>Agendamentos Solicitados:</h2>
-        <div class="container_agendamentos_dashboard" v-for="agenda in agendamentos" :key="agenda.id">
+        <div class="container_agendamentos_dashboard" v-for="agenda in agenda" :key="agenda.id">
             <div class="resposta-informacao">
                 <label for="paciente-nome">Agendamento:</label>
                 <input type="text" id="paciente-nome" :value="agenda.agendamento" readonly>
@@ -229,7 +234,15 @@ import Swal from 'sweetalert2'
 export default {
     name: 'dashboard',
     components: {
+        //CalendarAgendamentos,
         Sidebar
+        
+    },
+    props: {
+        agendamentos: {
+        type: Array,
+        required: true,
+        },
     },
     setup() {
         const store = useAuthStore()
@@ -240,6 +253,7 @@ export default {
     data() {
         return {
             agendamentos: [],
+            agenda: [],
             user: null,
             nome: null,
             email: null,
@@ -263,12 +277,14 @@ export default {
         
         async getAgendamentos(){
             const token = this.store.token
-            Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/profissionais/agendamentos/${this.email}`,{
+            Axios.get(`http://localhost:3000/profissionais/agendamentos`,{
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             }).then(response =>{
                 this.agendamentos = response.data.agenda
+                this.agenda = response.data.agenda.filter(agendamento => agendamento.status === 'Andamento');
+
                 console.log(this.agendamentos)
             }).catch(error =>{
                 console.log(error)

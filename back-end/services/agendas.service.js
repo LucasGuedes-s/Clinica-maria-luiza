@@ -57,19 +57,32 @@ async function getAgendamentosPacientes(user){
     });
     return Agendamentos;
 }
-async function getAgendamentos(user){  
+async function getAgendamentos(usuario){  
+    let whereCondition = {};
+    if (usuario.permissao === 1) {
+        // Se for admin, vê todas as consultas
+        whereCondition = {}
 
-    const agenda = await prisma.Agendamentos.findMany({
-        where: { 
-            profissionalId: user,
+    } else if (usuario.permissao === 2) {
+        // Se for profissional, vê apenas as consultas que ele atende
+        whereCondition = {
+            profissionalId: usuario.email,
             status: 'Andamento'
-        },
+        };
+    }
+    const agenda = await prisma.Agendamentos.findMany({
+        where: whereCondition,
         include: {
             paciente: {
               select: {
                 nome: true,
               },
             },
+            profissional:{
+                select:{
+                    nome:true
+                }
+            }
           },
     });
 
