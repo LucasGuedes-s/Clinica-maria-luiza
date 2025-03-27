@@ -277,7 +277,7 @@ export default {
         
         async getAgendamentos(){
             const token = this.store.token
-            Axios.get(`http://localhost:3000/profissionais/agendamentos`,{
+            Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/profissionais/agendamentos`,{
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
