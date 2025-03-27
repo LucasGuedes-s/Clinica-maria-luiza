@@ -9,7 +9,10 @@
                 </div>
             </div>
             <form @submit.prevent="registrarConsulta">
-
+                <div class="form-group horainicio">
+                    <label for="inicio">Data da consulta:</label>
+                    <input type="date" v-model="data" id="data"/>
+                </div>
                 <div class="form-group horainicio">
                     <label for="inicio">Hora de Início:</label>
                     <input type="time" v-model="inicio" id="inicio" required />
@@ -301,7 +304,7 @@ export default {
     },
     data() {
         return {
-            data: '',
+            data: null,
             consulta: '',
             inicio: '',
             fim: '',
@@ -346,7 +349,7 @@ export default {
                     }
 
                     // Realiza a requisição para registrar a consulta
-                    await Axios.post("https://clinica-maria-luiza-bjdd.onrender.com/consultaAba/registrar",
+                    await Axios.post("http://localhost:3000/consultaAba/registrar",
                         {
                             consulta: {
                                 pacienteId: this.cpf,
