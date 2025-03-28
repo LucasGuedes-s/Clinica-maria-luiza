@@ -17,30 +17,29 @@ export default {
   setup(props) {
     // Função para tratar a data e zerar a hora
     const processarData = (dataStr) => {
-      // Cria um objeto Date a partir da string recebida
       const date = new Date(dataStr);
-
-      // Zera a hora para 00:00:00, mantendo a data intacta
       date.setHours(0, 0, 0, 0);
-
       return date;
     };
 
     // Converte os agendamentos recebidos para o formato do calendário
     const eventosTratados = computed(() => {
       if (!props.agendamentos || !Array.isArray(props.agendamentos)) {
-        return []; // Se não for um array válido, retorna um array vazio
+        return [];
       }
 
       return props.agendamentos.map((agendamento) => {
-        const data = processarData(agendamento.data); // Processa a data e zera a hora
+        const data = processarData(agendamento.data);
+        
+        // Define a cor com base no status do agendamento
+        const color = agendamento.status === 'Concluida' ? 'green' : 'blue';
 
         return {
           key: agendamento.id,
-          dates: data, // Cria a data corretamente
-          highlight: { color: 'blue', fillMode: 'light' },
+          dates: data,
+          highlight: { color, fillMode: 'light' },
           popover: {
-            label: `Consulta com ${agendamento.profissional?.nome || 'Profissional'}`,
+            label: `Agendamento com ${agendamento.profissional?.nome || 'Profissional'}`,
           },
         };
       });

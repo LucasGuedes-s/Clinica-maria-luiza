@@ -19,22 +19,30 @@
             </div>
         </div>
 
-        <!--<div>
+        <div>
             <CalendarAgendamentos :agendamentos="agendamentos" />
-        </div>--> 
+        </div>
 
         <h2>Agendamentos Solicitados:</h2>
         <div class="container_agendamentos_dashboard" v-for="agenda in agenda" :key="agenda.id">
             <div class="resposta-informacao">
                 <label for="paciente-nome">Agendamento:</label>
                 <input type="text" id="paciente-nome" :value="agenda.agendamento" readonly>
+                <div v-if="permissao === 1">
+                    <label for="paciente-nome">Profissional:</label>
+                    <input type="text" id="paciente-nome" :value="agenda.profissional.nome" readonly>
+                </div>
                 <label for="paciente-nome" v-if="agenda.paciente != null">Nome do Paciente:</label>
                 <input type="text" id="paciente-nome" v-if="agenda.paciente != null" :value="agenda.paciente.nome" readonly>
                 <label for="resposta-data">Data:</label>
                 <input type="data" id="resposta-data" :value="agenda.dataFormatada" readonly>
                 <label for="resposta-hora">Hora:</label>
                 <input type="hora" id="resposta-hora" :value="agenda.horaFormatada" readonly>
-                <button class="btn-concluido" @click="updateAgendamento(agenda.id)">Marcar como Concluído</button>
+                <div class="botoes">
+                    <button class="btn-concluido" @click="updateAgendamento(agenda.id)">Alterar status</button>
+                    <button class="btn-concluido" @click="enviarNotificacao(agenda.id)">Enviar notificação</button>
+                </div>
+                
             </div>
         </div>
     </div>
@@ -158,12 +166,17 @@ h2 {
     border: 1px solid #D9D9D9;
     font-size: 14px;
     cursor: pointer;
+    width: 100%;
     font-family: 'Montserrat', sans-serif;
 
 }
 
 .btn-concluido:hover {
     background-color: #E7FAFF;
+}
+.botoes{
+    display: flex;
+    width: 100%;
 }
 @media (max-width: 768px) {
     .main_content_dashboard {
@@ -228,13 +241,14 @@ import { useAuthStore } from '@/store';
 import Sidebar from '@/components/Sidebar.vue';
 import Axios from 'axios';
 import Swal from 'sweetalert2'
-//import CalendarAgendamentos from '@/components/Calendario.vue';
+import router from '@/router';
+import CalendarAgendamentos from '@/components/Calendario.vue';
 // PRECISA AINDA CHAMAR O COMPONENTE CalendarAgendamentos
 
 export default {
     name: 'dashboard',
     components: {
-        //CalendarAgendamentos,
+        CalendarAgendamentos,
         Sidebar
         
     },
@@ -257,6 +271,7 @@ export default {
             user: null,
             nome: null,
             email: null,
+            permissao: null,
             telefone: null,
             imageUrl: null
         }
@@ -269,6 +284,7 @@ export default {
                 this.email = this.user.email
                 this.telefone = this.user.telefone
                 this.imageUrl = this.user.foto
+                this.permissao = this.user.permissao
             }
             catch {
                 console.log('Erro ao obter usuários')
@@ -277,22 +293,42 @@ export default {
         
         async getAgendamentos(){
             const token = this.store.token
-            Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/profissionais/agendamentos`,{
+            Axios.get(`http://localhost:3000/profissionais/agendamentos`,{
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             }).then(response =>{
                 this.agendamentos = response.data.agenda
                 this.agenda = response.data.agenda.filter(agendamento => agendamento.status === 'Andamento');
-
-                console.log(this.agendamentos)
+                console.log(this.agenda)
             }).catch(error =>{
                 console.log(error)
             })
         },
+        async enviarNotificacao(id){
+            Swal.fire({
+                title: 'Deseja mesmo enviar notificação',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Enviar notificação',
+                cancelButtonText: 'Cancelar'
+            })
+        },
         async updateAgendamento(id){
+            Swal.fire({
+                title: 'O que você deseja fazer?',
+                text: "O que você deseja fazer?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Marcar como concluída',
+                cancelButtonText: 'Cancelar agendamento'
+            })
             const token = this.store.token
-            Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/profissional/agendamento/${id}`,{
+            /*Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/profissional/agendamento/${id}`,{
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -308,7 +344,7 @@ export default {
                 this.getAgendamentos()
             }).catch(error =>{
                 console.log(error)
-            })
+            })*/
         }
         },
     mounted() {

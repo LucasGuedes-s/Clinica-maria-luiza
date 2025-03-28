@@ -44,5 +44,4 @@ async function getConsultasPorPaciente(req, res, next) {
     }
 }
 
-
 module.exports = { getTodasConsultas, getTotalConsultas, getConsultasProfissional, getConsultasPorPaciente };
