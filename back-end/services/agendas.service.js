@@ -76,6 +76,7 @@ async function getAgendamentos(usuario){
             paciente: {
               select: {
                 nome: true,
+                telefone: true
               },
             },
             profissional:{
