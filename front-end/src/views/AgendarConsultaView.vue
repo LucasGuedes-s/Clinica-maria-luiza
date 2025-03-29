@@ -101,6 +101,8 @@ select {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    outline: none;
+    box-shadow: none;
 }
 
 .form-group textarea {
@@ -111,6 +113,8 @@ select {
     font-size: 16px;
     color: #7E7E7E;
     resize: none;
+    outline: none;
+    box-shadow: none;
 }
 
 .observacao {

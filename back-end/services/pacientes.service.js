@@ -177,6 +177,25 @@ async function cadastrarPaciente(req) {
   return pacientes;
 }
 async function registrarConsulta(req) {
+  const adicionarData = (dateString) => {
+    if (!dateString) {
+      // Se a data for null, pega a data atual no fuso de Brasília
+      const now = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
+      const [date] = now.split(', ');
+      const [day, month, year] = date.split('/').map(Number);
+      return new Date(year, month - 1, day, 0, 0, 0, 0); // Retorna a data com hora zerada
+    }
+    // Se a data já vier no formato "YYYY-MM-DDTHH:mm:ss.sssZ", extrai só a parte da data
+    if (dateString.includes('T')) {
+      return new Date(dateString.split('T')[0] + "T00:00:00"); // Garante que a hora seja zerada
+    }
+
+    const [year, month, day] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day, 0, 0, 0, 0);
+  };
+  
+  const localDate = adicionarData(req.consulta.data)
+
   const paciente = await prisma.Pacientes.findUnique({
     where: { cpf: req.consulta.pacienteId }
   });
@@ -186,7 +205,7 @@ async function registrarConsulta(req) {
   const consulta = await prisma.Consultas.create({
     data: {
       consulta: req.consulta.consulta,
-      data: new Date(),
+      data: localDate.toISOString(),
       descricao: req.consulta.descricao,
       paciente: {
         connect: { cpf: req.consulta.pacienteId }
@@ -210,11 +229,25 @@ async function registrarConsultaAba(req) {
   if (!paciente) {
     throw new Error('Paciente não encontrado');
   }
-  const dateInLocalTime = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });  
-  const [date, time] = dateInLocalTime.split(', ');
-  const [day, month, year] = date.split('/').map(Number);
-  const localDate = new Date(Date.UTC(year, month - 1, day));
-  localDate.setUTCHours(0, 0, 0, 0);
+
+  const adicionarData = (dateString) => {
+    if (!dateString) {
+      // Se a data for null, pega a data atual no fuso de Brasília
+      const now = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
+      const [date] = now.split(', ');
+      const [day, month, year] = date.split('/').map(Number);
+      return new Date(year, month - 1, day, 0, 0, 0, 0); // Retorna a data com hora zerada
+    }
+    // Se a data já vier no formato "YYYY-MM-DDTHH:mm:ss.sssZ", extrai só a parte da data
+    if (dateString.includes('T')) {
+      return new Date(dateString.split('T')[0] + "T00:00:00"); // Garante que a hora seja zerada
+    }
+
+    const [year, month, day] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day, 0, 0, 0, 0);
+  };
+  
+  const localDate = adicionarData(req.consulta.data)
   
   const consulta = await prisma.ConsultaAba.create({
     data: {

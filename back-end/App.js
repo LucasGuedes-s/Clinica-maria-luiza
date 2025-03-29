@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 const cors = require('cors');
+require('dotenv').config();
 
 app.use(express.json());
 app.use(cors({
@@ -17,8 +18,6 @@ app.use(function(req, res, next) {
   next();
 });
 
-const firstRun = require('./firstRun.util.js');
-firstRun.FirstRun();
 
 //ROTAS
 app.get('/', (req, res) => {
@@ -39,6 +38,8 @@ const cron = require('node-cron');
 cron.schedule("0 7 * * 1-5", () => {
   enviarEmailsAgendamentos();
   enviarEmailsTodosAgendamentos();
+}, {
+  timezone: "America/Sao_Paulo" // Define o fuso para horário de Brasília
 });
 
 

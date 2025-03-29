@@ -174,6 +174,7 @@
 </style>
 
 <script>
+import router from '@/router';
 import { useAuthStore } from '@/store'; 
 
 export default {
@@ -184,6 +185,10 @@ export default {
     },
     setup(){
       const store = useAuthStore()
+      console.log(store.getUser)
+      if(store.getUser === null){
+        router.push("/")
+      }
       const userPermissions = store.getUser.usuario.permissao; // Obtém as permissões do usuário
       return {
         store,
@@ -201,5 +206,12 @@ export default {
           this.$router.push('/login');
         }
     },
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            if (!vm.store.isAuthenticated) {
+                vm.$router.push('/login')
+            }
+        })
+    }
 };
 </script>

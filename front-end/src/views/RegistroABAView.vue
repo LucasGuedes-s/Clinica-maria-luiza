@@ -9,7 +9,10 @@
                 </div>
             </div>
             <form @submit.prevent="registrarConsulta">
-
+                <div class="form-group horainicio">
+                    <label for="inicio">Data da consulta:</label>
+                    <input type="date" v-model="data" id="data"/>
+                </div>
                 <div class="form-group horainicio">
                     <label for="inicio">Hora de Início:</label>
                     <input type="time" v-model="inicio" id="inicio" required />
@@ -301,7 +304,7 @@ export default {
     },
     data() {
         return {
-            data: '',
+            data: null,
             consulta: '',
             inicio: '',
             fim: '',

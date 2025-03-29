@@ -13,23 +13,40 @@
                 <p>E-mail: {{ email }}</p>
                 <p>Telefone: {{ telefone }}</p>
                 <div class="botoes_div">
-                <router-link to="/alterarsenha"><button class="alterar_senha_btn" click="teste">Alterar Senha</button></router-link>
-                <router-link to="/realizarpagamento"><button class="realizarpagamento_btn" click="">Realizar Pagamento</button></router-link>
-            </div>
+                    <router-link to="/alterarsenha"><button class="alterar_senha_btn" click="teste">Alterar
+                            Senha</button></router-link>
+                    <router-link to="/realizarpagamento"><button class="realizarpagamento_btn" click="">Realizar
+                            Pagamento</button></router-link>
+                </div>
             </div>
         </div>
+
+        <!-- <div>
+            <CalendarAgendamentos :agendamentos="agendamentos" />
+        </div> -->
+
         <h2>Agendamentos Solicitados:</h2>
-        <div class="container_agendamentos_dashboard" v-for="agenda in agendamentos" :key="agenda.id">
+        <div class="container_agendamentos_dashboard" v-for="agenda in agenda" :key="agenda.id">
             <div class="resposta-informacao">
                 <label for="paciente-nome">Agendamento:</label>
                 <input type="text" id="paciente-nome" :value="agenda.agendamento" readonly>
+                <div v-if="permissao === 1">
+                    <label for="paciente-nome">Profissional:</label>
+                    <input type="text" id="paciente-nome" :value="agenda.profissional.nome" readonly>
+                </div>
                 <label for="paciente-nome" v-if="agenda.paciente != null">Nome do Paciente:</label>
-                <input type="text" id="paciente-nome" v-if="agenda.paciente != null" :value="agenda.paciente.nome" readonly>
+                <input type="text" id="paciente-nome" v-if="agenda.paciente != null" :value="agenda.paciente.nome"
+                    readonly>
                 <label for="resposta-data">Data:</label>
                 <input type="data" id="resposta-data" :value="agenda.dataFormatada" readonly>
                 <label for="resposta-hora">Hora:</label>
                 <input type="hora" id="resposta-hora" :value="agenda.horaFormatada" readonly>
-                <button class="btn-concluido" @click="updateAgendamento(agenda.id)">Marcar como Concluído</button>
+                <div class="botoes">
+                    <button class="btn-concluido" @click="updateAgendamento(agenda.id)">Alterar status</button>
+                    <button class="btn-concluido" @click="enviarNotificacao(agenda.paciente.telefone, agenda.paciente.nome, agenda.dataFormatada, agenda.horaFormatada)">Enviar
+                        notificação</button>
+                </div>
+
             </div>
         </div>
     </div>
@@ -90,7 +107,8 @@ body {
     right: 20px;
 }
 
-.alterar_senha_btn, .realizarpagamento_btn {
+.alterar_senha_btn,
+.realizarpagamento_btn {
     padding: 10px 20px;
     background-color: #F5F5F5;
     border: 1px solid #D9D9D9;
@@ -139,9 +157,11 @@ h2 {
     font-size: 16px;
     font-family: 'Montserrat', sans-serif;
     color: #7E7E7E;
-    width: 100%; /* Certifica que o input ocupe 100% da largura */
-    box-shadow: none; 
-    box-sizing: border-box; /* Inclui o padding e borda na largura total */
+    width: 100%;
+    /* Certifica que o input ocupe 100% da largura */
+    box-shadow: none;
+    box-sizing: border-box;
+    /* Inclui o padding e borda na largura total */
 }
 
 .btn-concluido {
@@ -153,6 +173,7 @@ h2 {
     border: 1px solid #D9D9D9;
     font-size: 14px;
     cursor: pointer;
+    width: 100%;
     font-family: 'Montserrat', sans-serif;
 
 }
@@ -160,12 +181,20 @@ h2 {
 .btn-concluido:hover {
     background-color: #E7FAFF;
 }
+
+.botoes {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+}
+
 @media (max-width: 768px) {
     .main_content_dashboard {
         margin-left: 0;
         padding: 10px 5px;
     }
-    .informacao{
+
+    .informacao {
         font-size: 12px;
         width: 50%;
         margin-left: 15px;
@@ -187,15 +216,19 @@ h2 {
     .alterar_senha_btn {
         display: none;
     }
-    .botoes_div{
+
+    .botoes_div {
         position: static;
 
     }
-    .realizarpagamento_btn{
+
+    .realizarpagamento_btn {
         width: 40%;
         padding: 5px 5px;
     }
-    .alterar_senha_btn, .realizarpagamento_btn {
+
+    .alterar_senha_btn,
+    .realizarpagamento_btn {
         width: 100%;
         font-size: 12px;
     }
@@ -223,11 +256,22 @@ import { useAuthStore } from '@/store';
 import Sidebar from '@/components/Sidebar.vue';
 import Axios from 'axios';
 import Swal from 'sweetalert2'
+import router from '@/router';
+import CalendarAgendamentos from '@/components/Calendario.vue';
+// PRECISA AINDA CHAMAR O COMPONENTE CalendarAgendamentos
 
 export default {
     name: 'dashboard',
     components: {
+        CalendarAgendamentos,
         Sidebar
+
+    },
+    props: {
+        agendamentos: {
+            type: Array,
+            required: true,
+        },
     },
     setup() {
         const store = useAuthStore()
@@ -238,9 +282,11 @@ export default {
     data() {
         return {
             agendamentos: [],
+            agenda: [],
             user: null,
             nome: null,
             email: null,
+            permissao: null,
             telefone: null,
             imageUrl: null
         }
@@ -253,46 +299,93 @@ export default {
                 this.email = this.user.email
                 this.telefone = this.user.telefone
                 this.imageUrl = this.user.foto
+                this.permissao = this.user.permissao
             }
             catch {
                 console.log('Erro ao obter usuários')
             }
         },
-        
-        async getAgendamentos(){
+
+        async getAgendamentos() {
             const token = this.store.token
-            Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/profissionais/agendamentos/${this.email}`,{
+            Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/profissionais/agendamentos`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
-            }).then(response =>{
+            }).then(response => {
                 this.agendamentos = response.data.agenda
-                console.log(this.agendamentos)
-            }).catch(error =>{
+                this.agenda = response.data.agenda.filter(agendamento => agendamento.status === 'Andamento');
+                console.log(this.agenda)
+            }).catch(error => {
                 console.log(error)
             })
         },
-        async updateAgendamento(id){
-            const token = this.store.token
-            Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/profissional/agendamento/${id}`,{
-                headers: {
-                    'Authorization': `Bearer ${token}`
+        async enviarNotificacao(telefone, paciente, data, hora) {
+            Swal.fire({
+                title: 'Deseja mesmo enviar notificação?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Enviar notificação',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let numeroPaciente = telefone; // Número recebido
+
+                    // Remove espaços, traços e outros caracteres não numéricos
+                    numeroPaciente = numeroPaciente.replace(/\D/g, "");
+
+                    // Adiciona código do país, se necessário (Brasil: 55)
+                    if (numeroPaciente.length === 11) {
+                        numeroPaciente = "55" + numeroPaciente;
+                    } else if (numeroPaciente.length === 10) {
+                        // Para casos sem o nono dígito, adicionamos o "9" e o DDD correto
+                        numeroPaciente = "5584" + numeroPaciente.substring(2);
+                    }
+                    const clinica = 'Clínica Maria Luiza'
+                    const endereco = 'Rua Tomaz de Araújo 287, centro, Acari'
+                    const mensagem = `📌 Olá ${paciente},\n\nLembre-se que você tem horário marcado em ${data} às ${hora}.\n\n*${clinica}*\n\n${endereco}`;
+                    const linkWhatsApp = `https://wa.me/${numeroPaciente}?text=${encodeURIComponent(mensagem)}`;
+
+                    window.open(linkWhatsApp, "_blank"); // Abre o WhatsApp em uma nova aba
                 }
-            }).then(response =>{
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Tarefa concluída com sucesso!',
-                    text: 'O status da tarefa foi atualizado com sucesso',
-                    timer: 2000,
-                    timerProgressBar: true,
-                    showConfirmButton: false
-                })
-                this.getAgendamentos()
-            }).catch(error =>{
-                console.log(error)
+            });
+        },
+        async updateAgendamento(id) {
+            Swal.fire({
+                title: 'O que você deseja fazer?',
+                text: "O que você deseja fazer?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Marcar como concluída',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const token = this.store.token
+                    Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/profissional/agendamento/${id}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    }).then(response => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Tarefa concluída com sucesso!',
+                            text: 'O status da tarefa foi atualizado com sucesso',
+                            timer: 2000,
+                            timerProgressBar: true,
+                            showConfirmButton: false
+                        })
+                        this.getAgendamentos()
+                    }).catch(error => {
+                        console.log(error)
+                    })
+                }
             })
         }
-        },
+    },
     mounted() {
         this.dados();
         this.getAgendamentos()

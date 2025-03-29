@@ -10,9 +10,11 @@
                 <input type="text" v-model="email" placeholder="Digite o seu e-mail">
                 <label for="senha">Senha</label>
                 <input type="password" v-model="senha" placeholder="Digite a sua senha">
+                <router-link to="/alterar-senha" class="senha">Esqueceu a senha?</router-link>
+
                 <div class="button_container">
                     <button type="submit" class="btn_profissional" click="login">Entrar como profissional</button>
-                    <router-link to="/loginpaciente" class="btn_paciente">Entrar como paciente</router-link>
+                    <!--<router-link to="/loginpaciente" class="btn_paciente">Entrar como paciente</router-link>--> 
                 </div>
             </form>
         </div>
@@ -88,15 +90,19 @@ h1 {
     color: #D9D9D9;
     font-family: 'Montserrat', sans-serif;
 }
-
+.senha{
+    color: #D9D9D9;
+    font-family: 'Montserrat', sans-serif;
+    text-decoration: none;
+    margin-bottom: 10px;
+}
 .button_container {
     display: flex;
     justify-content: space-between;
 }
 
-button,
-.btn_paciente {
-    width: 48%;
+button {
+    width: 100%;
     padding: 10px;
     border-radius: 4px;
     cursor: pointer;
@@ -113,6 +119,7 @@ button,
 .btn_profissional {
     background-color: #E7FAFF;
     border: 1px solid #86E7FF;
+    margin-top: 10px;
 }
 
 .btn_profissional:hover {

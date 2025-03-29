@@ -1,7 +1,6 @@
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 const bcryptUtil = require("./utils/bcrypt.ultil");
-require('dotenv').config();
 
 async function FirstRun() {
   // Verificar se já existem permissões no banco de dados
