@@ -101,9 +101,8 @@ h1 {
     justify-content: space-between;
 }
 
-button,
-.btn_paciente {
-    width: 48%;
+button {
+    width: 100%;
     padding: 10px;
     border-radius: 4px;
     cursor: pointer;

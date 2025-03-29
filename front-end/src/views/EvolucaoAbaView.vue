@@ -36,12 +36,130 @@
                     <td>{{ consult.Aplicacao3 }}</td>
                     <td>{{ consult.Aplicacao4 }}</td>
                     <td>{{ consult.Aplicacao5 }}</td>
+                    <button class="btn_editar" @click="abrirModal(consult)">Editar</button>
                     <button v-if="permissao_user" class="btn_exluir"
                         @click="exluirConsulta(consult.pacientes)">Exluir</button>
                     <button class="btn_foto" @click="abrirFoto(consult.foto)">Ver foto</button>
                 </tr>
             </tbody>
         </table>
+    </div>
+
+    <!-- Modal de Edição -->
+    <div v-if="showModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="organizacao_inputs">
+                <div class="form-group horainicio">
+                    <label for="inicio">Data da consulta:</label>
+                    <input type="date" v-model="consultaEdit.data" />
+                </div>
+                <div class="form-group horainicio">
+                    <label for="inicio">Hora de Início:</label>
+                    <input type="time" v-model="consultaEdit.inicio" />
+                </div>
+                <div class="form-group descricao">
+                    <label>Descrição de atividade:</label>
+                    <input id="descricao_atividade" v-model="consultaEdit.descricao_atividade" />
+                </div>
+                <div class="form-group pequenos-inputs">
+                    <label>Aplicações:</label>
+                    <div class="inputs-row">
+                        <select v-model="consultaEdit.Aplicacao1">
+                            <option value="" disabled selected>01:</option>
+                            <option value="AT +">AT +</option>
+                            <option value="AT + /">AT + /</option>
+                            <option value="AT -">AT -</option>
+                            <option value="AP +">AP +</option>
+                            <option value="AP + /">AP + /</option>
+                            <option value="AP -">AP -</option>
+                            <option value="SA +">SA +</option>
+                            <option value="SA + /">SA + /</option>
+                            <option value="SA -">SA -</option>
+                        </select>
+
+
+                        <select v-model="consultaEdit.Aplicacao2">
+                            <option value="" disabled selected>02:</option>
+                            <option value="AT +">AT +</option>
+                            <option value="AT + /">AT + /</option>
+                            <option value="AT -">AT -</option>
+                            <option value="AP +">AP +</option>
+                            <option value="AP + /">AP + /</option>
+                            <option value="AP -">AP -</option>
+                            <option value="SA +">SA +</option>
+                            <option value="SA + /">SA + /</option>
+                            <option value="SA -">SA -</option>
+                        </select>
+
+
+                        <select v-model="consultaEdit.Aplicacao3">
+                            <option value="" disabled selected>03:</option>
+                            <option value="AT +">AT +</option>
+                            <option value="AT + /">AT + /</option>
+                            <option value="AT -">AT -</option>
+                            <option value="AP +">AP +</option>
+                            <option value="AP + /">AP + /</option>
+                            <option value="AP -">AP -</option>
+                            <option value="SA +">SA +</option>
+                            <option value="SA + /">SA + /</option>
+                            <option value="SA -">SA -</option>
+                        </select>
+
+
+                        <select v-model="consultaEdit.Aplicacao4">
+                            <option value="" disabled selected>04:</option>
+                            <option value="AT +">AT +</option>
+                            <option value="AT + /">AT + /</option>
+                            <option value="AT -">AT -</option>
+                            <option value="AP +">AP +</option>
+                            <option value="AP + /">AP + /</option>
+                            <option value="AP -">AP -</option>
+                            <option value="SA +">SA +</option>
+                            <option value="SA + /">SA + /</option>
+                            <option value="SA -">SA -</option>
+                        </select>
+
+
+                        <select v-model="consultaEdit.Aplicacao5">
+                            <option value="" disabled selected>05:</option>
+                            <option value="AT +">AT +</option>
+                            <option value="AT + /">AT + /</option>
+                            <option value="AT -">AT -</option>
+                            <option value="AP +">AP +</option>
+                            <option value="AP + /">AP + /</option>
+                            <option value="AP -">AP -</option>
+                            <option value="SA +">SA +</option>
+                            <option value="SA + /">SA + /</option>
+                            <option value="SA -">SA -</option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group observacao">
+                    <label for="observacao_aba">Observação:</label>
+                    <textarea id="observacao_aba" v-model="consultaEdit.observacoes"></textarea>
+                </div>
+
+
+                <div class="form-group selecionar">
+                    <label for="imagem">Adicionar Imagem:</label>
+                    <input type="file" id="imagem_prof" name="imagem" accept="image/*" @change="handleFileUpload">
+                </div>
+
+
+                <div class="form-group horafinal">
+                    <label for="fim">Hora de Fim:</label>
+                    <input type="time" v-model="consultaEdit.fim" id="fim" />
+                </div>
+
+
+                <div class="modal-buttons">
+                    <button @click="salvarEdicao">Salvar</button>
+                    <button @click="fecharModal">Cancelar</button>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -66,7 +184,9 @@ export default {
     data() {
         return {
             consulta: [],
-            formatDate
+            formatDate,
+            consultaEdit: {}, // Dados da consulta sendo editada
+            showModal: false,  // Controle do modal de edição
         }
     },
     setup() {
@@ -169,7 +289,81 @@ export default {
                     }
                 });
             }
-        }
+        },
+        abrirModal(consult) {
+            const formattedDate = new Date(consult.data).toISOString().split('T')[0]; // Ex: "2025-03-29"
+            this.consultaEdit = {
+                ...consult,
+                data: formattedDate,
+                consultaAba: consult.consultaAba || {}  // Definir 'consultaAba' como um objeto vazio caso esteja ausente
+            };
+            
+            this.showModal = true;
+        },
+
+        fecharModal() {
+            this.showModal = false;
+        },
+        async salvarEdicao() {
+            console.log("Botão Salvar clicado!");
+            try {
+                const dadosEdicao = {
+                    consultaAba: {
+                        id: this.consultaEdit.pacientes,  // Mantendo 'pacientes' como id
+                        data: this.consultaEdit.data,
+                        inicio: this.consultaEdit.inicio,
+                        fim: this.consultaEdit.fim,
+                        descricao: this.consultaEdit.descricao_atividade,
+                        aplicacao1: this.consultaEdit.Aplicacao1,
+                        aplicacao2: this.consultaEdit.Aplicacao2,
+                        aplicacao3: this.consultaEdit.Aplicacao3,
+                        aplicacao4: this.consultaEdit.Aplicacao4,
+                        aplicacao5: this.consultaEdit.Aplicacao5,
+                        observacoes: this.consultaEdit.observacoes,
+                        foto: this.consultaEdit.foto,
+                    }
+                };
+
+                console.log("Dados enviados para API:", JSON.stringify(dadosEdicao, null, 2));
+
+                let response = await Axios.put(
+                    'https://clinica-maria-luiza-bjdd.onrender.com/update/consultaAba',
+                    dadosEdicao,
+                    {
+                        headers: { 'Authorization': `Bearer ${this.store.token}` }
+                    }
+                );
+
+                console.log("Resposta da API:", response);
+
+                if (response.status === 200) {
+                    Swal.fire('Sucesso!', 'Consulta atualizada com sucesso.', 'success');
+
+                    const updatedConsulta = response.data.consulta;
+
+                    // Verificando se a API retornou os dados corretamente
+                    if (!updatedConsulta || !updatedConsulta.pacientes) {
+                        throw new Error("Dados inválidos recebidos da API");
+                    }
+
+                    // Atualizando os dados no array consulta
+                    this.consulta = this.consulta.map(item =>
+                        item.pacientes === updatedConsulta.pacientes
+                            ? { ...item, ...updatedConsulta } // Atualiza apenas os campos necessários
+                            : item
+                    );
+
+                    console.log("Consulta atualizada:", this.consulta);
+
+                    this.showModal = false;
+                } else {
+                    throw new Error('Erro ao atualizar consulta');
+                }
+            } catch (error) {
+                console.error("Erro na atualização:", error);
+                Swal.fire('Erro!', 'Não foi possível salvar as edições. Tente novamente.', 'error');
+            }
+        },
     }
 }
 </script>
@@ -269,22 +463,141 @@ table td {
     color: inherit;
 }
 
+.btn_editar {
+    background-color: #c8e0f4;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    box-sizing: border-box;
+    border: none;
+    text-align: center;
+    display: inline-block;
+    text-decoration: none;
+    color: inherit;
+}
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #84E7FF;
+    box-shadow: 0 4px 10px -1px rgba(0, 0, 0, 0.10);
+    grid-template-columns:  1fr 1fr;
+}
+
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    grid-template-columns:  1fr 1fr;
+}
+
+
+.form-group label {
+    margin-bottom: 10px;
+}
+
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    resize: none;
+
+
+}
+
+
+.inputs-row {
+    display: flex;
+    gap: 15px;
+    /* Espaço entre os inputs */
+    grid-column: 1 / -1;
+}
+
+
+.inputs-row input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: 'Montserrat', sans-serif;
+}
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    gap: 20px;
+    grid-column: 1 / -1;
+}
+
+
+.modal-buttons button {
+    flex: 1;
+    padding: 10px 20px;
+    border-radius: 4px;
+    background-color: #F5F5F5;
+    color: #7E7E7E;
+    border: 1px solid #D9D9D9;
+    font-size: 14px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+}
+.organizacao_inputs{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    align-items: start;
+}
+.form-group.horafinal,
+.form-group.observacao,
+.form-group.selecionar,
+.form-group.descricao,
+.form-group.pequenos-inputs {
+    grid-column: 1 / -1; /* Faz esses campos ocuparem toda a largura */
+}
 @media (max-width: 768px) {
     .main-content_evolucao {
         margin-left: 0;
         padding: 10px;
     }
 
+
     table {
         font-size: 10px;
         /* Diminui ainda mais o tamanho da fonte */
     }
+
 
     table th,
     table td {
         padding: 6px 8px;
         /* Diminui ainda mais o padding */
     }
+
 
     /* Para esconder colunas que podem ser menos importantes */
     table th:nth-child(n+3),
@@ -294,9 +607,11 @@ table td {
         /* Esconde colunas a partir da quarta */
     }
 
+
     .btn_exluir {
         display: none
     }
+
 
     .btn_foto {
         font-size: 12px;
@@ -304,5 +619,12 @@ table td {
         padding: 6px;
         /* Ajusta o padding do botão */
     }
+    .btn_editar {
+        font-size: 12px;
+        /* Diminui o tamanho do botão */
+        padding: 6px;
+        /* Ajusta o padding do botão */
+    }
 }
+
 </style>

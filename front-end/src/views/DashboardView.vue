@@ -19,9 +19,9 @@
             </div>
         </div>
 
-        <div>
+        <!-- <div>
             <CalendarAgendamentos :agendamentos="agendamentos" />
-        </div>
+        </div> -->
 
         <h2>Agendamentos Solicitados:</h2>
         <div class="container_agendamentos_dashboard" v-for="agenda in agenda" :key="agenda.id">
@@ -177,6 +177,7 @@ h2 {
 .botoes{
     display: flex;
     width: 100%;
+    gap: 20px;
 }
 @media (max-width: 768px) {
     .main_content_dashboard {
