@@ -2,7 +2,6 @@ const nodemailer = require('nodemailer');
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient()
 
-
 const transporter = nodemailer.createTransport({
   service: 'gmail', // Pode usar "hotmail", "yahoo", etc.
   auth: {
@@ -315,6 +314,7 @@ async function enviarEmailsTodosAgendamentos() {
     // Enviar e-mail para os profissionais especificados
     const emailsDestinatarios = [
       "lucasguedes2908@gmail.com",
+      "mikarla.vivian@gmail.com",
       "francimarakarla@hotmail.com",
     ];
 

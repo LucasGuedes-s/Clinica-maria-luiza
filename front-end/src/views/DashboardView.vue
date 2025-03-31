@@ -13,17 +13,17 @@
                 <p>E-mail: {{ email }}</p>
                 <p>Telefone: {{ telefone }}</p>
                 <div class="botoes_div">
-                    <router-link to="/alterarsenha"><button class="alterar_senha_btn" click="teste">Alterar
-                            Senha</button></router-link>
+                    <!-- <router-link to="/alterarsenha"><button class="alterar_senha_btn" click="teste">Alterar
+                            Senha</button></router-link>-->
                     <router-link to="/realizarpagamento"><button class="realizarpagamento_btn" click="">Realizar
                             Pagamento</button></router-link>
                 </div>
             </div>
+            <div class="calendario">
+                <CalendarAgendamentos :agendamentos="agendamentos" />
+            </div>
         </div>
 
-        <!-- <div>
-            <CalendarAgendamentos :agendamentos="agendamentos" />
-        </div> -->
 
         <h2>Agendamentos Solicitados:</h2>
         <div class="container_agendamentos_dashboard" v-for="agenda in agenda" :key="agenda.id">
@@ -43,7 +43,8 @@
                 <input type="hora" id="resposta-hora" :value="agenda.horaFormatada" readonly>
                 <div class="botoes">
                     <button class="btn-concluido" @click="updateAgendamento(agenda.id)">Alterar status</button>
-                    <button class="btn-concluido" @click="enviarNotificacao(agenda.paciente.telefone, agenda.paciente.nome, agenda.dataFormatada, agenda.horaFormatada)">Enviar
+                    <button class="btn-concluido"
+                        @click="enviarNotificacao(agenda.paciente.telefone, agenda.paciente.nome, agenda.dataFormatada, agenda.horaFormatada)">Enviar
                         notificação</button>
                 </div>
 
@@ -102,11 +103,12 @@ body {
 }
 
 .botoes_div {
-    position: absolute;
     bottom: 20px;
     right: 20px;
 }
-
+.calendario{
+    display: flex;
+}
 .alterar_senha_btn,
 .realizarpagamento_btn {
     padding: 10px 20px;
@@ -194,39 +196,40 @@ h2 {
         padding: 10px 5px;
     }
 
-    .informacao {
-        font-size: 12px;
-        width: 50%;
-        margin-left: 15px;
-        text-align: left;
-        margin-bottom: auto;
+    .container_dashboard {
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
-    .container_dashboard {
-        align-items: center;
+    .informacao {
+        width: 50%;
+        font-size: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .calendario {
+        width: 100%;
+        max-width: 350px; /* Define um tamanho máximo para evitar estouro */
+        overflow: hidden;
     }
 
     .container_dashboard img {
-        width: 150px;
+        width: 120px;
         height: auto;
-        margin-right: 0;
-        margin-bottom: 0;
-    }
-
-    .alterar_senha_btn {
-        display: none;
+        margin-bottom: 10px;
     }
 
     .botoes_div {
-        position: static;
-
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
     }
 
     .realizarpagamento_btn {
-        width: 40%;
-        padding: 5px 5px;
+        width: 45%;
     }
-
     .alterar_senha_btn,
     .realizarpagamento_btn {
         width: 100%;
