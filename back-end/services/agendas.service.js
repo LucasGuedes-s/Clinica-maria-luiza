@@ -3,6 +3,7 @@ const prisma = new PrismaClient()
 const formatar = require('../utils/formatdata.ultil')
 const { DateTime } = require('luxon');
 const { enviarNotificacaoAgendamento } = require('./emails.service');
+require('dotenv').config();
 
 async function agendarConsulta(req){  
     const paciente = await prisma.Pacientes.findUnique({
@@ -59,7 +60,7 @@ async function getAgendamentosPacientes(user){
 }
 async function getAgendamentos(usuario){  
     let whereCondition = {};
-    if (usuario.permissao === 1) {
+    if (usuario.permissao === 1 || usuario.email === process.env.email_recepcao) {
         // Se for admin, vê todas as consultas
         whereCondition = {}
 
