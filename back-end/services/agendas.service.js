@@ -6,12 +6,16 @@ const { enviarNotificacaoAgendamento } = require('./emails.service');
 require('dotenv').config();
 
 async function agendarConsulta(req){  
-    const paciente = await prisma.Pacientes.findUnique({
-        where: { cpf: req.agenda.paciente }
-    });
     const profissional = await prisma.Profissionais.findUnique({
         where: { email: req.agenda.profissional }
     });
+
+    let paciente = null;
+    if (req.agenda.paciente) {
+        paciente = await prisma.Pacientes.findUnique({
+            where: { cpf: req.agenda.paciente }
+        });
+    }
     const data = new Date(req.agenda.data); // Valor vindo do front-end
     const data_ajustada = new Date(data.getTime() - data.getTimezoneOffset() * 60000);
     const agenda = await prisma.Agendamentos.create({
@@ -20,18 +24,28 @@ async function agendarConsulta(req){
 			agendamento: req.agenda.agendamento,
 			notas: req.agenda.notas,
             status: "Andamento",
-            pacienteId: paciente.cpf,
             profissionalId: profissional.email,
-			sala: 2
+			sala: 2,
+            ...(paciente ? { pacienteId: paciente.cpf } : {}) // Adiciona pacienteId apenas se existir
           },
     });
-    const agendamento = {
-        email: paciente.email,
-        data: agenda.data,
-        nome: paciente.nome,
-        profissional: profissional.nome
+    if(req.agenda.paciente){
+        const agendamento = {
+            email: paciente.email,
+            data: agenda.data,
+            nome: paciente.nome,
+            profissional: profissional.nome
+        }
+        enviarNotificacaoAgendamento(agenda.profissionalId, agendamento)
     }
-    enviarNotificacaoAgendamento(agenda.profissionalId, agendamento)
+    else{
+        const agendamento = {
+            email: null,
+            data: agenda.data,
+            profissional: profissional.nome
+        }
+        enviarNotificacaoAgendamento(agenda.profissionalId, agendamento)
+    }
     return agenda;
 }
 async function getAgendamentosPacientes(user){  
