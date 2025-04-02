@@ -275,7 +275,6 @@ async function registrarConsultaAba(req) {
   return consulta;
 }
 async function updateConsultaAba(req) {
-  //console.log(req)
   const update_consulta = await prisma.ConsultaAba.update({
     where:{
       pacientes: req.consultaAba.id

@@ -19,9 +19,9 @@
                             Pagamento</button></router-link>
                 </div>
             </div>
-            <!-- <<div class="calendario">
+            <<div class="calendario">
                 <CalendarAgendamentos :agendamentos="agendamentos" />
-            </div> -->
+            </div>
         </div>
 
 

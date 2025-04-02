@@ -34,6 +34,22 @@ export default {
       return new Date(year, month - 1, day); // Criação direta no fuso local
     };
 
+    // Feriados locais adicionados manualmente
+    const feriadosLocais = [
+      { date: "2025-04-11", name: "Emancipação política - feriado municipal em Acari" },
+      { date: "2025-08-15", name: "Feriado municipal" },
+      { date: "2025-10-03", name: "Mártires de Cunhaú e Uruaçu - feriado estadual" }
+
+    ];
+
+    const carregarFeriadosLocais = () => {
+      feriadosLocais.forEach(feriado => {
+        feriados.value.push({
+          date: processarDataFeriado(feriado.date),
+          name: feriado.name,
+        });
+      });
+    };
 
     // Buscar feriados da Brasil API e corrigir as datas sem mudança de fuso
     const fetchFeriados = async () => {
@@ -47,6 +63,7 @@ export default {
           date: processarDataFeriado(feriado.date), // Mantém o dia correto
           name: feriado.name,
         }));
+        carregarFeriadosLocais(); // Carregar feriados locais após os nacionais
       } catch (error) {
         console.error(error);
       }
@@ -107,3 +124,4 @@ export default {
   margin: 5px;
 }
 </style>
+

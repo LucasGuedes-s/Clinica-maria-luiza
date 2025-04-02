@@ -49,5 +49,8 @@ async function getConsultasPorPaciente(cpf) {
   return totalConsultaspacientes;
 }
 
+async function udateConsulta(req) {
+  
+}
 
 module.exports = { getConsultas, getTotalConsultas, getConsultasProfissional, getConsultasPorPaciente }

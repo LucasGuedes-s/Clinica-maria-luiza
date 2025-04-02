@@ -2,7 +2,16 @@
     <Sidebar />
     <div class="main-content">
         <h1>Histórico de Consultas</h1>
-        <div class="container_historico" v-for="consulta in consultas" :key="consulta.id">
+        <div class="input">
+            <label for="especialidade">Filtrar por Especialidade:</label>
+            <select v-model="especialidadeSelecionada">
+                <option value="">Todas</option>
+                <option v-for="especialidade in especialidadesUnicas" :key="especialidade" :value="especialidade">
+                    {{ especialidade }}
+                </option>
+            </select>
+        </div>
+        <div class="container_historico" v-for="consulta in consultasFiltradas" :key="consulta.id">
             <h1 v-if="consultas.length == 0">Nenhuma consulta registrada</h1>
 
             <div class="infos_historico">
@@ -12,8 +21,10 @@
                 </div>
                 <div class="info_item">
                     <label for="especialista-nome">Especialista:</label>
-                    <input type="text" id="especialista-nome" :value="consulta.consulta" readonly>
+                    <input type="text" id="especialista-nome"
+                        :value="consulta.consulta + ' - ' + consulta.profissional.nome" readonly>
                 </div>
+
                 <div class="info_item descricao">
                     <label for="historico_descricao">Descrição:</label>
                     <textarea id="historico_descricao" rows="4" :value="consulta.descricao" readonly></textarea>
@@ -63,6 +74,28 @@ body {
 
 h1 {
     color: #84E7FF;
+}
+.input{
+    padding: 10px 20px;
+    display: flex;
+    margin-bottom: 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+    font-family: 'Montserrat', sans-serif;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    background-color: white;
+}
+.input input,
+select {
+    width: 50%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
 
 .container_historico {
@@ -137,6 +170,7 @@ h1 {
     font-size: 14px;
     cursor: pointer;
 }
+
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -167,6 +201,7 @@ h1 {
     border: 2px solid #84E7FF;
     box-shadow: 0 4px 10px -1px rgba(0, 0, 0, 0.10);
 }
+
 .modal-content input,
 .modal-content textarea {
     padding: 10px;
@@ -203,6 +238,7 @@ h1 {
     cursor: pointer;
     font-family: 'Montserrat', sans-serif;
 }
+
 @media (max-width: 768px) {
     .main-content {
         margin-left: 0;
@@ -232,7 +268,8 @@ export default {
     data() {
         return {
             formatDate,
-            consultas: null,
+            consultas: [],
+            especialidadeSelecionada: "",
             cpf: sessionStorage.getItem('cpf') || '',
             showModal: false,
             consultaEdit: {
@@ -247,6 +284,19 @@ export default {
         //Limpar o CPF do sessionStorage após uso
         //sessionStorage.removeItem('cpf');
         this.getConsultas()
+    },
+    computed: {
+        consultasFiltradas() {
+            if (!this.especialidadeSelecionada) {
+                return this.consultas; // Exibe todas se nenhuma especialidade for escolhida
+            }
+            return this.consultas.filter(consulta =>
+                consulta.consulta && consulta.consulta === this.especialidadeSelecionada
+            );
+        },
+        especialidadesUnicas() {
+            return [...new Set(this.consultas.map(consulta => consulta.consulta).filter(Boolean))];
+        }
     },
     methods: {
         async laudo(link) {
@@ -308,7 +358,8 @@ export default {
                 }
             }).then(response => {
                 this.consultas = response.data.consultas.consultas.slice().reverse()
-                sessionStorage.removeItem('cpf');
+                console.log(this.consultas)
+                //sessionStorage.removeItem('cpf');
             }).catch(error => {
                 console.error(error)
             })
@@ -319,6 +370,10 @@ export default {
         },
         fecharModal() {
             this.showModal = false;
+        },
+        filtrarConsultas() {
+            // Apenas força a reatividade, pois o filtro já acontece na computed
+            this.consultas = [...this.consultas];
         },
         async salvarEdicao() {
             try {
