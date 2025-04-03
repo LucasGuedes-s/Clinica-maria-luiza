@@ -254,6 +254,40 @@ h2 {
         margin-right: auto;
     }
 }
+@media (max-width: 1247px) {
+    .main_content_dashboard {
+        margin-left: 0; 
+    }
+
+    .container_dashboard {
+        flex-direction: column; 
+        align-items: center; 
+        justify-content: center; 
+        gap: 20px; 
+        z-index: -1;
+    }
+
+    .container_dashboard img {
+        width: 200px;
+        height: auto; 
+    }
+
+    .informacao {
+        text-align: center; 
+    }
+
+    .botoes_div {
+        text-align: center; 
+    }
+
+    .alterar_senha_btn,
+    .realizarpagamento_btn {
+        width: 100%; 
+        margin-bottom: 10px; 
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
 
 </style>
 
