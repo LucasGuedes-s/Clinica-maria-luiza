@@ -21,5 +21,7 @@ router.get('/consultas/total', consultaController.getTotalConsultas);
 router.get('/consultas/profissional/:email', consultaController.getConsultasProfissional);
 router.get('/consultas/paciente/:cpf', consultaController.getConsultasPorPaciente);
 
+router.put('/editar/consulta', consultaController.updateConsulta);
+
 module.exports = router;
 
