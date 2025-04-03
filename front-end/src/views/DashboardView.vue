@@ -19,7 +19,7 @@
                             Pagamento</button></router-link>
                 </div>
             </div>
-            <<div class="calendario">
+            <div class="calendario">
                 <CalendarAgendamentos :agendamentos="agendamentos" />
             </div>
         </div>
@@ -90,8 +90,8 @@ body {
 }
 
 .container_dashboard img {
-    width: 165px;
-    height: 170px;
+    width: 250px;
+    height: 250px;
     margin-right: 20px;
     border-radius: 5px;
     object-fit: cover;
@@ -189,71 +189,74 @@ h2 {
     width: 100%;
     gap: 20px;
 }
-
 @media (max-width: 768px) {
     .main_content_dashboard {
-        margin-left: 0;
-        padding: 10px 5px;
+        margin-left: 0; /* Retira o margin-left nas telas menores */
     }
 
     .container_dashboard {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    .informacao {
-        width: 50%;
-        font-size: 10px;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .calendario {
-        width: 100%;
-        max-width: 350px; /* Define um tamanho máximo para evitar estouro */
-        overflow: hidden;
+        flex-direction: column; 
+        align-items: center;
+        justify-content: center; 
+        text-align: center; 
     }
 
     .container_dashboard img {
-        width: 120px;
-        height: auto;
-        margin-bottom: 10px;
+        width: 200px; 
+        height: auto; 
+    }
+
+    .calendario {
+        margin-top: 20px; 
     }
 
     .botoes_div {
-        width: 100%;
-        display: flex;
-        justify-content: flex-start;
+        position: static; 
     }
 
-    .realizarpagamento_btn {
-        width: 45%;
-    }
     .alterar_senha_btn,
     .realizarpagamento_btn {
-        width: 100%;
-        font-size: 12px;
-    }
-
-    .container_agendamentos {
-        width: 100%;
-    }
-
-    .resposta-informacao {
-        flex-direction: column;
-    }
-
-    .resposta-informacao label,
-    .resposta-informacao input {
-        width: 100%;
-    }
-
-    .btn-concluido {
-        width: 100%;
+        width: 100%; 
+        margin-bottom: 10px; 
     }
 }
+@media (max-width: 820px) {
+    .main_content_dashboard {
+        margin-left: 0; 
+    }
+
+    .container_dashboard {
+        flex-direction: column; 
+        align-items: center; 
+        justify-content: center; 
+        gap: 20px; 
+        z-index: -1;
+    }
+
+    .container_dashboard img {
+        width: 200px;
+        height: auto; 
+    }
+
+    .informacao {
+        text-align: center; 
+    }
+
+    .botoes_div {
+        text-align: center; 
+    }
+
+    .alterar_senha_btn,
+    .realizarpagamento_btn {
+        width: 100%; 
+        margin-bottom: 10px; 
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
 </style>
+
 <script>
 import { useAuthStore } from '@/store';
 import Sidebar from '@/components/Sidebar.vue';
