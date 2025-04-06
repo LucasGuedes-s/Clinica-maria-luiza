@@ -253,6 +253,11 @@ import { useAuthStore } from '@/store.js'
 import { formatDate } from '../utils/formatarData';
 import Swal from 'sweetalert2';
 
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from '../firebase.js'
+import { v4 as uuidv4 } from 'uuid';
+import router from '@/router/index.js';
+
 export default {
     name: 'historicodeconsulta',
 
@@ -275,6 +280,8 @@ export default {
             formatDate,
             showModal: false,
             consultaEdit: {},
+            laudos: [], // <-- aqui!
+
         };
     },
     mounted() {
@@ -366,6 +373,7 @@ export default {
             this.consultaEdit = { 
                 ...consulta,
                 data: formattedDate,
+                laudos: consulta.laudos || []
                 // consultaAba: consult.consultaAba || {} 
             }; 
             this.showModal = true;
@@ -377,10 +385,15 @@ export default {
             const token = this.store.token;
 
             try {
-                // Envia os dados da consulta editada para o back-end
+                if (this.laudos.length > 0) {
+                    this.consultaEdit.laudos = this.laudos;
+                }
+
+                const consultaParaEnvio = JSON.parse(JSON.stringify(this.consultaEdit));
+
                 const response = await Axios.put(
-                    'https://clinica-maria-luiza-bjdd.onrender.com',
-                    this.consultaEdit,
+                    'https://clinica-maria-luiza-bjdd.onrender.com/editar/consulta',
+                    consultaParaEnvio,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`
@@ -388,22 +401,23 @@ export default {
                     }
                 );
 
-                // Atualiza a lista local com os dados atualizados
                 const index = this.consultas.findIndex(c => c.id === this.consultaEdit.id);
                 if (index !== -1) {
                     this.consultas.splice(index, 1, {
                         ...this.consultaEdit,
-                        profissional: this.consultas[index].profissional // mantém o nome do profissional
+                        profissional: this.consultas[index].profissional
                     });
                 }
 
                 this.showModal = false;
+                this.laudos = [];
 
                 Swal.fire({
                     icon: 'success',
                     title: 'Consulta atualizada com sucesso!',
                     timer: 2000
                 });
+
             } catch (error) {
                 console.error("Erro ao atualizar consulta:", error);
                 Swal.fire({
@@ -411,6 +425,29 @@ export default {
                     title: 'Erro ao atualizar consulta',
                     text: error.response?.data?.error || 'Tente novamente mais tarde.'
                 });
+            }
+        },
+        async handleFileUpload(event) {
+            try {
+                const arquivos = Array.from(event.target.files); // Novas imagens
+                const novasUrls = []; // Para armazenar os novos links
+
+                for (const imagem of arquivos) {
+                    const uniqueImageName = uuidv4() + '_' + imagem.name;
+                    const storageRef = ref(storage, 'laudos/' + uniqueImageName);
+
+                    const snapshot = await uploadBytes(storageRef, imagem);
+                    const downloadURL = await getDownloadURL(snapshot.ref);
+
+                    novasUrls.push(downloadURL); // Adiciona URL ao array
+                }
+
+                // Substitui o campo 'laudos' da consulta que está sendo editada
+                this.consultaEdit.laudos = novasUrls;
+
+                console.log("Laudos atualizados:", this.consultaEdit.laudos);
+            } catch (error) {
+                console.error("Erro ao carregar laudos", error);
             }
         },
         filtrarConsultas() {

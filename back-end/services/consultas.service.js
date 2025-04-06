@@ -50,7 +50,6 @@ async function getConsultasPorPaciente(cpf) {
 }
 
 async function atualizarConsulta(dados) {
-  // console.log(dados); // Agora vai mostrar o objeto certo
   const { id, data, ...resto } = dados;
 
   if (!id) {
@@ -79,10 +78,12 @@ async function atualizarConsulta(dados) {
     where: { id },
     data: {
       consulta: dadosAtualizacao.consulta,
+      descricao: dadosAtualizacao.descricao,
+      data: dadosAtualizacao.data,
+      laudos: dadosAtualizacao.laudos
     }
   });
 }
-
 
 
 module.exports = { getConsultas, getTotalConsultas, atualizarConsulta, getConsultasProfissional, getConsultasPorPaciente }
