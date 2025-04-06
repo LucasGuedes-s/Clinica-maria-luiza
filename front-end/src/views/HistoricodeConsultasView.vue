@@ -42,13 +42,13 @@
             <div class="modal-content">
                 <h2>Editar Consulta</h2>
                 <label>Data:</label>
-                <input type="date" v-model="consultaEdit.data">
+                <input type="date"  v-model="consultaEdit.data">
 
                 <label for="imagem">Laudos:</label>
                 <input type="file" @change="handleFileUpload" multiple>
 
                 <label>Descrição:</label>
-                <textarea v-model="consultaEdit.descricao" rows="8"></textarea>
+                <textarea rows="8" v-model="consultaEdit.descricao"></textarea>
 
                 <div class="modal-buttons">
                     <button @click="salvarEdicao">Salvar</button>
@@ -271,13 +271,10 @@ export default {
             consultas: [],
             especialidadeSelecionada: "",
             cpf: sessionStorage.getItem('cpf') || '',
+            arquivosSelecionados: [],
+            formatDate,
             showModal: false,
-            consultaEdit: {
-                id: null,
-                data: '',
-                consulta: '',
-                descricao: ''
-            },
+            consultaEdit: {},
         };
     },
     mounted() {
@@ -365,26 +362,61 @@ export default {
             })
         },
         abrirModal(consulta) {
-            this.consultaEdit = { ...consulta }; // Copia os dados da consulta selecionada
+            const formattedDate = new Date(consulta.data).toISOString().split('T')[0]; // Ex: "2025-03-29"
+            this.consultaEdit = { 
+                ...consulta,
+                data: formattedDate,
+                // consultaAba: consult.consultaAba || {} 
+            }; 
             this.showModal = true;
         },
         fecharModal() {
             this.showModal = false;
         },
+        async salvarEdicao() {
+            const token = this.store.token;
+
+            try {
+                // Envia os dados da consulta editada para o back-end
+                const response = await Axios.put(
+                    'http://localhost:3000/editar/consulta',
+                    this.consultaEdit,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+
+                // Atualiza a lista local com os dados atualizados
+                const index = this.consultas.findIndex(c => c.id === this.consultaEdit.id);
+                if (index !== -1) {
+                    this.consultas.splice(index, 1, {
+                        ...this.consultaEdit,
+                        profissional: this.consultas[index].profissional // mantém o nome do profissional
+                    });
+                }
+
+                this.showModal = false;
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Consulta atualizada com sucesso!',
+                    timer: 2000
+                });
+            } catch (error) {
+                console.error("Erro ao atualizar consulta:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro ao atualizar consulta',
+                    text: error.response?.data?.error || 'Tente novamente mais tarde.'
+                });
+            }
+        },
         filtrarConsultas() {
             // Apenas força a reatividade, pois o filtro já acontece na computed
             this.consultas = [...this.consultas];
         },
-        async salvarEdicao() {
-            try {
-                await Axios.put(`https://clinica-maria-luiza-bjdd.onrender.com/consulta/${this.consultaEdit.id}`, this.consultaEdit);
-                Swal.fire('Sucesso!', 'Consulta editada com sucesso!', 'success');
-                this.getConsultas(); // Atualiza a lista de consultas
-                this.fecharModal();
-            } catch (error) {
-                Swal.fire('Erro!', 'Não foi possível salvar as alterações.', 'error');
-            }
-        }
     }
 }
 </script>

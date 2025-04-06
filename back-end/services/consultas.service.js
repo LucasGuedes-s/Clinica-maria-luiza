@@ -49,9 +49,9 @@ async function getConsultasPorPaciente(cpf) {
   return totalConsultaspacientes;
 }
 
-async function atualizarConsulta(req) {
-  console.log(req.consulta)
-  const { id, data, ...resto } = req.consulta;
+async function atualizarConsulta(dados) {
+  // console.log(dados); // Agora vai mostrar o objeto certo
+  const { id, data, ...resto } = dados;
 
   if (!id) {
     throw new Error("ID da consulta é obrigatório");
@@ -62,14 +62,13 @@ async function atualizarConsulta(req) {
     throw new Error("Consulta não encontrada");
   }
 
-  // Se a data for enviada, formata corretamente
-  const dataAtualizada = data
-    ? new Date(data.includes('T') ? data.split('T')[0] + "T00:00:00" : `${data}T00:00:00`).toISOString()
+  const dataConvertida = data
+    ? new Date(data.includes('T') ? data : `${data}T00:00:00`)
     : undefined;
 
   const dadosAtualizacao = {
     ...resto,
-    ...(dataAtualizada ? { data: dataAtualizada } : {}) // Adiciona a data apenas se existir
+    ...(dataConvertida ? { data: dataConvertida } : {})
   };
 
   if (Object.keys(dadosAtualizacao).length === 0) {
@@ -78,8 +77,12 @@ async function atualizarConsulta(req) {
 
   return await prisma.Consultas.update({
     where: { id },
-    data: dadosAtualizacao
+    data: {
+      consulta: dadosAtualizacao.consulta,
+    }
   });
 }
+
+
 
 module.exports = { getConsultas, getTotalConsultas, atualizarConsulta, getConsultasProfissional, getConsultasPorPaciente }
