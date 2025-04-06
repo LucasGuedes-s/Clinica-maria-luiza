@@ -379,7 +379,7 @@ export default {
             try {
                 // Envia os dados da consulta editada para o back-end
                 const response = await Axios.put(
-                    'http://localhost:3000/editar/consulta',
+                    'https://clinica-maria-luiza-bjdd.onrender.com',
                     this.consultaEdit,
                     {
                         headers: {
