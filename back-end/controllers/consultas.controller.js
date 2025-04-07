@@ -43,5 +43,15 @@ async function getConsultasPorPaciente(req, res, next) {
         res.status(500).json({ error: "Erro ao buscar consultas do paciente." });
     }
 }
+async function updateConsulta(req, res, next) {
+    try {
+        const consulta = await consultas.atualizarConsulta(req.body);  // Soma as consultas do paciente (tradicionais + ABAS)
+        res.status(200).json({ consulta });
+        next();
+    } catch (err) {
+        console.error(`Erro ao atualizar consultas por paciente: ${err}`);
+        res.status(500).json({ error: "Erro ao buscar consultas do paciente." });
+    }
+}
 
-module.exports = { getTodasConsultas, getTotalConsultas, getConsultasProfissional, getConsultasPorPaciente };
+module.exports = { getTodasConsultas, getTotalConsultas, getConsultasProfissional, getConsultasPorPaciente, updateConsulta};

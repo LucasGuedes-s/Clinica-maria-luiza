@@ -219,7 +219,8 @@ export default {
             profissional: '',
             profissionais: [], // Este array deve ser preenchido com os dados dos profissionais
             pacientes: [], // Este array deve ser preenchido com os dados dos pacientes
-            sugestoes: false
+            sugestoes: false,
+            paciente: null
         }
     },
     methods: {
@@ -255,14 +256,17 @@ export default {
                     Swal.showLoading();
                 }
             })
-            await Axios.post(`https://clinica-maria-luiza-bjdd.onrender.com/cadastrar/agendamento`, {
+            if(this.selecionado){
+                this.paciente = this.selecionado
+            }
+            await Axios.post(`http://localhost:3000/cadastrar/agendamento`, {
                 agenda: {
                     agendamento: this.agendamento,
                     data: this.data,
                     agendar: this.agenda,
                     notas: this.notas,
                     profissional: this.profissional,
-                    paciente: this.selecionado
+                    paciente: this.paciente
                 }
             },
                 {

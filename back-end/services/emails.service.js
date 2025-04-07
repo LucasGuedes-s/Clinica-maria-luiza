@@ -80,29 +80,29 @@ async function enviarNotificacaoAgendamento(destinatario, agendamento) {
             </p>
           `
     });
-
-    await transporter.sendMail({
-      from: '"Clinica Maria Luiza"',
-      to: agendamento.email,
-      subject: 'Lembrete de Agendamento',
-      html: `
-            <p>Olá, <strong>${agendamento.nome}</strong>! 😊</p>
-            <p>Este é um lembrete do seu agendamento na Clínica Maria Luiza.</p>
-            <p><strong>📅 Data e hora:</strong> ${dataFormatada}</p>
-            <p><strong>👨‍⚕️ Profissional:</strong> ${agendamento.profissional}</p>
-            <p>Se precisar remarcar ou cancelar, entre em contato conosco.</p>
-            <p>Tenha um ótimo dia!<br>Atenciosamente, <br><strong>Equipe da Clínica Maria Luiza</strong> 🏥</p>
-            <p>
-              <a href="https://wa.me/5584991611038?text=Olá!%20Gostaria%20de%20remarcar%20meu%20agendamento." target="_blank">
-                  <button style="background-color: #84E7FF; color: black; border: none; padding: 8px 16px; font-size: 12px; border-radius: 5px;">
-                      Remarcar via WhatsApp
-                  </button>
-              </a>
-          </p>
-          `
-    });
-
-    console.log('E-mails enviados com sucesso');
+    if(agendamento.email != null){
+      await transporter.sendMail({
+        from: '"Clinica Maria Luiza"',
+        to: agendamento.email,
+        subject: 'Lembrete de Agendamento',
+        html: `
+              <p>Olá, <strong>${agendamento.nome}</strong>! 😊</p>
+              <p>Este é um lembrete do seu agendamento na Clínica Maria Luiza.</p>
+              <p><strong>📅 Data e hora:</strong> ${dataFormatada}</p>
+              <p><strong>👨‍⚕️ Profissional:</strong> ${agendamento.profissional}</p>
+              <p>Se precisar remarcar ou cancelar, entre em contato conosco.</p>
+              <p>Tenha um ótimo dia!<br>Atenciosamente, <br><strong>Equipe da Clínica Maria Luiza</strong> 🏥</p>
+              <p>
+                <a href="https://wa.me/5584991611038?text=Olá!%20Gostaria%20de%20remarcar%20meu%20agendamento." target="_blank">
+                    <button style="background-color: #84E7FF; color: black; border: none; padding: 8px 16px; font-size: 12px; border-radius: 5px;">
+                        Remarcar via WhatsApp
+                    </button>
+                </a>
+            </p>
+            `
+      });
+    }
+    //console.log('E-mails enviados com sucesso');
   } catch (error) {
     console.error('Erro ao enviar e-mails:', error);
   }

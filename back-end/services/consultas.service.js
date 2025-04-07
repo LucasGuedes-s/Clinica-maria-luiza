@@ -49,5 +49,41 @@ async function getConsultasPorPaciente(cpf) {
   return totalConsultaspacientes;
 }
 
+async function atualizarConsulta(dados) {
+  const { id, data, ...resto } = dados;
 
-module.exports = { getConsultas, getTotalConsultas, getConsultasProfissional, getConsultasPorPaciente }
+  if (!id) {
+    throw new Error("ID da consulta é obrigatório");
+  }
+
+  const consultaExistente = await prisma.Consultas.findUnique({ where: { id } });
+  if (!consultaExistente) {
+    throw new Error("Consulta não encontrada");
+  }
+
+  const dataConvertida = data
+    ? new Date(data.includes('T') ? data : `${data}T00:00:00`)
+    : undefined;
+
+  const dadosAtualizacao = {
+    ...resto,
+    ...(dataConvertida ? { data: dataConvertida } : {})
+  };
+
+  if (Object.keys(dadosAtualizacao).length === 0) {
+    throw new Error("Nenhum campo para atualização foi fornecido");
+  }
+
+  return await prisma.Consultas.update({
+    where: { id },
+    data: {
+      consulta: dadosAtualizacao.consulta,
+      descricao: dadosAtualizacao.descricao,
+      data: dadosAtualizacao.data,
+      laudos: dadosAtualizacao.laudos
+    }
+  });
+}
+
+
+module.exports = { getConsultas, getTotalConsultas, atualizarConsulta, getConsultasProfissional, getConsultasPorPaciente }
