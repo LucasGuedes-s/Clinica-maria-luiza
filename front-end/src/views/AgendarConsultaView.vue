@@ -259,7 +259,7 @@ export default {
             if(this.selecionado){
                 this.paciente = this.selecionado
             }
-            await Axios.post(`http://localhost:3000/cadastrar/agendamento`, {
+            await Axios.post(`https://clinica-maria-luiza-bjdd.onrender.com/cadastrar/agendamento`, {
                 agenda: {
                     agendamento: this.agendamento,
                     data: this.data,
