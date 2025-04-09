@@ -6,6 +6,11 @@
         <div class="titulo_dashboard">
             <h1>Bem-vindo(a)!</h1>
         </div>
+        <div class="contagem_dashboard">
+            <h1>Total de consultas: {{ total.totalConsultasAba + total.totalConsultas}}</h1>
+            <h1>Total de consultas de rotina: {{ total.totalConsultas }}</h1>
+            <h1>Total de consultas: {{ total.totalConsultasAba }}</h1>
+        </div>
         <div class="container_dashboard">
             <img :src="imageUrl" alt="Foto do Usuário" @error="onImageError" />
             <div class="informacao">
@@ -78,6 +83,20 @@ body {
     color: #D9D9D9;
 }
 
+.contagem_dashboard {
+    display: flex;
+    justify-content: space-around;
+    background-color: white;
+    margin-bottom: 20px;
+    text-align: center;
+    border-radius: 8px;
+    border: 1px solid #84E7FF;
+}
+
+.contagem_dashboard h1 {
+    color: #D9D9D9;
+    font-size: 18px;
+}
 .container_dashboard {
     background-color: white;
     padding: 20px;
@@ -321,6 +340,7 @@ export default {
     },
     data() {
         return {
+            total: 0,
             agendamentos: [],
             agenda: [],
             user: null,
@@ -354,8 +374,8 @@ export default {
                 }
             }).then(response => {
                 this.agendamentos = response.data.agenda
+                this.total = response.data.totalConsultas
                 this.agenda = response.data.agenda.filter(agendamento => agendamento.status === 'Andamento');
-                console.log(this.agenda)
             }).catch(error => {
                 console.log(error)
             })
