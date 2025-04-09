@@ -7,9 +7,9 @@
             <h1>Bem-vindo(a)!</h1>
         </div>
         <div class="contagem_dashboard">
-            <h1>Total de consultas: {{ total.totalConsultasAba + total.totalConsultas}}</h1>
-            <h1>Total de consultas de rotina: {{ total.totalConsultas }}</h1>
-            <h1>Total de consultas: {{ total.totalConsultasAba }}</h1>
+            <p>Total de consultas: <strong> <span class="value_totalconsultas"> {{ total.totalConsultasAba + total.totalConsultas}} </span></strong> </p>
+            <p>Total de consultas de rotina: <strong> <span class="value_totalconsultasrotina">{{ total.totalConsultas }} </span></strong> </p>
+            <p>Total de consultas ABA: <strong> <span class="value_totalconsultasaba"> {{ total.totalConsultasAba }} </span></strong> </p>
         </div>
         <div class="container_dashboard">
             <img :src="imageUrl" alt="Foto do Usuário" @error="onImageError" />
@@ -17,12 +17,10 @@
                 <p>Nome: {{ nome }}</p>
                 <p>E-mail: {{ email }}</p>
                 <p>Telefone: {{ telefone }}</p>
-                <div class="botoes_div">
                     <!-- <router-link to="/alterarsenha"><button class="alterar_senha_btn" click="teste">Alterar
                             Senha</button></router-link>-->
-                    <router-link to="/realizarpagamento"><button class="realizarpagamento_btn" click="">Realizar
-                            Pagamento</button></router-link>
-                </div>
+                <router-link to="/realizarpagamento"><button class="realizarpagamento_btn" click="">Realizar
+                        Pagamento</button></router-link>
             </div>
             <div class="calendario">
                 <CalendarAgendamentos :agendamentos="agendamentos" />
@@ -207,6 +205,11 @@ h2 {
     display: flex;
     width: 100%;
     gap: 20px;
+}
+.value_totalconsultas,
+.value_totalconsultasrotina,
+.value_totalconsultasaba {
+    color: #84E7FF;
 }
 @media (max-width: 768px) {
     .main_content_dashboard {
