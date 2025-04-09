@@ -5,6 +5,7 @@ const permission = require('../services/permissions/profissionais.permissions.se
 const router = express.Router()
 
 router.post('/cadastrar/profissional', [jwtMiddleware, permission.postProfissional], userController.postProfissional);
+router.put('/editar/profissional', [jwtMiddleware, permission.postProfissional], userController.updateProfissional);
 
 router.get('/profissionais/agendar', [jwtMiddleware, permission.post], userController.getProfissionais);
 router.get('/profissionais', [jwtMiddleware, permission.get], userController.getProfissionais);
