@@ -18,6 +18,7 @@ model Profissionais {
   permissao        Permissao    @relation(fields: [permissaoId], references: [id])
   permissaoId      Int
   especialidade    String
+  status           String?    @default("Ativo")  
   agendamentos     Agendamentos[]
   consultas        Consultas[]
   consultasAba     ConsultaAba[]
@@ -26,8 +27,9 @@ model Profissionais {
 
 model Pacientes{
   cpf             String       @id
-  email           String?      @unique
+  email           String?     
   nome            String
+  status           String?    @default("Ativo")  
   nome_responsavel String?
   data_nascimento DateTime?
   telefone        String?
@@ -35,6 +37,7 @@ model Pacientes{
   foto            String?      @db.VarChar(2048)
   tipo_paciente   String?
   laudos          String[] @db.VarChar(2048)
+  estimulos       PacienteEstimulo[]
   agendamentos    Agendamentos[]
   consultas       Consultas[]
   paciente_dados  Pacientes_dados[]
@@ -69,6 +72,11 @@ model Agendamentos{
   pacienteId      String?
   sala_consulta   Salas? @relation(fields: [sala], references: [id])
   sala            Int?
+
+
+  notificacao_recorrente Boolean? @default(false) // Define se a notificação será recorrente
+  dias_notificacao       String[] @default([])  // Lista dos dias de notificação (ex: ["segunda", "quarta", "sexta"])
+  ultima_notificacao     DateTime? // Armazena a última vez que a notificação foi enviada
 }
 model Salas{
   id              Int @id @default(autoincrement())
@@ -108,6 +116,25 @@ model ConsultaAba{
   teste           String?
   foto            String? @db.VarChar(2048)
   observacoes     String? @db.VarChar(2048)
+  comportamentos  String?
+
+}
+model Estimulos {
+  id                Int                 @id @default(autoincrement())
+  nome_estimulo     String
+  descricao         String?
+  pacienteEstimulo  PacienteEstimulo[]
+}
+
+model PacienteEstimulo {
+  pacienteCpf   String
+  estimuloId    Int
+  criadoEm      DateTime @default(now()) // exemplo de metadado
+  finalizadoEm  DateTime?
+  paciente      Pacientes @relation(fields: [pacienteCpf], references: [cpf])
+  estimulo      Estimulos @relation(fields: [estimuloId], references: [id])
+
+  @@id([pacienteCpf, estimuloId]) // chave primária composta
 }
 model AvaliacaoAba{
   pacientes       Int @id @default(autoincrement())
