@@ -6,7 +6,7 @@
         <div class="titulo_dashboard">
             <h1>Bem-vindo(a)!</h1>
         </div>
-        <div class="contagem_dashboard">
+        <div class="contagem_dashboard" v-if="permissao === 1">
             <p>Total de consultas: <strong> <span class="value_totalconsultas"> {{ total.totalConsultasAba + total.totalConsultas}} </span></strong> </p>
             <p>Total de consultas de rotina: <strong> <span class="value_totalconsultasrotina">{{ total.totalConsultas }} </span></strong> </p>
             <p>Total de consultas ABA: <strong> <span class="value_totalconsultasaba"> {{ total.totalConsultasAba }} </span></strong> </p>
