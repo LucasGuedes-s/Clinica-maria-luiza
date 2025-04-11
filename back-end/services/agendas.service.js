@@ -3,6 +3,7 @@ const prisma = new PrismaClient()
 const formatar = require('../utils/formatdata.ultil')
 const { DateTime } = require('luxon');
 const { enviarNotificacaoAgendamento } = require('./emails.service');
+const { getTotalConsultas } = require('./consultas.service');
 require('dotenv').config();
 
 async function agendarConsulta(req){  
@@ -123,8 +124,13 @@ async function getAgendamentos(usuario){
             horaFormatada: horaFormatada,
         };
     });
-    
-    return Agendamentos;
+
+    const total = await getTotalConsultas()
+
+    return {
+        agenda: Agendamentos,
+        totalConsultas: total
+    };
 }
 async function updateAgendamentos(id){
     const dataAtual = new Date()

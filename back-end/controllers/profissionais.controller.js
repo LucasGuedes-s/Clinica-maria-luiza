@@ -29,4 +29,15 @@ async function postProfissional(req, res, next){
         console.error(`Erro ao receber usuário`);
     }  
 }
-module.exports = {getProfissionais, getProfissional, postProfissional};
+
+async function updateProfissional(req, res, next){
+    try {
+        const editar = await Profissional.updateProfissional(req.body)
+        res.status(200).json({editar});
+        next()
+    } catch (err) {
+        console.log(err)
+        console.error(`Erro ao editar usuário`);
+    }  
+}
+module.exports = {getProfissionais, getProfissional, postProfissional, updateProfissional};

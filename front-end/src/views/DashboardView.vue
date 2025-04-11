@@ -6,18 +6,21 @@
         <div class="titulo_dashboard">
             <h1>Bem-vindo(a)!</h1>
         </div>
+        <div class="contagem_dashboard">
+            <p>Total de consultas: <strong> <span class="value_totalconsultas"> {{ total.totalConsultasAba + total.totalConsultas}} </span></strong> </p>
+            <p>Total de consultas de rotina: <strong> <span class="value_totalconsultasrotina">{{ total.totalConsultas }} </span></strong> </p>
+            <p>Total de consultas ABA: <strong> <span class="value_totalconsultasaba"> {{ total.totalConsultasAba }} </span></strong> </p>
+        </div>
         <div class="container_dashboard">
             <img :src="imageUrl" alt="Foto do Usuário" @error="onImageError" />
             <div class="informacao">
                 <p>Nome: {{ nome }}</p>
                 <p>E-mail: {{ email }}</p>
                 <p>Telefone: {{ telefone }}</p>
-                <div class="botoes_div">
                     <!-- <router-link to="/alterarsenha"><button class="alterar_senha_btn" click="teste">Alterar
                             Senha</button></router-link>-->
-                    <router-link to="/realizarpagamento"><button class="realizarpagamento_btn" click="">Realizar
-                            Pagamento</button></router-link>
-                </div>
+                <router-link to="/realizarpagamento"><button class="realizarpagamento_btn" click="">Realizar
+                        Pagamento</button></router-link>
             </div>
             <div class="calendario">
                 <CalendarAgendamentos :agendamentos="agendamentos" />
@@ -78,6 +81,20 @@ body {
     color: #D9D9D9;
 }
 
+.contagem_dashboard {
+    display: flex;
+    justify-content: space-around;
+    background-color: white;
+    margin-bottom: 20px;
+    text-align: center;
+    border-radius: 8px;
+    border: 1px solid #84E7FF;
+}
+
+.contagem_dashboard h1 {
+    color: #D9D9D9;
+    font-size: 18px;
+}
 .container_dashboard {
     background-color: white;
     padding: 20px;
@@ -188,6 +205,11 @@ h2 {
     display: flex;
     width: 100%;
     gap: 20px;
+}
+.value_totalconsultas,
+.value_totalconsultasrotina,
+.value_totalconsultasaba {
+    color: #84E7FF;
 }
 @media (max-width: 768px) {
     .main_content_dashboard {
@@ -321,6 +343,7 @@ export default {
     },
     data() {
         return {
+            total: 0,
             agendamentos: [],
             agenda: [],
             user: null,
@@ -354,8 +377,8 @@ export default {
                 }
             }).then(response => {
                 this.agendamentos = response.data.agenda
+                this.total = response.data.totalConsultas
                 this.agenda = response.data.agenda.filter(agendamento => agendamento.status === 'Andamento');
-                console.log(this.agenda)
             }).catch(error => {
                 console.log(error)
             })

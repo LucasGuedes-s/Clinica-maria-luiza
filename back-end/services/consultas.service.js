@@ -18,7 +18,7 @@ async function getTotalConsultas() {
   const totalConsultas = await prisma.consultas.count();
   const totalConsultasAba = await prisma.consultaAba.count();
 
-  return totalConsultas + totalConsultasAba;
+  return {totalConsultas: totalConsultas, totalConsultasAba: totalConsultasAba};
 }
 
 async function getConsultasProfissional(email) {
