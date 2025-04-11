@@ -3,6 +3,9 @@
         <Sidebar />
     </div>
     <div class="main-content_evolucao">
+        <div v-if="!loading && consulta.length === 0" class="div_consultanaoregistrada">
+            <ConsultaNaoRegistrada />
+        </div>
         <div>
             <GraficoEvolucao :dado="cpf" />
         </div>
@@ -172,6 +175,7 @@ import Swal from 'sweetalert2';
 import { formatDate } from '../utils/formatarData';
 import router from '@/router';
 import GraficoEvolucaoBarras from '@/components/GraficoEvolucaoBarras.vue';
+import ConsultaNaoRegistrada from '@/components/ConsultaNaoRegistrada.vue';
 
 export default {
 
@@ -187,6 +191,7 @@ export default {
             formatDate,
             consultaEdit: {}, // Dados da consulta sendo editada
             showModal: false,  // Controle do modal de edição
+            loading: true, // <-- nova flag
         }
     },
     setup() {
@@ -206,7 +211,8 @@ export default {
     components: {
         Sidebar,
         GraficoEvolucao,
-        GraficoEvolucaoBarras
+        GraficoEvolucaoBarras,
+        ConsultaNaoRegistrada,
     },
     methods: {
         async abrirFoto(link) {
@@ -223,17 +229,19 @@ export default {
 
         },
         async getConsultas() {
-            const token = this.store.token
+            const token = this.store.token;
 
-            await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/consultasAba/paciente/${this.cpf}`,{
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            }).then(response => {
-                this.consulta = response.data.consultas
-            }).catch(error => {
-                console.error(error)
-            })
+            this.loading = true;
+            try {
+                const response = await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/consultasAba/paciente/${this.cpf}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                this.consulta = response.data.consultas;
+            } catch (error) {
+                console.error(error);
+            } finally {
+                this.loading = false;
+            }
         },
         async exluirConsulta(id) {
             const authStore = useAuthStore();
@@ -427,6 +435,8 @@ table tbody tr:hover {
 /* Estilo das células */
 table td {
     font-size: 14px;
+    line-height: 1.5;
+    text-align: justify;
 }
 
 .btn_foto {
