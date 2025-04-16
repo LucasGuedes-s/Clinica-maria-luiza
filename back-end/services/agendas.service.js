@@ -49,6 +49,64 @@ async function agendarConsulta(req){
     }
     return agenda;
 }
+
+async function atualizarOuDeletarAgendamento(req) {
+    const { id, deletar, dadosAtualizados } = req.agenda;
+
+    const agendamentoExistente = await prisma.Agendamentos.findUnique({
+        where: { id },
+    });
+
+    if (!agendamentoExistente) {
+        throw new Error("Agendamento não encontrado.");
+    }
+
+    if (deletar) {
+        await prisma.Agendamentos.delete({
+            where: { id },
+        });
+        return { mensagem: "Agendamento deletado com sucesso." };
+    }
+
+    // Se for atualização
+    let profissional = null;
+    if (dadosAtualizados.profissional) {
+        profissional = await prisma.Profissionais.findUnique({
+            where: { email: dadosAtualizados.profissional },
+        });
+        if (!profissional) throw new Error("Profissional não encontrado.");
+    }
+
+    let paciente = null;
+    if (dadosAtualizados.paciente) {
+        paciente = await prisma.Pacientes.findUnique({
+            where: { cpf: dadosAtualizados.paciente },
+        });
+        if (!paciente) throw new Error("Paciente não encontrado.");
+    }
+
+    let dataAjustada = undefined;
+    if (dadosAtualizados.data) {
+        const data = new Date(dadosAtualizados.data);
+        dataAjustada = new Date(data.getTime() - data.getTimezoneOffset() * 60000);
+    }
+
+    const agendamentoAtualizado = await prisma.Agendamentos.update({
+        where: { id },
+        data: {
+            ...(dataAjustada ? { data: dataAjustada } : {}),
+            ...(dadosAtualizados.agendamento ? { agendamento: dadosAtualizados.agendamento } : {}),
+            ...(dadosAtualizados.notas ? { notas: dadosAtualizados.notas } : {}),
+            ...(dadosAtualizados.status ? { status: dadosAtualizados.status } : {}),
+            ...(profissional ? { profissionalId: profissional.email } : {}),
+            ...(paciente ? { pacienteId: paciente.cpf } : {}),
+            ...(dadosAtualizados.sala ? { sala: dadosAtualizados.sala } : {}),
+        },
+    });
+
+    return agendamentoAtualizado;
+}
+
 async function getAgendamentosPacientes(user){  
 
     const agenda = await prisma.Agendamentos.findMany({
@@ -147,4 +205,4 @@ async function updateAgendamentos(id){
     });   
     return agenda;
 }
-module.exports = {agendarConsulta, getAgendamentos, getAgendamentosPacientes, updateAgendamentos};
+module.exports = {agendarConsulta, atualizarOuDeletarAgendamento, getAgendamentos, getAgendamentosPacientes, updateAgendamentos};

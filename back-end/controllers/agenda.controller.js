@@ -8,7 +8,18 @@ async function postAgendamentos(req, res, next){
     } catch (err) {
         res.status(500)
         console.log(err)
-        console.error(`Erro ao registrar agendamento para profissional`);
+        console.error(`Erro ao registrar agendamento do profissional`);
+    }
+}
+async function updateOrDeleteAgendamento(req, res, next){
+    try {
+        const consulta = await Agendamentos.atualizarOuDeletarAgendamento(req.body)
+        res.status(200).json({consulta});
+        next()
+    } catch (err) {
+        res.status(500)
+        console.log(err)
+        console.error(`Erro ao atualizar agendamento para profissional`);
     }
 }
 async function getAgendamentos(req, res, next){
@@ -42,4 +53,4 @@ async function updateAgendamentos(req, res, next){
         console.error(`Erro ao registrar agendamento para profissional`);
     }
 }
-module.exports = {postAgendamentos, getAgendamentos, getAgendamentosPacientes, updateAgendamentos};
+module.exports = {postAgendamentos, updateOrDeleteAgendamento, getAgendamentos, getAgendamentosPacientes, updateAgendamentos};
