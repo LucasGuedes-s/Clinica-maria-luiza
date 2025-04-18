@@ -84,6 +84,69 @@ async function atualizarConsulta(dados) {
     }
   });
 }
+async function postEstimulos(req, res) {
+  const { nome_estimulo, descricao, pacienteId } = req.body;
+  const estimulo = await prisma.Estimulos.create({
+    data: {
+      nome_estimulo,
+      descricao,
+    }
+  });
+  if(pacienteId === 'Não informado') {
+    return "Paciente não informado";
+  }
+  const paciente = await prisma.Pacientes.findUnique({
+    where: { cpf: pacienteId }
+  });
+
+  if (!paciente) {
+    return "Paciente não encontrado";
+  }
+
+  const PacienteEstimulo = await prisma.PacienteEstimulo.create({
+    data: {
+      pacienteCpf: paciente.cpf,
+      estimuloId: estimulo.id
+    }
+  });
+
+  return {
+    estimulo,
+    pacienteEstimulo: PacienteEstimulo
+  };
+}
+async function vincularEstimulo(req, res){
+  const { estimuloId, pacienteId } = req.body;
+
+  const PacienteEstimulo = await prisma.PacienteEstimulo.create({
+    data: {
+      pacienteCpf: pacienteId,
+      estimuloId: estimuloId
+    }
+  });
+  if (!PacienteEstimulo) {
+    return "Erro ao vincular estimulo ao paciente";
+  }
+  return PacienteEstimulo
+}
+
+async function getEstimulos() {
+  const estimulos = await prisma.Estimulos.findMany();
+  return estimulos;
+}
+
+async function getEstimulosPorPaciente(pacienteId) {
+  const estimulos = await prisma.PacienteEstimulo.findMany({
+    where: {
+      pacienteCpf: pacienteId // Ex: "138.845.747-25"
+    },
+    include: {
+      estimulo: true
+    }
+  });
+
+  return estimulos;
+}
 
 
-module.exports = { getConsultas, getTotalConsultas, atualizarConsulta, getConsultasProfissional, getConsultasPorPaciente }
+module.exports = { getConsultas, postEstimulos, vincularEstimulo, getEstimulos, getEstimulosPorPaciente, getTotalConsultas, atualizarConsulta, getConsultasProfissional, getConsultasPorPaciente }
