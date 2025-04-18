@@ -248,7 +248,8 @@ async function registrarConsultaAba(req) {
   };
   
   const localDate = adicionarData(req.consulta.data)
-  
+  const texto = `${req.consulta.descricao.nome} - ${req.consulta.descricao.descricao}`;
+
   const consulta = await prisma.ConsultaAba.create({
     data: {
       paciente: {
@@ -260,7 +261,7 @@ async function registrarConsultaAba(req) {
       data: localDate.toISOString(),
       hora_inicio: req.consulta.inicio,
       hora_fim: req.consulta.fim,
-      descricao_atividade: req.consulta.descricao,
+      descricao_atividade: texto,
       Aplicacao1:  req.consulta.aplicacao1,
       Aplicacao2:  req.consulta.aplicacao2,
       Aplicacao3:  req.consulta.aplicacao3,
@@ -291,7 +292,8 @@ async function updateConsultaAba(req) {
       Aplicacao5:  req.consultaAba.aplicacao5,
       teste:       req.consultaAba.teste,
       observacoes: req.consultaAba.observacoes,      
-      foto:        req.consultaAba.foto
+      foto:        req.consultaAba.foto,
+      comportamentos: req.consultaAba.comportamento,
     }
   });
   return update_consulta;

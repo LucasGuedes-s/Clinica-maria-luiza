@@ -9,5 +9,6 @@ router.get('/pacientes/agendamentos/:id', userController.getAgendamentosPaciente
 router.get('/profissionais/agendamentos', [jwtMiddleware, permission.getAgendamentos], userController.getAgendamentos);
 router.get('/profissional/agendamento/:id', [jwtMiddleware, permission.post], userController.updateAgendamentos);
 router.post('/cadastrar/agendamento', [jwtMiddleware, permission.post], userController.postAgendamentos);
+router.put('/atualizar/agendamento', userController.updateOrDeleteAgendamento);
 
 module.exports = router;

@@ -56,24 +56,24 @@ async function postProfissional(user){
     return cad;
 }
 
-async function updateProfissional(user){  
+async function updateProfissional(user) {  
     const profissionalAtualizado = await prisma.Profissionais.update({
-        where: { email: user.usuario.email },
-        // Atualiza apenas os campos que foram enviados na requisição
+        where: { email: user.email },
         data: {
-            email: user.usuario.email_novo,
-            nome: user.usuario.nome,
-            telefone: user.usuario.telefone,
-            foto: user.usuario.foto,
-            identificador: user.usuario.email,
-            permissaoId: user.usuario.permissaoId,
-            pix: user.usuario.pix,
-            especialidade: user.usuario.especialidade
+            email: user.email_novo,
+            nome: user.nome,
+            telefone: user.telefone,
+            foto: user.foto,
+            identificador: user.email,
+            permissaoId: user.permissaoId,
+            pix: user.pix,
+            especialidade: user.especialidade
         }
     });
 
     return profissionalAtualizado;
 }
+
 
 async function getConsultasAba(req, res){ 
     const {email, mesDesejado} = req

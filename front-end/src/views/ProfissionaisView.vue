@@ -18,8 +18,38 @@
             </div>
             <div class="detalhar-div">
                 <button class="detalhar-btn" @click="consultas(usuario.email, usuario.nome)">Consultas</button>
+                <button class="detalhar-btn" @click="abrirModal(usuario)">Editar Dados</button>
             </div>
         </div>
+
+        <!-- Modal de Edição -->
+        <div v-if="showModal" class="modal-overlay">
+            <div class="modal-content">
+                <h2>Editar Profissional</h2>
+
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome_funcionario" name="nome" v-model="consultaEdit.nome">
+
+
+                <label for="email">Email:</label>
+                <input type="email" id="email_prof" name="email" v-model="consultaEdit.email">
+
+                <label for="telefone">Telefone:</label>
+                <input type="tel" id="telefone_prof" name="telefone" v-model="consultaEdit.telefone">
+
+                <label for="pix">PIX:</label>
+                <input type="text" id="pix" name="pix" v-model="consultaEdit.pix">
+
+                <label for="imagem">Adicionar Imagem:</label>
+                <input type="file" id="imagem_prof" name="imagem" @change="handleFileUpload">
+
+                <div class="modal-buttons">
+                    <button @click="salvarEdicao">Salvar</button>
+                    <button @click="fecharModal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -100,6 +130,8 @@ input {
     position: absolute;
     bottom: 20px;
     right: 20px;
+    display: flex;
+    gap: 15px;
 }
 
 .detalhar-btn {
@@ -115,6 +147,74 @@ input {
 
 .detalhar-btn:hover {
     background-color: #E7FAFF;
+}
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content h2 {
+    color: #84E7FF;
+    margin-bottom: 2px;
+    font-size: 30px;
+    margin-top: 2px;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border: 2px solid #84E7FF;
+    box-shadow: 0 4px 10px -1px rgba(0, 0, 0, 0.10);
+}
+
+.modal-content input,
+.modal-content textarea,
+.modal-content select {
+    padding: 10px;
+    border: 1px solid #D9D9D9;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 16px;
+    color: #7E7E7E;
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    box-shadow: none;
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.5;
+    text-align: justify;
+    resize: none;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    gap: 20px;
+}
+
+.modal-buttons button {
+    flex: 1;
+    padding: 10px 20px;
+    border-radius: 4px;
+    background-color: #F5F5F5;
+    color: #7E7E7E;
+    border: 1px solid #D9D9D9;
+    font-size: 14px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
 }
 @media (max-width: 768px) {
     .container-profissional {
@@ -180,7 +280,9 @@ export default {
             hora: '',
             pesquisa: '',
             profissional: [],
-            consultasPorProfissional: {}
+            consultasPorProfissional: {},
+            showModal: false,
+            consultaEdit: {},
         }
     },
     methods: {
@@ -204,6 +306,75 @@ export default {
                 console.error("Erro ao carregar consultas por profissional:", error);
             }
         },
+        abrirModal(usuario) {
+            this.consultaEdit = { ...usuario };
+            this.showModal = true;
+        },
+        fecharModal() {
+            this.showModal = false; // Fecha o modal
+            this.consultaEdit = null; // Limpa os dados do profissional
+        },
+        handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Crie um objeto FileReader para ler a imagem
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    // Atualiza a URL da imagem localmente para visualização
+                    this.consultaEdit.foto = e.target.result;
+                };
+                reader.readAsDataURL(file); // Lê a imagem e converte em base64
+                this.consultaEdit.imagemArquivo = file; // Salva o arquivo para enviar depois
+            }
+        },
+        async salvarEdicao() {
+            try {
+                const token = this.store.token;
+
+                const payload = {
+                    email: this.consultaEdit.email,
+                    nome: this.consultaEdit.nome,
+                    telefone: this.consultaEdit.telefone,
+                    pix: this.consultaEdit.pix,
+                    email_novo: this.consultaEdit.email, // mantém o mesmo se não for alterado
+                    especialidade: this.consultaEdit.especialidade,
+                    foto: this.consultaEdit.foto,
+                };
+
+                const response = await Axios.put(
+                    "https://clinica-maria-luiza-bjdd.onrender.com/editar/profissional",
+                    payload,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            "Content-Type": "application/json",
+                        },
+                    }
+                );
+
+                const index = this.profissional.findIndex(p => p.email === this.consultaEdit.email);
+                if (index !== -1) {
+                    this.profissional[index] = { ...this.consultaEdit };
+                }
+
+                this.fecharModal();
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Dados atualizados com sucesso!',
+                    timer: 2000,
+                });
+
+            } catch (error) {
+                console.error("Erro ao salvar edição:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro ao salvar alterações!',
+                    timer: 3000,
+                });
+            }
+        },
+
         async consultas(email, nome) {
             try {
                 // Pergunta se o usuário quer ver consultas com ou sem hora
