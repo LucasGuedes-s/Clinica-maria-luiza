@@ -52,7 +52,7 @@
                     <button class="btn-concluido"
                         @click="enviarNotificacao(agenda.paciente.telefone, agenda.paciente.nome, agenda.dataFormatada, agenda.horaFormatada)">Enviar
                         notificação</button>
-                    <button class="btn_editaragendamento" @click="abrirModal(agenda)">Editar Consulta</button>
+                    <button class="btn_editaragendamento" @click="abrirModal(agenda)">Editar Agendamento</button>
                 </div>
 
             </div>
