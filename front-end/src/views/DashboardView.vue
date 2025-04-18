@@ -335,6 +335,12 @@ h2 {
         margin-top: 20px; 
     }
 
+    .botoes {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+
     .botoes_div {
         position: static; 
     }
@@ -343,6 +349,21 @@ h2 {
     .realizarpagamento_btn {
         width: 100%; 
         margin-bottom: 10px; 
+    }
+
+    .modal-content {
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .modal-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modal-buttons button {
+        width: 100%;
     }
 }
 @media (max-width: 820px) {
@@ -377,6 +398,20 @@ h2 {
         margin-bottom: 10px; 
         margin-left: auto;
         margin-right: auto;
+    }
+    .modal-content {
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .modal-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modal-buttons button {
+        width: 100%;
     }
 }
 @media (max-width: 1247px) {
