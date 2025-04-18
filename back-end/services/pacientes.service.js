@@ -291,7 +291,8 @@ async function updateConsultaAba(req) {
       Aplicacao5:  req.consultaAba.aplicacao5,
       teste:       req.consultaAba.teste,
       observacoes: req.consultaAba.observacoes,      
-      foto:        req.consultaAba.foto
+      foto:        req.consultaAba.foto,
+      comportamentos: req.consultaAba.comportamento,
     }
   });
   return update_consulta;

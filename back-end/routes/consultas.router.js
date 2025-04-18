@@ -16,10 +16,15 @@ router.get('/apagar/consulta/:id', [jwtMiddleware, permission.apagar], userContr
 
 router.post('/consulta/registrar', [jwtMiddleware, permission.postConsulta], userController.postConsulta);
 router.post('/consultaAba/registrar', [jwtMiddleware, permission.postConsulta], userController.postConsultaAba);
+router.post('/adicionar/estimulo', consultaController.postEstimulos);
+router.post('/vincular/estimulo', consultaController.vincularEstimulo);
+
 
 router.get('/consultas/total', consultaController.getTotalConsultas);
 router.get('/consultas/profissional/:email', consultaController.getConsultasProfissional);
 router.get('/consultas/paciente/:cpf', consultaController.getConsultasPorPaciente);
+router.get('/estimulos', consultaController.getEstimulos);
+router.get('/estimulos/paciente/:cpf', consultaController.getEstimulosPorPaciente);
 
 router.put('/editar/consulta', consultaController.updateConsulta);
 

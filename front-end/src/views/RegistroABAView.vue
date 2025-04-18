@@ -17,10 +17,14 @@
                     <label for="inicio">Hora de Início:</label>
                     <input type="time" v-model="inicio" id="inicio" required />
                 </div>
-                <div class="form-group descricao">
-                    <label for="descricao_atividade">Descrição de atividade:</label>
-                    <input id="descricao_atividade" rows="4" v-model="descricao"></input>
-                </div>
+                <label>Atividade:</label>
+                <select id="paciente" name="paciente" v-model="pacienteId" required>
+                    <option value="" disabled selected>Selecione um paciente</option>
+                    <option value="Não informado">Não informado</option>
+                    <option v-for="estimulo in estimulos.estimulo" :key="estimulo.estimulo.id" :value="estimulo.id">
+                        {{ estimulo.estimulo.nome_estimulo }} - {{ estimulo.estimulo.descricao }}
+                    </option>
+                </select>
                 <div class="form-group pequenos-inputs">
                     <label>Aplicações:</label>
                     <div class="inputs-row">
@@ -318,11 +322,29 @@ export default {
             foto: '',
             observacoes: '',
             imagem: null, // Adicionando a variável para armazenar a imagem
+            estimulos: [],
         };
+    },
+    mounted() {
+        this.getEstimulos(); // Chama a função para buscar os estímulos ao montar o componente
     },
     methods: {
         async handleFileUpload(event) {
             this.imagem = event.target.files[0]; // Armazena a imagem selecionada
+        },
+        async getEstimulos() {
+            const token = this.store.token;
+            try {
+                const paciente = this.cpf; // Obtém o CPF do paciente
+                const response = await Axios.get(`http://localhost:3000/estimulos/paciente/${paciente}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                this.estimulos = response.data;
+            } catch (error) {
+                console.error('Erro ao buscar estimulos:', error);
+            }
         },
         async registrarConsulta() {
             const token = this.store.token;
@@ -387,7 +409,7 @@ export default {
                     Swal.fire('Erro!', 'Falha ao fazer upload da imagem.', 'error'); // Feedback para erro no upload
                 }
             }
-        }
+        },
     }
 }
 </script>

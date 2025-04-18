@@ -45,7 +45,7 @@ async function getConsultasPorPaciente(req, res, next) {
 }
 async function updateConsulta(req, res, next) {
     try {
-        const consulta = await consultas.atualizarConsulta(req.body);  // Soma as consultas do paciente (tradicionais + ABAS)
+        const consulta = await consultas.atualizarConsulta(req.body);
         res.status(200).json({ consulta });
         next();
     } catch (err) {
@@ -53,5 +53,44 @@ async function updateConsulta(req, res, next) {
         res.status(500).json({ error: "Erro ao buscar consultas do paciente." });
     }
 }
-
-module.exports = { getTodasConsultas, getTotalConsultas, getConsultasProfissional, getConsultasPorPaciente, updateConsulta};
+async function postEstimulos(req, res, next) {
+    try {
+        const estimulos = await consultas.postEstimulos(req); 
+        res.status(200).json({ estimulos });
+        next();
+    } catch (err) {
+        console.error(`Erro ao adicionar estimulo: ${err}`);
+        res.status(500).json({ error: "Erro ao adicionar estimulo." });
+    }
+}
+async function getEstimulos(req, res, next) {
+    try {
+        const estimulos = await consultas.getEstimulos(); 
+        res.status(200).json({ estimulos });
+        next();
+    } catch (err) {
+        console.error(`Erro ao obter estimulos: ${err}`);
+        res.status(500).json({ error: "Erro ao obter estimulos." });
+    }
+}
+async function vincularEstimulo(req, res, next) {
+    try {
+        const estimulo = await consultas.vincularEstimulo(req); 
+        res.status(200).json({ estimulo });
+        next();
+    } catch (err) {
+        console.error(`Erro ao vincular estimulo: ${err}`);
+        res.status(500).json({ error: "Erro ao obter estimulos." });
+    }
+}
+async function getEstimulosPorPaciente(req, res, next) {
+    try {
+        const estimulo = await consultas.getEstimulosPorPaciente(req.params.cpf); 
+        res.status(200).json({ estimulo });
+        next();
+    } catch (err) {
+        console.error(`Erro ao receber estimulos: ${err}`);
+        res.status(500).json({ error: "Erro ao obter estimulos." });
+    }
+}
+module.exports = { getTodasConsultas, postEstimulos, getEstimulos, getEstimulosPorPaciente, vincularEstimulo, getTotalConsultas, getConsultasProfissional, getConsultasPorPaciente, updateConsulta};
