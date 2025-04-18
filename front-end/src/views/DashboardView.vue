@@ -230,7 +230,6 @@ h2 {
     cursor: pointer;
     width: 100%;
     font-family: 'Montserrat', sans-serif;
-
 }
 
 .btn-concluido:hover {
@@ -558,7 +557,7 @@ export default {
 
                 const dataISO = dataHora.toISOString();
 
-                const response = await Axios.put(`http://localhost:3000/atualizar/agendamento`, {
+                const response = await Axios.put(`https://clinica-maria-luiza-bjdd.onrender.com/atualizar/agendamento`, {
                     agenda: {
                         id: this.agendaEditada.id,
                         dadosAtualizados: {
