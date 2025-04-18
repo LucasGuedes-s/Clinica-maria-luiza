@@ -18,10 +18,10 @@
                     <input type="time" v-model="inicio" id="inicio" required />
                 </div>
                 <label>Atividade:</label>
-                <select id="paciente" name="paciente" v-model="pacienteId" required>
-                    <option value="" disabled selected>Selecione um paciente</option>
+                <select id="paciente" name="paciente" v-model="descricao" required>
+                    <option value="" disabled selected>Selecione um estimulo</option>
                     <option value="Não informado">Não informado</option>
-                    <option v-for="estimulo in estimulos.estimulo" :key="estimulo.estimulo.id" :value="estimulo.id">
+                    <option v-for="estimulo in estimulos.estimulo" :key="estimulo.estimulo.id" :value="{ nome: estimulo.estimulo.nome_estimulo, descricao: estimulo.estimulo.descricao }">
                         {{ estimulo.estimulo.nome_estimulo }} - {{ estimulo.estimulo.descricao }}
                     </option>
                 </select>
@@ -336,6 +336,7 @@ export default {
             const token = this.store.token;
             try {
                 const paciente = this.cpf; // Obtém o CPF do paciente
+                console.log(this.cpf)
                 const response = await Axios.get(`http://localhost:3000/estimulos/paciente/${paciente}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -371,7 +372,8 @@ export default {
                     }
 
                     // Realiza a requisição para registrar a consulta
-                    await Axios.post("https://clinica-maria-luiza-bjdd.onrender.com/consultaAba/registrar",
+                    console.log(this.descricao)
+                    await Axios.post("http://localhost:3000/consultaAba/registrar",
                         {
                             consulta: {
                                 pacienteId: this.cpf,
