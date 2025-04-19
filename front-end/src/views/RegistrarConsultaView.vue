@@ -12,7 +12,7 @@
                     <label for="nome">Registrando a consulta de: </label>
                     <input type="text" id="nome_paciente" name="nome" :value="nome" required>
                 </div>
-                <div class="form-group">
+                <div class="form-group select_especialidade">
                     <label for="especialidade">Especialidade:</label>
                     <select id="especialidade" name="especialidade" v-model="especialidade" required>
                         <option v-for="especialidade in especialidades" :key="especialidade" :value="especialidade">
@@ -93,7 +93,8 @@ form {
 }
 
 .selecionar,
-.descricao {
+.descricao,
+.select_especialidade {
     grid-column: 1 / -1;
 }
 
