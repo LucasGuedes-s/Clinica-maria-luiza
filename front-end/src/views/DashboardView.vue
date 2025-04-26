@@ -612,7 +612,7 @@ export default {
 
                 const token = this.store.token;
 
-                const response = await Axios.put('http://localhost:3000/atualizar/agendamento', {
+                const response = await Axios.put('https://clinica-maria-luiza-bjdd.onrender.com/atualizar/agendamento', {
                     agenda: {
                         id: this.agendaEditada.id,
                         deletar: true

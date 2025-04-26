@@ -31,7 +31,16 @@ async function getConsultasProfissional(req, res, next) {
         res.status(500).json({ error: "Erro ao buscar consultas do profissional." });
     }
 }
-
+async function getConsultasPorProfissional(req, res, next) {
+    try {
+        const consultasProfissional = await consultas.getConsultasPorProfissional(req.body); 
+        res.status(200).json({ consultasProfissional });
+        next();
+    } catch (err) {
+        console.error(`Erro ao obter consultas por profissional: ${err}`);
+        res.status(500).json({ error: "Erro ao buscar consultas do profissional." });
+    }
+}
 async function getConsultasPorPaciente(req, res, next) {
     try {
         const { cpf } = req.params;
@@ -93,4 +102,15 @@ async function getEstimulosPorPaciente(req, res, next) {
         res.status(500).json({ error: "Erro ao obter estimulos." });
     }
 }
-module.exports = { getTodasConsultas, postEstimulos, getEstimulos, getEstimulosPorPaciente, vincularEstimulo, getTotalConsultas, getConsultasProfissional, getConsultasPorPaciente, updateConsulta};
+async function updateEstimulo(req, res, next) {
+    try {
+        const { pacienteCpf, estimuloId } = req.body;
+        const estimulo = await consultas.finalizarEstimulo(pacienteCpf, estimuloId);
+        res.status(200).json({ estimulo });
+        next();
+    } catch (err) {
+        console.error(`Erro ao receber estimulos: ${err}`);
+        res.status(500).json({ error: "Erro ao obter estimulos." });
+    }
+}
+module.exports = { getTodasConsultas, updateEstimulo, postEstimulos, getConsultasPorProfissional, getEstimulos, getEstimulosPorPaciente, vincularEstimulo, getTotalConsultas, getConsultasProfissional, getConsultasPorPaciente, updateConsulta};

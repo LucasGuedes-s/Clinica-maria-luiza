@@ -9,16 +9,19 @@
                     <input type="text" id="nome" name="nome" v-model="nome_estimulo" required>
                 </div>
                 <div class="form-group">
-                    <label for="nome">Descrição:</label>
+                    <label for="descricao">Descrição:</label>
                     <input type="text" id="descricao" name="descricao" v-model="descricao">
                 </div>
-                <select id="paciente" name="paciente" v-model="pacienteId" required>
-                    <option value="" disabled selected>Selecione um paciente</option>
-                    <option value="Não informado">Não informado</option>
-                    <option v-for="paciente in pacientes.pacientes" :key="paciente.cpf" :value="paciente.cpf">
-                        {{ paciente.nome }} - {{ paciente.tipo_paciente }} 
-                    </option>
-                </select>
+                <div class="form-group select_paciente">
+                    <label for="paciente">Paciente:</label>
+                    <select id="paciente" name="paciente" v-model="pacienteId" required>
+                        <option value="" disabled selected>Selecione um paciente</option>
+                        <option value="Não informado">Não informado</option>
+                        <option v-for="paciente in pacientes.pacientes" :key="paciente.cpf" :value="paciente.cpf">
+                            {{ paciente.nome }} - {{ paciente.tipo_paciente }}
+                        </option>
+                    </select>
+                </div>
                 <button type="submit" class="cadastrar-btn" click="cadastrarestimulo">Cadastrar</button>
             </form>
         </div>
@@ -29,11 +32,12 @@
                     <label for="tipo_paciente">Paciente:</label>
                     <select id="paciente" name="paciente" v-model="pacienteId" required>
                         <option v-for="paciente in pacientes.pacientes" :key="paciente.cpf" :value="paciente.cpf">
-                            {{ paciente.nome }} - {{ paciente.tipo_paciente }} 
+                            {{ paciente.nome }} - {{ paciente.tipo_paciente }}
                         </option>
                     </select>
+                </div>
+                <div class="form-group">
                     <label for="tipo_paciente">Estimulo:</label>
-
                     <select id="paciente" name="paciente" v-model="estimuloId" required>
                         <option v-for="estimulo in estimulos.estimulos" :key="estimulo.id" :value="estimulo.id">
                             {{ estimulo.nome_estimulo }} - {{ estimulo.descricao }}
@@ -84,7 +88,7 @@ h1 {
 form {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 35px;
+    gap: 30px;
     align-items: start;
 }
 
@@ -104,6 +108,7 @@ select {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .cadastrar-btn {
@@ -125,9 +130,11 @@ select {
     background-color: #E7FAFF;
 }
 
-.selecionar {
+.select_paciente {
     grid-column: 1 / -1;
 }
+
+
 
 @media (max-width: 768px) {
     .main-content-paciente {
@@ -174,7 +181,7 @@ export default {
             }
             try {
                 // Envia os dados do paciente para o backend
-                await Axios.post(`http://localhost:3000/adicionar/estimulo`, {
+                await Axios.post(`https://clinica-maria-luiza-bjdd.onrender.com/adicionar/estimulo`, {
                         nome_estimulo: this.nome_estimulo,
                         descricao: this.descricao,
                         pacienteId: this.pacienteId
@@ -190,6 +197,7 @@ export default {
                         timerProgressBar: true,
                         showConfirmButton: false,
                     });
+                    this.getEstimulos();
                     this.nome_estimulo = '';
                     this.descricao = '';
                     this.pacienteId = '';
@@ -216,7 +224,7 @@ export default {
                 });
             }
             try {
-                await Axios.post(`http://localhost:3000/vincular/estimulo`, {
+                await Axios.post(`https://clinica-maria-luiza-bjdd.onrender.com/vincular/estimulo`, {
                         estimuloId: this.estimuloId,
                         pacienteId: this.pacienteId
                 }, {            
@@ -251,7 +259,7 @@ export default {
             const token = this.store.token
             try {
                 // Envia os dados do paciente para o backend
-                await Axios.get(`http://localhost:3000/pacientes`, {
+                await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/pacientes`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -268,7 +276,7 @@ export default {
             const token = this.store.token
             try {
                 // Envia os dados do paciente para o backend
-                await Axios.get(`http://localhost:3000/estimulos`, {
+                await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/estimulos`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }

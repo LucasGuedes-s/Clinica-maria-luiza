@@ -2,39 +2,92 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient()
 
 async function getConsultas() {
-    const consultas = await prisma.consultas.findMany();
-    const consultasPorProfissional = consultas.reduce((acc, consulta) => {
-      if (!acc[consulta.profissionalId]) {
-        acc[consulta.profissionalId] = [];
-      }
-      acc[consulta.profissionalId].push(consulta);
-      return acc;
-    }, {});
+  const consultas = await prisma.consultas.findMany();
+  const consultasPorProfissional = consultas.reduce((acc, consulta) => {
+    if (!acc[consulta.profissionalId]) {
+      acc[consulta.profissionalId] = [];
+    }
+    acc[consulta.profissionalId].push(consulta);
+    return acc;
+  }, {});
 
-    return consultasPorProfissional;
+  return consultasPorProfissional;
 }
 
 async function getTotalConsultas() {
   const totalConsultas = await prisma.consultas.count();
   const totalConsultasAba = await prisma.consultaAba.count();
 
-  return {totalConsultas: totalConsultas, totalConsultasAba: totalConsultasAba};
+  return { totalConsultas: totalConsultas, totalConsultasAba: totalConsultasAba };
 }
 
 async function getConsultasProfissional(email) {
   const getConsultasProfissionalTradicionais = await prisma.consultas.count({
-      where: { profissionalId: email }
+    where: { profissionalId: email }
   });
 
   const getConsultasProfissionalAba = await prisma.ConsultaAba.count({
-      where: { profissionalId: email }
+    where: { profissionalId: email }
   });
 
   const totalConsultaspacientes = getConsultasProfissionalTradicionais + getConsultasProfissionalAba;
 
   return totalConsultaspacientes;
 }
+async function getConsultasPorProfissional(req) {
+  console.log(req);
 
+  // Cria o objeto de filtro condicionalmente
+  const filtro = {
+    profissionalId: req.email,
+    ...(req.dataInicio && req.dataFim
+      ? {
+          data: {
+            gte: new Date(req.dataInicio),
+            lte: new Date(req.dataFim),
+          },
+        }
+      : {}),
+  };
+
+  if (req.tipoConsulta === 'ABA') {
+    const consultas = await prisma.consultaAba.findMany({
+      where: filtro,
+      orderBy: {
+        data: 'desc',
+      },
+      include: {
+        paciente: {
+          select: {
+            nome: true, // Seleciona apenas o nome do paciente
+          },
+        },
+      },
+    });
+
+    return consultas;
+  }
+
+  if (req.tipoConsulta === 'TRADICIONAL') {
+    const consultas = await prisma.consultas.findMany({
+      where: filtro,
+      orderBy: {
+        data: 'desc',
+      },
+      include: {
+        paciente: {
+          select: {
+            nome: true, // Seleciona apenas o nome do paciente
+          },
+        },
+      },
+    });
+
+    return consultas;
+  }
+
+  throw new Error("Tipo de consulta inválido");
+}
 async function getConsultasPorPaciente(cpf) {
   const consultasPorPacienteTradicionais = await prisma.consultas.count({
     where: { pacienteId: cpf }
@@ -92,7 +145,7 @@ async function postEstimulos(req, res) {
       descricao,
     }
   });
-  if(pacienteId === 'Não informado') {
+  if (pacienteId === 'Não informado') {
     return "Paciente não informado";
   }
   const paciente = await prisma.Pacientes.findUnique({
@@ -115,7 +168,7 @@ async function postEstimulos(req, res) {
     pacienteEstimulo: PacienteEstimulo
   };
 }
-async function vincularEstimulo(req, res){
+async function vincularEstimulo(req, res) {
   const { estimuloId, pacienteId } = req.body;
 
   const PacienteEstimulo = await prisma.PacienteEstimulo.create({
@@ -138,7 +191,8 @@ async function getEstimulos() {
 async function getEstimulosPorPaciente(pacienteId) {
   const estimulos = await prisma.PacienteEstimulo.findMany({
     where: {
-      pacienteCpf: pacienteId // Ex: "138.845.747-25"
+      pacienteCpf: pacienteId, // Ex: "138.845.747-25"
+      finalizadoEm: null // apenas os que não foram finalizados
     },
     include: {
       estimulo: true
@@ -147,6 +201,22 @@ async function getEstimulosPorPaciente(pacienteId) {
 
   return estimulos;
 }
+async function finalizarEstimulo(pacienteCpf, estimuloId) {
+  
+  const estimuloFinalizado = await prisma.pacienteEstimulo.update({
+    where: {
+      pacienteCpf_estimuloId: {
+        pacienteCpf,
+        estimuloId
+      }
+    },
+    data: {
+      finalizadoEm: new Date()
+    }
+  });
+
+  return estimuloFinalizado;
+}
 
 
-module.exports = { getConsultas, postEstimulos, vincularEstimulo, getEstimulos, getEstimulosPorPaciente, getTotalConsultas, atualizarConsulta, getConsultasProfissional, getConsultasPorPaciente }
+module.exports = { getConsultas, finalizarEstimulo, postEstimulos, vincularEstimulo, getEstimulos, getEstimulosPorPaciente, getTotalConsultas, atualizarConsulta, getConsultasProfissional, getConsultasPorProfissional, getConsultasPorPaciente }

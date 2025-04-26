@@ -22,11 +22,14 @@ router.post('/vincular/estimulo', consultaController.vincularEstimulo);
 
 router.get('/consultas/total', consultaController.getTotalConsultas);
 router.get('/consultas/profissional/:email', consultaController.getConsultasProfissional);
+router.get('/consultas', consultaController.getConsultasPorProfissional);
+
 router.get('/consultas/paciente/:cpf', consultaController.getConsultasPorPaciente);
 router.get('/estimulos', consultaController.getEstimulos);
 router.get('/estimulos/paciente/:cpf', consultaController.getEstimulosPorPaciente);
 
 router.put('/editar/consulta', consultaController.updateConsulta);
+router.put('/alterar/estimulo', consultaController.updateEstimulo);
 
 module.exports = router;
 
