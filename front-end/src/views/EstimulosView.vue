@@ -181,7 +181,7 @@ export default {
             }
             try {
                 // Envia os dados do paciente para o backend
-                await Axios.post(`http://localhost:3000/adicionar/estimulo`, {
+                await Axios.post(`https://clinica-maria-luiza-bjdd.onrender.com/adicionar/estimulo`, {
                         nome_estimulo: this.nome_estimulo,
                         descricao: this.descricao,
                         pacienteId: this.pacienteId
@@ -224,7 +224,7 @@ export default {
                 });
             }
             try {
-                await Axios.post(`http://localhost:3000/vincular/estimulo`, {
+                await Axios.post(`https://clinica-maria-luiza-bjdd.onrender.com/vincular/estimulo`, {
                         estimuloId: this.estimuloId,
                         pacienteId: this.pacienteId
                 }, {            
@@ -259,7 +259,7 @@ export default {
             const token = this.store.token
             try {
                 // Envia os dados do paciente para o backend
-                await Axios.get(`http://localhost:3000/pacientes`, {
+                await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/pacientes`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -276,7 +276,7 @@ export default {
             const token = this.store.token
             try {
                 // Envia os dados do paciente para o backend
-                await Axios.get(`http://localhost:3000/estimulos`, {
+                await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/estimulos`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }

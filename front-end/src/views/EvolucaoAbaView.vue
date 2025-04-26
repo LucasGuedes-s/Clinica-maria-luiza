@@ -256,7 +256,7 @@ export default {
             const token = this.store.token;
 
             try {
-                const response = await Axios.get(`http://localhost:3000/estimulos/paciente/${this.cpf}`, {
+                const response = await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/estimulos/paciente/${this.cpf}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 this.estimulos = response.data.estimulo;
@@ -385,7 +385,6 @@ export default {
                     throw new Error('Erro ao atualizar consulta');
                 }
             } catch (error) {
-                console.error("Erro na atualização:", error);
                 Swal.fire('Erro!', 'Não foi possível salvar as edições. Tente novamente.', 'error');
             }
         },
