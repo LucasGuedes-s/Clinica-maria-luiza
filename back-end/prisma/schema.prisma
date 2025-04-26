@@ -23,6 +23,9 @@ model Profissionais {
   consultas        Consultas[]
   consultasAba     ConsultaAba[]
   pagamentos       Pagamentos[]
+
+  mensagensEnviadas   Mensagem[] @relation("MensagensEnviadas")
+  mensagensRecebidas  Mensagem[] @relation("MensagensRecebidas")
 }
 
 model Pacientes{
@@ -156,4 +159,16 @@ model Permissao {
   id               Int             @id @default(autoincrement())
   acesso           String?
   profissionais    Profissionais[]
+}
+
+model Mensagem {
+  id              Int       @id @default(autoincrement())
+  texto           String
+  enviadoEm       DateTime   @default(now())
+
+  remetenteId     String    
+  destinatarioId  String   
+
+  remetente       Profissionais   @relation("MensagensEnviadas", fields: [remetenteId], references: [email])
+  destinatario    Profissionais   @relation("MensagensRecebidas", fields: [destinatarioId], references: [email])
 }
