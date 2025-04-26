@@ -204,7 +204,6 @@ export default {
     },
     setup(){
       const store = useAuthStore()
-      console.log(store.getUser)
       if(store.getUser === null){
         router.push("/")
       }

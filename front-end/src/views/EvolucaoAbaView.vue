@@ -6,16 +6,24 @@
         <div v-if="!loading && consulta.length === 0" class="div_consultanaoregistrada">
             <ConsultaNaoRegistrada />
         </div>
-        <div>
+        <div v-if="consulta.length != 0">
             <GraficoEvolucao :dado="cpf" />
         </div>
-        <!--<div>
-            <GraficoEvolucaoBarras :dado="cpf" />
-        </div> -->
-        <div class="titulo_evolucao">
+        <div v-if="estimulos.length != 0">
+            <div class="titulo_evolucao" v-if="estimulos.length != 0">
+                <h1>Estímulos Aba</h1>
+            </div>
+            <div class="titulo_evolucao" v-for="estimulo in estimulos" :key="estimulo.estimuloId">
+                <div class="estimulos">
+                    <p>{{ estimulo.estimulo.nome_estimulo }} - {{ estimulo.estimulo.descricao }}</p>
+                    <button @click="finalizarestimulo(estimulo.pacienteCpf, estimulo.estimuloId)">Finalizar</button>
+                </div>
+            </div>
+        </div>
+        <div class="titulo_evolucao" v-if="consulta.length != 0">
             <h1>Histórico de consultas Aba</h1>
         </div>
-        <table class="tabela">
+        <table class="tabela" v-if="consulta.length != 0">
             <thead>
                 <tr>
                     <th>Data</th>
@@ -182,6 +190,7 @@ export default {
     name: 'historicodeconsulta',
     mounted() {
         this.getConsultas()
+        this.getEstimulos()
         // Limpar o CPF do sessionStorage após uso
         // sessionStorage.removeItem('cpf');
     },
@@ -189,6 +198,7 @@ export default {
         return {
             consulta: [],
             formatDate,
+            estimulos: [],
             consultaEdit: {}, // Dados da consulta sendo editada
             showModal: false,  // Controle do modal de edição
             loading: true, // <-- nova flag
@@ -226,7 +236,6 @@ export default {
             }
             catch {
             }
-
         },
         async getConsultas() {
             const token = this.store.token;
@@ -237,6 +246,21 @@ export default {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 this.consulta = response.data.consultas;
+            } catch (error) {
+                console.error(error);
+            } finally {
+                this.loading = false;
+            }
+        },
+        async getEstimulos() {
+            const token = this.store.token;
+
+            try {
+                const response = await Axios.get(`http://localhost:3000/estimulos/paciente/${this.cpf}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                this.estimulos = response.data.estimulo;
+                console.log(this.estimulos);
             } catch (error) {
                 console.error(error);
             } finally {
@@ -305,7 +329,7 @@ export default {
                 data: formattedDate,
                 consultaAba: consult.consultaAba || {}  // Definir 'consultaAba' como um objeto vazio caso esteja ausente
             };
-            
+
             this.showModal = true;
         },
 
@@ -313,7 +337,6 @@ export default {
             this.showModal = false;
         },
         async salvarEdicao() {
-            console.log("Botão Salvar clicado!");
             try {
                 const dadosEdicao = {
                     consultaAba: {
@@ -332,8 +355,6 @@ export default {
                     }
                 };
 
-                console.log("Dados enviados para API:", JSON.stringify(dadosEdicao, null, 2));
-
                 let response = await Axios.put(
                     'https://clinica-maria-luiza-bjdd.onrender.com/update/consultaAba',
                     dadosEdicao,
@@ -341,8 +362,6 @@ export default {
                         headers: { 'Authorization': `Bearer ${this.store.token}` }
                     }
                 );
-
-                console.log("Resposta da API:", response);
 
                 if (response.status === 200) {
                     Swal.fire('Sucesso!', 'Consulta atualizada com sucesso.', 'success');
@@ -361,8 +380,6 @@ export default {
                             : item
                     );
 
-                    console.log("Consulta atualizada:", this.consulta);
-
                     this.showModal = false;
                 } else {
                     throw new Error('Erro ao atualizar consulta');
@@ -372,6 +389,37 @@ export default {
                 Swal.fire('Erro!', 'Não foi possível salvar as edições. Tente novamente.', 'error');
             }
         },
+        async finalizarestimulo(pacienteCpf, estimuloId) {
+            const token = this.store.token;
+
+            try {
+                await Axios.put(`http://localhost:3000/alterar/estimulo`, {
+                    pacienteCpf: pacienteCpf,
+                    estimuloId: estimuloId
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }).then(response => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Estímulo finalizado com sucesso',
+                        timer: 4000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+                    });
+                    this.getEstimulos(); // Atualiza a lista de estímulos
+                });
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro ao finalizar o estímulo',
+                    text: error.response?.data?.message || 'Tente novamente mais tarde.',
+                    timer: 4000,
+                });
+            }
+        }
+
     }
 }
 </script>
@@ -393,6 +441,32 @@ export default {
 .main-content_evolucao {
     margin-left: 250px;
     padding: 10px;
+}
+
+.estimulos {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px;
+    background-color: white;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.estimulos button {
+    background-color: #84E7FF;
+    width: 20%;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    box-sizing: border-box;
+    border: none;
+    text-align: center;
+    display: inline-block;
+    text-decoration: none;
+    color: inherit;
 }
 
 /* Cabeçalho da tabela */
@@ -489,6 +563,7 @@ table td {
     text-decoration: none;
     color: inherit;
 }
+
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -501,7 +576,6 @@ table td {
     justify-content: center;
 }
 
-
 .modal-content {
     background: white;
     padding: 20px;
@@ -511,14 +585,14 @@ table td {
     flex-direction: column;
     border: 2px solid #84E7FF;
     box-shadow: 0 4px 10px -1px rgba(0, 0, 0, 0.10);
-    grid-template-columns:  1fr 1fr;
+    grid-template-columns: 1fr 1fr;
 }
 
 
 .form-group {
     display: flex;
     flex-direction: column;
-    grid-template-columns:  1fr 1fr;
+    grid-template-columns: 1fr 1fr;
 }
 
 
@@ -556,6 +630,7 @@ table td {
     border-radius: 4px;
     font-family: 'Montserrat', sans-serif;
 }
+
 .modal-buttons {
     display: flex;
     justify-content: space-between;
@@ -576,19 +651,23 @@ table td {
     cursor: pointer;
     font-family: 'Montserrat', sans-serif;
 }
-.organizacao_inputs{
+
+.organizacao_inputs {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
     align-items: start;
 }
+
 .form-group.horafinal,
 .form-group.observacao,
 .form-group.selecionar,
 .form-group.descricao,
 .form-group.pequenos-inputs {
-    grid-column: 1 / -1; /* Faz esses campos ocuparem toda a largura */
+    grid-column: 1 / -1;
+    /* Faz esses campos ocuparem toda a largura */
 }
+
 @media (max-width: 768px) {
     .main-content_evolucao {
         margin-left: 0;
@@ -629,6 +708,7 @@ table td {
         padding: 6px;
         /* Ajusta o padding do botão */
     }
+
     .btn_editar {
         font-size: 12px;
         /* Diminui o tamanho do botão */
@@ -636,5 +716,4 @@ table td {
         /* Ajusta o padding do botão */
     }
 }
-
 </style>

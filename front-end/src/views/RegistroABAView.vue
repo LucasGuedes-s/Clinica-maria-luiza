@@ -325,28 +325,11 @@ export default {
             estimulos: [],
         };
     },
-    mounted() {
-        this.getEstimulos(); // Chama a função para buscar os estímulos ao montar o componente
-    },
     methods: {
         async handleFileUpload(event) {
             this.imagem = event.target.files[0]; // Armazena a imagem selecionada
         },
-        async getEstimulos() {
-            const token = this.store.token;
-            try {
-                const paciente = this.cpf; // Obtém o CPF do paciente
-                console.log(this.cpf)
-                const response = await Axios.get(`http://localhost:3000/estimulos/paciente/${paciente}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                this.estimulos = response.data;
-            } catch (error) {
-                console.error('Erro ao buscar estimulos:', error);
-            }
-        },
+        
         async registrarConsulta() {
             const token = this.store.token;
             const { aplicacao1, aplicacao2, aplicacao3, aplicacao4, aplicacao5, teste } = this;
@@ -373,7 +356,7 @@ export default {
 
                     // Realiza a requisição para registrar a consulta
                     console.log(this.descricao)
-                    await Axios.post("http://localhost:3000/consultaAba/registrar",
+                    await Axios.post("https://clinica-maria-luiza-bjdd.onrender.com/consultaAba/registrar",
                         {
                             consulta: {
                                 pacienteId: this.cpf,

@@ -197,6 +197,7 @@ export default {
                         timerProgressBar: true,
                         showConfirmButton: false,
                     });
+                    this.getEstimulos();
                     this.nome_estimulo = '';
                     this.descricao = '';
                     this.pacienteId = '';
