@@ -189,6 +189,7 @@ async function getEstimulos() {
 }
 
 async function getEstimulosPorPaciente(pacienteId) {
+  console.log(pacienteId);
   const estimulos = await prisma.PacienteEstimulo.findMany({
     where: {
       pacienteCpf: pacienteId, // Ex: "138.845.747-25"
