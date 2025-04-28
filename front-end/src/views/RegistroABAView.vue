@@ -21,7 +21,7 @@
                 <select id="paciente" name="paciente" v-model="descricao" required>
                     <option value="" disabled selected>Selecione um estimulo</option>
                     <option value="Não informado">Não informado</option>
-                    <option v-for="estimulo in estimulos.estimulo" :key="estimulo.estimulo.id" :value="{ nome: estimulo.estimulo.nome_estimulo, descricao: estimulo.estimulo.descricao }">
+                    <option v-for="estimulo in estimulos" :key="estimulo.estimuloId" :value="{ nome: estimulo.estimulo.nome_estimulo, descricao: estimulo.estimulo.descricao }">
                         {{ estimulo.estimulo.nome_estimulo }} - {{ estimulo.estimulo.descricao }}
                     </option>
                 </select>
@@ -306,6 +306,9 @@ export default {
             nome: sessionStorage.getItem('nome') || '',
         };
     },
+    mounted() {
+        this.getEstimulos();
+    },
     data() {
         return {
             data: null,
@@ -355,7 +358,6 @@ export default {
                     }
 
                     // Realiza a requisição para registrar a consulta
-                    console.log(this.descricao)
                     await Axios.post("https://clinica-maria-luiza-bjdd.onrender.com/consultaAba/registrar",
                         {
                             consulta: {
@@ -393,6 +395,22 @@ export default {
                     console.error('Erro durante o upload da imagem:', error);
                     Swal.fire('Erro!', 'Falha ao fazer upload da imagem.', 'error'); // Feedback para erro no upload
                 }
+            }
+        },
+        async getEstimulos() {
+            const token = this.store.token;
+
+            try {
+                console.log(this.cpf);
+                const response = await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/estimulos/paciente/${this.cpf}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                this.estimulos = response.data.estimulo;
+                console.log(this.estimulos);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                this.loading = false;
             }
         },
     }

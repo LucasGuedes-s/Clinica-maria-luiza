@@ -35,7 +35,6 @@ async function getConsultasProfissional(email) {
   return totalConsultaspacientes;
 }
 async function getConsultasPorProfissional(req) {
-  console.log(req);
 
   // Cria o objeto de filtro condicionalmente
   const filtro = {
@@ -92,13 +91,11 @@ async function getConsultasPorPaciente(cpf) {
   const consultasPorPacienteTradicionais = await prisma.consultas.count({
     where: { pacienteId: cpf }
   });
-
   const consultasPorPacienteAba = await prisma.consultaAba.count({
     where: { pacienteId: cpf }
   });
 
   const totalConsultaspacientes = consultasPorPacienteTradicionais + consultasPorPacienteAba;
-
   return totalConsultaspacientes;
 }
 
@@ -189,7 +186,6 @@ async function getEstimulos() {
 }
 
 async function getEstimulosPorPaciente(pacienteId) {
-  console.log(pacienteId);
   const estimulos = await prisma.PacienteEstimulo.findMany({
     where: {
       pacienteCpf: pacienteId, // Ex: "138.845.747-25"
@@ -199,7 +195,7 @@ async function getEstimulosPorPaciente(pacienteId) {
       estimulo: true
     }
   });
-
+  console.log(estimulos);
   return estimulos;
 }
 async function finalizarEstimulo(pacienteCpf, estimuloId) {
