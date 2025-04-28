@@ -256,11 +256,11 @@ export default {
             const token = this.store.token;
 
             try {
+                console.log(this.cpf);
                 const response = await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/estimulos/paciente/${this.cpf}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 this.estimulos = response.data.estimulo;
-                console.log(this.estimulos);
             } catch (error) {
                 console.error(error);
             } finally {

@@ -43,7 +43,7 @@ async function getConsultasPorProfissional(req, res, next) {
 }
 async function getConsultasPorPaciente(req, res, next) {
     try {
-        const { cpf } = req.params.cpf;
+        const { cpf } = req.params;
         const consultasPaciente = await consultas.getConsultasPorPaciente(cpf);  // Soma as consultas do paciente (tradicionais + ABAS)
         res.status(200).json({ paciente: cpf, consultas: consultasPaciente });
         next();
