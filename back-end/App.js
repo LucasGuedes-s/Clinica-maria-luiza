@@ -31,6 +31,8 @@ const agendaRouter = require('./routes/agenda.router.js');
 const consultasRouter = require('./routes/consultas.router.js');
 const pagamentosRouter = require('./routes/pagamentos.router.js');
 const pdfsRouter = require('./routes/pdfs.router.js');
+const mensagensRouter = require('./routes/mensagens.router.js');
+
 
 const { enviarEmailsAgendamentos, enviarEmailsTodosAgendamentos } = require('./services/emails.service.js');
 const cron = require('node-cron');
@@ -43,7 +45,31 @@ cron.schedule("0 7 * * 1-5", () => {
 });
 
 
+const { Server } = require('socket.io');
+const http = require('http');
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: '*', // Ajuste para a origem do frontend
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Authorization', 'Content-Type'],   
+  }
+})
+
+io.on('connection', (socket) => {
+  console.log('Cliente conectado via WebSocket');
+
+  socket.on('disconnect', () => {
+    console.log('Cliente desconectado');
+  });
+});
+
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 app.use(UserRouter, profissionaisRouter, pacientesRouter, agendaRouter, consultasRouter, pagamentosRouter, pdfsRouter)
+
+app.use('/mensagem', mensagensRouter(io, prisma), );
+
 
 const hostname = 'localhost';
 app.listen(port, () => {

@@ -3,38 +3,37 @@
     <div class="main-content">
         <h1>Consultas</h1>
 
-        <div class="tipo_consulta">
-            <button>Consultas</button>
-            <button>Consultas ABA</button>
-        </div>
-
         <div class="filtros">
             <input type="text" placeholder="Buscar por nome...">
             <input type="date" id="data_inicio">
             <input type="date" id="data_fim">
             <button>Filtrar</button>
             <button class="btn_arquivopdf">Arquivo em PDF</button>
+            
         </div>
-
-        <div class="container_consultas">
+        <div class="tipo_consulta">
+            <button>Consultas</button>
+            <button>Consultas ABA</button>
+        </div>
+        <div class="container_consultas" v-for="consulta in consultas" :key="consulta.id">
             <div class="infos_historico">
                 <div class="info_item nome_paciente">
                     <label for="nome_paciente">Paciente:</label>
-                    <input type="text" id="nome_paciente" readonly>
+                    <input type="text" id="nome_paciente" :value="consulta.paciente.nome" readonly>
                 </div>
 
                 <div class="info_item">
                     <label for="resposta-data">Data:</label>
-                    <input type="text" id="resposta-data" readonly>
+                    <input type="text" id="resposta-data" :value="consulta.data" readonly>
                 </div>
                 <div class="info_item">
-                    <label for="especialista-nome">Hora:</label>
-                    <input type="text" id="especialista-nome" readonly>
+                    <label for="especialista-nome">Hora de inicio e fim:</label>
+                    <input type="text" id="especialista-nome" :value="consulta.hora_inicio" readonly>
                 </div>
 
                 <div class="info_item descricao">
                     <label for="historico_descricao">Descrição:</label>
-                    <textarea id="historico_descricao" rows="4" readonly></textarea>
+                    <textarea id="historico_descricao" rows="4" :value="consulta.descricao" readonly></textarea>
                 </div>
 
             </div>
@@ -171,11 +170,56 @@ h1 {
 
 <script>
 import Sidebar from '@/components/Sidebar.vue';
+import api from '@/axios';
+import { useAuthStore } from '@/store';
 
 export default {
     name: 'visualizarconsultas',
     components: {
-        Sidebar
+        Sidebar 
     },
+    data() {
+        return {
+            consultas: [],
+            email: '',
+            tipoConsulta: ''
+        }
+    },
+    setup() {
+        const store = useAuthStore()
+        return {
+            store
+        }
+    },
+    methods: {
+        async getConsultas() {
+            try {
+                const profissional = localStorage.getItem('profissional')
+                const token = this.store.token
+                await api.post(`/consultas`, 
+                {
+                    email: profissional,
+                    tipoConsulta: "TRADICIONAL"                
+                },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }).then(response => {
+                    this.consultas = response.data.consultasProfissional;
+                    console.log(this.consultas)
+
+                }).catch(Error => {
+                    console.error(Error)
+                })
+                
+            } catch (error) {
+                console.error('Error fetching consulta data:', error);
+            }
+        }
+    },
+    mounted() {
+        this.getConsultas();
+    }
 }
 </script>

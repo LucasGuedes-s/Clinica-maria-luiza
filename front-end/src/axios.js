@@ -2,7 +2,8 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 
 const api = axios.create({
-  baseURL: 'https://clinica-maria-luiza-bjdd.onrender.com',
+  baseURL: 'http://localhost:3000',
+  //baseURL: 'https://clinica-maria-luiza-bjdd.onrender.com',
 });
 
 api.interceptors.response.use(
@@ -10,7 +11,7 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response) {
+    if (error.response.error) {
       console.error("Erro da API:", error.response.data.message);
       Swal.fire({
         icon: 'error',

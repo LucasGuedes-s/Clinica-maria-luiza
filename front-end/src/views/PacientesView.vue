@@ -224,7 +224,6 @@ import Sidebar from '@/components/Sidebar.vue'
 import { useAuthStore } from '@/store';
 import Axios from 'axios';
 import Swal from 'sweetalert2';
-import { RouterLink } from 'vue-router';
 import { storage } from '../firebase.js'
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from 'uuid';

@@ -264,6 +264,8 @@ import Sidebar from '@/components/Sidebar.vue'
 import { useAuthStore } from '@/store';
 import Axios from 'axios';
 import Swal from 'sweetalert2';
+import router from '@/router';
+
 export default {
     name: 'profissionais',
     components: {
@@ -377,7 +379,9 @@ export default {
 
         async consultas(email, nome) {
             try {
-                // Pergunta se o usuário quer ver consultas com ou sem hora
+                localStorage.setItem('profissional', email);
+                router.push('/visualizarconsultas');
+                /* Pergunta se o usuário quer ver consultas com ou sem hora
                 const horaResult = await Swal.fire({
                     title: 'Deseja',
                     text: 'Deseja visualizar consultas com hora ou sem?',
@@ -440,7 +444,7 @@ export default {
                 link.setAttribute('download', `Relatório de atendimentos - ${nome}.pdf`);
                 document.body.appendChild(link);
                 link.click();
-                link.remove();
+                link.remove();*/
 
             } catch (error) {
                 // Exibe erro em caso de falha
@@ -460,7 +464,6 @@ export default {
                 }
             }).then(response => {
                 this.profissional = response.data.profissionais;
-                console.log(this.profissional)
                 this.carregarConsultasPorProfissional();
             }).catch(Error => {
                 console.error(Error)

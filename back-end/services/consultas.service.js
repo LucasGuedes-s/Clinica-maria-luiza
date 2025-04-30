@@ -35,7 +35,7 @@ async function getConsultasProfissional(email) {
   return totalConsultaspacientes;
 }
 async function getConsultasPorProfissional(req) {
-
+  console.log(req);
   // Cria o objeto de filtro condicionalmente
   const filtro = {
     profissionalId: req.email,
