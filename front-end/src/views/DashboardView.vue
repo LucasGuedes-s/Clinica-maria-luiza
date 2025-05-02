@@ -25,8 +25,7 @@
                 <p>Nome: {{ nome }}</p>
                 <p>E-mail: {{ email }}</p>
                 <p>Telefone: {{ telefone }}</p>
-                <!-- <router-link to="/alterarsenha"><button class="alterar_senha_btn" click="teste">Alterar
-                            Senha</button></router-link>-->
+
                 <router-link to="/realizarpagamento"><button class="realizarpagamento_btn" click="">Realizar
                         Pagamento</button></router-link>
             </div>
