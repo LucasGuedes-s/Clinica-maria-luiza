@@ -3,38 +3,42 @@
     <div class="main-content">
         <h1>Consultas</h1>
 
-        <div class="tipo_consulta">
-            <button>Consultas</button>
-            <button>Consultas ABA</button>
-        </div>
-
         <div class="filtros">
-            <input type="text" placeholder="Buscar por nome...">
-            <input type="date" id="data_inicio">
-            <input type="date" id="data_fim">
-            <button>Filtrar</button>
-            <button class="btn_arquivopdf">Arquivo em PDF</button>
+            <input type="text" placeholder="Buscar por nome do paciente" v-model="nomePaciente">
+            <input type="date" id="data_inicio" v-model="dataInicio">
+            <input type="date" id="data_fim" v-model="dataFim">
+            <button class="btn_arquivopdf" @click="gerarPDF">Arquivo em PDF</button>
         </div>
-
-        <div class="container_consultas">
+        <div class="tipo_consulta">
+            <button @click="getConsultas('TRADICIONAL')">Consultas</button>
+            <button @click="getConsultas('ABA')">Consultas ABA</button>
+        </div>
+        <div class="container_consultas" v-for="consulta in consultasFiltradas" :key="consulta.id">
             <div class="infos_historico">
                 <div class="info_item nome_paciente">
                     <label for="nome_paciente">Paciente:</label>
-                    <input type="text" id="nome_paciente" readonly>
+                    <input type="text" id="nome_paciente" :value="consulta.paciente.nome" readonly>
                 </div>
 
                 <div class="info_item">
                     <label for="resposta-data">Data:</label>
-                    <input type="text" id="resposta-data" readonly>
+                    <input type="text" id="resposta-data" :value="`${formatDate(consulta.data)}`" readonly>
                 </div>
                 <div class="info_item">
-                    <label for="especialista-nome">Hora:</label>
-                    <input type="text" id="especialista-nome" readonly>
+                    <label for="especialista-nome">Hora de inicio e fim:</label>
+                    <input type="text" id="especialista-nome"
+                        :value="consulta.hora_inicio && consulta.hora_fim ? `${consulta.hora_inicio} - ${consulta.hora_fim}` : 'Horário não informado'"
+                        readonly>
                 </div>
 
                 <div class="info_item descricao">
                     <label for="historico_descricao">Descrição:</label>
-                    <textarea id="historico_descricao" rows="4" readonly></textarea>
+                    <textarea id="historico_descricao" rows="4"
+                        :value="tipo === 'ABA' ? consulta.descricao_atividade : consulta.descricao" readonly></textarea>
+                    <label for="historico_descricao" v-if="tipo === 'ABA'">Aplicações:</label>
+                    <textarea id="historico_descricao" rows="4" v-if="tipo === 'ABA'"
+                        :value="[consulta.Aplicacao1, consulta.Aplicacao2, consulta.Aplicacao3, consulta.Aplicacao4, consulta.Aplicacao5].filter(Boolean).join('\n')"
+                        readonly></textarea>
                 </div>
 
             </div>
@@ -71,7 +75,7 @@ h1 {
 .tipo_consulta {
     display: flex;
     margin-bottom: 20px;
-    gap:20px;
+    gap: 20px;
 }
 
 .tipo_consulta button {
@@ -81,7 +85,8 @@ h1 {
     background-color: white;
     cursor: pointer;
     border-radius: 4px;
-    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1); /* Sombra mais sutil na parte inferior */
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+    /* Sombra mais sutil na parte inferior */
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
 }
@@ -130,6 +135,7 @@ h1 {
     line-height: 1.5;
     text-align: justify;
 }
+
 .btn_arquivopdf {
     padding: 10px;
     border-radius: 4px;
@@ -139,13 +145,16 @@ h1 {
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
     cursor: pointer;
-    width: 100%; /* Agora ocupa 100% da largura */
+    width: 100%;
+    /* Agora ocupa 100% da largura */
 }
+
 .filtros {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
 }
+
 .filtros input,
 .filtros select {
     padding: 8px;
@@ -165,17 +174,125 @@ h1 {
     font-size: 14px;
     cursor: pointer;
 }
-
 </style>
-
-
 <script>
 import Sidebar from '@/components/Sidebar.vue';
+import api from '@/axios';
+import { useAuthStore } from '@/store';
+import { formatDate } from '../utils/formatarData';
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
 
 export default {
     name: 'visualizarconsultas',
     components: {
         Sidebar
     },
+    data() {
+        return {
+            consultas: [],
+            email: '',
+            tipoConsulta: '',
+            formatDate,
+            tipo: '',
+            dataInicio: '',
+            dataFim: '',
+            nomePaciente: ''
+        }
+    },
+    setup() {
+        const store = useAuthStore()
+        return { store }
+    },
+    methods: {
+        async getConsultas(tipoConsulta) {
+            try {
+                const profissional = localStorage.getItem('profissional')
+                const token = this.store.token
+                this.tipo = tipoConsulta
+
+                const filtro = {
+                    email: profissional,
+                    tipoConsulta: tipoConsulta
+                }
+
+                if (this.dataInicio) filtro.dataInicio = this.dataInicio
+                if (this.dataFim) filtro.dataFim = this.dataFim
+
+                await api.post(`/consultas`, filtro, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }).then(response => {
+                    this.consultas = response.data.consultasProfissional
+                    console.log(this.consultas)
+                }).catch(error => {
+                    console.error(error)
+                })
+
+            } catch (error) {
+                console.error('Erro ao buscar consultas:', error)
+            }
+        },
+        gerarPDF() {
+            try {
+                const doc = new jsPDF();
+
+                // Adicionar a imagem (logo)
+                const imgPath = require('../assets/girafas.png');  // Ajuste para o caminho correto
+                // Obter a largura da página
+                const pageWidth = doc.internal.pageSize.width;
+
+                // Obter a largura da imagem (ajuste a altura proporcionalmente para manter a qualidade)
+                const imgWidth = 40;
+                const imgHeight = 40;
+
+                // Calcular a posição para centralizar a imagem
+                const x = (pageWidth - imgWidth) / 2;  // Centraliza a imagem na página
+
+                // Adicionar a imagem no centro do topo da página
+                doc.addImage(imgPath, 'PNG', x, 10, imgWidth, imgHeight);  // Posição centralizada no topo (10px do topo)
+
+                // Gerar a tabela com dados
+                const dados = this.consultasFiltradas.map(consulta => {
+                    return [
+                        consulta.paciente.nome,
+                        consulta.profissional.nome,
+
+                        this.formatDate(consulta.data),
+                        consulta.hora_inicio && consulta.hora_fim
+                            ? `${consulta.hora_inicio} - ${consulta.hora_fim}`
+                            : 'Não informado',
+                        this.tipo === 'ABA'
+                            ? consulta.descricao_atividade || ''
+                            : consulta.descricao || ''
+                    ];
+                });
+
+                // Adicionar a tabela com autoTable
+                autoTable(doc, {
+                    startY: 60,  // Inicia a tabela abaixo do título (ajuste conforme necessário)
+                    head: [['Paciente', 'Profissional', 'Data', 'Horário', 'Descrição']],
+                    body: dados,
+                    styles: { fontSize: 10 },
+                    headStyles: {
+                        fillColor: [132, 231, 255],
+                    },
+                });
+
+                doc.save(`consultas_${this.tipo}.pdf`)
+            } catch (error) {
+                console.error('Erro ao gerar PDF:', error)
+            }
+        }
+    },
+    computed: {
+        consultasFiltradas() {
+            if (!this.nomePaciente) return this.consultas;
+            return this.consultas.filter(consulta =>
+                consulta.paciente.nome.toLowerCase().includes(this.nomePaciente.toLowerCase())
+            );
+        }
+    }
 }
 </script>

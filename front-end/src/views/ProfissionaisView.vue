@@ -264,6 +264,9 @@ import Sidebar from '@/components/Sidebar.vue'
 import { useAuthStore } from '@/store';
 import Axios from 'axios';
 import Swal from 'sweetalert2';
+import router from '@/router';
+import api from '@/axios';
+
 export default {
     name: 'profissionais',
     components: {
@@ -289,7 +292,7 @@ export default {
         async carregarConsultasPorProfissional() {
             try {
                 const requests = this.profissional.map(async (prof) => {
-                    const response = await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/consultas/profissional/${prof.email}`);
+                    const response = await api.get(`/consultas/profissional/${prof.email}`);
                     return { email: prof.email, total: response.data.consultas };
                 });
 
@@ -341,8 +344,8 @@ export default {
                     foto: this.consultaEdit.foto,
                 };
 
-                const response = await Axios.put(
-                    "https://clinica-maria-luiza-bjdd.onrender.com/editar/profissional",
+                const response = await api.put(
+                    "/editar/profissional",
                     payload,
                     {
                         headers: {
@@ -377,7 +380,9 @@ export default {
 
         async consultas(email, nome) {
             try {
-                // Pergunta se o usuário quer ver consultas com ou sem hora
+                localStorage.setItem('profissional', email);
+                router.push('/visualizarconsultas');
+                /* Pergunta se o usuário quer ver consultas com ou sem hora
                 const horaResult = await Swal.fire({
                     title: 'Deseja',
                     text: 'Deseja visualizar consultas com hora ou sem?',
@@ -440,7 +445,7 @@ export default {
                 link.setAttribute('download', `Relatório de atendimentos - ${nome}.pdf`);
                 document.body.appendChild(link);
                 link.click();
-                link.remove();
+                link.remove();*/
 
             } catch (error) {
                 // Exibe erro em caso de falha
@@ -454,13 +459,12 @@ export default {
         },
         async profissionais() {
             const token = this.store.token
-            Axios.get("https://clinica-maria-luiza-bjdd.onrender.com/profissionais", {
+            api.get("/profissionais", {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             }).then(response => {
                 this.profissional = response.data.profissionais;
-                console.log(this.profissional)
                 this.carregarConsultasPorProfissional();
             }).catch(Error => {
                 console.error(Error)

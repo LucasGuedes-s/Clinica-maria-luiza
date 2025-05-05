@@ -2,15 +2,21 @@
     <div>
         <Sidebar />
     </div>
+    <!-- <Chat /> -->
     <div class="main_content_dashboard">
         <div class="titulo_dashboard">
             <h1>Bem-vindo(a)!</h1>
         </div>
+        <!-- Carregando ou Dados -->
+        <div v-if="loading" class="loading">
+            <Carregar />
+        </div>
+
         <div class="contagem_dashboard" v-if="permissao === 1">
             <p>Total de consultas: <strong> <span class="value_totalconsultas"> {{ total.totalConsultasAba +
-                        total.totalConsultas}} </span></strong> </p>
+                total.totalConsultas }} </span></strong> </p>
             <p>Total de consultas de rotina: <strong> <span class="value_totalconsultasrotina">{{ total.totalConsultas
-                        }} </span></strong> </p>
+            }} </span></strong> </p>
             <p>Total de consultas ABA: <strong> <span class="value_totalconsultasaba"> {{ total.totalConsultasAba }}
                     </span></strong> </p>
         </div>
@@ -20,8 +26,7 @@
                 <p>Nome: {{ nome }}</p>
                 <p>E-mail: {{ email }}</p>
                 <p>Telefone: {{ telefone }}</p>
-                <!-- <router-link to="/alterarsenha"><button class="alterar_senha_btn" click="teste">Alterar
-                            Senha</button></router-link>-->
+
                 <router-link to="/realizarpagamento"><button class="realizarpagamento_btn" click="">Realizar
                         Pagamento</button></router-link>
             </div>
@@ -130,6 +135,7 @@ body {
     color: #D9D9D9;
     font-size: 18px;
 }
+
 .container_dashboard {
     background-color: white;
     padding: 20px;
@@ -158,9 +164,11 @@ body {
     bottom: 20px;
     right: 20px;
 }
-.calendario{
+
+.calendario {
     display: flex;
 }
+
 .alterar_senha_btn,
 .realizarpagamento_btn {
     padding: 10px 20px;
@@ -219,7 +227,7 @@ h2 {
 }
 
 .btn-concluido,
-.btn_editaragendamento{
+.btn_editaragendamento {
     margin-top: 20px;
     padding: 10px 20px;
     border-radius: 4px;
@@ -241,11 +249,13 @@ h2 {
     width: 100%;
     gap: 20px;
 }
+
 .value_totalconsultas,
 .value_totalconsultasrotina,
 .value_totalconsultasaba {
     color: #84E7FF;
 }
+
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -313,25 +323,27 @@ h2 {
     cursor: pointer;
     font-family: 'Montserrat', sans-serif;
 }
+
 @media (max-width: 768px) {
     .main_content_dashboard {
-        margin-left: 0; /* Retira o margin-left nas telas menores */
+        margin-left: 0;
+        /* Retira o margin-left nas telas menores */
     }
 
     .container_dashboard {
-        flex-direction: column; 
+        flex-direction: column;
         align-items: center;
-        justify-content: center; 
-        text-align: center; 
+        justify-content: center;
+        text-align: center;
     }
 
     .container_dashboard img {
-        width: 200px; 
-        height: auto; 
+        width: 200px;
+        height: auto;
     }
 
     .calendario {
-        margin-top: 20px; 
+        margin-top: 20px;
     }
 
     .botoes {
@@ -341,13 +353,13 @@ h2 {
     }
 
     .botoes_div {
-        position: static; 
+        position: static;
     }
 
     .alterar_senha_btn,
     .realizarpagamento_btn {
-        width: 100%; 
-        margin-bottom: 10px; 
+        width: 100%;
+        margin-bottom: 10px;
     }
 
     .modal-content {
@@ -365,39 +377,41 @@ h2 {
         width: 100%;
     }
 }
+
 @media (max-width: 820px) {
     .main_content_dashboard {
-        margin-left: 0; 
+        margin-left: 0;
     }
 
     .container_dashboard {
-        flex-direction: column; 
-        align-items: center; 
-        justify-content: center; 
-        gap: 20px; 
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
         z-index: -1;
     }
 
     .container_dashboard img {
         width: 200px;
-        height: auto; 
+        height: auto;
     }
 
     .informacao {
-        text-align: center; 
+        text-align: center;
     }
 
     .botoes_div {
-        text-align: center; 
+        text-align: center;
     }
 
     .alterar_senha_btn,
     .realizarpagamento_btn {
-        width: 100%; 
-        margin-bottom: 10px; 
+        width: 100%;
+        margin-bottom: 10px;
         margin-left: auto;
         margin-right: auto;
     }
+
     .modal-content {
         width: 90%;
         max-height: 90vh;
@@ -413,41 +427,41 @@ h2 {
         width: 100%;
     }
 }
+
 @media (max-width: 1247px) {
     .main_content_dashboard {
-        margin-left: 0; 
+        margin-left: 0;
     }
 
     .container_dashboard {
-        flex-direction: column; 
-        align-items: center; 
-        justify-content: center; 
-        gap: 20px; 
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
         z-index: -1;
     }
 
     .container_dashboard img {
         width: 200px;
-        height: auto; 
+        height: auto;
     }
 
     .informacao {
-        text-align: center; 
+        text-align: center;
     }
 
     .botoes_div {
-        text-align: center; 
+        text-align: center;
     }
 
     .alterar_senha_btn,
     .realizarpagamento_btn {
-        width: 100%; 
-        margin-bottom: 10px; 
+        width: 100%;
+        margin-bottom: 10px;
         margin-left: auto;
         margin-right: auto;
     }
 }
-
 </style>
 
 <script>
@@ -457,13 +471,17 @@ import Axios from 'axios';
 import Swal from 'sweetalert2'
 import router from '@/router';
 import CalendarAgendamentos from '@/components/Calendario.vue';
+import Carregar from '@/components/Carregar.vue';
+import Chat from '@/components/Chat.vue'
 // PRECISA AINDA CHAMAR O COMPONENTE CalendarAgendamentos
 
 export default {
     name: 'dashboard',
     components: {
+        Carregar,  // Registrando o componente Loader
         CalendarAgendamentos,
-        Sidebar
+        Sidebar,
+        // Chat
 
     },
     props: {
@@ -488,9 +506,10 @@ export default {
             email: null,
             permissao: null,
             telefone: null,
-            imageUrl: null,        
+            imageUrl: null,
             agendaEditada: {},
             showModal: false,
+            loading: true,  // Variável de controle do loading
         }
     },
     methods: {
@@ -509,21 +528,27 @@ export default {
         },
 
         async getAgendamentos() {
-            const token = this.store.token
-            Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/profissionais/agendamentos`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            }).then(response => {
-                this.agendamentos = response.data.agenda
-                this.total = response.data.totalConsultas
+            const token = this.store.token;
+            this.loading = true; // Começa o carregamento
+            try {
+                const response = await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/profissionais/agendamentos`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                this.agendamentos = response.data.agenda;
+                this.total = response.data.totalConsultas;
                 this.agenda = response.data.agenda.filter(agendamento => agendamento.status === 'Andamento');
-            }).catch(error => {
-                console.log(error)
-            })
+            } catch (error) {
+                console.error(error);
+            } finally {
+                this.loading = false; // Finaliza o carregamento
+            }
         },
+
         abrirModal(agenda) {
-            this.agendaEditada = {...agenda,
+            this.agendaEditada = {
+                ...agenda,
             };
             this.showModal = true;
         },

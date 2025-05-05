@@ -22,7 +22,7 @@ router.post('/vincular/estimulo', consultaController.vincularEstimulo);
 
 router.get('/consultas/total', consultaController.getTotalConsultas);
 router.get('/consultas/profissional/:email', consultaController.getConsultasProfissional);
-router.get('/consultas', consultaController.getConsultasPorProfissional);
+router.post('/consultas', consultaController.getConsultasPorProfissional);
 
 router.get('/consultas/paciente/:cpf', consultaController.getConsultasPorPaciente);
 router.get('/estimulos', consultaController.getEstimulos);

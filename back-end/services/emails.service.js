@@ -9,7 +9,30 @@ const transporter = nodemailer.createTransport({
     pass: 'xbnm wdwf uzuh dtqm' // Use uma senha de aplicativo, não a senha real!
   }
 });
+async function emailParaTodos(texto) {
+  try {
+    const profissionais = await prisma.Profissionais.findMany({
+      select: {
+        email: true,
+      },
+    });
+    for(i in profissionais){
+      const profissional = profissionais[i];
 
+      const info = await transporter.sendMail({
+        from: '"Clinica Maria Luiza"',
+        to: profissional.email,
+        subject: 'Mensagem para Todos',
+        html: `
+        <div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 500px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+          <h2 style="color: #2c3e50; text-align: center;">Comunicado para todos</h2>
+          <p>${texto}</p>`
+      })
+  }
+  } catch (error) {
+    console.error('Erro ao enviar e-mail:', error);
+  }
+}
 async function enviarEmail(destinatario) {
   try {
     const info = await transporter.sendMail({
@@ -341,4 +364,4 @@ async function enviarEmailsTodosAgendamentos() {
   }
 }
 
-module.exports = { enviarEmail, enviarNotificacaoAgendamento, enviarEmailsAgendamentos, enviarEmailsTodosAgendamentos };
+module.exports = { emailParaTodos, enviarEmail, enviarNotificacaoAgendamento, enviarEmailsAgendamentos, enviarEmailsTodosAgendamentos };

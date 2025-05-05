@@ -137,10 +137,10 @@ h1 {
 </style>
 
 <script>
-import Axios from 'axios';
 import Swal from 'sweetalert2'
 import { useAuthStore } from '@/store.js'
 import router from '@/router';
+import api from '@/axios';
 
 export default {
     name: 'senhaView',
@@ -169,7 +169,7 @@ export default {
             }
             else {
                 const nova_senha = this.senha
-                await Axios.post("https://clinica-maria-luiza-bjdd.onrender.com/user/alterar/senha", {
+                await api.post("/user/alterar/senha", {
                     usuario: {
                         email: this.email,
                         nova_senha: nova_senha,

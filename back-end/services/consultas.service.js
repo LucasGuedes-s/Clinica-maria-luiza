@@ -35,7 +35,6 @@ async function getConsultasProfissional(email) {
   return totalConsultaspacientes;
 }
 async function getConsultasPorProfissional(req) {
-
   // Cria o objeto de filtro condicionalmente
   const filtro = {
     profissionalId: req.email,
@@ -56,6 +55,11 @@ async function getConsultasPorProfissional(req) {
         data: 'desc',
       },
       include: {
+        profissional: {
+          select: {
+            nome: true, // Seleciona apenas o nome do profissional
+          },
+        },
         paciente: {
           select: {
             nome: true, // Seleciona apenas o nome do paciente
@@ -74,6 +78,11 @@ async function getConsultasPorProfissional(req) {
         data: 'desc',
       },
       include: {
+        profissional: {
+          select: {
+            nome: true, // Seleciona apenas o nome do profissional
+          },
+        },
         paciente: {
           select: {
             nome: true, // Seleciona apenas o nome do paciente
