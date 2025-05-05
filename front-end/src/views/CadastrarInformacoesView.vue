@@ -161,6 +161,7 @@ import Swal from 'sweetalert2';
 import { useAuthStore } from '@/store.js'
 import Axios from 'axios';
 import router from '@/router';
+import api from '@/axios';
 
 export default {
     name: 'registrarconsulta',
@@ -197,7 +198,7 @@ export default {
                 const peso = parseFloat(this.peso)
                 const altura = parseFloat(this.altura)
                 // Envia os dados do paciente para o backend
-                await Axios.post(`https://clinica-maria-luiza-bjdd.onrender.com/dados/pacientes`, {
+                await api.post(`/dados/pacientes`, {
                     dados: {
                         pacienteId: this.cpf,
                         peso: peso,

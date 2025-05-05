@@ -16,7 +16,7 @@
             <div class="titulo_evolucao" v-for="estimulo in estimulos" :key="estimulo.estimuloId">
                 <div class="estimulos">
                     <p>{{ estimulo.estimulo.nome_estimulo }} - {{ estimulo.estimulo.descricao }}</p>
-                    <button @click="finalizarestimulo(estimulo.pacienteCpf, estimulo.estimuloId)">Finalizar</button>
+                    <button @click="finalizarestimulo(estimulo.pacienteCpf, estimulo.estimuloId)" v-if="permissao_user">Finalizar</button>
                 </div>
             </div>
         </div>

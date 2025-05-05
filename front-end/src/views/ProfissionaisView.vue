@@ -265,6 +265,7 @@ import { useAuthStore } from '@/store';
 import Axios from 'axios';
 import Swal from 'sweetalert2';
 import router from '@/router';
+import api from '@/axios';
 
 export default {
     name: 'profissionais',
@@ -291,7 +292,7 @@ export default {
         async carregarConsultasPorProfissional() {
             try {
                 const requests = this.profissional.map(async (prof) => {
-                    const response = await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/consultas/profissional/${prof.email}`);
+                    const response = await api.get(`/consultas/profissional/${prof.email}`);
                     return { email: prof.email, total: response.data.consultas };
                 });
 
@@ -343,8 +344,8 @@ export default {
                     foto: this.consultaEdit.foto,
                 };
 
-                const response = await Axios.put(
-                    "https://clinica-maria-luiza-bjdd.onrender.com/editar/profissional",
+                const response = await api.put(
+                    "/editar/profissional",
                     payload,
                     {
                         headers: {
@@ -458,7 +459,7 @@ export default {
         },
         async profissionais() {
             const token = this.store.token
-            Axios.get("https://clinica-maria-luiza-bjdd.onrender.com/profissionais", {
+            api.get("/profissionais", {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

@@ -193,6 +193,7 @@ li:hover {
 import Sidebar from '@/components/Sidebar.vue'
 import { useAuthStore } from '@/store';
 import Axios from 'axios';
+import api from '@/axios';
 import Swal from 'sweetalert2'
 import router from '@/router';
 
@@ -259,7 +260,7 @@ export default {
             if(this.selecionado){
                 this.paciente = this.selecionado
             }
-            await Axios.post(`https://clinica-maria-luiza-bjdd.onrender.com/cadastrar/agendamento`, {
+            await api.post(`/cadastrar/agendamento`, {
                 agenda: {
                     agendamento: this.agendamento,
                     data: this.data,
@@ -295,7 +296,7 @@ export default {
     mounted() {
         ///profissionais/agendar
         const token = this.store.token
-        Axios.get("https://clinica-maria-luiza-bjdd.onrender.com/pacientes", {
+        api.get("/pacientes", {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -304,7 +305,7 @@ export default {
         }).catch(Error => {
             console.error(Error)
         })
-        Axios.get("https://clinica-maria-luiza-bjdd.onrender.com/profissionais/agendar", {
+        api.get("/profissionais/agendar", {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

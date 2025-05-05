@@ -132,8 +132,8 @@ h1 {
 </style>
 
 <script>
-import Axios from 'axios';
 import Swal from 'sweetalert2'
+import api from '@/axios';
 
 export default {
     name: 'senhaView',
@@ -145,7 +145,7 @@ export default {
     },
     methods: {
         async Altersenha() {
-            await Axios.post("https://clinica-maria-luiza-bjdd.onrender.com/alterar/senha", {
+            await api.post("/alterar/senha", {
                 usuario: {
                     email: this.email,
                 }
