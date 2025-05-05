@@ -46,15 +46,22 @@ cron.schedule("0 7 * * 1-5", () => {
 
 
 const { Server } = require('socket.io');
+
 const http = require('http');
+
+const PORT = 3000;
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: {
-    origin: '*', // Ajuste para a origem do frontend
-    methods: ['GET', 'POST'],
-    allowedHeaders: ['Authorization', 'Content-Type'],   
-  }
-})
+    cors: {
+        origin: '*',
+        methods: ['GET', 'POST'],
+    },
+});
+// 🔹 Adiciona o `io` no `req` para acessar no controller
+app.use((req, res, next) => {
+    req.io = io;
+    next();
+});
 
 io.on('connection', (socket) => {
   console.log('Cliente conectado via WebSocket');
@@ -72,6 +79,6 @@ app.use('/mensagem', mensagensRouter(io, prisma), );
 
 
 const hostname = 'localhost';
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Servidor iniciado em http://${hostname}:${port} (Clique Ctrl+C)`)
 })

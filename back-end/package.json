@@ -30,6 +30,7 @@
     "nodemailer": "^6.10.0",
     "pdf-lib": "^1.17.1",
     "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "timezone-support": "^3.1.0"
   },
   "devDependencies": {

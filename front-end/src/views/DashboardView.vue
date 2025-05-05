@@ -2,6 +2,7 @@
     <div>
         <Sidebar />
     </div>
+    <!-- <Chat /> -->
     <div class="main_content_dashboard">
         <div class="titulo_dashboard">
             <h1>Bem-vindo(a)!</h1>
@@ -471,6 +472,7 @@ import Swal from 'sweetalert2'
 import router from '@/router';
 import CalendarAgendamentos from '@/components/Calendario.vue';
 import Carregar from '@/components/Carregar.vue';
+import Chat from '@/components/Chat.vue'
 // PRECISA AINDA CHAMAR O COMPONENTE CalendarAgendamentos
 
 export default {
@@ -478,7 +480,8 @@ export default {
     components: {
         Carregar,  // Registrando o componente Loader
         CalendarAgendamentos,
-        Sidebar
+        Sidebar,
+        // Chat
 
     },
     props: {

@@ -1,23 +1,20 @@
 <template>
     <Sidebar />
     <div class="main_content_laudos">
-        <h1>Laudos e Anexos</h1>
-        <div class="conteiner_laudos" v-for="laudo in laudos" :key="laudo">            
-            <iframe
+      <h1>Laudos e Anexos</h1>
+      <div class="galeria">
+        <div class="item_laudo" v-for="laudo in laudos" :key="laudo" @click="abrirLaudo(laudo)">
+          <iframe
             :src="laudo"
-            width="100%"
-            height="600px"
+            class="thumb_iframe"
             frameborder="0"
-            ></iframe>
-            <v-img
-                v-if="fileType === 'jpeg'"
-                :src="laudo"
-                aspect-ratio="1.77"
-                max-width="100%"
-            ></v-img>
+            scrolling="no"
+          ></iframe>
         </div>
+      </div>
     </div>
-</template>
+  </template>
+  
 
 <style scoped>
 body {
@@ -35,75 +32,39 @@ h1 {
     color: #84E7FF;
 }
 
-.conteiner_laudos {
-    background-color: white;
-    padding: 20px;
-    margin-bottom: 20px;
-    border: 1px solid #84E7FF;
-    border-radius: 8px;
-    width: calc(100% - 40px);
+.galeria {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
 }
 
-.infos_historico {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+.item_laudo {
+  border: 1px solid #84E7FF;
+  border-radius: 8px;
+  background-color: white;
+  padding: 5px;
+  cursor: pointer;
+  transition: transform 0.2s;
 }
 
-.info_item {
-    display: flex;
-    flex-direction: column;
+.item_laudo:hover {
+  transform: scale(1.02);
+}
+.thumb_iframe {
+  width: 100%;
+  height: 180px;
+  border-radius: 6px;
+  pointer-events: none;
+  overflow: hidden;
+  scrollbar-width: none;       /* Firefox */
+  -ms-overflow-style: none;    /* IE 10+ */
 }
 
-.descricao {
-    grid-column: 1 / -1;
+.thumb_iframe::-webkit-scrollbar {
+  display: none;               /* Chrome, Safari */
 }
 
-.botoes {
-    grid-column: 1 / -1;
-    display: flex;
-    justify-content: space-between;
-    /* Alinha os botões com espaçamento entre eles */
-    gap: 10px;
-}
 
-.info_item label {
-    margin-bottom: 5px;
-    color: #7E7E7E;
-}
-
-.info_item input,
-.info_item textarea {
-    padding: 10px;
-    border: 1px solid #D9D9D9;
-    border-radius: 4px;
-    background-color: white;
-    font-size: 16px;
-    color: #7E7E7E;
-}
-
-.info_item textarea {
-    resize: none;
-}
-
-.btn_detalhar_hist,
-.btn_arquivopdf_hist {
-    flex: 1;
-    /* Faz com que os botões tenham a mesma largura */
-    padding: 10px 20px;
-    border-radius: 4px;
-    background-color: #F5F5F5;
-    color: #7E7E7E;
-    border: 1px solid #D9D9D9;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 14px;
-    cursor: pointer;
-}
-@media (max-width: 768px) {
-    .main_content_laudos {
-        margin-left: 0;
-    }
-}
 </style>
 <script>
 import Sidebar from '@/components/Sidebar.vue';
@@ -151,7 +112,11 @@ export default {
             }).catch(error => {
                 console.error(error)
             })
-        }
+        },
+        abrirLaudo(laudo) {
+  window.open(laudo, '_blank');
+}
+
     }
 }
 </script>
