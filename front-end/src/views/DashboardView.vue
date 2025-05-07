@@ -472,7 +472,7 @@ import Swal from 'sweetalert2'
 import router from '@/router';
 import CalendarAgendamentos from '@/components/Calendario.vue';
 import Carregar from '@/components/Carregar.vue';
-import Chat from '@/components/Chat.vue'
+// import Chat from '@/components/Chat.vue'
 // PRECISA AINDA CHAMAR O COMPONENTE CalendarAgendamentos
 
 export default {

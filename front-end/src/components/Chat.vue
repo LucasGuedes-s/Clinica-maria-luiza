@@ -27,12 +27,10 @@
                         <div v-for="(msg, index) in mensagens" :key="index"
                             :class="['message-row', msg.remetenteId === usuarioAtualEmail ? 'sent' : 'received']">
 
-                            <!-- Avatar do remetente da mensagem -->
                             <img :src="getAvatar(msg.remetenteId)" class="avatar" />
 
                             <div class="message-container">
                                 <div class="sender-name">
-                                    <!-- Exibe 'Você' para o usuário atual, ou o nome do remetente -->
                                     {{ msg.remetenteId === usuarioAtualEmail ? 'Você' : msg.remetente.nome }}
                                 </div>
                                 <div class="message">{{ msg.texto }}</div>
@@ -56,8 +54,6 @@
     </div>
 </template>
 
-
-
 <script>
 import { io } from "socket.io-client";
 import { useAuthStore } from "@/store";
@@ -74,11 +70,11 @@ export default {
             socket: null,
             profissionais: [],
             destinatarioSelecionado: null,
-            usuarioAtualEmail: this.store.usuario.usuario.email, // 👈 aqui
+            usuarioAtualEmail: this.store.usuario.usuario.email, 
             mensagemInput: "",
             mensagens: [],
             chatAberto: false,
-            notificacoes: {}, // 👈 Aqui
+            notificacoes: {},
         };
     },
     mounted() {
@@ -89,12 +85,11 @@ export default {
         });
 
         this.socket.on("nova-mensagem", (data) => {
-            // Só atualiza se a nova mensagem for para o destinatário atual
             if (
                 data.destinatarioEmail === this.usuarioAtualEmail ||
                 data.destinatarioEmail === this.destinatarioSelecionado?.email
             ) {
-                this.carregarMensagens(); // ou adicionar a mensagem manualmente
+                this.carregarMensagens();
             }
         });
 
@@ -114,11 +109,17 @@ export default {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                this.profissionais = response.data.profissionais || response.data;
+
+                const todosProfissionais = response.data.profissionais || response.data;
+
+                this.profissionais = todosProfissionais
+                    .filter(prof => prof.email !== this.usuarioAtualEmail)
+                    .sort((a, b) => a.nome.localeCompare(b.nome)); 
             } catch (error) {
                 console.error("Erro ao buscar profissionais:", error);
             }
         },
+
         async selecionarDestinatario(profissional) {
             this.destinatarioSelecionado = profissional;
             console.log("Destinatário selecionado:", profissional);
@@ -126,6 +127,12 @@ export default {
         },
         async carregarMensagens() {
             const remetenteEmail = this.store.usuario.usuario.email;
+
+            if (!this.destinatarioSelecionado) {
+                console.warn("Nenhum destinatário selecionado.");
+                return;
+            }
+
             const destinatarioEmail = this.destinatarioSelecionado.email;
 
             console.log('Requisitando mensagens...');
@@ -134,28 +141,35 @@ export default {
 
             try {
                 const response = await Axios.post(
-                    'http://localhost:3000/mensagem/get',
+                    'https://clinica-maria-luiza-bjdd.onrender.com/mensagem/get',
                     { remetenteEmail, destinatarioEmail },
                     {
                         headers: {
                             Authorization: `Bearer ${this.store.token}`,
+
                         },
                     }
                 );
 
                 console.log("Mensagens carregadas:", response.data);
                 this.mensagens = response.data.reverse();
+                this.$nextTick(() => {
+                    this.scrollToBottom();
+                });
             } catch (error) {
                 console.error("Erro ao carregar mensagens:", error);
             }
         },
         getAvatar(remetenteId) {
-            // Encontre o profissional com base no remetenteId
+            if (remetenteId === this.usuarioAtualEmail) {
+                return this.store.usuario.usuario.foto; 
+            }
+
             const profissional = this.profissionais.find(prof => prof.email === remetenteId);
-            return profissional ? profissional.foto : ''; // Retorna a foto do profissional, ou uma foto padrão se não encontrado
+            return profissional ? profissional.foto : ''; 
         },
         async enviarMensagem() {
-            if (!this.mensagemInput.trim()) return; // Ignora se estiver vazio
+            if (!this.mensagemInput.trim()) return; 
 
             const remetenteEmail = this.store.usuario.usuario.email;
             const destinatarioEmail = this.destinatarioSelecionado?.email;
@@ -168,7 +182,7 @@ export default {
 
             try {
                 await Axios.post(
-                    "http://localhost:3000/mensagem",
+                    "https://clinica-maria-luiza-bjdd.onrender.com/mensagem",
                     { remetenteEmail, destinatarioEmail, texto },
                     {
                         headers: {
@@ -178,25 +192,21 @@ export default {
                 );
 
                 this.mensagemInput = "";
-                await this.carregarMensagens(); // Atualiza mensagens após envio
-                this.scrollParaFim(); // Scroll para o final do chat
+                await this.carregarMensagens(); 
             } catch (error) {
                 console.error("Erro ao enviar mensagem:", error);
             }
         },
-        scrollParaFim() {
-            this.$nextTick(() => {
-                const chatMessages = document.getElementById("chatMessages");
-                if (chatMessages) {
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                }
-            });
-        }
+        scrollToBottom() {
+            const container = document.getElementById("chatMessages");
+            if (container) {
+                container.scrollTop = container.scrollHeight;
+            }
+        },
 
     },
 };
 </script>
-
 
 
 <style scoped>
