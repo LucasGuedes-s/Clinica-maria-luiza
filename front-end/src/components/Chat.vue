@@ -234,7 +234,7 @@ export default {
 
             try {
                 await Axios.post(
-                    "https://clinica-maria-luiza-bjdd.onrender.com//mensagem",
+                    "https://clinica-maria-luiza-bjdd.onrender.com/mensagem",
                     { remetenteEmail, destinatarioEmail, texto },
                     {
                         headers: {
