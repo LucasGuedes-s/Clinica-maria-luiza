@@ -137,7 +137,6 @@ select {
 <script>
 import Sidebar from '@/components/Sidebar.vue';
 import { useAuthStore } from '@/store';
-import Axios from 'axios';
 import Swal from 'sweetalert2'
 import router from '@/router';
 
@@ -179,7 +178,7 @@ export default {
                 const token = this.store.token;
                 const valorFloat = parseFloat(this.valor);
 
-                await Axios.post("https://clinica-maria-luiza-bjdd.onrender.com/registrar/pagamentos", {
+                await api.post("/registrar/pagamentos", {
                     pagar: {
                         profissionalId: profissionalId,
                         valor: valorFloat,

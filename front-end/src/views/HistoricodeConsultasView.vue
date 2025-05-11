@@ -257,6 +257,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from '../firebase.js'
 import { v4 as uuidv4 } from 'uuid';
 import router from '@/router/index.js';
+import api from '@/axios';
 
 export default {
     name: 'historicodeconsulta',
@@ -356,7 +357,7 @@ export default {
             const token = this.store.token
             const cpf = this.cpf
 
-            Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/consulta/paciente/${cpf}`, {
+            api.get(`/consulta/paciente/${cpf}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -391,8 +392,8 @@ export default {
 
                 const consultaParaEnvio = JSON.parse(JSON.stringify(this.consultaEdit));
 
-                const response = await Axios.put(
-                    'https://clinica-maria-luiza-bjdd.onrender.com/editar/consulta',
+                const response = await api.put(
+                    '/editar/consulta',
                     consultaParaEnvio,
                     {
                         headers: {

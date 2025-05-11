@@ -137,6 +137,7 @@ import { useAuthStore } from '@/store';
 import Axios from 'axios';
 import { formatDate, formatarMesAno } from '../utils/formatarData';
 import Swal from 'sweetalert2';
+import api from '@/axios';
 
 export default {
     name: 'pagamentos',
@@ -239,7 +240,7 @@ export default {
             console.log(id, this.novo_val, novo_paciente, this.tipoPagamento, this.tipoPagamento)
             try {
                 const token = this.store.token;
-                Axios.post("https://clinica-maria-luiza-bjdd.onrender.com/alterar/pagamento", {
+                api.post("/alterar/pagamento", {
                     pagar: {
                         id: id,
                         valor: this.novo_val,
@@ -275,7 +276,7 @@ export default {
         },
         async getPagamentos() {
             const token = this.store.token
-            await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/pagamentos`, {
+            await api.get(`/pagamentos`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

@@ -159,7 +159,6 @@ input::placeholder {
 import Sidebar from '@/components/Sidebar.vue';
 import Swal from 'sweetalert2';
 import { useAuthStore } from '@/store.js'
-import Axios from 'axios';
 import router from '@/router';
 import api from '@/axios';
 

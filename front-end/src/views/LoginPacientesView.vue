@@ -128,9 +128,9 @@ h1 {
 }
 </style>
 <script>
-import Axios from 'axios';
 import Swal from 'sweetalert2'
 import router from '@/router';
+import api from '@/axios';
 
 export default {
     data() {
@@ -145,7 +145,7 @@ export default {
         async login() {
             const id = this.usuario
             
-            await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/pacientes/login/${id}`
+            await api.get(`/pacientes/login/${id}`
             ).then(response => {
                 console.log(response.data)
                 sessionStorage.setItem('cpf', response.data.paciente.cpf);

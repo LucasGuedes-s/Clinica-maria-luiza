@@ -10,8 +10,8 @@
 <script>
 import { onMounted, ref } from 'vue'
 import Chart from 'chart.js/auto'
-import Axios from 'axios';
 import { formatDate } from '@/utils/formatarData';
+import api from '@/axios';
 
 export default {
     props: {
@@ -27,7 +27,7 @@ export default {
         const fetchConsultas = async () => {
             const cpf = props.dado;
             try {
-                const response = await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/consultasAba/paciente/${cpf}`);
+                const response = await api.get(`/consultasAba/paciente/${cpf}`);
                 consultas.value = response.data.consultas.slice(0, 15);
                 updateChart();
             } catch (error) {

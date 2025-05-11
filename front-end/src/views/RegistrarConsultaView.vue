@@ -151,6 +151,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from '../firebase.js'
 import { v4 as uuidv4 } from 'uuid';
 import router from '@/router/index.js';
+import api from '@/axios';
 
 export default {
     name: 'registrarconsulta',
@@ -212,7 +213,7 @@ export default {
                 }
             });
             const profissionalId = this.store.usuario.usuario.email
-            await Axios.post("https://clinica-maria-luiza-bjdd.onrender.com/consulta/registrar", {
+            await api.post("/consulta/registrar", {
                 consulta: {
                     consulta: this.especialidade,
                     data: this.data,

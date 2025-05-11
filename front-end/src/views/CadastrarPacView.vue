@@ -159,6 +159,8 @@ import router from '@/router';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from '../firebase.js'
 import { v4 as uuidv4 } from 'uuid';
+import api from '@/axios';
+
 
 export default {
     name: 'cadastrar_paciente',
@@ -231,7 +233,7 @@ export default {
             }
             try {
                 // Envia os dados do paciente para o backend
-                await Axios.post(`https://clinica-maria-luiza-bjdd.onrender.com/cadastrar/pacientes`, {
+                await api.post(`/cadastrar/pacientes`, {
                     paciente: {
                         cpf: this.cpf,
                         nome: this.nome,

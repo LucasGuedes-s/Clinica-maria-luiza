@@ -44,8 +44,6 @@ module.exports = (io, prisma) => {
     router.post('/get', async (req, res) => {
         try {
             const { remetenteEmail, destinatarioEmail } = req.body;
-            console.log (remetenteEmail)
-            console.log(destinatarioEmail)
    
             // Busca mensagens onde remetente e destinatário estão entre os profissionais
             const mensagens = await prisma.mensagem.findMany({
@@ -69,7 +67,6 @@ module.exports = (io, prisma) => {
                     enviadoEm: 'desc'
                 }
             });
-            console.log('Mensagens:', mensagens);
             return res.status(200).json(mensagens);
         } catch (error) {
             console.error('Erro ao buscar mensagens entre profissionais:', error);
