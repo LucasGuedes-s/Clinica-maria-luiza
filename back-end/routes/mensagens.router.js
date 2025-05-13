@@ -29,6 +29,7 @@ module.exports = (io, prisma) => {
                 // Emite evento global para o front-end
                 io.emit('nova-mensagem', {
                     destinatarioEmail, // para o front saber quem deve reagir
+                    remetenteEmail,
                 });
 
 
