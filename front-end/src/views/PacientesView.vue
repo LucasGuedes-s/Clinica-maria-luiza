@@ -10,7 +10,7 @@
         <div v-if="loading" class="loading">
             <Carregar />
         </div>
-        <div class="container_paciente" v-for="usuario in filteredPacientes" :key="usuario.cpf">
+        <div class="container_paciente" v-for="usuario in filteredPacientes" :key="usuario.cpf" v-if="loading === false">
             <div class="info">
                 <img :src="usuario.foto" @click="editarDados(usuario.cpf, usuario.email)">
                 <div class="textos">
@@ -257,6 +257,7 @@ export default {
             laudos: [],
             cpf: null,
             consultasPorPaciente: {},
+            loading: true,
         }
     },
     methods: {
@@ -296,6 +297,7 @@ export default {
             }).then(response => {
                 this.paciente = response.data.pacientes;
                 this.carregarConsultasPorPaciente();
+                this.loading = false;
             }).catch(Error => {
                 console.error(Error)
             })

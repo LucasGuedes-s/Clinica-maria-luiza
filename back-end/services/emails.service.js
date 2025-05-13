@@ -341,24 +341,39 @@ async function enviarEmailsTodosAgendamentos() {
       "francimarakarla@hotmail.com",
     ];
 
-    for (const emailDestinatario of emailsDestinatarios) {
-      const mailOptions = {
-        from: '"Clinica Maria Luiza"',
-        to: emailDestinatario,
-        subject: "Lembrete de Agendamentos de Hoje",
-        html: `
+    if(agendamentosDoDia.length == 0){
+      for (const emailDestinatario of emailsDestinatarios) {
+        const mailOptions = {
+          from: '"Clinica Maria Luiza"',
+          to: emailDestinatario,
+          subject: "Lembrete de Agendamentos de Hoje",
+          html: `
             <p>Olá, <strong>Profissional</strong>! 😊</p>
-            <p>Bom dia! Aqui estão todos os agendamentos da clínica para hoje:</p>
-            ${tabelaAgendamentos}
+            <p>Bom dia! Não há agendamentos para hoje.</p>
             <p>Este é um e-mail automático, por favor não responder!</p>
             <p>Tenha um ótimo dia!<br>Atenciosamente, <br><strong>Equipe da Clínica Maria Luiza</strong> 🏥</p>
-        `
-      };
-
-      await transporter.sendMail(mailOptions);
+          `
+        };
+        await transporter.sendMail(mailOptions);
+      }
+    } else {
+      // Enviar e-mail com a tabela de agendamentos      
+      for (const emailDestinatario of emailsDestinatarios) {
+        const mailOptions = {
+          from: '"Clinica Maria Luiza"',
+          to: emailDestinatario,
+          subject: "Lembrete de Agendamentos de Hoje",
+          html: `
+              <p>Olá, <strong>Profissional</strong>! 😊</p>
+              <p>Bom dia! Aqui estão todos os agendamentos da clínica para hoje:</p>
+              ${tabelaAgendamentos}
+              <p>Este é um e-mail automático, por favor não responder!</p>
+              <p>Tenha um ótimo dia!<br>Atenciosamente, <br><strong>Equipe da Clínica Maria Luiza</strong> 🏥</p>
+          `
+        };
+        await transporter.sendMail(mailOptions);
+      }
     }
-
-    console.log("E-mails enviados com sucesso para os profissionais!");
   } catch (error) {
     console.error("Erro ao enviar e-mails para os agendamentos de hoje:", error);
   }

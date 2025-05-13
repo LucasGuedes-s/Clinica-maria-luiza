@@ -11,7 +11,7 @@
                 <div class="form-group">
                     <label for="nome_paciente">Paciente:</label>
                     <input type="text" id="nome_paciente" v-model="buscar" @input="searchpacientes"
-                        @focus="sugestoes = true" @blur="hideSuggestions" autocomplete="off"/>
+                        @focus="sugestoes = true" @blur="hideSuggestions" autocomplete="off" />
                     <ul v-if="sugestoes && filtrarPacientes.length">
                         <li v-for="paciente in filtrarPacientes" :key="paciente.id"
                             @mousedown.prevent="selecionarPaciente(paciente)">
@@ -26,12 +26,33 @@
                 <div class="form-group especialidade">
                     <label for="especialidade">Especialidade:</label>
                     <select id="especialidade" name="especialidade" v-model="profissional" required>
-                        <option v-for="profissional in profissionais" :key="profissional.email" :value="profissional.email">
-                            {{ profissional.especialidade }} - {{ profissional.nome }} 
+                        <option v-for="profissional in profissionais" :key="profissional.email"
+                            :value="profissional.email">
+                            {{ profissional.especialidade }} - {{ profissional.nome }}
                         </option>
-                        
                     </select>
                 </div>
+
+                <!-- Checkbox para ativar notificações -->
+                <div>
+                    <label>
+                        Ativar notificação recorrente
+                    </label>
+                    <input type="checkbox" v-model="agenda.notificacao_recorrente" />
+
+                </div>
+
+                <!-- Seleção de dias da semana -->
+                <div class="form-group" v-if="agenda.notificacao_recorrente">
+                    <label>Dias da Notificação:</label>
+                    <div class="dias-notificacao-container">
+                        <label v-for="dia in diasDaSemana" :key="dia" class="dia-checkbox">
+                            <input type="checkbox" :value="dia" v-model="agenda.dias_notificacao" />
+                            {{ dia }}
+                        </label>
+                    </div>
+                </div>
+
                 <div class="form-group observacao">
                     <label for="observacao_agendarconsulta">Observação:</label>
                     <textarea id="observacao_agendarconsulta" rows="4"></textarea>
@@ -143,28 +164,29 @@ select {
 .agendarconsulta_btn:hover {
     background-color: #E7FAFF;
 }
+
 ul {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  max-height: 150px;
-  overflow-y: auto;
-  margin-top: 65px;
-  padding-left: 0;
-  list-style-type: none;
-  background-color: #fff;
-  position: absolute;
-  width: 50%;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-height: 150px;
+    overflow-y: auto;
+    margin-top: 65px;
+    padding-left: 0;
+    list-style-type: none;
+    background-color: #fff;
+    position: absolute;
+    width: 50%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
 }
 
 li {
-  padding: 10px;
-  cursor: pointer;
+    padding: 10px;
+    cursor: pointer;
 }
 
 li:hover {
-  background-color: #f0f0f0;
+    background-color: #f0f0f0;
 }
 
 #data_consulta,
@@ -172,6 +194,38 @@ li:hover {
 #horario {
     font-family: 'Montserrat', sans-serif;
 }
+
+/* Container dos checkboxes dos dias da semana */
+.dias-notificacao-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+/* Estilo individual para cada checkbox com label */
+.dia-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #f4f4f4;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.dia-checkbox:hover {
+    background-color: #e0e0e0;
+}
+
+/* Checkbox visível e com espaçamento */
+.dia-checkbox input[type="checkbox"] {
+    accent-color: #007bff;
+    width: 16px;
+    height: 16px;
+}
+
 @media (max-width: 768px) {
     .main-content_agendar {
         margin-left: 0;
@@ -186,7 +240,6 @@ li:hover {
         grid-template-columns: 1fr;
     }
 }
-
 </style>
 
 <script>
@@ -209,6 +262,14 @@ export default {
     },
     data() {
         return {
+            agenda: {
+                notificacao_recorrente: false,
+                dias_notificacao: []
+            },
+            diasDaSemana: [
+                "segunda", "terça", "quarta", "quinta", "sexta"
+            ],
+
             agendar: '',
             notas: '',
             data: '',
@@ -246,7 +307,6 @@ export default {
         },
         async agendarconsulta() {
             const token = this.store.token
-            console.log(this.profissional)
             Swal.fire({
                 title: 'Aguarde...',
                 text: `Agendando consulta`,
@@ -256,7 +316,7 @@ export default {
                     Swal.showLoading();
                 }
             })
-            if(this.selecionado){
+            if (this.selecionado) {
                 this.paciente = this.selecionado
             }
             await api.post(`/cadastrar/agendamento`, {
@@ -266,14 +326,16 @@ export default {
                     agendar: this.agenda,
                     notas: this.notas,
                     profissional: this.profissional,
-                    paciente: this.paciente
+                    paciente: this.paciente,
+                    dias_notificacao: this.agenda.dias_notificacao, 
+                    notificacao_recorrente: this.agenda.notificacao_recorrente
                 }
             },
                 {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
-                }   
+                }
             ).then(response => {
                 console.log(response.status)
                 Swal.fire({

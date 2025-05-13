@@ -3,20 +3,19 @@
         <Sidebar />
     </div>
     <!-- <Chat /> -->
-    <div class="main_content_dashboard">
+    <div v-if="loading" class="loading">
+        <Carregar />
+    </div>
+    <div class="main_content_dashboard" v-if="loading === false">
         <div class="titulo_dashboard">
             <h1>Bem-vindo(a)!</h1>
         </div>
-        <!-- Carregando ou Dados -->
-        <div v-if="loading" class="loading">
-            <Carregar />
-        </div>
-
+ 
         <div class="contagem_dashboard" v-if="permissao === 1">
             <p>Total de consultas: <strong> <span class="value_totalconsultas"> {{ total.totalConsultasAba +
                 total.totalConsultas }} </span></strong> </p>
             <p>Total de consultas de rotina: <strong> <span class="value_totalconsultasrotina">{{ total.totalConsultas
-            }} </span></strong> </p>
+                        }} </span></strong> </p>
             <p>Total de consultas ABA: <strong> <span class="value_totalconsultasaba"> {{ total.totalConsultasAba }}
                     </span></strong> </p>
         </div>

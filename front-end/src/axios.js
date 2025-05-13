@@ -3,8 +3,8 @@ import Swal from 'sweetalert2';
 import router from './router';
 
 const api = axios.create({
-  //baseURL: 'http://localhost:3000',
-  baseURL: 'https://clinica-maria-luiza-bjdd.onrender.com',
+  baseURL: 'http://localhost:3000',
+  //baseURL: 'https://clinica-maria-luiza-bjdd.onrender.com',
 });
 
 api.interceptors.response.use(
