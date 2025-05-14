@@ -85,7 +85,7 @@ export default {
         };
     },
     mounted() {
-        this.socket = io("http://localhost:3000/");
+        this.socket = io("https://clinica-maria-luiza-bjdd.onrender.com/");
 
         this.socket.on("connect", () => {
         });
@@ -234,7 +234,7 @@ export default {
 
             try {
                 await Axios.post(
-                    "http://localhost:3000/mensagem",
+                    "https://clinica-maria-luiza-bjdd.onrender.com/mensagem",
                     { remetenteEmail, destinatarioEmail, texto },
                     {
                         headers: {
