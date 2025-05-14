@@ -92,8 +92,7 @@ import Axios from 'axios';
 import Swal from 'sweetalert2';
 import { formatDate } from '../utils/formatarData';
 import router from '@/router';
-
-
+import api from '@/axios';
 
 export default {
 
@@ -184,11 +183,10 @@ export default {
 
             }
             catch {
-            }
-
+                }
         },
         async getAgenda() {
-            await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/pacientes/agendamentos/${this.cpf}`
+            await api.get(`/pacientes/agendamentos/${this.cpf}`
             ).then(response => {
                 this.agendamentos = response.data.agenda
             }).catch(error => {
@@ -204,7 +202,7 @@ export default {
             })
         },
         async getConsultas() {
-            Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/consultas/paciente/${this.cpf}`,
+            api.get(`/consultas/paciente/${this.cpf}`,
 
             ).then(response => {
                 this.consultas = response.data.consultas.consultas.slice().reverse().slice(-7)

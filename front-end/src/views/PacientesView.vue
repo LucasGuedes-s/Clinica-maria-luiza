@@ -6,7 +6,11 @@
             <input type="text" id="search-input" placeholder="Nome do paciente..." v-model="pesquisa">
             <RouterLink to="/cadastrarpaciente"><button>Cadastrar</button></RouterLink>
         </div>
-        <div class="container_paciente" v-for="usuario in filteredPacientes" :key="usuario.cpf">
+        <!-- Carregando ou Dados -->
+        <div v-if="loading" class="loading">
+            <Carregar />
+        </div>
+        <div class="container_paciente" v-for="usuario in filteredPacientes" :key="usuario.cpf" v-if="loading === false">
             <div class="info">
                 <img :src="usuario.foto" @click="editarDados(usuario.cpf, usuario.email)">
                 <div class="textos">
@@ -34,6 +38,7 @@
             </div>
         </div>
     </div>
+    <Chat />
 </template>
 
 <style>
@@ -222,16 +227,20 @@ input {
 <script>
 import Sidebar from '@/components/Sidebar.vue'
 import { useAuthStore } from '@/store';
-import Axios from 'axios';
 import Swal from 'sweetalert2';
 import { storage } from '../firebase.js'
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from 'uuid';
+import api from '@/axios';
+import Carregar from '@/components/Carregar.vue';
+import Chat from '@/components/Chat.vue';
 
 export default {
     name: 'pacientes',
     components: {
-        Sidebar
+        Sidebar,
+        Carregar,
+        Chat
     },
     setup() {
         const store = useAuthStore()
@@ -251,6 +260,7 @@ export default {
             laudos: [],
             cpf: null,
             consultasPorPaciente: {},
+            loading: true,
         }
     },
     methods: {
@@ -283,13 +293,14 @@ export default {
         },
         async pacientes() {
             const token = this.store.token
-            Axios.get("https://clinica-maria-luiza-bjdd.onrender.com/pacientes", {
+            api.get("/pacientes", {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             }).then(response => {
                 this.paciente = response.data.pacientes;
                 this.carregarConsultasPorPaciente();
+                this.loading = false;
             }).catch(Error => {
                 console.error(Error)
             })
@@ -370,7 +381,7 @@ export default {
         async addLaudo() {
             const token = this.store.token
             console.log(this.cpf, this.laudo)
-            Axios.post("https://clinica-maria-luiza-bjdd.onrender.com/paciente/laudos",
+            api.post("/paciente/laudos",
                 {
                     cpf: this.cpf,
                     laudo: this.laudo

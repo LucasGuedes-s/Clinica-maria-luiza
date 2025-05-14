@@ -54,6 +54,7 @@
             </form>
         </div>
     </div>
+    <Chat />
 </template>
 
 <style>
@@ -159,11 +160,15 @@ import router from '@/router';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from '../firebase.js'
 import { v4 as uuidv4 } from 'uuid';
+import api from '@/axios';
+import Chat from '@/components/Chat.vue';
+
 
 export default {
     name: 'cadastrar_paciente',
     components: {
-        Sidebar
+        Sidebar,
+        Chat
     },
     setup() {
         const store = useAuthStore() //Importação da função do Store.js
@@ -231,7 +236,7 @@ export default {
             }
             try {
                 // Envia os dados do paciente para o backend
-                await Axios.post(`https://clinica-maria-luiza-bjdd.onrender.com/cadastrar/pacientes`, {
+                await api.post(`/cadastrar/pacientes`, {
                     paciente: {
                         cpf: this.cpf,
                         nome: this.nome,

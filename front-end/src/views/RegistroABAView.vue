@@ -141,6 +141,7 @@
             </form>
         </div>
     </div>
+    <Chat />
 </template>
 
 <style>
@@ -292,11 +293,14 @@ import { storage } from '../firebase.js';
 import { v4 as uuidv4 } from 'uuid';
 import router from '@/router/index.js';
 import { DateTime } from 'luxon'; // Certifique-se de que Luxon está instalado
+import api from '@/axios';
+import Chat from '@/components/Chat.vue';
 
 export default {
     name: 'registroaba',
     components: {
-        Sidebar
+        Sidebar,
+        Chat
     },
     setup() {
         const store = useAuthStore();
@@ -358,7 +362,7 @@ export default {
                     }
 
                     // Realiza a requisição para registrar a consulta
-                    await Axios.post("https://clinica-maria-luiza-bjdd.onrender.com/consultaAba/registrar",
+                    await api.post("/consultaAba/registrar",
                         {
                             consulta: {
                                 pacienteId: this.cpf,
@@ -402,7 +406,7 @@ export default {
 
             try {
                 console.log(this.cpf);
-                const response = await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/estimulos/paciente/${this.cpf}`, {
+                const response = await api.get(`/estimulos/paciente/${this.cpf}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 this.estimulos = response.data.estimulo;

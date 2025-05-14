@@ -172,18 +172,20 @@
             </div>
         </div>
     </div>
+    <Chat />
 </template>
 
 <script>
 import Sidebar from '@/components/Sidebar.vue';
 import { useAuthStore } from '@/store.js'
 import GraficoEvolucao from '@/components/GraficoEvolucao.vue';
-import Axios from 'axios';
 import Swal from 'sweetalert2';
 import { formatDate } from '../utils/formatarData';
 import router from '@/router';
 import GraficoEvolucaoBarras from '@/components/GraficoEvolucaoBarras.vue';
 import ConsultaNaoRegistrada from '@/components/ConsultaNaoRegistrada.vue';
+import api from '@/axios';
+import Chat from '@/components/Chat.vue';
 
 export default {
 
@@ -191,8 +193,6 @@ export default {
     mounted() {
         this.getConsultas()
         this.getEstimulos()
-        // Limpar o CPF do sessionStorage após uso
-        // sessionStorage.removeItem('cpf');
     },
     data() {
         return {
@@ -223,6 +223,7 @@ export default {
         GraficoEvolucao,
         GraficoEvolucaoBarras,
         ConsultaNaoRegistrada,
+        Chat
     },
     methods: {
         async abrirFoto(link) {
@@ -242,7 +243,7 @@ export default {
 
             this.loading = true;
             try {
-                const response = await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/consultasAba/paciente/${this.cpf}`, {
+                const response = await api.get(`https://clinica-maria-luiza-bjdd.onrender.com/consultasAba/paciente/${this.cpf}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 this.consulta = response.data.consultas;
@@ -257,7 +258,7 @@ export default {
 
             try {
                 console.log(this.cpf);
-                const response = await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/estimulos/paciente/${this.cpf}`, {
+                const response = await api.get(`/estimulos/paciente/${this.cpf}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 this.estimulos = response.data.estimulo;
@@ -289,7 +290,7 @@ export default {
                 }).then((result) => {
                     if (result.isConfirmed) {
                         // O usuário confirmou, envia a requisição
-                        Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/apagar/consulta/${id}`, {
+                        api.get(`/apagar/consulta/${id}`, {
                             headers: {
                                 'Authorization': `Bearer ${token}`
                             }
@@ -355,8 +356,8 @@ export default {
                     }
                 };
 
-                let response = await Axios.put(
-                    'https://clinica-maria-luiza-bjdd.onrender.com/update/consultaAba',
+                let response = await api.put(
+                    '/update/consultaAba',
                     dadosEdicao,
                     {
                         headers: { 'Authorization': `Bearer ${this.store.token}` }
@@ -392,7 +393,7 @@ export default {
             const token = this.store.token;
 
             try {
-                await Axios.put(`http://localhost:3000/alterar/estimulo`, {
+                await api.put(`/alterar/estimulo`, {
                     pacienteCpf: pacienteCpf,
                     estimuloId: estimuloId
                 }, {

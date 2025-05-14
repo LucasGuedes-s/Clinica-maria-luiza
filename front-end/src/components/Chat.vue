@@ -27,12 +27,10 @@
                         <div v-for="(msg, index) in mensagens" :key="index"
                             :class="['message-row', msg.remetenteId === usuarioAtualEmail ? 'sent' : 'received']">
 
-                            <!-- Avatar do remetente da mensagem -->
                             <img :src="getAvatar(msg.remetenteId)" class="avatar" />
 
                             <div class="message-container">
                                 <div class="sender-name">
-                                    <!-- Exibe 'Você' para o usuário atual, ou o nome do remetente -->
                                     {{ msg.remetenteId === usuarioAtualEmail ? 'Você' : msg.remetente.nome }}
                                 </div>
                                 <div class="message">{{ msg.texto }}</div>
@@ -54,9 +52,10 @@
             <span>Chat</span>
         </div>
     </div>
+     <div v-if="notificacao.visivel" class="chat-notificacao">
+            📩 Você recebeu uma nova mensagem de <strong>{{ notificacao.remetente?.nome }}</strong>
+    </div>
 </template>
-
-
 
 <script>
 import { io } from "socket.io-client";
@@ -74,29 +73,56 @@ export default {
             socket: null,
             profissionais: [],
             destinatarioSelecionado: null,
-            usuarioAtualEmail: this.store.usuario.usuario.email, // 👈 aqui
+            usuarioAtualEmail: this.store.usuario.usuario.email,
             mensagemInput: "",
             mensagens: [],
             chatAberto: false,
-            notificacoes: {}, // 👈 Aqui
+            notificacao: {
+                visivel: false,
+                remetente: null,
+                timeoutId: null,
+            },
         };
     },
     mounted() {
-        this.socket = io("http://localhost:3000");
+        this.socket = io("http://localhost:3000/");
 
         this.socket.on("connect", () => {
-            console.log("Conectado ao servidor", this.socket.id);
         });
 
-        this.socket.on("nova-mensagem", (data) => {
-            // Só atualiza se a nova mensagem for para o destinatário atual
+        this.socket.on("nova-mensagem", async (data) => {
+            const { destinatarioEmail, remetenteEmail } = data;
+
+            // Se não for o usuário atual, ignore
+            if (destinatarioEmail !== this.usuarioAtualEmail) return;
+
+            // Se o usuário já está com o chat aberto com o remetente, não exibe notificação
             if (
-                data.destinatarioEmail === this.usuarioAtualEmail ||
-                data.destinatarioEmail === this.destinatarioSelecionado?.email
+                this.chatAberto &&
+                this.destinatarioSelecionado &&
+                this.destinatarioSelecionado.email === remetenteEmail
             ) {
-                this.carregarMensagens(); // ou adicionar a mensagem manualmente
+                await this.carregarMensagens();
+                return; // Não exibe notificação
+            }
+
+            // Busca o profissional remetente
+            const remetente = this.profissionais.find(p => p.email === remetenteEmail);
+            if (!remetente) return;
+
+            this.notificacao.remetente = remetente;
+            this.notificacao.visivel = true;
+
+            // Sempre carrega mensagens se for o remetente da conversa atual
+            if (
+                this.destinatarioSelecionado &&
+                remetenteEmail === this.destinatarioSelecionado.email
+            ) {
+                await this.carregarMensagens();
             }
         });
+
+
 
         this.carregarProfissionais();
     },
@@ -114,23 +140,56 @@ export default {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                this.profissionais = response.data.profissionais || response.data;
+
+                const todosProfissionais = response.data.profissionais || response.data;
+
+                this.profissionais = [
+                    {
+                        identificador: "todos",
+                        nome: "Todos os profissionais",
+                        especialidade: "Mensagem geral",
+                        email: "Todos",
+                        foto: require('../assets/emailprofissionais.png')
+                    },
+                    ...todosProfissionais
+                        .filter(prof => prof.email !== this.usuarioAtualEmail)
+                        .sort((a, b) => a.nome.localeCompare(b.nome))
+                ];
             } catch (error) {
                 console.error("Erro ao buscar profissionais:", error);
             }
         },
+
         async selecionarDestinatario(profissional) {
             this.destinatarioSelecionado = profissional;
-            console.log("Destinatário selecionado:", profissional);
-            this.carregarMensagens()
+
+            // Fecha a notificação se ela era do mesmo remetente
+            if (
+                this.notificacao.visivel &&
+                this.notificacao.remetente &&
+                profissional.email === this.notificacao.remetente.email
+            ) {
+                this.notificacao.visivel = false;
+                clearTimeout(this.notificacao.timeoutId);
+            }
+
+            await this.carregarMensagens();
         },
         async carregarMensagens() {
-            const remetenteEmail = this.store.usuario.usuario.email;
+            const remetenteEmail = this.usuarioAtualEmail;
+
+            if (!this.destinatarioSelecionado) {
+                console.warn("Nenhum destinatário selecionado.");
+                return;
+            }
+
             const destinatarioEmail = this.destinatarioSelecionado.email;
 
-            console.log('Requisitando mensagens...');
-            console.log('Remetente:', remetenteEmail);
-            console.log('Destinatário:', destinatarioEmail);
+            // Para "Todos", não há histórico a carregar
+            if (destinatarioEmail === "Todos") {
+                this.mensagens = [];
+                return;
+            }
 
             try {
                 const response = await Axios.post(
@@ -143,21 +202,28 @@ export default {
                     }
                 );
 
-                console.log("Mensagens carregadas:", response.data);
                 this.mensagens = response.data.reverse();
+                this.$nextTick(() => {
+                    this.scrollToBottom();
+                });
             } catch (error) {
                 console.error("Erro ao carregar mensagens:", error);
             }
         },
-        getAvatar(remetenteId) {
-            // Encontre o profissional com base no remetenteId
-            const profissional = this.profissionais.find(prof => prof.email === remetenteId);
-            return profissional ? profissional.foto : ''; // Retorna a foto do profissional, ou uma foto padrão se não encontrado
-        },
-        async enviarMensagem() {
-            if (!this.mensagemInput.trim()) return; // Ignora se estiver vazio
 
-            const remetenteEmail = this.store.usuario.usuario.email;
+        getAvatar(remetenteId) {
+            if (remetenteId === this.usuarioAtualEmail) {
+                return this.store.usuario.usuario.foto;
+            }
+
+            const profissional = this.profissionais.find(prof => prof.email === remetenteId);
+            return profissional ? profissional.foto : '';
+        },
+
+        async enviarMensagem() {
+            if (!this.mensagemInput.trim()) return;
+
+            const remetenteEmail = this.usuarioAtualEmail;
             const destinatarioEmail = this.destinatarioSelecionado?.email;
             const texto = this.mensagemInput.trim();
 
@@ -178,26 +244,30 @@ export default {
                 );
 
                 this.mensagemInput = "";
-                await this.carregarMensagens(); // Atualiza mensagens após envio
-                this.scrollParaFim(); // Scroll para o final do chat
+
+                if (destinatarioEmail === "Todos") {
+                    this.mensagens = [{
+                        remetenteId: remetenteEmail,
+                        remetente: { nome: "Você" },
+                        texto: "Mensagem geral enviada para todos os profissionais.",
+                    }];
+                } else {
+                    await this.carregarMensagens();
+                }
             } catch (error) {
                 console.error("Erro ao enviar mensagem:", error);
             }
         },
-        scrollParaFim() {
-            this.$nextTick(() => {
-                const chatMessages = document.getElementById("chatMessages");
-                if (chatMessages) {
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                }
-            });
-        }
 
+        scrollToBottom() {
+            const container = document.getElementById("chatMessages");
+            if (container) {
+                container.scrollTop = container.scrollHeight;
+            }
+        },
     },
 };
 </script>
-
-
 
 <style scoped>
 .chatbox {
@@ -215,7 +285,6 @@ export default {
     z-index: 2;
 }
 
-/* Área da lista de profissionais - mesma aparência do chat */
 .chat-profissionais {
     width: 220px;
     background: #ffffff;
@@ -273,14 +342,12 @@ export default {
     color: #888;
 }
 
-/* Área de mensagens */
 .chat-main {
     flex: 1;
     display: flex;
     flex-direction: column;
 }
 
-/* Cabeçalho */
 .chat-header {
     background-color: #84E7FF;
     padding: 14px 20px;
@@ -324,7 +391,6 @@ export default {
     align-items: flex-start;
 }
 
-/* Campo de entrada */
 .chat-input-container {
     display: flex;
     border-top: 1px solid #eee;
@@ -370,12 +436,10 @@ export default {
     gap: 10px;
 }
 
-/* Alinha mensagens recebidas à esquerda */
 .message-row.received {
     justify-content: flex-start;
 }
 
-/* Alinha mensagens enviadas à direita */
 .message-row.sent {
     justify-content: flex-end;
 }
@@ -386,7 +450,6 @@ export default {
     max-width: 75%;
 }
 
-/* Estilo base da mensagem */
 .message {
     padding: 12px 16px;
     border-radius: 16px;
@@ -395,7 +458,6 @@ export default {
     word-wrap: break-word;
 }
 
-/* Estilo para mensagens enviadas por você */
 .message-row.sent .message {
     background-color: #e6f7ff;
     color: #7E7E7E;
@@ -403,7 +465,6 @@ export default {
     align-self: flex-end;
 }
 
-/* Estilo para mensagens recebidas */
 .message-row.received .message {
     background-color: #F5F5F5;
     color: #333;
@@ -411,7 +472,6 @@ export default {
     align-self: flex-start;
 }
 
-/* Nome do remetente acima da mensagem */
 .sender-name {
     font-size: 12px;
     font-weight: 600;
@@ -419,7 +479,6 @@ export default {
     margin-bottom: 4px;
 }
 
-/* Avatar já está definido corretamente */
 .avatar {
     width: 42px;
     height: 42px;
@@ -427,5 +486,19 @@ export default {
     object-fit: cover;
     border: 2px solid #ffffff;
     box-shadow: 0 0 0 2px #e6f7ff;
+}
+
+.chat-notificacao {
+    position: fixed;
+    bottom: 90px; 
+    right: 20px;
+    background-color: #e6f7ff;
+    border: 1px solid #84E7FF;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    color: #7E7E7E;
+    z-index: 999;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 </style>

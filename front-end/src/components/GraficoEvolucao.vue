@@ -12,6 +12,7 @@ import { onMounted, ref } from 'vue'
 import Chart from 'chart.js/auto'
 import Axios from 'axios';
 import { useAuthStore } from '@/store.js'
+import api from '@/axios';
 
 import { formatDate } from '@/utils/formatarData';
 export default {
@@ -30,7 +31,7 @@ export default {
             const cpf = props.dado;
             try {
                 const token = store.token;
-                const response = await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/consultasAba/paciente/${cpf}`,{
+                const response = await api.get(`/consultasAba/paciente/${cpf}`,{
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }

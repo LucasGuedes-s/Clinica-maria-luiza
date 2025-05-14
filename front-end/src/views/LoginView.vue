@@ -40,6 +40,7 @@ form {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: white;
 }
 
 h1 {
@@ -176,10 +177,10 @@ button {
 </style>
 
 <script>
-import Axios from 'axios';
 import Swal from 'sweetalert2'
 import { useAuthStore } from '@/store.js'
 import router from '@/router';
+import api from '@/axios';
 
 export default {
     name:'LoginView',
@@ -199,7 +200,7 @@ export default {
     },
 methods:{
     async login(){
-        await Axios.post("https://clinica-maria-luiza-bjdd.onrender.com/user/login", {
+        await api.post("/user/login", {
             usuario:{
                 email:this.email,
                 senha:this.senha

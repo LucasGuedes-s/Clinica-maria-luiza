@@ -35,6 +35,7 @@
             </form>
         </div>
     </div>
+    <Chat />
 </template>
 
 <style>
@@ -137,14 +138,15 @@ select {
 <script>
 import Sidebar from '@/components/Sidebar.vue';
 import { useAuthStore } from '@/store';
-import Axios from 'axios';
 import Swal from 'sweetalert2'
 import router from '@/router';
+import Chat from '@/components/Chat.vue';
 
 export default {
     name: 'registrarconsulta',
     components: {
-        Sidebar
+        Sidebar,
+        Chat
     },
     setup() {
         const store = useAuthStore();
@@ -179,7 +181,7 @@ export default {
                 const token = this.store.token;
                 const valorFloat = parseFloat(this.valor);
 
-                await Axios.post("https://clinica-maria-luiza-bjdd.onrender.com/registrar/pagamentos", {
+                await api.post("/registrar/pagamentos", {
                     pagar: {
                         profissionalId: profissionalId,
                         valor: valorFloat,

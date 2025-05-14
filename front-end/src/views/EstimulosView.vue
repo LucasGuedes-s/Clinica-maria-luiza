@@ -48,6 +48,7 @@
             </form>
         </div>
     </div>
+    <Chat />
 </template>
 
 <style>
@@ -151,11 +152,14 @@ import Sidebar from '@/components/Sidebar.vue'
 import { useAuthStore } from '@/store.js'
 import Axios from 'axios';
 import Swal from 'sweetalert2';
+import api from '@/axios';
+import Chat from '@/components/Chat.vue';
 
 export default {
     name: 'cadastrar_paciente',
     components: {
-        Sidebar
+        Sidebar,
+        Chat
     },
     setup() {
         const store = useAuthStore() //Importação da função do Store.js
@@ -181,7 +185,7 @@ export default {
             }
             try {
                 // Envia os dados do paciente para o backend
-                await Axios.post(`https://clinica-maria-luiza-bjdd.onrender.com/adicionar/estimulo`, {
+                await api.post(`/adicionar/estimulo`, {
                         nome_estimulo: this.nome_estimulo,
                         descricao: this.descricao,
                         pacienteId: this.pacienteId
@@ -224,7 +228,7 @@ export default {
                 });
             }
             try {
-                await Axios.post(`https://clinica-maria-luiza-bjdd.onrender.com/vincular/estimulo`, {
+                await api.post(`/vincular/estimulo`, {
                         estimuloId: this.estimuloId,
                         pacienteId: this.pacienteId
                 }, {            
@@ -259,7 +263,7 @@ export default {
             const token = this.store.token
             try {
                 // Envia os dados do paciente para o backend
-                await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/pacientes`, {
+                await api.get(`/pacientes`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -276,7 +280,7 @@ export default {
             const token = this.store.token
             try {
                 // Envia os dados do paciente para o backend
-                await Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/estimulos`, {
+                await api.get(`/estimulos`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }

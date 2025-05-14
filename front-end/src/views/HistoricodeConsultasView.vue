@@ -56,8 +56,8 @@
                 </div>
             </div>
         </div>
-
     </div>
+    <Chat />
 </template>
 
 <style scoped>
@@ -257,6 +257,8 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from '../firebase.js'
 import { v4 as uuidv4 } from 'uuid';
 import router from '@/router/index.js';
+import api from '@/axios';
+import Chat from '@/components/Chat.vue';
 
 export default {
     name: 'historicodeconsulta',
@@ -268,7 +270,8 @@ export default {
         }
     },
     components: {
-        Sidebar
+        Sidebar,
+        Chat
     },
     data() {
         return {
@@ -356,7 +359,7 @@ export default {
             const token = this.store.token
             const cpf = this.cpf
 
-            Axios.get(`https://clinica-maria-luiza-bjdd.onrender.com/consulta/paciente/${cpf}`, {
+            api.get(`/consulta/paciente/${cpf}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -391,8 +394,8 @@ export default {
 
                 const consultaParaEnvio = JSON.parse(JSON.stringify(this.consultaEdit));
 
-                const response = await Axios.put(
-                    'https://clinica-maria-luiza-bjdd.onrender.com/editar/consulta',
+                const response = await api.put(
+                    '/editar/consulta',
                     consultaParaEnvio,
                     {
                         headers: {

@@ -15,8 +15,7 @@
         </div>
     </div>
 </template>
-
-
+<Chat />
 <style>
 body {
     margin: 0;
@@ -98,11 +97,13 @@ h1 {
 import Sidebar from '@/components/Sidebar.vue';
 import { ref, listAll, getDownloadURL } from 'firebase/storage';
 import { storage } from '../firebase.js';
+import Chat from '@/components/Chat.vue';
 
 export default {
     name: 'galeria',
     components: {
-        Sidebar
+        Sidebar,
+        Chat
     },
     data() {
         return {

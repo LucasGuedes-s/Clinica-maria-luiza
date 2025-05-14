@@ -6,7 +6,11 @@
             <input type="text" id="search-input" placeholder="Nome do profissional..." v-model="pesquisa">
             <RouterLink to="/cadastrarprofissional"><button>Cadastrar</button></RouterLink>
         </div>
-        <div class="container-profissional" v-for="usuario in filteredProfissional" :key="usuario.email">
+        <!-- Carregando ou Dados -->
+        <div v-if="loading" class="loading">
+            <Carregar />
+        </div>
+        <div class="container-profissional" v-for="usuario in filteredProfissional" :key="usuario.email" v-if="loading === false">
             <img :src="usuario.foto">
             <div class="info_prof">
                 <p>Nome: {{ usuario.nome }}</p>
@@ -51,6 +55,7 @@
         </div>
 
     </div>
+    <Chat />
 </template>
 
 <style>
@@ -262,15 +267,19 @@ input {
 <script>
 import Sidebar from '@/components/Sidebar.vue'
 import { useAuthStore } from '@/store';
-import Axios from 'axios';
 import Swal from 'sweetalert2';
 import router from '@/router';
 import api from '@/axios';
+import Carregar from '@/components/Carregar.vue';
+import Chat from '@/components/Chat.vue';
+
 
 export default {
     name: 'profissionais',
     components: {
-        Sidebar
+        Sidebar,
+        Carregar,
+        Chat
     },
     setup() {
         const store = useAuthStore()
@@ -286,6 +295,7 @@ export default {
             consultasPorProfissional: {},
             showModal: false,
             consultaEdit: {},
+            loading: true, // Estado de carregamento
         }
     },
     methods: {
@@ -466,6 +476,7 @@ export default {
             }).then(response => {
                 this.profissional = response.data.profissionais;
                 this.carregarConsultasPorProfissional();
+                this.loading = false; // Define o estado de carregamento como falso após os dados serem carregados
             }).catch(Error => {
                 console.error(Error)
             })

@@ -44,6 +44,7 @@
             </div>
         </div>
     </div>
+    <Chat />
 </template>
 
 <style>
@@ -178,6 +179,7 @@ h1 {
 <script>
 import Sidebar from '@/components/Sidebar.vue';
 import api from '@/axios';
+import Chat from '@/components/Chat.vue';
 import { useAuthStore } from '@/store';
 import { formatDate } from '../utils/formatarData';
 import jsPDF from 'jspdf'
@@ -186,7 +188,8 @@ import autoTable from 'jspdf-autotable'
 export default {
     name: 'visualizarconsultas',
     components: {
-        Sidebar
+        Sidebar,
+        Chat
     },
     data() {
         return {

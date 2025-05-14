@@ -13,6 +13,7 @@
         </div>
       </div>
     </div>
+    <Chat />
   </template>
   
 
@@ -72,6 +73,7 @@ import Axios from 'axios';
 import { useAuthStore } from '@/store.js'
 import { formatDate } from '../utils/formatarData';
 import Swal from 'sweetalert2';
+import Chat from '@/components/Chat.vue';
 
 export default {
     name: 'historicodeconsulta',
@@ -83,7 +85,8 @@ export default {
         }
     },
     components: {
-        Sidebar
+        Sidebar,
+        Chat
     },
     data() {
         return {
