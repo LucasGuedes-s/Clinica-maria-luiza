@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="chatAberto" class="chatbox">
-              <div class="chat-profissionais">
+            <div class="chat-profissionais">
                 <h4>Profissionais:</h4>
                 <div class="profissionais-list">
                     <div v-for="profissional in profissionais" :key="profissional.identificador"
@@ -53,8 +53,8 @@
             <span>Chat</span>
         </div>
     </div>
-     <div v-if="notificacao.visivel" class="chat-notificacao">
-            📩 Você recebeu uma nova mensagem de <strong>{{ notificacao.remetente?.nome }}</strong>
+    <div v-if="notificacao.visivel" class="chat-notificacao">
+        📩 Você recebeu uma nova mensagem de <strong>{{ notificacao.remetente?.nome }}</strong>
     </div>
 </template>
 
@@ -94,36 +94,33 @@ export default {
         this.socket.on("nova-mensagem", async (data) => {
             const { destinatarioEmail, remetenteEmail } = data;
 
-            // Se não for o usuário atual, ignore
-            if (destinatarioEmail !== this.usuarioAtualEmail) return;
+            const envolvidoNaConversa =
+                this.usuarioAtualEmail === destinatarioEmail ||
+                this.usuarioAtualEmail === remetenteEmail;
 
-            // Se o usuário já está com o chat aberto com o remetente, não exibe notificação
+            if (!envolvidoNaConversa) return;
+
+            // Atualiza mensagens se o chat está aberto com a outra parte envolvida
+            const outroParticipante = this.usuarioAtualEmail === destinatarioEmail
+                ? remetenteEmail
+                : destinatarioEmail;
+
             if (
                 this.chatAberto &&
                 this.destinatarioSelecionado &&
-                this.destinatarioSelecionado.email === remetenteEmail
+                this.destinatarioSelecionado.email === outroParticipante
             ) {
                 await this.carregarMensagens();
-                return; // Não exibe notificação
+                return;
             }
 
-            // Busca o profissional remetente
+            // Exibe notificação caso o chat não esteja com esse participante
             const remetente = this.profissionais.find(p => p.email === remetenteEmail);
             if (!remetente) return;
 
             this.notificacao.remetente = remetente;
             this.notificacao.visivel = true;
-
-            // Sempre carrega mensagens se for o remetente da conversa atual
-            if (
-                this.destinatarioSelecionado &&
-                remetenteEmail === this.destinatarioSelecionado.email
-            ) {
-                await this.carregarMensagens();
-            }
         });
-
-
 
         this.carregarProfissionais();
     },
@@ -285,6 +282,7 @@ export default {
     overflow: hidden;
     z-index: 2;
 }
+
 .chat-profissionais {
     width: 220px;
     background: #ffffff;
@@ -308,7 +306,7 @@ export default {
 .profissional-item {
     display: flex;
     align-items: center;
-    gap: 10px; 
+    gap: 10px;
     padding: 8px;
     border-radius: 8px;
     cursor: pointer;
@@ -322,8 +320,8 @@ export default {
 }
 
 .profissional-item img.avatar {
-    width: 40px; 
-    height: 40px; 
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     object-fit: cover;
 }
@@ -337,7 +335,8 @@ export default {
 }
 
 .profissional-item .nome {
-    font-size: 12px; /* Reduzido para 12px */
+    font-size: 12px;
+    /* Reduzido para 12px */
     color: #333;
     font-family: 'Montserrat', sans-serif;
 
@@ -345,7 +344,8 @@ export default {
 
 /* Especialidade do profissional */
 .profissional-item .especialidade {
-    font-size: 10px; /* Reduzido para 10px */
+    font-size: 10px;
+    /* Reduzido para 10px */
     color: #888;
 }
 
@@ -497,7 +497,7 @@ export default {
 
 .chat-notificacao {
     position: fixed;
-    bottom: 90px; 
+    bottom: 90px;
     right: 20px;
     background-color: #e6f7ff;
     border: 1px solid #84E7FF;
