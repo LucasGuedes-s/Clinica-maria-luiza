@@ -1,19 +1,20 @@
 <template>
     <div>
         <div v-if="chatAberto" class="chatbox">
-            <div class="chat-profissionais">
+              <div class="chat-profissionais">
                 <h4>Profissionais:</h4>
-                <ul>
-                    <li v-for="profissional in profissionais" :key="profissional.identificador"
+                <div class="profissionais-list">
+                    <div v-for="profissional in profissionais" :key="profissional.identificador"
                         @click="selecionarDestinatario(profissional)"
-                        :class="{ ativo: destinatarioSelecionado?.identificador === profissional.identificador }">
+                        :class="{ ativo: destinatarioSelecionado?.identificador === profissional.identificador }"
+                        class="profissional-item">
                         <img :src="profissional.foto" class="avatar" />
                         <div class="info">
                             <span class="nome">{{ profissional.nome }}</span>
                             <span class="especialidade">{{ profissional.especialidade }}</span>
                         </div>
-                    </li>
-                </ul>
+                    </div>
+                </div>
             </div>
 
             <div class="chat-main">
@@ -284,7 +285,6 @@ export default {
     overflow: hidden;
     z-index: 2;
 }
-
 .chat-profissionais {
     width: 220px;
     background: #ffffff;
@@ -299,46 +299,53 @@ export default {
     color: #84E7FF;
 }
 
-.chat-profissionais ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+.profissionais-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
-.chat-profissionais li {
+.profissional-item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 10px; 
     padding: 8px;
-    cursor: pointer;
     border-radius: 8px;
-    transition: background 0.2s;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
 }
 
-.chat-profissionais li:hover,
-.chat-profissionais li.ativo {
+.profissional-item:hover,
+.profissional-item.ativo {
     background: #e6f7ff;
+    transform: translateY(-5px);
 }
 
-.chat-profissionais img.avatar {
-    width: 32px;
-    height: 32px;
+.profissional-item img.avatar {
+    width: 40px; 
+    height: 40px; 
     border-radius: 50%;
     object-fit: cover;
 }
 
-.chat-profissionais .info {
+.profissional-item .info {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    font-family: 'Montserrat', sans-serif;
+
 }
 
-.chat-profissionais .nome {
-    font-size: 13px;
+.profissional-item .nome {
+    font-size: 12px; /* Reduzido para 12px */
     color: #333;
+    font-family: 'Montserrat', sans-serif;
+
 }
 
-.chat-profissionais .especialidade {
-    font-size: 11px;
+/* Especialidade do profissional */
+.profissional-item .especialidade {
+    font-size: 10px; /* Reduzido para 10px */
     color: #888;
 }
 
