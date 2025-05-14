@@ -4,7 +4,7 @@
         <h1>Galeria</h1>
 
         <div class="galeria-grid">
-            <div v-for="(imagem, index) in laudos" :key="index" class="imagem-card" @click="abrirModal(imagem)">
+            <div v-for="(imagem, index) in imagensVisiveis" :key="index" class="imagem-card" @click="abrirModal(imagem)">
                 <img :src="imagem" alt="Anexo" />
             </div>
         </div>
@@ -15,7 +15,9 @@
         </div>
     </div>
 </template>
+
 <Chat />
+
 <style>
 body {
     margin: 0;
@@ -60,6 +62,7 @@ h1 {
     height: 100%;
     object-fit: cover;
 }
+
 .modal {
     display: flex;
     justify-content: center;
@@ -90,7 +93,6 @@ h1 {
     cursor: pointer;
     z-index: 10000;
 }
-
 </style>
 
 <script>
@@ -107,12 +109,18 @@ export default {
     },
     data() {
         return {
-            laudos: [],
-            imagemSelecionada: null // nova propriedade
+            laudos: [],                
+            imagensVisiveis: [],       
+            quantidadePorLote: 10,     
+            imagemSelecionada: null
         };
     },
     async mounted() {
         await this.carregarLaudosDoFirebase();
+        window.addEventListener('scroll', this.verificarRolagem);
+    },
+    beforeDestroy() {
+        window.removeEventListener('scroll', this.verificarRolagem);
     },
     methods: {
         async carregarLaudosDoFirebase() {
@@ -125,8 +133,6 @@ export default {
                 const urls = await Promise.all(
                     resultado.items.map(async (itemRef) => {
                         const caminho = itemRef.name.toLowerCase();
-
-                        // Verifica se o nome do arquivo tem uma extensão permitida
                         const extensaoValida = extensoesPermitidas.some(ext => caminho.endsWith(ext));
                         if (!extensaoValida) return null;
 
@@ -141,8 +147,23 @@ export default {
                 );
 
                 this.laudos = urls.filter(url => url);
+                this.imagensVisiveis = this.laudos.slice(0, this.quantidadePorLote);
             } catch (error) {
                 console.error("Erro ao carregar imagens do Firebase:", error);
+            }
+        },
+        carregarMaisImagens() {
+            const totalVisiveis = this.imagensVisiveis.length;
+            const proximoLote = this.laudos.slice(
+                totalVisiveis,
+                totalVisiveis + this.quantidadePorLote
+            );
+            this.imagensVisiveis.push(...proximoLote);
+        },
+        verificarRolagem() {
+            const fundoPagina = window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
+            if (fundoPagina && this.imagensVisiveis.length < this.laudos.length) {
+                this.carregarMaisImagens();
             }
         },
         abrirModal(imagemUrl) {
