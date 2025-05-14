@@ -7,176 +7,168 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model Profissionais {
-  email         String
-  senha         String
-  nome          String
-  telefone      String?
-  foto          String? @db.VarChar(2048)
-  identificador String?
-  pix           String?
-  permissaoId   Int
-  especialidade String
-  status        String? @default("Ativo")
-
-  @@ignore
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model Pacientes {
-  cpf              String
-  email            String?
+  email            String       @id
+  senha            String
   nome             String
-  nome_responsavel String?
-  data_nascimento  DateTime?
   telefone         String?
-  endereco         String?
-  foto             String?   @db.VarChar(2048)
-  tipo_paciente    String?
-  laudos           String[]  @db.VarChar(2048)
-  status           String?   @default("Ativo")
+  foto             String?      @db.VarChar(2048)
+  identificador    String?      @unique
+  pix              String?
+  permissao        Permissao    @relation(fields: [permissaoId], references: [id])
+  permissaoId      Int
+  especialidade    String
+  status           String?    @default("Ativo")  
+  agendamentos     Agendamentos[]
+  consultas        Consultas[]
+  consultasAba     ConsultaAba[]
+  pagamentos       Pagamentos[]
 
-  @@ignore
+  mensagensEnviadas   Mensagem[] @relation("MensagensEnviadas")
+  mensagensRecebidas  Mensagem[] @relation("MensagensRecebidas")
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model Pacientes_dados {
-  pacientes   Int       @default(autoincrement())
-  pacienteId  String?
-  peso        Float?
-  altura      Float?
-  comestiveis String?   @db.VarChar(2048)
-  tangiveis   String?   @db.VarChar(2048)
-  fisicos     String?   @db.VarChar(2048)
-  data        DateTime  @default(now())
-  data_neuro  DateTime? @db.Date
-  alergicos   String?
-  laudos      String[]  @db.VarChar(2048)
-
-  @@ignore
+model Pacientes{
+  cpf             String       @id
+  email           String?     
+  nome            String
+  status           String?    @default("Ativo")  
+  nome_responsavel String?
+  data_nascimento DateTime?
+  telefone        String?
+  endereco        String?
+  foto            String?      @db.VarChar(2048)
+  tipo_paciente   String?
+  laudos          String[] @db.VarChar(2048)
+  estimulos       PacienteEstimulo[]
+  agendamentos    Agendamentos[]
+  consultas       Consultas[]
+  paciente_dados  Pacientes_dados[]
+  ConsultaAba     ConsultaAba[]
+  avaliacaoAba    AvaliacaoAba[] //Adicionado
+}
+model Pacientes_dados{
+  pacientes       Int @id @default(autoincrement())
+  paciente        Pacientes? @relation(fields: [pacienteId], references: [cpf])
+  pacienteId      String? @unique
+  peso            Float?      
+  altura          Float?
+  laudos          String[] @db.VarChar(2048)
+  comestiveis     String? @db.VarChar(2048)
+  tangiveis       String? @db.VarChar(2048)
+  fisicos         String? @db.VarChar(2048)
+  data            DateTime @default(now())
+  data_neuro      DateTime? @db.Date
+  alergicos       String?
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model Agendamentos {
-  id                     Int       @default(autoincrement())
-  data                   DateTime?
-  data_conclusao         DateTime? @db.Date
-  agendamento            String?
-  notas                  String?
-  status                 String?
-  profissionalId         String
-  pacienteId             String?
-  sala                   Int?
-  dias_notificacao       String[]  @default([])
-  notificacao_recorrente Boolean?  @default(false)
-  ultima_notificacao     DateTime?
+model Agendamentos{
+  id              Int @id @default(autoincrement())
+  data            DateTime?
+  data_conclusao  DateTime? @db.Date
+  agendamento     String?
+  notas           String?
+  status          String?
+  profissional    Profissionais? @relation(fields: [profissionalId], references: [email])
+  profissionalId  String
+  paciente        Pacientes? @relation(fields: [pacienteId], references: [cpf])
+  pacienteId      String?
+  sala_consulta   Salas? @relation(fields: [sala], references: [id])
+  sala            Int?
 
-  @@ignore
+
+  notificacao_recorrente Boolean? @default(false) // Define se a notificação será recorrente
+  dias_notificacao       String[] @default([])  // Lista dos dias de notificação (ex: ["segunda", "quarta", "sexta"])
+  ultima_notificacao     DateTime? // Armazena a última vez que a notificação foi enviada
 }
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model Salas {
-  id    Int     @default(autoincrement())
-  notas String?
-
-  @@ignore
+model Salas{
+  id              Int @id @default(autoincrement())
+  notas           String?
+  agendamentos    Agendamentos[]
 }
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model Consultas {
-  id             Int       @default(autoincrement())
-  consulta       String
-  data           DateTime  @default(now())
-  hora_inicio    DateTime?
-  hora_fim       DateTime?
-  descricao      String?
-  laudos         String[]  @db.VarChar(2048)
-  foto           String[]  @db.VarChar(2048)
-  pacienteId     String?
-  profissionalId String?
-
-  @@ignore
+model Consultas{
+  id              Int @id @default(autoincrement())
+  consulta        String
+  data            DateTime @default(now())
+  hora_inicio     DateTime?
+  hora_fim        DateTime?
+  descricao       String?
+  laudos          String[] @db.VarChar(2048)
+  foto            String[] @db.VarChar(2048)
+  paciente        Pacientes? @relation(fields: [pacienteId], references: [cpf])
+  profissional    Profissionais? @relation(fields: [profissionalId], references: [email])
+  pacienteId      String?
+  profissionalId  String?
 }
+model ConsultaAba{
+  //MUDAR ESSE IDENTIFICADOR
+  pacientes       Int @id @default(autoincrement())
+  paciente        Pacientes? @relation(fields: [pacienteId], references: [cpf])
+  pacienteId      String?
+  profissional    Profissionais? @relation(fields: [profissionalId], references: [email])
+  profissionalId  String?
+  data            DateTime?
+  hora_inicio     String?
+  hora_fim        String?
+  descricao_atividade String? @db.VarChar(2048)
+  Aplicacao1      String?
+  Aplicacao2      String?
+  Aplicacao3      String?
+  Aplicacao4      String?
+  Aplicacao5      String?
+  teste           String?
+  foto            String? @db.VarChar(2048)
+  observacoes     String? @db.VarChar(2048)
+  comportamentos  String?
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model ConsultaAba {
-  pacientes           Int       @default(autoincrement())
-  pacienteId          String?
-  profissionalId      String?
-  hora_inicio         String?
-  hora_fim            String?
-  descricao_atividade String?   @db.VarChar(2048)
-  Aplicacao1          String?
-  Aplicacao2          String?
-  Aplicacao3          String?
-  Aplicacao4          String?
-  Aplicacao5          String?
-  teste               String?
-  foto                String?   @db.VarChar(2048)
-  observacoes         String?   @db.VarChar(2048)
-  data                DateTime?
-  comportamentos      String?
-
-  @@ignore
 }
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model Estimulos {
-  id            Int     @default(autoincrement())
-  nome_estimulo String
-  descricao     String?
-
-  @@ignore
+  id                Int                 @id @default(autoincrement())
+  nome_estimulo     String
+  descricao         String?
+  pacienteEstimulo  PacienteEstimulo[]
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model PacienteEstimulo {
-  pacienteCpf  String
-  estimuloId   Int
-  criadoEm     DateTime  @default(now())
-  finalizadoEm DateTime?
+  pacienteCpf   String
+  estimuloId    Int
+  criadoEm      DateTime @default(now()) // exemplo de metadado
+  finalizadoEm  DateTime?
+  paciente      Pacientes @relation(fields: [pacienteCpf], references: [cpf])
+  estimulo      Estimulos @relation(fields: [estimuloId], references: [id])
 
-  @@ignore
+  @@id([pacienteCpf, estimuloId]) // chave primária composta
 }
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model AvaliacaoAba {
-  pacientes  Int      @default(autoincrement())
-  pacienteId String?
-  foto       String[] @db.VarChar(2048)
-
-  @@ignore
+model AvaliacaoAba{
+  pacientes       Int @id @default(autoincrement())
+  paciente        Pacientes? @relation(fields: [pacienteId], references: [cpf])
+  pacienteId      String?
+  foto            String[] @db.VarChar(2048)
 }
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model Pagamentos {
-  id             Int      @default(autoincrement())
-  pagamento      Float?
-  paciente       String?
-  profissionalId String?
-  Data           DateTime @default(now())
-  tipo_pagamento String?
-  metodo         String?
-
-  @@ignore
+model Pagamentos{
+  id              Int @id @default(autoincrement())
+  pagamento       Float?
+  paciente        String?
+  tipo_pagamento  String?
+  profissional    Profissionais? @relation(fields: [profissionalId], references: [email])     
+  profissionalId  String?
+  metodo          String?
+  Data            DateTime @default(now())
 }
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model Permissao {
-  id     Int     @default(autoincrement())
-  acesso String?
-
-  @@ignore
+  id               Int             @id @default(autoincrement())
+  acesso           String?
+  profissionais    Profissionais[]
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model Mensagem {
-  id             Int      @default(autoincrement())
-  texto          String
-  enviadoEm      DateTime @default(now())
-  remetenteId    String
-  destinatarioId String
+  id              Int       @id @default(autoincrement())
+  texto           String
+  enviadoEm       DateTime   @default(now())
 
-  @@ignore
+  remetenteId     String    
+  destinatarioId  String   
+
+  remetente       Profissionais   @relation("MensagensEnviadas", fields: [remetenteId], references: [email])
+  destinatario    Profissionais   @relation("MensagensRecebidas", fields: [destinatarioId], references: [email])
 }
