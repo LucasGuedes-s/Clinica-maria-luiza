@@ -35,6 +35,7 @@
             </form>
         </div>
     </div>
+    <Chat />
 </template>
 
 <style>
@@ -139,11 +140,13 @@ import Sidebar from '@/components/Sidebar.vue';
 import { useAuthStore } from '@/store';
 import Swal from 'sweetalert2'
 import router from '@/router';
+import Chat from '@/components/Chat.vue';
 
 export default {
     name: 'registrarconsulta',
     components: {
-        Sidebar
+        Sidebar,
+        Chat
     },
     setup() {
         const store = useAuthStore();

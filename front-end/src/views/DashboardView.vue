@@ -2,7 +2,7 @@
     <div>
         <Sidebar />
     </div>
-    <!-- <Chat /> -->
+    <Chat />
     <div v-if="loading" class="loading">
         <Carregar />
     </div>
@@ -471,7 +471,7 @@ import Swal from 'sweetalert2'
 import router from '@/router';
 import CalendarAgendamentos from '@/components/Calendario.vue';
 import Carregar from '@/components/Carregar.vue';
-// import Chat from '@/components/Chat.vue'
+import Chat from '@/components/Chat.vue'
 // PRECISA AINDA CHAMAR O COMPONENTE CalendarAgendamentos
 
 export default {
@@ -480,7 +480,7 @@ export default {
         Carregar,  // Registrando o componente Loader
         CalendarAgendamentos,
         Sidebar,
-        // Chat
+        Chat
 
     },
     props: {

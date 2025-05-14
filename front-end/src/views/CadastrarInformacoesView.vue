@@ -36,6 +36,7 @@
             </form>
         </div>
     </div>
+    <Chat />
 </template>
 
 <style>
@@ -161,11 +162,13 @@ import Swal from 'sweetalert2';
 import { useAuthStore } from '@/store.js'
 import router from '@/router';
 import api from '@/axios';
+import Chat from '@/components/Chat.vue';
 
 export default {
     name: 'registrarconsulta',
     components: {
-        Sidebar
+        Sidebar,
+        Chat
     },
     setup(){
         const store = useAuthStore() //Importação da função do Store.js

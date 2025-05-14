@@ -48,6 +48,7 @@
             </form>
         </div>
     </div>
+    <Chat />
 </template>
 
 <style>
@@ -152,11 +153,13 @@ import { useAuthStore } from '@/store.js'
 import Axios from 'axios';
 import Swal from 'sweetalert2';
 import api from '@/axios';
+import Chat from '@/components/Chat.vue';
 
 export default {
     name: 'cadastrar_paciente',
     components: {
-        Sidebar
+        Sidebar,
+        Chat
     },
     setup() {
         const store = useAuthStore() //Importação da função do Store.js

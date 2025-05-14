@@ -40,6 +40,7 @@ form {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: white;
 }
 
 h1 {

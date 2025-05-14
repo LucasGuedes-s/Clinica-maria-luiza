@@ -54,6 +54,7 @@
             </form>
         </div>
     </div>
+    <Chat />
 </template>
 
 <style>
@@ -160,12 +161,14 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from '../firebase.js'
 import { v4 as uuidv4 } from 'uuid';
 import api from '@/axios';
+import Chat from '@/components/Chat.vue';
 
 
 export default {
     name: 'cadastrar_paciente',
     components: {
-        Sidebar
+        Sidebar,
+        Chat
     },
     setup() {
         const store = useAuthStore() //Importação da função do Store.js

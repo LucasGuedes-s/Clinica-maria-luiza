@@ -32,6 +32,7 @@
             </form>
         </div>
     </div>
+    <Chat />
 </template>
 
 <style>
@@ -152,11 +153,14 @@ import { storage } from '../firebase.js'
 import { v4 as uuidv4 } from 'uuid';
 import router from '@/router/index.js';
 import api from '@/axios';
+import { Chart } from 'chart.js';
+import Chat from '@/components/Chat.vue';
 
 export default {
     name: 'registrarconsulta',
     components: {
-        Sidebar
+        Sidebar,
+        Chat
     },
     setup() {
         const store = useAuthStore()

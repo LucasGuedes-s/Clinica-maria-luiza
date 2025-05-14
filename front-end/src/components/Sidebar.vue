@@ -58,6 +58,15 @@
         </svg>
         Pagamentos
       </router-link>
+      <router-link to="/galeria">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-images"
+          viewBox="0 0 16 16">
+          <path d="M4.502 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3" />
+          <path
+            d="M14.002 13a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2V5A2 2 0 0 1 2 3a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-1.998 2M14 2H4a1 1 0 0 0-1 1h9.002a2 2 0 0 1 2 2v7A1 1 0 0 0 15 11V3a1 1 0 0 0-1-1M2.002 4a1 1 0 0 0-1 1v8l2.646-2.354a.5.5 0 0 1 .63-.062l2.66 1.773 3.71-3.71a.5.5 0 0 1 .577-.094l1.777 1.947V5a1 1 0 0 0-1-1z" />
+        </svg>
+        Galeria
+      </router-link>
       <button class="logout-button" @click="logout">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-coin"
           viewBox="0 0 16 16">
@@ -73,55 +82,57 @@
 </template>
 <style>
 .sidebar {
-    height: 100%;
-    width: 250px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: white;
-    padding-top: 20px;
-    text-align: center;
-    box-shadow: 0 4px 10px -1px rgba(0, 0, 0, 0.10);
+  height: 100%;
+  width: 250px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: white;
+  padding-top: 20px;
+  text-align: center;
+  box-shadow: 0 4px 10px -1px rgba(0, 0, 0, 0.10);
+  font-family: 'Montserrat', sans-serif;
+
 }
 
 .sidebar img {
-    width: 150px;
-    margin-top: 20px;
-    margin-bottom: 20px;
+  width: 140px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .sidebar a {
-    padding: 20px 15px;
-    text-decoration: none;
-    font-size: 16px;
-    text-align: left;
-    color: #7E7E7E;
-    display: block;
-    margin-left: 30px;
+  padding: 20px 15px;
+  text-decoration: none;
+  font-size: 16px;
+  text-align: left;
+  color: #7E7E7E;
+  display: block;
+  margin-left: 30px;
 }
 
 .sidebar a:hover {
-    color: #84E7FF;
+  color: #84E7FF;
 }
 
 /* Botão para abrir o sidebar no celular */
 .sidebar-toggle {
-    position: relative;
-    top: 20px;
-    left: 15px;
-    color: #84E7FF;
-    border: none;
-    cursor: pointer;
-    z-index: 1001;
+  position: relative;
+  top: 20px;
+  left: 15px;
+  color: #84E7FF;
+  border: none;
+  cursor: pointer;
+  z-index: 1001;
 }
 
 .sidebar-toggle.active {
-    left: 230px;
+  left: 230px;
 }
 
 .sidebar a svg {
-    margin-right: 5px;
-    vertical-align: middle;
+  margin-right: 5px;
+  vertical-align: middle;
 }
 
 .logout-button {
@@ -131,28 +142,36 @@
   font-size: 16px;
   left: 50%;
   transform: translateX(-50%);
-  display: flex; /* Alinhamento com flexbox */
-  align-items: center; /* Alinha verticalmente */
-  background-color: transparent; /* Sem fundo */
+  display: flex;
+  /* Alinhamento com flexbox */
+  align-items: center;
+  /* Alinha verticalmente */
+  background-color: transparent;
+  /* Sem fundo */
   color: #7E7E7E;
   border: none;
   padding: 10px;
   cursor: pointer;
   width: 80%;
   text-align: center;
+  font-family: 'Montserrat', sans-serif;
+
 }
 
 .logout-button svg {
-  margin-right: 8px; /* Espaço entre o ícone e o texto */
+  margin-right: 8px;
+  /* Espaço entre o ícone e o texto */
 }
 
 .logout-button:hover {
-  color: #e53935; /* Cor ao passar o mouse */
+  color: #e53935;
+  /* Cor ao passar o mouse */
 }
+
 @media (min-width: 768px) {
-    .sidebar-toggle {
-        display: none;
-    }
+  .sidebar-toggle {
+    display: none;
+  }
 }
 
 @media (max-width: 768px) {
@@ -163,73 +182,73 @@
   .logout-button {
     bottom: 80px;
   }
-  
+
   .sidebar {
-        display: block;
-        position: fixed;
-        left: -250px;
-        top: 0;
-        width: 200px;
-        height: 100vh;
-        transition: left 0.3s ease;
-        z-index: 1000;
-    }
+    display: block;
+    position: fixed;
+    left: -250px;
+    top: 0;
+    width: 200px;
+    height: 100vh;
+    transition: left 0.3s ease;
+    z-index: 1000;
+  }
 
-    .sidebar.active {
-        left: 0;
-    }
+  .sidebar.active {
+    left: 0;
+  }
 
-    .sidebar a {
-        justify-content: flex-start;
-        padding: 15px;
-        margin-left: 10px;
-    }
-    .sidebar img {
-        width: 60px;
-        margin-bottom: 15px;
-    }
+  .sidebar a {
+    justify-content: flex-start;
+    padding: 15px;
+    margin-left: 10px;
+  }
+
+  .sidebar img {
+    width: 60px;
+    margin-bottom: 15px;
+  }
 }
-
 </style>
 
 <script>
 import router from '@/router';
-import { useAuthStore } from '@/store'; 
+import { useAuthStore } from '@/store';
 
 export default {
-    data() {
-        return {
-        isSidebarActive: false
-            };
-    },
-    setup(){
-      const store = useAuthStore()
-      if(store.getUser === null){
-        router.push("/")
-      }
-      const userPermissions = store.getUser.usuario.permissao; // Obtém as permissões do usuário
-      return {
-        store,
-        userPermissions
-      }
-    },
-    methods: {
-        toggleSidebar() {
-            this.isSidebarActive = !this.isSidebarActive;
-        },
-        async logout() {
-          const authStore = useAuthStore();
-          authStore.logout(); // Chama a função logout da store
-
-          this.$router.push('/login');
-        }
-    },
-    beforeRouteEnter(to, from, next) {
-        next(vm => {
-            if (!vm.store.isAuthenticated) {
-                vm.$router.push('/login')
-            }
-        })
+  data() {
+    return {
+      isSidebarActive: false
+    };
+  },
+  setup() {
+    const store = useAuthStore()
+    if (store.getUser === null) {
+      router.push("/")
     }
+    const userPermissions = store.getUser.usuario.permissao; // Obtém as permissões do usuário
+    return {
+      store,
+      userPermissions
+    }
+  },
+  methods: {
+    toggleSidebar() {
+      this.isSidebarActive = !this.isSidebarActive;
+    },
+    async logout() {
+      const authStore = useAuthStore();
+      authStore.logout(); // Chama a função logout da store
+
+      this.$router.push('/login');
+    }
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      if (!vm.store.isAuthenticated) {
+        vm.$router.push('/login')
+      }
+    })
+  }
 };
 </script>

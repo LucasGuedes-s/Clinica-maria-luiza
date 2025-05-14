@@ -55,6 +55,7 @@
         </div>
 
     </div>
+    <Chat />
 </template>
 
 <style>
@@ -270,13 +271,15 @@ import Swal from 'sweetalert2';
 import router from '@/router';
 import api from '@/axios';
 import Carregar from '@/components/Carregar.vue';
+import Chat from '@/components/Chat.vue';
 
 
 export default {
     name: 'profissionais',
     components: {
         Sidebar,
-        Carregar
+        Carregar,
+        Chat
     },
     setup() {
         const store = useAuthStore()

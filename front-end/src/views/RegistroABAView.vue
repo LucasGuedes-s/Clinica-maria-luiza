@@ -141,6 +141,7 @@
             </form>
         </div>
     </div>
+    <Chat />
 </template>
 
 <style>
@@ -293,11 +294,13 @@ import { v4 as uuidv4 } from 'uuid';
 import router from '@/router/index.js';
 import { DateTime } from 'luxon'; // Certifique-se de que Luxon está instalado
 import api from '@/axios';
+import Chat from '@/components/Chat.vue';
 
 export default {
     name: 'registroaba',
     components: {
-        Sidebar
+        Sidebar,
+        Chat
     },
     setup() {
         const store = useAuthStore();

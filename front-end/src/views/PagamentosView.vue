@@ -39,6 +39,7 @@
             </div>
         </div>
     </div>
+    <Chat />
 </template>
 
 <style scoped>
@@ -138,11 +139,13 @@ import Axios from 'axios';
 import { formatDate, formatarMesAno } from '../utils/formatarData';
 import Swal from 'sweetalert2';
 import api from '@/axios';
+import Chat from '@/components/Chat.vue';
 
 export default {
     name: 'pagamentos',
     components: {
-        Sidebar
+        Sidebar,
+        Chat
     },
     setup() {
         const store = useAuthStore()

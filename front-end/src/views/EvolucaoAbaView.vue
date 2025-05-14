@@ -172,6 +172,7 @@
             </div>
         </div>
     </div>
+    <Chat />
 </template>
 
 <script>
@@ -184,6 +185,7 @@ import router from '@/router';
 import GraficoEvolucaoBarras from '@/components/GraficoEvolucaoBarras.vue';
 import ConsultaNaoRegistrada from '@/components/ConsultaNaoRegistrada.vue';
 import api from '@/axios';
+import Chat from '@/components/Chat.vue';
 
 export default {
 
@@ -221,6 +223,7 @@ export default {
         GraficoEvolucao,
         GraficoEvolucaoBarras,
         ConsultaNaoRegistrada,
+        Chat
     },
     methods: {
         async abrirFoto(link) {

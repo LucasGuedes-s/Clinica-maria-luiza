@@ -56,8 +56,8 @@
                 </div>
             </div>
         </div>
-
     </div>
+    <Chat />
 </template>
 
 <style scoped>
@@ -258,6 +258,7 @@ import { storage } from '../firebase.js'
 import { v4 as uuidv4 } from 'uuid';
 import router from '@/router/index.js';
 import api from '@/axios';
+import Chat from '@/components/Chat.vue';
 
 export default {
     name: 'historicodeconsulta',
@@ -269,7 +270,8 @@ export default {
         }
     },
     components: {
-        Sidebar
+        Sidebar,
+        Chat
     },
     data() {
         return {

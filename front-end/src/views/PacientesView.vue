@@ -38,6 +38,7 @@
             </div>
         </div>
     </div>
+    <Chat />
 </template>
 
 <style>
@@ -232,12 +233,14 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from 'uuid';
 import api from '@/axios';
 import Carregar from '@/components/Carregar.vue';
+import Chat from '@/components/Chat.vue';
 
 export default {
     name: 'pacientes',
     components: {
         Sidebar,
-        Carregar
+        Carregar,
+        Chat
     },
     setup() {
         const store = useAuthStore()

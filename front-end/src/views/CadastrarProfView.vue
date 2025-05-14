@@ -49,6 +49,7 @@
             </form>            
         </div>
     </div>
+    <Chat />
 </template>
 
 <style scoped>
@@ -144,6 +145,7 @@ import { useAuthStore } from '@/store.js'
 import Axios from 'axios';
 import Swal from 'sweetalert2';
 import router from '@/router';
+import Chat from '@/components/Chat.vue';
 //Importações de subir imagem
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from '../firebase.js'
@@ -152,7 +154,8 @@ import { v4 as uuidv4 } from 'uuid';
 export default {
     name: 'cadastrar_profissional',
     components:{
-        Sidebar
+        Sidebar,
+        Chat
     },
     setup(){
         const store = useAuthStore() //Importação da função do Store.js
