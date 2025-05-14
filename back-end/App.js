@@ -64,8 +64,6 @@ app.use((req, res, next) => {
 });
 
 io.on('connection', (socket) => {
-  console.log('Cliente conectado via WebSocket');
-
   socket.on('disconnect', () => {
     console.log('Cliente desconectado');
   });
