@@ -193,7 +193,7 @@ export default {
 
             try {
                 const response = await Axios.post(
-                    'http://localhost:3000/mensagem/get',
+                    'https://clinica-maria-luiza-bjdd.onrender.com/mensagem/get',
                     { remetenteEmail, destinatarioEmail },
                     {
                         headers: {
