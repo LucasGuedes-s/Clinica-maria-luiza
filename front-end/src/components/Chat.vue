@@ -508,4 +508,75 @@ export default {
     z-index: 999;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
+@media (max-width: 768px) {
+    .chatbox {
+        flex-direction: column;
+        width: 95vw;
+        height: 90vh;
+        right: 2.5vw;
+        bottom: 5vh;
+    }
+
+    .chat-profissionais {
+        width: 100%;
+        max-height: 180px;
+        border-right: none;
+        border-bottom: 1px solid #eee;
+        padding: 12px 10px;
+    }
+
+    .chat-main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        height: calc(100% - 180px);
+    }
+
+    .chat-header {
+        font-size: 14px;
+        padding: 12px 16px;
+    }
+
+    .chat-input {
+        font-size: 13px;
+        padding: 10px;
+    }
+
+    .chat-send {
+        font-size: 13px;
+        padding: 8px 12px;
+    }
+
+    .profissional-item .nome {
+        font-size: 11px;
+    }
+
+    .profissional-item .especialidade {
+        font-size: 9px;
+    }
+
+    .message {
+        font-size: 13px;
+        padding: 10px 14px;
+    }
+
+    .avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+    .chat-notificacao {
+        right: 10px;
+        left: 10px;
+        bottom: 80px;
+        font-size: 13px;
+        padding: 10px 14px;
+        text-align: center;
+    }
+
+    .chatbox,
+    .chat-notificacao {
+        border-radius: 12px;
+    }
+}
 </style>
