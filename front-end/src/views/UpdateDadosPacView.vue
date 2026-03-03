@@ -168,7 +168,7 @@ select {
 <script>
 import Sidebar from '@/components/Sidebar.vue'
 import { useAuthStore } from '@/store.js'
-import Axios from 'axios';
+import api from '@/axios';
 import Swal from 'sweetalert2';
 import router from '@/router';
 //Importações de subir imagem
